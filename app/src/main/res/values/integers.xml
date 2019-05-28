@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="daysInYear">365</integer>
+    <!--Pitcher Base Percentages to 4 decimal places represented by integers (2950 = 29.50%)-->
+    <integer name="pitcherOSwingPctMean">2950</integer>
+    <integer name="pitcherOSwingPctStdDev">281</integer>
+    <integer name="pitcherOSwingPctMin">2010</integer>
+    <integer name="pitcherOSwingPctMax">3890</integer>
+
+    <integer name="pitcherZSwingPctMean">6609</integer>
+    <integer name="pitcherZSwingPctStdDev">295</integer>
+    <integer name="pitcherZSwingPctMin">5460</integer>
+    <integer name="pitcherZSwingPctMax">7680</integer>
+
+    <integer name="pitcherOContactPctMean">6475</integer>
+    <integer name="pitcherOContactPctStdDev">665</integer>
+    <integer name="pitcherOContactPctMin">3680</integer>
+    <integer name="pitcherOContactPctMax">8220</integer>
+
+    <integer name="pitcherZContactPctMean">8676</integer>
+    <integer name="pitcherZContactPctStdDev">346</integer>
+    <integer name="pitcherZContactPctMin">6920</integer>
+    <integer name="pitcherZContactPctMax">9450</integer>
+
+    <integer name="pitcherGroundBallPctMean">4402</integer>
+    <integer name="pitcherGroundBallPctStdDev">709</integer>
+    <integer name="pitcherGroundBallPctMin">2490</integer>
+    <integer name="pitcherGroundBallPctMax">7210</integer>
+
+    <integer name="pitcherLineDrivePctMean">2018</integer>
+    <integer name="pitcherLineDrivePctStdDev">184</integer>
+    <integer name="pitcherLineDrivePctMin">1430</integer>
+    <integer name="pitcherLineDrivePctMax">2750</integer>
+
+    <integer name="pitcherHomeRunPctMean">396</integer>
+    <integer name="pitcherHomeRunPctStdDev">111</integer>
+    <integer name="pitcherHomeRunPctMin">91</integer>
+    <integer name="pitcherHomeRunPctMax">827</integer>
+
+    <integer name="pitcherInfieldFlyBallPctMean">964</integer>
+    <integer name="pitcherInfieldFlyBallPctStdDev">260</integer>
+    <integer name="pitcherInfieldFlyBallPctMin">180</integer>
+    <integer name="pitcherInfieldFlyBallPctMax">2130</integer>
+
+    <integer name="pitcherHitByPitchPctMean">90</integer>
+    <integer name="pitcherHitByPitchPctStdDev">43</integer>
+    <integer name="pitcherHitByPitchPctMin">0</integer>
+    <integer name="pitcherHitByPitchPctMax">296</integer>
+
+    <integer name="pitcherWildPitchPctMean">99</integer>
+    <integer name="pitcherWildPitchPctStdDev">57</integer>
+    <integer name="pitcherWildPitchPctMin">0</integer>
+    <integer name="pitcherWildPitchPctMax">524</integer>
+
+    <integer name="pitcherBalkPctMean">8</integer>
+    <integer name="pitcherBalkPctStdDev">11</integer>
+    <integer name="pitcherBalkPctMin">0</integer>
+    <integer name="pitcherBalkPctMax">80</integer>
+
+    <integer name="pitcherZonePctMean">4505</integer>
+    <integer name="pitcherZonePctStdDev">265</integer>
+    <integer name="pitcherZonePctMin">3330</integer>
+    <integer name="pitcherZonePctMax">5440</integer>
+
+    <integer name="pitcherFirstStrikePctMean">5958</integer>
+    <integer name="pitcherFirstStrikePctStdDev">324</integer>
+    <integer name="pitcherFirstStrikePctMin">4900</integer>
+    <integer name="pitcherFirstStrikePctMax">7080</integer>
+
+    <integer name="starterNumberOfPitchTypesMean">432</integer>
+    <integer name="starterNumberOfPitchTypesStdDev">78</integer>
+    <integer name="starterNumberOfPitchTypesMin">3</integer>
+    <integer name="starterNumberOfPitchTypesMax">7</integer>
+
+    <integer name="relieverNumberOfPitchTypesMean">418</integer>
+    <integer name="relieverNumberOfPitchTypesStdDev">82</integer>
+    <integer name="relieverNumberOfPitchTypesMin">2</integer>
+    <integer name="relieverNumberOfPitchTypesMax">7</integer>
+
+    <integer name="starterStaminaMean">9048</integer>
+    <integer name="starterStaminaStdDev">732</integer>
+    <integer name="starterStaminaMin">6152</integer>
+    <integer name="starterStaminaMax">10953</integer>
+
+    <integer name="longReliefStaminaMean">4990</integer>
+    <integer name="longReliefStaminaStdDev">1936</integer>
+    <integer name="longReliefStaminaMin">2102</integer>
+    <integer name="longReliefStaminaMax">8684</integer>
+
+    <integer name="shortReliefStaminaMean">1629</integer>
+    <integer name="shortReliefStaminaStdDev">204</integer>
+    <integer name="shortReliefStaminaMin">807</integer>
+    <integer name="shortReliefStaminaMax">2099</integer>
+
+    <integer name="pitchersThatThrowSliderPct">8840</integer>
+    <integer name="pitchersThatThrowCutterPct">4212</integer>
+    <integer name="pitchersThatThrowCurvePct">7735</integer>
+    <integer name="pitchersThatThrowChangePct">9365</integer>
+    <integer name="pitchersThatThrowSplitFingerPct">1674</integer>
+    <integer name="pitchersThatThrowKnuckleballPct">77</integer>
+
+    <integer name="sliderThrownPctMean">1767</integer>
+    <integer name="sliderThrownPctStdDev">1120</integer>
+    <integer name="sliderThrownPctMin">0</integer>
+    <integer name="sliderThrownPctMax">6430</integer>
+
+    <integer name="cutterThrownPctMean">1270</integer>
+    <integer name="cutterThrownPctStdDev">1290</integer>
+    <integer name="cutterThrownPctMin">0</integer>
+    <integer name="cutterThrownPctMax">8890</integer>
+
+    <integer name="curveThrownPctMean">1169</integer>
+    <integer name="curveThrownPctStdDev">844</integer>
+    <integer name="curveThrownPctMin">0</integer>
+    <integer name="curveThrownPctMax">4450</integer>
+
+    <integer name="changeThrownPctMean">1057</integer>
+    <integer name="changeThrownPctStdDev">789</integer>
+    <integer name="changeThrownPctMin">0</integer>
+    <integer name="changeThrownPctMax">3880</integer>
+
+    <integer name="splitterThrownPctMean">1007</integer>
+    <integer name="splitterThrownPctStdDev">1150</integer>
+    <integer name="splitterThrownPctMin">0</integer>
+    <integer name="splitterThrownPctMax">5860</integer>
+
+    <integer name="knucklerThrownPctMean">3847</integer>
+    <integer name="knucklerThrownPctStdDev">4033</integer>
+    <integer name="knucklerThrownPctMin">0</integer>
+    <integer name="knucklerThrownPctMax">8580</integer>
+
+    <integer name="fastballThrownPctMin">110</integer>
+
+</resources>
