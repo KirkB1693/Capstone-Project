@@ -345,7 +345,7 @@ public class PitchingPercentages implements Parcelable
                 ", IFFB Pct : " + formatPct(infieldFlyBallPct) + ", HBP Pct : " + formatPct(hitByPitchPct) + ", WP Pct : " + formatPct(wildPitchPct) + ", Balk Pct : " + formatPct(balkPct) +
                 ", Zone Pct : " + formatPct(zonePct) + ", F-Strike Pct : " + formatPct(firstPitchStrikePct) + ", Fastball Pct : " + formatPct(fastballPct) + ", Slider Pct : " + formatPct(sliderPct) +
                 ", Cutter Pct : " + formatPct(cutterPct) + ", Curve Pct : " + formatPct(curveballPct) + ", Change Up Pct : " + formatPct(changeUpPct) + ", Splitter Pct : " + formatPct(splitFingerPct) +
-                ", Knuckler Pct : " + formatPct(knuckleballPct) + ", Pitching pitchingStamina : " + pitchingStamina/100;
+                ", Knuckler Pct : " + formatPct(knuckleballPct) + ", Pitching Stamina : " + pitchingStamina/100;
     }
 
     private String formatPct(int percentAsInteger) {

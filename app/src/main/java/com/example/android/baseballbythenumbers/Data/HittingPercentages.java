@@ -343,7 +343,7 @@ public class HittingPercentages implements Parcelable
                 ", GB Pct : " + formatPct(groundBallPct) + ", LD Pct : " + formatPct(lineDrivePct) + ", HR Pct : " + formatPct(homeRunPct) + ", 3B Pct : " + formatPct(triplePct) +
                 ", 2B Pct : " + formatPct(doublePct) + ", SB Pct : " + formatPct(stolenBasePct) + ", IFFB Pct : " + formatPct(infieldFlyBallPct) + ", HBP Pct : " + formatPct(hitByPitchPct) +
                 ", BABIP Pct : " + formatPct(battingAverageBallsInPlay) + ", Foul Pct : " + formatPct(foulBallPct) + ", Pull Pct : " + formatPct(pullPct) + ", Center Pct : " + formatPct(centerPct) +
-                ", SB Rate : " + formatPct(stolenBaseRate) + ", Baserunning : " + baseRunning/100 + ", Speed : " + speed/100 + ", Fielding Stamina : " + stamina;
+                ", SB Rate : " + formatPct(stolenBaseRate) + ", Baserunning : " + baseRunning/100 + ", Speed : " + speed/100 + ", Error Pct : " + errorPct + ", Fielding Stamina : " + stamina;
     }
 
     private String formatPct(int percentAsInteger) {

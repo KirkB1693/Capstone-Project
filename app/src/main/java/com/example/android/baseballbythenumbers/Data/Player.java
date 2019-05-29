@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Comparator;
+
 import static com.example.android.baseballbythenumbers.Data.Positions.getPositionName;
 
 public class Player implements Parcelable {
@@ -131,6 +133,8 @@ public class Player implements Parcelable {
         this.lastName = lastName;
     }
 
+    public String getName() {return firstName + " " + lastName;}
+
     public int getPrimaryPosition() {
         return primaryPosition;
     }
@@ -227,4 +231,43 @@ public class Player implements Parcelable {
         return 0;
     }
 
+    public static Comparator<Player> PrimaryPositionComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int positionOfPlayer1 = player1.primaryPosition;
+            int positionOfPlayer2 = player2.primaryPosition;
+            //ascending order so player1-player2 --> Gives output in order from least to highest position number
+            return positionOfPlayer1-positionOfPlayer2;
+        }
+    };
+
+    public static Comparator<Player> ErrorPctComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int errorPctPlayer1 = player1.hittingPercentages.getErrorPct();
+            int errorPctPlayer2 = player2.hittingPercentages.getErrorPct();
+            //ascending order so player1-player2, want lowest error rate (best fielder) first
+            return errorPctPlayer1-errorPctPlayer2;
+        }
+    };
+
+    public static Comparator<Player> BestPowerComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int powerPlayer1 = (player1.hittingPercentages.getHomeRunPct() * 4) + player1.hittingPercentages.getTriplePct() * 3 + player1.hittingPercentages.getDoublePct() * 2;
+            int powerplayer2 = (player2.hittingPercentages.getHomeRunPct() * 4) + player2.hittingPercentages.getTriplePct() * 3 + player2.hittingPercentages.getDoublePct() * 2;
+            //ascending order so player2-player1, want highest power rate (best power) first
+            return powerplayer2-powerPlayer1;
+        }
+    };
+
+    public static Comparator<Player> BestContactComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int powerPlayer1 = (player1.hittingPercentages.getHomeRunPct() * 4) + player1.hittingPercentages.getTriplePct() * 3 + player1.hittingPercentages.getDoublePct() * 2;
+            int powerplayer2 = (player2.hittingPercentages.getHomeRunPct() * 4) + player2.hittingPercentages.getTriplePct() * 3 + player2.hittingPercentages.getDoublePct() * 2;
+            //ascending order so player2-player1, want highest power rate (best power) first
+            return powerplayer2-powerPlayer1;
+        }
+    };
 }

@@ -103,6 +103,93 @@ import static com.example.android.baseballbythenumbers.Data.Constants.BatterBase
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MIN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CHANGE_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CHANGE_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CHANGE_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CHANGE_THROWN_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CURVE_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CURVE_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CURVE_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CURVE_THROWN_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CUTTER_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CUTTER_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CUTTER_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.CUTTER_THROWN_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.FASTBALL_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.KNUCKLER_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.KNUCKLER_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.KNUCKLER_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.KNUCKLER_THROWN_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_CHANGE_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_CURVE_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_CUTTER_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_KNUCKLER_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_SLIDER_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHERS_THAT_THROW_SPLITTER_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_BALK_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_BALK_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_BALK_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_BALK_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_FIRST_STRIKE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_FIRST_STRIKE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_FIRST_STRIKE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_FIRST_STRIKE_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_GROUND_BALL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_GROUND_BALL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_GROUND_BALL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_GROUND_BALL_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HIT_BY_PITCH_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HIT_BY_PITCH_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HIT_BY_PITCH_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HIT_BY_PITCH_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_INFIELD_FLY_BALL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_INFIELD_FLY_BALL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_INFIELD_FLY_BALL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_INFIELD_FLY_BALL_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_LINE_DRIVE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_LINE_DRIVE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_LINE_DRIVE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_LINE_DRIVE_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_WILD_PITCH_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_WILD_PITCH_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_WILD_PITCH_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_WILD_PITCH_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SLIDER_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SLIDER_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SLIDER_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SLIDER_THROWN_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SPLITTER_THROWN_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SPLITTER_THROWN_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SPLITTER_THROWN_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SPLITTER_THROWN_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.PitchTypes.CHANGE_UP;
 import static com.example.android.baseballbythenumbers.Data.PitchTypes.CURVEBALL;
 import static com.example.android.baseballbythenumbers.Data.PitchTypes.CUTTER;
@@ -461,122 +548,99 @@ public class HitterGenerator {
     }
 
     private PitchingPercentages generatePitchingPercentages() {
-        int oSwingPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherOSwingPctStdDev)) + context.getResources().getInteger(R.integer.pitcherOSwingPctMean);
-        oSwingPct = checkBounds(oSwingPct, context.getResources().getInteger(R.integer.pitcherOSwingPctMin), context.getResources().getInteger(R.integer.pitcherOSwingPctMax));
+        int oSwingPct = getRandomNormalizedPercentage(PITCHER_O_SWING_PCT_STD_DEV, PITCHER_O_SWING_PCT_MEAN, PITCHER_O_SWING_PCT_MIN, PITCHER_O_SWING_PCT_MAX);
 
-        int zSwingPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherZSwingPctStdDev)) + context.getResources().getInteger(R.integer.pitcherZSwingPctMean);
-        zSwingPct = checkBounds(zSwingPct, context.getResources().getInteger(R.integer.pitcherZSwingPctMin), context.getResources().getInteger(R.integer.pitcherZSwingPctMax));
+        int zSwingPct = getRandomNormalizedPercentage(PITCHER_Z_SWING_PCT_STD_DEV, PITCHER_Z_SWING_PCT_MEAN, PITCHER_Z_SWING_PCT_MIN, PITCHER_Z_SWING_PCT_MAX);
 
-        int oContactPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherOContactPctStdDev)) + context.getResources().getInteger(R.integer.pitcherOContactPctMean);
-        oContactPct = checkBounds(oContactPct, context.getResources().getInteger(R.integer.pitcherOContactPctMin), context.getResources().getInteger(R.integer.pitcherOContactPctMax));
+        int oContactPct = getRandomNormalizedPercentage(PITCHER_O_CONTACT_PCT_STD_DEV, PITCHER_O_CONTACT_PCT_MEAN, PITCHER_O_CONTACT_PCT_MIN, PITCHER_O_CONTACT_PCT_MAX);
 
-        int zContactPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherZContactPctStdDev)) + context.getResources().getInteger(R.integer.pitcherZContactPctMean);
-        zContactPct = checkBounds(zContactPct, context.getResources().getInteger(R.integer.pitcherZContactPctMin), context.getResources().getInteger(R.integer.pitcherZContactPctMax));
+        int zContactPct = getRandomNormalizedPercentage(PITCHER_Z_CONTACT_PCT_STD_DEV, PITCHER_Z_CONTACT_PCT_MEAN, PITCHER_Z_CONTACT_PCT_MIN, PITCHER_Z_CONTACT_PCT_MAX);
 
-        int groundBallPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherGroundBallPctStdDev)) + context.getResources().getInteger(R.integer.pitcherGroundBallPctMean);
-        groundBallPct = checkBounds(groundBallPct, context.getResources().getInteger(R.integer.pitcherGroundBallPctMin), context.getResources().getInteger(R.integer.pitcherGroundBallPctMax));
+        int groundBallPct = getRandomNormalizedPercentage(PITCHER_GROUND_BALL_PCT_STD_DEV, PITCHER_GROUND_BALL_PCT_MEAN, PITCHER_GROUND_BALL_PCT_MIN, PITCHER_GROUND_BALL_PCT_MAX);
 
-        int lineDrivePct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherLineDrivePctStdDev)) + context.getResources().getInteger(R.integer.pitcherLineDrivePctMean);
-        lineDrivePct = checkBounds(lineDrivePct, context.getResources().getInteger(R.integer.pitcherLineDrivePctMin), context.getResources().getInteger(R.integer.pitcherLineDrivePctMax));
+        int lineDrivePct = getRandomNormalizedPercentage(PITCHER_LINE_DRIVE_PCT_STD_DEV, PITCHER_LINE_DRIVE_PCT_MEAN, PITCHER_LINE_DRIVE_PCT_MIN, PITCHER_LINE_DRIVE_PCT_MAX);
 
-        int homeRunPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherHomeRunPctStdDev)) + context.getResources().getInteger(R.integer.pitcherHomeRunPctMean);
-        homeRunPct = checkBounds(homeRunPct, context.getResources().getInteger(R.integer.pitcherHomeRunPctMin), context.getResources().getInteger(R.integer.pitcherHomeRunPctMax));
+        int homeRunPct = getRandomNormalizedPercentage(PITCHER_HOME_RUN_PCT_STD_DEV, PITCHER_HOME_RUN_PCT_MEAN, PITCHER_HOME_RUN_PCT_MIN, PITCHER_HOME_RUN_PCT_MAX);
 
-        int infieldFlyBallPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherInfieldFlyBallPctStdDev)) + context.getResources().getInteger(R.integer.pitcherInfieldFlyBallPctMean);
-        infieldFlyBallPct = checkBounds(infieldFlyBallPct, context.getResources().getInteger(R.integer.pitcherInfieldFlyBallPctMin), context.getResources().getInteger(R.integer.pitcherInfieldFlyBallPctMax));
+        int infieldFlyBallPct = getRandomNormalizedPercentage(PITCHER_INFIELD_FLY_BALL_STD_DEV, PITCHER_INFIELD_FLY_BALL_PCT_MEAN, PITCHER_INFIELD_FLY_BALL_PCT_MIN, PITCHER_INFIELD_FLY_BALL_PCT_MAX);
 
-        int hitByPitchPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherHitByPitchPctStdDev)) + context.getResources().getInteger(R.integer.pitcherHitByPitchPctMean);
-        hitByPitchPct = checkBounds(hitByPitchPct, context.getResources().getInteger(R.integer.pitcherHitByPitchPctMin), context.getResources().getInteger(R.integer.pitcherHitByPitchPctMax));
+        int hitByPitchPct = getRandomNormalizedPercentage(PITCHER_HIT_BY_PITCH_STD_DEV, PITCHER_HIT_BY_PITCH_PCT_MEAN, PITCHER_HIT_BY_PITCH_PCT_MIN, PITCHER_HIT_BY_PITCH_PCT_MAX);
 
-        int wildPitchPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherWildPitchPctStdDev)) + context.getResources().getInteger(R.integer.pitcherWildPitchPctMean);
-        wildPitchPct = checkBounds(wildPitchPct, context.getResources().getInteger(R.integer.pitcherWildPitchPctMin), context.getResources().getInteger(R.integer.pitcherWildPitchPctMax));
+        int wildPitchPct = getRandomNormalizedPercentage(PITCHER_WILD_PITCH_STD_DEV, PITCHER_WILD_PITCH_PCT_MEAN, PITCHER_WILD_PITCH_PCT_MIN, PITCHER_WILD_PITCH_PCT_MAX);
 
-        int balkPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherBalkPctStdDev)) + context.getResources().getInteger(R.integer.pitcherBalkPctMean);
-        balkPct = checkBounds(balkPct, context.getResources().getInteger(R.integer.pitcherBalkPctMin), context.getResources().getInteger(R.integer.pitcherBalkPctMax));
+        int balkPct = getRandomNormalizedPercentage(PITCHER_BALK_STD_DEV, PITCHER_BALK_PCT_MEAN, PITCHER_BALK_PCT_MIN, PITCHER_BALK_PCT_MAX);
 
-        int zonePct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherZonePctStdDev)) + context.getResources().getInteger(R.integer.pitcherZonePctMean);
-        zonePct = checkBounds(zonePct, context.getResources().getInteger(R.integer.pitcherZonePctMin), context.getResources().getInteger(R.integer.pitcherZonePctMax));
+        int zonePct = getRandomNormalizedPercentage(PITCHER_ZONE_STD_DEV, PITCHER_ZONE_PCT_MEAN, PITCHER_ZONE_PCT_MIN, PITCHER_ZONE_PCT_MAX);
 
-        int firstStrikePct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.pitcherFirstStrikePctStdDev)) + context.getResources().getInteger(R.integer.pitcherFirstStrikePctMean);
-        firstStrikePct = checkBounds(firstStrikePct, context.getResources().getInteger(R.integer.pitcherFirstStrikePctMin), context.getResources().getInteger(R.integer.pitcherFirstStrikePctMax));
+        int firstStrikePct = getRandomNormalizedPercentage(PITCHER_FIRST_STRIKE_STD_DEV, PITCHER_FIRST_STRIKE_PCT_MEAN, PITCHER_FIRST_STRIKE_PCT_MIN, PITCHER_FIRST_STRIKE_PCT_MAX);
 
         List<Integer> pitchTypes = new ArrayList<>();
         int stamina = 0;
 
-        int numberOfPitchTypes = (int) (random.nextGaussian() + 2);
-        numberOfPitchTypes = checkBounds(numberOfPitchTypes, 1, 3);
+        int numberOfPitchTypes = getRandomNormalizedPercentage(1, 2, 1, 3);
 
+        stamina = getRandomNormalizedPercentage(SHORT_RELIEVER_STAMINA_STD_DEV, SHORT_RELIEVER_STAMINA_MEAN, SHORT_RELIEVER_STAMINA_MIN, SHORT_RELIEVER_STAMINA_MAX);
         pitchTypes = generatePitchTypesThrown(pitchTypes, numberOfPitchTypes);
 
-        stamina = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.shortReliefStaminaStdDev)) + context.getResources().getInteger(R.integer.shortReliefStaminaMean);
-        stamina = checkBounds(stamina, context.getResources().getInteger(R.integer.shortReliefStaminaMin), context.getResources().getInteger(R.integer.shortReliefStaminaMax));
-
-        int maxPercentLeft = ONE_HUNDRED_PERCENT - context.getResources().getInteger(R.integer.fastballThrownPctMin);
+        int maxPercentLeft = ONE_HUNDRED_PERCENT - FASTBALL_THROWN_MIN;
         int sliderPct = 0;
-        if (pitchTypes.contains(SLIDER)) {
-            sliderPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.sliderThrownPctStdDev)) + context.getResources().getInteger(R.integer.sliderThrownPctMean);
-            if (context.getResources().getInteger(R.integer.sliderThrownPctMax) < maxPercentLeft) {
-                sliderPct = checkBounds(sliderPct, 0, context.getResources().getInteger(R.integer.sliderThrownPctMax));
-            } else {
-                sliderPct = checkBounds(sliderPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(SLIDER)){
+            sliderPct =  getRandomNormalizedPercentage(SLIDER_THROWN_STD_DEV, SLIDER_THROWN_MEAN, SLIDER_THROWN_MIN, SLIDER_THROWN_MAX);
+            if (sliderPct > maxPercentLeft) {
+                sliderPct = maxPercentLeft;
             }
         }
         maxPercentLeft -= sliderPct;
         int cutterPct = 0;
-        if (pitchTypes.contains(CUTTER)) {
-            cutterPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.cutterThrownPctStdDev)) + context.getResources().getInteger(R.integer.cutterThrownPctMean);
-            if (context.getResources().getInteger(R.integer.cutterThrownPctMax) < maxPercentLeft) {
-                cutterPct = checkBounds(cutterPct, 0, context.getResources().getInteger(R.integer.cutterThrownPctMax));
-            } else {
-                cutterPct = checkBounds(cutterPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(CUTTER)){
+            cutterPct =  getRandomNormalizedPercentage(CUTTER_THROWN_STD_DEV, CUTTER_THROWN_MEAN, CUTTER_THROWN_MIN, CUTTER_THROWN_MAX);
+            if (cutterPct > maxPercentLeft) {
+                cutterPct = maxPercentLeft;
             }
         }
         maxPercentLeft -= cutterPct;
         int curveballPct = 0;
-        if (pitchTypes.contains(CURVEBALL)) {
-            curveballPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.curveThrownPctStdDev)) + context.getResources().getInteger(R.integer.curveThrownPctMean);
-            if (context.getResources().getInteger(R.integer.curveThrownPctMax) < maxPercentLeft) {
-                curveballPct = checkBounds(curveballPct, 0, context.getResources().getInteger(R.integer.curveThrownPctMax));
-            } else {
-                curveballPct = checkBounds(curveballPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(CURVEBALL)){
+            curveballPct =  getRandomNormalizedPercentage(CURVE_THROWN_STD_DEV, CURVE_THROWN_MEAN, CURVE_THROWN_MIN, CURVE_THROWN_MAX);
+            if (curveballPct > maxPercentLeft) {
+                curveballPct = maxPercentLeft;
             }
         }
         maxPercentLeft -= curveballPct;
         int changeUpPct = 0;
-        if (pitchTypes.contains(CHANGE_UP)) {
-            changeUpPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.changeThrownPctStdDev)) + context.getResources().getInteger(R.integer.changeThrownPctMean);
-            if (context.getResources().getInteger(R.integer.changeThrownPctMax) < maxPercentLeft) {
-                changeUpPct = checkBounds(changeUpPct, 0, context.getResources().getInteger(R.integer.changeThrownPctMax));
-            } else {
-                changeUpPct = checkBounds(changeUpPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(CHANGE_UP)){
+            changeUpPct =  getRandomNormalizedPercentage(CHANGE_THROWN_STD_DEV, CHANGE_THROWN_MEAN, CHANGE_THROWN_MIN, CHANGE_THROWN_MAX);
+            if (changeUpPct > maxPercentLeft) {
+                changeUpPct = maxPercentLeft;
             }
         }
         maxPercentLeft -= changeUpPct;
         int splitFingerPct = 0;
-        if (pitchTypes.contains(SPLIT_FINGER)) {
-            splitFingerPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.splitterThrownPctStdDev)) + context.getResources().getInteger(R.integer.splitterThrownPctMean);
-            if (context.getResources().getInteger(R.integer.splitterThrownPctMax) < maxPercentLeft) {
-                splitFingerPct = checkBounds(splitFingerPct, 0, context.getResources().getInteger(R.integer.splitterThrownPctMax));
-            } else {
-                splitFingerPct = checkBounds(splitFingerPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(SPLIT_FINGER)){
+            splitFingerPct =  getRandomNormalizedPercentage(SPLITTER_THROWN_STD_DEV, SPLITTER_THROWN_MEAN, SPLITTER_THROWN_MIN, SPLITTER_THROWN_MAX);
+            if (splitFingerPct > maxPercentLeft) {
+                splitFingerPct = maxPercentLeft;
             }
         }
         maxPercentLeft -= splitFingerPct;
         int knuckleballPct = 0;
-        if (pitchTypes.contains(KNUCKLEBALL)) {
-            knuckleballPct = (int) (random.nextGaussian() * context.getResources().getInteger(R.integer.knucklerThrownPctStdDev)) + context.getResources().getInteger(R.integer.knucklerThrownPctMean);
-            if (context.getResources().getInteger(R.integer.knucklerThrownPctMax) < maxPercentLeft) {
-                knuckleballPct = checkBounds(knuckleballPct, 0, context.getResources().getInteger(R.integer.knucklerThrownPctMax));
-            } else {
-                knuckleballPct = checkBounds(knuckleballPct, 0, maxPercentLeft);
+        if (pitchTypes.contains(KNUCKLEBALL)){
+            knuckleballPct =  getRandomNormalizedPercentage(KNUCKLER_THROWN_STD_DEV, KNUCKLER_THROWN_MEAN, KNUCKLER_THROWN_MIN, KNUCKLER_THROWN_MAX);
+            if (knuckleballPct > maxPercentLeft) {
+                knuckleballPct = maxPercentLeft;
             }
         }
 
-        int fastballPct = maxPercentLeft + context.getResources().getInteger(R.integer.fastballThrownPctMin);
+        int fastballPct = maxPercentLeft + FASTBALL_THROWN_MIN;
 
 
         return new PitchingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, groundBallPct, lineDrivePct, homeRunPct, infieldFlyBallPct, hitByPitchPct, wildPitchPct, balkPct, zonePct,
                 firstStrikePct, fastballPct, sliderPct, cutterPct, curveballPct, changeUpPct, splitFingerPct, knuckleballPct, stamina);
+    }
+
+    private int getRandomNormalizedPercentage(int stdDev, int mean, int min, int max) {
+        int normalizedPercentage = (int) (random.nextGaussian() * stdDev) + mean;
+        return checkBounds(normalizedPercentage, min, max);
     }
 
     private List<Integer> generatePitchTypesThrown(List<Integer> pitchTypes, int numberOfPitchTypes) {
@@ -587,28 +651,28 @@ public class HitterGenerator {
             Collections.addAll(pitchTypes, CHANGE_UP, SLIDER, CURVEBALL, CUTTER, SPLIT_FINGER, KNUCKLEBALL);
             return pitchTypes;
         }
-        while (numberOfPitchTypes > 0) {
-            if (!pitchTypes.contains(CHANGE_UP) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowChangePct)) {
+        while (numberOfPitchTypes>0) {
+            if (!pitchTypes.contains(CHANGE_UP) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_CHANGE_PCT) {
                 pitchTypes.add(CHANGE_UP);
                 numberOfPitchTypes--;
             }
-            if (numberOfPitchTypes > 0 && !pitchTypes.contains(SLIDER) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowSliderPct)) {
+            if (numberOfPitchTypes>0 && !pitchTypes.contains(SLIDER) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_SLIDER_PCT) {
                 pitchTypes.add(SLIDER);
                 numberOfPitchTypes--;
             }
-            if (numberOfPitchTypes > 0 && !pitchTypes.contains(CURVEBALL) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowCurvePct)) {
+            if (numberOfPitchTypes>0 && !pitchTypes.contains(CURVEBALL) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_CURVE_PCT) {
                 pitchTypes.add(CURVEBALL);
                 numberOfPitchTypes--;
             }
-            if (numberOfPitchTypes > 0 && !pitchTypes.contains(CUTTER) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowCutterPct)) {
+            if (numberOfPitchTypes>0 && !pitchTypes.contains(CUTTER) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_CUTTER_PCT) {
                 pitchTypes.add(CUTTER);
                 numberOfPitchTypes--;
             }
-            if (numberOfPitchTypes > 0 && !pitchTypes.contains(SPLIT_FINGER) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowSplitFingerPct)) {
+            if (numberOfPitchTypes>0 && !pitchTypes.contains(SPLIT_FINGER) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_SPLITTER_PCT) {
                 pitchTypes.add(SPLIT_FINGER);
                 numberOfPitchTypes--;
             }
-            if (numberOfPitchTypes > 0 && !pitchTypes.contains(KNUCKLEBALL) && random.nextInt(ONE_HUNDRED_PERCENT) < context.getResources().getInteger(R.integer.pitchersThatThrowKnuckleballPct)) {
+            if (numberOfPitchTypes>0 && !pitchTypes.contains(KNUCKLEBALL) && random.nextInt(ONE_HUNDRED_PERCENT) < PITCHERS_THAT_THROW_KNUCKLER_PCT) {
                 pitchTypes.add(KNUCKLEBALL);
                 numberOfPitchTypes--;
             }

@@ -314,7 +314,7 @@ public class PitcherGenerator {
             }
         }
 
-        int fastballPct = maxPercentLeft + context.getResources().getInteger(R.integer.fastballThrownPctMin);
+        int fastballPct = maxPercentLeft + FASTBALL_THROWN_MIN;
 
 
 
