@@ -159,20 +159,30 @@ public class Constants {
         public static final int PITCHER_BATTING_Z_CONTACT_PCT_MIN = 6520;
         public static final int PITCHER_BATTING_Z_CONTACT_PCT_MAX = 9520;
 
-        public static final int PITCHER_BATTING_GROUND_BALL_PCT_MEAN = 6080;
-        public static final int PITCHER_BATTING_GROUND_BALL_PCT_STD_DEV = 1095;
+        public static final int PITCHER_BATTING_GROUND_BALL_PCT_MEAN = 6067;
+        public static final int PITCHER_BATTING_GROUND_BALL_PCT_STD_DEV = 1046;
         public static final int PITCHER_BATTING_GROUND_BALL_PCT_MIN = 3220;
-        public static final int PITCHER_BATTING_GROUND_BALL_PCT_MAX = 8480;
+        public static final int PITCHER_BATTING_GROUND_BALL_PCT_MAX = 8280;
 
-        public static final int PITCHER_BATTING_LINE_DRIVE_PCT_MEAN = 1723;
-        public static final int PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV = 462;
+        public static final int PITCHER_BATTING_LINE_DRIVE_PCT_MEAN = 1700;
+        public static final int PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV = 430;
         public static final int PITCHER_BATTING_LINE_DRIVE_PCT_MIN = 780;
         public static final int PITCHER_BATTING_LINE_DRIVE_PCT_MAX = 3370;
 
-        public static final int PITCHER_BATTING_HOME_RUN_PCT_MEAN = 92;
-        public static final int PITCHER_BATTING_HOME_RUN_PCT_STD_DEV = 136;
+        public static final int PITCHER_BATTING_HARD_HIT_PCT_MEAN = 1425;
+        public static final int PITCHER_BATTING_HARD_HIT_PCT_STD_DEV = 570;
+        public static final int PITCHER_BATTING_HARD_HIT_PCT_MIN = 360;
+        public static final int PITCHER_BATTING_HARD_HIT_PCT_MAX = 3290;
+
+        public static final int PITCHER_BATTING_MED_HIT_PCT_MEAN = 5611;
+        public static final int PITCHER_BATTING_MED_HIT_PCT_STD_DEV = 503;
+        public static final int PITCHER_BATTING_MED_HIT_PCT_MIN = 4300;
+        public static final int PITCHER_BATTING_MED_HIT_PCT_MAX = 6850;
+
+        public static final int PITCHER_BATTING_HOME_RUN_PCT_MEAN = 333;
+        public static final int PITCHER_BATTING_HOME_RUN_PCT_STD_DEV = 437;
         public static final int PITCHER_BATTING_HOME_RUN_PCT_MIN = 0;
-        public static final int PITCHER_BATTING_HOME_RUN_PCT_MAX = 678;
+        public static final int PITCHER_BATTING_HOME_RUN_PCT_MAX = 2110;
 
         public static final int PITCHER_BATTING_TRIPLE_PCT_MEAN = 22;
         public static final int PITCHER_BATTING_TRIPLE_STD_DEV = 51;
@@ -276,13 +286,23 @@ public class Constants {
         public static final int BATTING_LINE_DRIVE_PCT_MIN = 1419;
         public static final int BATTING_LINE_DRIVE_PCT_MAX = 2769;
 
-        public static final int BATTING_HOME_RUN_PCT_MEAN = 408;
-        public static final int BATTING_HOME_RUN_PCT_STD_DEV = 216;
-        public static final int BATTING_HOME_RUN_PCT_MIN = 20;
-        public static final int BATTING_HOME_RUN_PCT_MAX = 1469;
+        public static final int BATTING_HARD_HIT_PCT_MEAN = 3005;
+        public static final int BATTING_HARD_HIT_PCT_STD_DEV = 540;
+        public static final int BATTING_HARD_HIT_PCT_MIN = 1320;
+        public static final int BATTING_HARD_HIT_PCT_MAX = 4730;
+
+        public static final int BATTING_MED_HIT_PCT_MEAN = 5195;
+        public static final int BATTING_MED_HIT_PCT_STD_DEV = 433;
+        public static final int BATTING_MED_HIT_PCT_MIN = 3900;
+        public static final int BATTING_MED_HIT_PCT_MAX = 6660;
+
+        public static final int BATTING_HOME_RUN_PCT_MEAN = 1109;
+        public static final int BATTING_HOME_RUN_PCT_STD_DEV = 510;
+        public static final int BATTING_HOME_RUN_PCT_MIN = 71;
+        public static final int BATTING_HOME_RUN_PCT_MAX = 3180;
 
         public static final int BATTING_TRIPLE_PCT_MEAN = 71;
-        public static final int BATTING_TRIPLE_STD_DEV = 51;
+        public static final int BATTING_TRIPLE_STD_RATE = 51;
         public static final int BATTING_TRIPLE_PCT_MIN = 0;
         public static final int BATTING_TRIPLE_PCT_MAX = 267;
 
@@ -294,7 +314,7 @@ public class Constants {
         public static final int BATTING_STOLEN_BASE_PCT_MEAN = 6551;
         public static final int BATTING_STOLEN_BASE_STD_DEV = 1667;
         public static final int BATTING_STOLEN_BASE_PCT_MIN = 0;
-        public static final int BATTING_STOLEN_BASE_PCT_MAX = 10000;
+        public static final int BATTING_STOLEN_BASE_PCT_MAX = 9000;
 
         public static final int BATTING_INFIELD_FLY_BALL_PCT_MEAN = 956;
         public static final int BATTING_INFIELD_FLY_BALL_STD_DEV = 324;
@@ -350,6 +370,29 @@ public class Constants {
         public static final int BATTING_STAMINA_STD_DEV = 1008;
         public static final int BATTING_STAMINA_MIN = 122;
         public static final int BATTING_STAMINA_MAX = 162;
+    }
+
+    public static class HitRates {
+        //Percentages are from 2017
+        public static final int BATTING_SOFT_GROUNDBALL_HIT_PCT = 1250;
+        public static final int BATTING_MED_GROUNDBALL_HIT_PCT = 1720;
+        public static final int BATTING_HARD_GROUNDBALL_HIT_PCT = 4450;
+        public static final int BATTING_SOFT_LINE_DRIVE_HIT_PCT = 6640;
+        public static final int BATTING_MED_LINE_DRIVE_HIT_PCT = 7190;
+        public static final int BATTING_HARD_LINE_DRIVE_HIT_PCT = 6320;
+        public static final int BATTING_SOFT_FLYBALL_HIT_PCT = 780;
+        public static final int BATTING_MED_FLYBALL_HIT_PCT = 650;
+        public static final int BATTING_HARD_FLYBALL_HIT_PCT = 2350;
+    }
+
+    public static class Handedness {
+        public static final int PITCHER_THROWS_LEFT_PCT = 3500;
+        public static final int FIRST_AND_OF_HITS_SWITCH_PCT = 1250;
+        public static final int INF_HITS_SWITCH_PCT = 2000;
+        public static final int INF_HITS_LEFT_PCT = 1200;
+        public static final int FIRST_HITS_LEFT_PCT = 5500;
+        public static final int OF_HITS_LEFT_PCT = 4300;
+        public static final int POPULATION_LEFT_PCT = 2000;
     }
 }
 

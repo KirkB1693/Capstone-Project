@@ -18,6 +18,7 @@ import java.util.TreeMap;
 
 import timber.log.Timber;
 
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Positions.getPositionName;
 import static com.example.android.baseballbythenumbers.LineupAndDefense.DefenseGenerator.defenseFromTeam;
 import static com.example.android.baseballbythenumbers.LineupAndDefense.LineupGenerator.lineupFromTeam;
@@ -32,15 +33,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
         JodaTimeAndroid.init(this);
 
         teams = new ArrayList<Team>();
-         teamGenerator = new TeamGenerator(this, 5, 3, 4, 2,
-                 1, 1, 1, 1, 1, 1, 1,
-                 2, 1, 1, 0);
+        teamGenerator = new TeamGenerator(this, 5, 3, 4, 2,
+                1, 1, 1, 1, 1, 1, 1,
+                2, 1, 1, 0);
         newName(null);
 
     }
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         List<TreeMap<Integer, Player>> lineups = new ArrayList<>();
         StringBuilder displayText = new StringBuilder();
 
-        for (Team team: teams) {
+
+        for (Team team : teams) {
             TreeMap<Integer, Player> defense = defenseFromTeam(team);
             TreeMap<Integer, Player> lineup = lineupFromTeam(team);
             defenses.add(defense);
@@ -61,34 +63,34 @@ public class MainActivity extends AppCompatActivity {
             List<Player> playerList = team.getPlayers();
             Collections.sort(playerList, Player.PrimaryPositionComparator);
             for (Player player : playerList) {
-                if (playerList.indexOf(player) != playerList.size()-1) {
-                    displayText.append(getPositionName(player.getPrimaryPosition()) + " - " + player.getName() + " Error Pct : " + player.getHittingPercentages().getErrorPct() + " , Power Rating : " +
-                            (player.getHittingPercentages().getDoublePct()*2 + player.getHittingPercentages().getTriplePct()*3 + player.getHittingPercentages().getHomeRunPct()*4 ) + " , ");
-                } else {
-                    displayText.append(getPositionName(player.getPrimaryPosition()) + " - " + player.getName() + "\n");
-                }
+
+                displayText.append(getPositionName(player.getPrimaryPosition()) + " - " + player.getName() + " , Error Pct : " + player.getHittingPercentages().getErrorPct() +
+                        " , Power : " + (player.getHittingPercentages().getHomeRunPct() + player.getHittingPercentages().getTriplePct() + player.getHittingPercentages().getDoublePct()) +
+                        " , OBP : " + (BATTING_Z_SWING_PCT_MEAN - player.getHittingPercentages().getZSwingPct() +
+                        player.getHittingPercentages().getBattingAverageBallsInPlay()) + "\n");
+
             }
 
         }
 
         int teamNumber = 0;
         for (TreeMap<Integer, Player> defense : defenses) {
-            teamNumber ++;
-            displayText.append("Best Defense for Team " + teamNumber +":\n");
-            for (TreeMap.Entry entry : defense.entrySet()){
+            teamNumber++;
+            displayText.append("Best Defense for Team " + teamNumber + ":\n");
+            for (TreeMap.Entry entry : defense.entrySet()) {
                 Player player = (Player) entry.getValue();
                 String position = getPositionName((Integer) entry.getKey());
-                displayText.append("Pos : " + position + " - Player : " + player.getName() + "\n");
+                displayText.append("Pos : " + position + " - Player : " + player.getName() + " - Throws : " + player.getThrows() + "\n");
             }
         }
         teamNumber = 0;
         for (TreeMap<Integer, Player> lineup : lineups) {
-            teamNumber ++;
-            displayText.append("Best Lineup for Team " + teamNumber +":\n");
-            for (TreeMap.Entry entry : lineup.entrySet()){
+            teamNumber++;
+            displayText.append("Best Lineup for Team " + teamNumber + ":\n");
+            for (TreeMap.Entry entry : lineup.entrySet()) {
                 Player player = (Player) entry.getValue();
                 String orderPosition = entry.getKey().toString();
-                displayText.append(orderPosition + " - Player : " + player.getName() + " , Pos : " + getPositionName(player.getPrimaryPosition()) + "\n");
+                displayText.append(orderPosition + " - Player : " + player.getName() + " , Pos : " + getPositionName(player.getPrimaryPosition()) + " , Bats : " + player.getHits() + "\n");
             }
         }
         textView.setText(displayText);

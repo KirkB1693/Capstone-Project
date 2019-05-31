@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Baseball By The Numbers</string>
+
+
+    <string name="right_handed">R</string>
+    <string name="left_handed">L</string>
+    <string name="switch_hitter">S</string>
 </resources>

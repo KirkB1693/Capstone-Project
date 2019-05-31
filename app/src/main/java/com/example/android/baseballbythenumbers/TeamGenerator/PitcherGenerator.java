@@ -19,11 +19,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static com.example.android.baseballbythenumbers.Data.Constants.Handedness.PITCHER_THROWS_LEFT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_LINE_DRIVE_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_LINE_DRIVE_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_LINE_DRIVE_HIT_PCT;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.*;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MIN;
@@ -48,14 +56,16 @@ import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBat
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MIN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MIN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MIN;
@@ -64,6 +74,10 @@ import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBat
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MIN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MIN;
@@ -91,11 +105,9 @@ import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBat
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MIN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_STD_DEV;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MAX;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MIN;
@@ -122,7 +134,7 @@ public class PitcherGenerator {
     private static final int PITCHER_AGE_MIN = 19;
     private static final int PITCHER_AGE_MAX = 47;
 
-    private static final int ONE_HUNDRED_PERCENT = 10000;
+    public static final int ONE_HUNDRED_PERCENT = 10000;
     public static final int MIN_PITCH_TYPES = 2;
 
 
@@ -138,12 +150,18 @@ public class PitcherGenerator {
 
     private Context context;
 
+    private String leftHanded;
+
+    private String rightHanded;
+
     public PitcherGenerator(Context context, NameGenerator nameGenerator, int startingPitchers, int longReliefPitchers, int shortReliefPitchers) {
         this.startingPitchers = startingPitchers;
         this.longReliefPitchers = longReliefPitchers;
         this.shortReliefPitchers = shortReliefPitchers;
         this.nameGenerator = nameGenerator;
         this.context = context;
+        this.leftHanded = context.getResources().getString(R.string.left_handed);
+        this.rightHanded = context.getResources().getString(R.string.right_handed);
         this.random = new Random();
     }
 
@@ -173,8 +191,15 @@ public class PitcherGenerator {
                 trueAge = PITCHER_AGE_MAX + (trueAge - (int) trueAge);
             }
             String birthdate = getFormattedBirthdate(trueAge);
+            String throwingSide;
+            if (random.nextInt(ONE_HUNDRED_PERCENT) < PITCHER_THROWS_LEFT_PCT) {
+                throwingSide = leftHanded;
+            } else {
+                throwingSide = rightHanded;
+            }
+            String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), STARTING_PITCHER, LONG_RELIEVER + SHORT_RELEIVER,
-                    age, birthdate, "", "", generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER));
+                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER));
             startersList.add(newPitcher);
         }
         return startersList;
@@ -191,8 +216,15 @@ public class PitcherGenerator {
                 trueAge = PITCHER_AGE_MAX + (trueAge - (int) trueAge);
             }
             String birthdate = getFormattedBirthdate(trueAge);
+            String throwingSide;
+            if (random.nextInt(ONE_HUNDRED_PERCENT) < PITCHER_THROWS_LEFT_PCT) {
+                throwingSide = leftHanded;
+            } else {
+                throwingSide = rightHanded;
+            }
+            String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LONG_RELIEVER, STARTING_PITCHER + SHORT_RELEIVER,
-                    age, birthdate, "", "", generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER));
+                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER));
             longRelieversList.add(newPitcher);
         }
         return longRelieversList;
@@ -210,8 +242,15 @@ public class PitcherGenerator {
                 trueAge = PITCHER_AGE_MAX + (trueAge - (int) trueAge);
             }
             String birthdate = getFormattedBirthdate(trueAge);
+            String throwingSide;
+            if (random.nextInt(ONE_HUNDRED_PERCENT) < PITCHER_THROWS_LEFT_PCT) {
+                throwingSide = leftHanded;
+            } else {
+                throwingSide = rightHanded;
+            }
+            String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORT_RELEIVER, LONG_RELIEVER,
-                    age, birthdate, "", "", generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER));
+                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER));
             shortRelieversList.add(newPitcher);
         }
         return shortRelieversList;
@@ -392,16 +431,28 @@ public class PitcherGenerator {
         int lineDrivePct = (int) (random.nextGaussian() * PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV) + PITCHER_BATTING_LINE_DRIVE_PCT_MEAN;
         lineDrivePct = checkBounds(lineDrivePct, PITCHER_BATTING_LINE_DRIVE_PCT_MIN, PITCHER_BATTING_LINE_DRIVE_PCT_MAX);
 
-        int homeRunPct = (int) (random.nextGaussian() * PITCHER_BATTING_HOME_RUN_PCT_STD_DEV) + PITCHER_BATTING_HOME_RUN_PCT_MEAN;
+        int hardPct = getRandomNormalizedPercentage(PITCHER_BATTING_HARD_HIT_PCT_STD_DEV, PITCHER_BATTING_HARD_HIT_PCT_MEAN, PITCHER_BATTING_HARD_HIT_PCT_MIN, PITCHER_BATTING_HARD_HIT_PCT_MAX);
+
+        int medPctMax = PITCHER_BATTING_MED_HIT_PCT_MAX;
+        if ((ONE_HUNDRED_PERCENT - hardPct - 1040) < medPctMax ) {
+            medPctMax = ONE_HUNDRED_PERCENT - hardPct - 1040;
+        }
+        int medPct = getRandomNormalizedPercentage(PITCHER_BATTING_MED_HIT_PCT_STD_DEV, PITCHER_BATTING_MED_HIT_PCT_MEAN, PITCHER_BATTING_MED_HIT_PCT_MIN, medPctMax);
+
+        int homeRunPct = (((ONE_HUNDRED_PERCENT-groundBallPct-lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) + getRandomNormalizedPercentage(350, 0, -ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT);
         homeRunPct = checkBounds(homeRunPct, PITCHER_BATTING_HOME_RUN_PCT_MIN, PITCHER_BATTING_HOME_RUN_PCT_MAX);
 
-        int triplePct = (int) (random.nextGaussian() * PITCHER_BATTING_TRIPLE_STD_DEV) + PITCHER_BATTING_TRIPLE_PCT_MEAN;
+        int speed = getRandomNormalizedPercentage(PITCHER_BATTING_SPEED_STD_DEV, PITCHER_BATTING_SPEED_MEAN, PITCHER_BATTING_SPEED_MIN, PITCHER_BATTING_SPEED_MAX);
+
+        int baseRunning = getRandomNormalizedPercentage(PITCHER_BATTING_BASERUNNING_STD_DEV, PITCHER_BATTING_BASERUNNING_MEAN, PITCHER_BATTING_BASERUNNING_MIN, PITCHER_BATTING_BASERUNNING_MAX);
+
+        int triplePct = (int) ((speed - PITCHER_BATTING_SPEED_MEAN) / 2.5 + PITCHER_BATTING_TRIPLE_PCT_MEAN);
         triplePct = checkBounds(triplePct, PITCHER_BATTING_TRIPLE_PCT_MIN, PITCHER_BATTING_TRIPLE_PCT_MAX);
 
         int doublePct = (int) (random.nextGaussian() * PITCHER_BATTING_DOUBLE_STD_DEV) + PITCHER_BATTING_DOUBLE_PCT_MEAN;
         doublePct = checkBounds(doublePct, PITCHER_BATTING_DOUBLE_PCT_MIN, PITCHER_BATTING_DOUBLE_PCT_MAX);
 
-        int stolenBasePct = (int) (random.nextGaussian() * PITCHER_BATTING_STOLEN_BASE_STD_DEV) + PITCHER_BATTING_STOLEN_BASE_PCT_MEAN;
+        int stolenBasePct = PITCHER_BATTING_STOLEN_BASE_PCT_MEAN + ((speed - PITCHER_BATTING_SPEED_MEAN + baseRunning - PITCHER_BATTING_BASERUNNING_MEAN));
         stolenBasePct = checkBounds(stolenBasePct, PITCHER_BATTING_STOLEN_BASE_PCT_MIN, PITCHER_BATTING_STOLEN_BASE_PCT_MAX);
 
         int infieldFlyBallPct = (int) (random.nextGaussian() * PITCHER_BATTING_INFIELD_FLY_BALL_STD_DEV) + PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MEAN;
@@ -410,26 +461,30 @@ public class PitcherGenerator {
         int hitByPitchPct = (int) (random.nextGaussian() * PITCHER_BATTING_HIT_BY_PITCH_STD_DEV) + PITCHER_BATTING_HIT_BY_PITCH_PCT_MEAN;
         hitByPitchPct = checkBounds(hitByPitchPct, PITCHER_BATTING_HIT_BY_PITCH_PCT_MIN, PITCHER_BATTING_HIT_BY_PITCH_PCT_MAX);
 
-        int battingAverageBallsInPlay = (int) (random.nextGaussian() * PITCHER_BATTING_BABIP_STD_DEV) + PITCHER_BATTING_BABIP_PCT_MEAN;
-        battingAverageBallsInPlay = checkBounds(battingAverageBallsInPlay, PITCHER_BATTING_BABIP_PCT_MIN, PITCHER_BATTING_BABIP_PCT_MAX);
-
-        int foulBallPct = (int) (random.nextGaussian() * PITCHER_BATTING_FOUL_BALL_STD_DEV) + PITCHER_BATTING_FOUL_BALL_PCT_MEAN;
-        foulBallPct = checkBounds(foulBallPct, PITCHER_BATTING_FOUL_BALL_PCT_MIN, PITCHER_BATTING_FOUL_BALL_PCT_MAX);
-
         int pullPct = (int) (random.nextGaussian() * PITCHER_BATTING_PULL_STD_DEV) + PITCHER_BATTING_PULL_PCT_MEAN;
         pullPct = checkBounds(pullPct, PITCHER_BATTING_PULL_PCT_MIN, PITCHER_BATTING_PULL_PCT_MAX);
 
         int centerPct = (int) (random.nextGaussian() * PITCHER_BATTING_CENTER_STD_DEV) + PITCHER_BATTING_CENTER_PCT_MEAN;
         centerPct = checkBounds(centerPct, PITCHER_BATTING_CENTER_PCT_MIN, PITCHER_BATTING_CENTER_PCT_MAX);
 
+        int battingAverageBallsInPlay = 150 + ((hardPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((medPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_MED_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((ONE_HUNDRED_PERCENT-hardPct-medPct)*lineDrivePct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((hardPct*groundBallPct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((medPct*groundBallPct)/ONE_HUNDRED_PERCENT)* BATTING_MED_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((ONE_HUNDRED_PERCENT-hardPct-medPct)*groundBallPct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((hardPct*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT)* BATTING_HARD_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((medPct*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT)* BATTING_MED_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                ((ONE_HUNDRED_PERCENT-hardPct-medPct)*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT * BATTING_SOFT_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
+                (PITCHER_BATTING_PULL_PCT_MEAN - pullPct)/5 + (centerPct - PITCHER_BATTING_CENTER_PCT_MEAN)/5 + (((ONE_HUNDRED_PERCENT - pullPct - centerPct) -
+                (ONE_HUNDRED_PERCENT - PITCHER_BATTING_PULL_PCT_MEAN - PITCHER_BATTING_CENTER_PCT_MEAN))/5);
+        battingAverageBallsInPlay = checkBounds(battingAverageBallsInPlay, PITCHER_BATTING_BABIP_PCT_MIN, PITCHER_BATTING_BABIP_PCT_MAX);
+
+        int foulBallPct = (int) (random.nextGaussian() * PITCHER_BATTING_FOUL_BALL_STD_DEV) + PITCHER_BATTING_FOUL_BALL_PCT_MEAN;
+        foulBallPct = checkBounds(foulBallPct, PITCHER_BATTING_FOUL_BALL_PCT_MIN, PITCHER_BATTING_FOUL_BALL_PCT_MAX);
+
         int stolenBaseRate = (int) (random.nextGaussian() * PITCHER_BATTING_STOLEN_BASE_RATE_STD_DEV) + PITCHER_BATTING_STOLEN_BASE_RATE_MEAN;
         stolenBaseRate = checkBounds(stolenBaseRate, PITCHER_BATTING_STOLEN_BASE_RATE_MIN, PITCHER_BATTING_STOLEN_BASE_RATE_MAX);
-
-        int baseRunning = (int) (random.nextGaussian() * PITCHER_BATTING_BASERUNNING_STD_DEV) + PITCHER_BATTING_BASERUNNING_MEAN;
-        baseRunning = checkBounds(baseRunning, PITCHER_BATTING_BASERUNNING_MIN, PITCHER_BATTING_BASERUNNING_MAX);
-
-        int speed = (int) (random.nextGaussian() * PITCHER_BATTING_SPEED_STD_DEV) + PITCHER_BATTING_SPEED_MEAN;
-        speed = checkBounds(speed, PITCHER_BATTING_SPEED_MIN, PITCHER_BATTING_SPEED_MAX);
 
         int errorPct = (int) (random.nextGaussian() * PITCHER_BATTING_ERROR_PCT_STD_DEV) + PITCHER_BATTING_ERROR_PCT_MEAN;
         errorPct = checkBounds(errorPct, PITCHER_BATTING_ERROR_PCT_MIN, PITCHER_BATTING_ERROR_PCT_MAX);
@@ -438,9 +493,8 @@ public class PitcherGenerator {
         stamina = checkBounds(stamina, PITCHER_BATTING_STAMINA_MIN, PITCHER_BATTING_STAMINA_MAX);
 
 
-        return new HittingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, groundBallPct, lineDrivePct, homeRunPct, triplePct, doublePct,
-        stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, pullPct, centerPct,
-        stolenBaseRate, baseRunning, speed, errorPct, stamina);
+        return new HittingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, speed, groundBallPct, lineDrivePct, hardPct, medPct, pullPct, centerPct, homeRunPct, triplePct, doublePct,
+                stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina);
     }
 
 }

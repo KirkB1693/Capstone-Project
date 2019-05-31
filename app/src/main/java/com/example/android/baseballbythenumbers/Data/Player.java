@@ -8,9 +8,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Comparator;
 
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Positions.getPositionName;
 
-public class Player implements Parcelable {
+public class Player implements Parcelable
+{
 
     @SerializedName("firstName")
     @Expose
@@ -33,6 +38,12 @@ public class Player implements Parcelable {
     @SerializedName("dateOfBirth")
     @Expose
     private String dateOfBirth;
+    @SerializedName("Hits")
+    @Expose
+    private String hits;
+    @SerializedName("Throws")
+    @Expose
+    private String _throws;
     @SerializedName("currentSeasonStats")
     @Expose
     private String currentSeasonStats;
@@ -59,7 +70,8 @@ public class Player implements Parcelable {
             return (new Player[size]);
         }
 
-    };
+    }
+            ;
 
     protected Player(Parcel in) {
         this.firstName = ((String) in.readValue((String.class.getClassLoader())));
@@ -69,6 +81,8 @@ public class Player implements Parcelable {
         this.alternatePositions = ((int) in.readValue((int.class.getClassLoader())));
         this.age = ((int) in.readValue((int.class.getClassLoader())));
         this.dateOfBirth = ((String) in.readValue((String.class.getClassLoader())));
+        this.hits = ((String) in.readValue((String.class.getClassLoader())));
+        this._throws = ((String) in.readValue((String.class.getClassLoader())));
         this.currentSeasonStats = ((String) in.readValue((String.class.getClassLoader())));
         this.careerStats = ((String) in.readValue((String.class.getClassLoader())));
         this.hittingPercentages = ((HittingPercentages) in.readValue((HittingPercentages.class.getClassLoader())));
@@ -77,24 +91,28 @@ public class Player implements Parcelable {
 
     /**
      * No args constructor for use in serialization
+     *
      */
     public Player() {
     }
 
     /**
-     * @param pitchingPercentages
-     * @param dateOfBirth
+     *
      * @param middleName
+     * @param dateOfBirth
      * @param lastName
+     * @param _throws
      * @param primaryPosition
+     * @param currentSeasonStats
+     * @param hittingPercentages
+     * @param pitchingPercentages
+     * @param hits
      * @param careerStats
      * @param age
-     * @param currentSeasonStats
      * @param alternatePositions
      * @param firstName
-     * @param hittingPercentages
      */
-    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String currentSeasonStats, String careerStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages) {
+    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String _throws, String currentSeasonStats, String careerStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages) {
         super();
         this.firstName = firstName;
         this.middleName = middleName;
@@ -103,6 +121,8 @@ public class Player implements Parcelable {
         this.alternatePositions = alternatePositions;
         this.age = age;
         this.dateOfBirth = dateOfBirth;
+        this.hits = hits;
+        this._throws = _throws;
         this.currentSeasonStats = currentSeasonStats;
         this.careerStats = careerStats;
         this.hittingPercentages = hittingPercentages;
@@ -132,8 +152,6 @@ public class Player implements Parcelable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public String getName() {return firstName + " " + lastName;}
 
     public int getPrimaryPosition() {
         return primaryPosition;
@@ -165,6 +183,22 @@ public class Player implements Parcelable {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getHits() {
+        return hits;
+    }
+
+    public void setHits(String hits) {
+        this.hits = hits;
+    }
+
+    public String getThrows() {
+        return _throws;
+    }
+
+    public void setThrows(String _throws) {
+        this._throws = _throws;
     }
 
     public String getCurrentSeasonStats() {
@@ -199,6 +233,29 @@ public class Player implements Parcelable {
         this.pitchingPercentages = pitchingPercentages;
     }
 
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(firstName);
+        dest.writeValue(middleName);
+        dest.writeValue(lastName);
+        dest.writeValue(primaryPosition);
+        dest.writeValue(alternatePositions);
+        dest.writeValue(age);
+        dest.writeValue(dateOfBirth);
+        dest.writeValue(hits);
+        dest.writeValue(_throws);
+        dest.writeValue(currentSeasonStats);
+        dest.writeValue(careerStats);
+        dest.writeValue(hittingPercentages);
+        dest.writeValue(pitchingPercentages);
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public String getName() {return firstName + " " + lastName;}
+
     @Override
     public String toString() {
         return "Name : " + firstName + " " + middleName + " " + lastName + "\n"+
@@ -209,26 +266,6 @@ public class Player implements Parcelable {
                 "Career Stats : " + careerStats + "\n"+
                 "Hitting Percentages : " + hittingPercentages + "\n"+
                 "Pitching Percentages : " + pitchingPercentages + "\n";
-    }
-
-
-
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(firstName);
-        dest.writeValue(middleName);
-        dest.writeValue(lastName);
-        dest.writeValue(primaryPosition);
-        dest.writeValue(alternatePositions);
-        dest.writeValue(age);
-        dest.writeValue(dateOfBirth);
-        dest.writeValue(currentSeasonStats);
-        dest.writeValue(careerStats);
-        dest.writeValue(hittingPercentages);
-        dest.writeValue(pitchingPercentages);
-    }
-
-    public int describeContents() {
-        return 0;
     }
 
     public static Comparator<Player> PrimaryPositionComparator = new Comparator<Player>() {
@@ -254,19 +291,35 @@ public class Player implements Parcelable {
     public static Comparator<Player> BestPowerComparator = new Comparator<Player>() {
         @Override
         public int compare(Player player1, Player player2) {
-            int powerPlayer1 = (player1.hittingPercentages.getHomeRunPct() * 4) + player1.hittingPercentages.getTriplePct() * 3 + player1.hittingPercentages.getDoublePct() * 2;
-            int powerplayer2 = (player2.hittingPercentages.getHomeRunPct() * 4) + player2.hittingPercentages.getTriplePct() * 3 + player2.hittingPercentages.getDoublePct() * 2;
-            //ascending order so player2-player1, want highest power rate (best power) first
-            return powerplayer2-powerPlayer1;
+            int powerPlayer1 = ((player1.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player1.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN +
+                    ((player1.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN));
+            int powerPlayer2 = ((player2.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player2.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN +
+                    ((player2.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN));
+            //descending order so player2-player1, want highest power rate (best power) first
+            return powerPlayer2-powerPlayer1;
         }
     };
 
-    public static Comparator<Player> BestContactComparator = new Comparator<Player>() {
+    public static Comparator<Player> BestOnBaseComparator = new Comparator<Player>() {
         @Override
         public int compare(Player player1, Player player2) {
-            int powerPlayer1 = (player1.hittingPercentages.getHomeRunPct() * 4) + player1.hittingPercentages.getTriplePct() * 3 + player1.hittingPercentages.getDoublePct() * 2;
-            int powerplayer2 = (player2.hittingPercentages.getHomeRunPct() * 4) + player2.hittingPercentages.getTriplePct() * 3 + player2.hittingPercentages.getDoublePct() * 2;
-            //ascending order so player2-player1, want highest power rate (best power) first
+            int onBasePlayer1 = BATTING_Z_SWING_PCT_MEAN - player1.hittingPercentages.getZSwingPct() + player1.hittingPercentages.getBattingAverageBallsInPlay();
+            int onBaseplayer2 = BATTING_Z_SWING_PCT_MEAN - player2.hittingPercentages.getZSwingPct() + player2.hittingPercentages.getBattingAverageBallsInPlay();
+            //descending order so player2-player1, want highest on base rate (best onbase pct) first
+            return onBaseplayer2-onBasePlayer1;
+        }
+    };
+
+    public static Comparator<Player> BestCombinedOnBaseAndPowerComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int powerPlayer1 = BATTING_Z_SWING_PCT_MEAN - player1.hittingPercentages.getZSwingPct() + player1.hittingPercentages.getBattingAverageBallsInPlay() +
+                    ((player1.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player1.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
+                    player1.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
+            int powerplayer2 = BATTING_Z_SWING_PCT_MEAN - player2.hittingPercentages.getZSwingPct() + player2.hittingPercentages.getBattingAverageBallsInPlay() +
+                    ((player2.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player2.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
+                    player2.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
+            //descending order so player2-player1, want highest combined rate (best onbase pct + power) first
             return powerplayer2-powerPlayer1;
         }
     };
