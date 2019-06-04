@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Comparator;
+import java.util.List;
 
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
@@ -38,18 +39,18 @@ public class Player implements Parcelable
     @SerializedName("dateOfBirth")
     @Expose
     private String dateOfBirth;
-    @SerializedName("Hits")
+    @SerializedName("hits")
     @Expose
     private String hits;
-    @SerializedName("Throws")
+    @SerializedName("throwingHand")
     @Expose
-    private String _throws;
-    @SerializedName("currentSeasonStats")
+    private String throwingHand;
+    @SerializedName("battingStats")
     @Expose
-    private String currentSeasonStats;
-    @SerializedName("careerStats")
+    private List<BattingStats> battingStats = null;
+    @SerializedName("pitchingStats")
     @Expose
-    private String careerStats;
+    private List<PitchingStats> pitchingStats = null;
     @SerializedName("hittingPercentages")
     @Expose
     private HittingPercentages hittingPercentages;
@@ -82,9 +83,9 @@ public class Player implements Parcelable
         this.age = ((int) in.readValue((int.class.getClassLoader())));
         this.dateOfBirth = ((String) in.readValue((String.class.getClassLoader())));
         this.hits = ((String) in.readValue((String.class.getClassLoader())));
-        this._throws = ((String) in.readValue((String.class.getClassLoader())));
-        this.currentSeasonStats = ((String) in.readValue((String.class.getClassLoader())));
-        this.careerStats = ((String) in.readValue((String.class.getClassLoader())));
+        this.throwingHand = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.battingStats, (BattingStats.class.getClassLoader()));
+        in.readList(this.pitchingStats, (PitchingStats.class.getClassLoader()));
         this.hittingPercentages = ((HittingPercentages) in.readValue((HittingPercentages.class.getClassLoader())));
         this.pitchingPercentages = ((PitchingPercentages) in.readValue((PitchingPercentages.class.getClassLoader())));
     }
@@ -101,18 +102,18 @@ public class Player implements Parcelable
      * @param middleName
      * @param dateOfBirth
      * @param lastName
-     * @param _throws
      * @param primaryPosition
-     * @param currentSeasonStats
+     * @param battingStats
+     * @param pitchingStats
      * @param hittingPercentages
      * @param pitchingPercentages
      * @param hits
-     * @param careerStats
      * @param age
      * @param alternatePositions
      * @param firstName
+     * @param throwingHand
      */
-    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String _throws, String currentSeasonStats, String careerStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages) {
+    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages) {
         super();
         this.firstName = firstName;
         this.middleName = middleName;
@@ -122,9 +123,9 @@ public class Player implements Parcelable
         this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.hits = hits;
-        this._throws = _throws;
-        this.currentSeasonStats = currentSeasonStats;
-        this.careerStats = careerStats;
+        this.throwingHand = throwingHand;
+        this.battingStats = battingStats;
+        this.pitchingStats = pitchingStats;
         this.hittingPercentages = hittingPercentages;
         this.pitchingPercentages = pitchingPercentages;
     }
@@ -193,28 +194,28 @@ public class Player implements Parcelable
         this.hits = hits;
     }
 
-    public String getThrows() {
-        return _throws;
+    public String getThrowingHand() {
+        return throwingHand;
     }
 
-    public void setThrows(String _throws) {
-        this._throws = _throws;
+    public void setThrowingHand(String throwingHand) {
+        this.throwingHand = throwingHand;
     }
 
-    public String getCurrentSeasonStats() {
-        return currentSeasonStats;
+    public List<BattingStats> getBattingStats() {
+        return battingStats;
     }
 
-    public void setCurrentSeasonStats(String currentSeasonStats) {
-        this.currentSeasonStats = currentSeasonStats;
+    public void setBattingStats(List<BattingStats> battingStats) {
+        this.battingStats = battingStats;
     }
 
-    public String getCareerStats() {
-        return careerStats;
+    public List<PitchingStats> getPitchingStats() {
+        return pitchingStats;
     }
 
-    public void setCareerStats(String careerStats) {
-        this.careerStats = careerStats;
+    public void setPitchingStats(List<PitchingStats> pitchingStats) {
+        this.pitchingStats = pitchingStats;
     }
 
     public HittingPercentages getHittingPercentages() {
@@ -242,9 +243,9 @@ public class Player implements Parcelable
         dest.writeValue(age);
         dest.writeValue(dateOfBirth);
         dest.writeValue(hits);
-        dest.writeValue(_throws);
-        dest.writeValue(currentSeasonStats);
-        dest.writeValue(careerStats);
+        dest.writeValue(throwingHand);
+        dest.writeList(battingStats);
+        dest.writeList(pitchingStats);
         dest.writeValue(hittingPercentages);
         dest.writeValue(pitchingPercentages);
     }
@@ -252,7 +253,6 @@ public class Player implements Parcelable
     public int describeContents() {
         return 0;
     }
-
 
     public String getName() {return firstName + " " + lastName;}
 
@@ -262,8 +262,8 @@ public class Player implements Parcelable
                 "Position : " + getPositionName(primaryPosition) + "\n"+
                 "Age : " + age + "\n"+
                 "Date of Birth : " + dateOfBirth + "\n"+
-                "Current Season Stats : " + currentSeasonStats + "\n"+
-                "Career Stats : " + careerStats + "\n"+
+                "Batting Stats : " + battingStats + "\n"+
+                "Pitching Stats : " + pitchingStats + "\n"+
                 "Hitting Percentages : " + hittingPercentages + "\n"+
                 "Pitching Percentages : " + pitchingPercentages + "\n";
     }

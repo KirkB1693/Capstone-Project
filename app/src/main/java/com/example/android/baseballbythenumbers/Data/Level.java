@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.List;
 
 public class Level implements Parcelable
@@ -16,6 +14,9 @@ public class Level implements Parcelable
     @SerializedName("levelName")
     @Expose
     private String levelName;
+    @SerializedName("currentYear")
+    @Expose
+    private int currentYear;
     @SerializedName("leagues")
     @Expose
     private List<League> leagues = null;
@@ -38,6 +39,7 @@ public class Level implements Parcelable
 
     protected Level(Parcel in) {
         this.levelName = ((String) in.readValue((String.class.getClassLoader())));
+        this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
     }
 
@@ -51,11 +53,13 @@ public class Level implements Parcelable
     /**
      *
      * @param leagues
+     * @param currentYear
      * @param levelName
      */
-    public Level(String levelName, List<League> leagues) {
+    public Level(String levelName, int currentYear, List<League> leagues) {
         super();
         this.levelName = levelName;
+        this.currentYear = currentYear;
         this.leagues = leagues;
     }
 
@@ -67,6 +71,14 @@ public class Level implements Parcelable
         this.levelName = levelName;
     }
 
+    public int getCurrentYear() {
+        return currentYear;
+    }
+
+    public void setCurrentYear(int currentYear) {
+        this.currentYear = currentYear;
+    }
+
     public List<League> getLeagues() {
         return leagues;
     }
@@ -75,13 +87,9 @@ public class Level implements Parcelable
         this.leagues = leagues;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("levelName", levelName).append("leagues", leagues).toString();
-    }
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(levelName);
+        dest.writeValue(currentYear);
         dest.writeList(leagues);
     }
 

@@ -21,12 +21,103 @@ import static com.example.android.baseballbythenumbers.Data.Positions.THIRD_BASE
 
 public class LineupGenerator {
 
-    static int[] positionsNoDH = {STARTING_PITCHER, CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD};
-    static int[] positionsWithDH = {CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD, DESIGNATED_HITTER};
-    static int[] idealOrderToFillLineup = {1, 4, 2, 5, 3, 6, 7, 8, 9};
+    private static int[] positionsNoDH = {STARTING_PITCHER, CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD};
+    private static int[] positionsWithDH = {CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD, DESIGNATED_HITTER};
+    private static int[] idealOrderToFillLineup = {1, 4, 2, 5, 3, 6, 7, 8, 9};
 
-    public ArrayList<Player> lineupFromDefense(ArrayList<Player> lineup) {
-        return lineup;
+    public static TreeMap<Integer, Player> lineupFromDefense(TreeMap<Integer, Player> defense, Team team) {
+
+
+        List<Player> defensePlayers= new ArrayList<>();
+
+        if (team.isUseDh()){
+            for (Player player: team.getPlayers()) {
+                if (player.getPrimaryPosition() == DESIGNATED_HITTER) {
+                    defensePlayers.add(player);
+                }
+            }
+            for (TreeMap.Entry entry : defense.entrySet() ) {
+                defensePlayers.add((Player) entry.getValue());
+            }
+        } else {
+            for (TreeMap.Entry entry : defense.entrySet() ) {
+                defensePlayers.add((Player) entry.getValue());
+            }
+        }
+
+
+
+
+        Collections.sort(defensePlayers, Player.BestPowerComparator);
+        TreeMap<Integer, Player> bestPower = new TreeMap<>();
+        int bestOrder = 1;
+        for (Player player : defensePlayers) {
+            bestPower.put(bestOrder, player);
+            bestOrder++;
+        }
+
+        Collections.sort(defensePlayers, Player.BestOnBaseComparator);
+        TreeMap<Integer, Player> bestOBP = new TreeMap<>();
+        bestOrder = 1;
+        for (Player player : defensePlayers) {
+            bestOBP.put(bestOrder, player);
+            bestOrder++;
+        }
+
+        Collections.sort(defensePlayers, Player.BestCombinedOnBaseAndPowerComparator);
+        TreeMap<Integer, Player> bestCombined = new TreeMap<>();
+        bestOrder = 1;
+        for (Player player : defensePlayers) {
+            bestCombined.put(bestOrder, player);
+            bestOrder++;
+        }
+
+
+        TreeMap<Integer, Player> newLineup = new TreeMap<>();
+
+        for (int lineupPosition : idealOrderToFillLineup) {
+            if (lineupPosition <= 3) {
+                for (TreeMap.Entry entry : bestOBP.entrySet()) {
+                    Player player = (Player) entry.getValue();
+                    final int position = player.getPrimaryPosition();
+                    if (newLineup.isEmpty() && position != STARTING_PITCHER && positionIsInValidPositions(position, team.isUseDh())) {
+                        newLineup.put(lineupPosition, player);
+                        break;
+                    } else {
+                        if (position != STARTING_PITCHER && playerNotAlreadyInLineup(player, newLineup) && positionIsInValidPositions(position, team.isUseDh()) && positionNotAlreadyInLineup(position, newLineup)) {
+                            newLineup.put(lineupPosition, player);
+                            break;
+                        }
+                    }
+                }
+            } else if (lineupPosition <= 6) {
+                for (TreeMap.Entry entry : bestCombined.entrySet()) {
+                    Player player = (Player) entry.getValue();
+                    final int position = player.getPrimaryPosition();
+                    if (newLineup.isEmpty() && position != STARTING_PITCHER && positionIsInValidPositions(position, team.isUseDh())) {
+                        newLineup.put(lineupPosition, player);
+                        break;
+                    } else {
+                        if (position != STARTING_PITCHER && playerNotAlreadyInLineup(player, newLineup) && positionIsInValidPositions(position, team.isUseDh()) && positionNotAlreadyInLineup(position, newLineup)) {
+                            newLineup.put(lineupPosition, player);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                for (TreeMap.Entry entry : bestPower.entrySet()) {
+                    Player player = (Player) entry.getValue();
+                    final int position = player.getPrimaryPosition();
+                    if (playerNotAlreadyInLineup(player, newLineup) && positionIsInValidPositions(position, team.isUseDh()) && positionNotAlreadyInLineup(position, newLineup) && okToPlacePitcher(position, lineupPosition)) {
+                        newLineup.put(lineupPosition, player);
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        return newLineup;
     }
 
 

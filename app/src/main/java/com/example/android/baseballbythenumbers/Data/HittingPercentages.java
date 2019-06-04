@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 public class HittingPercentages implements Parcelable
 {
 
@@ -24,16 +26,16 @@ public class HittingPercentages implements Parcelable
     @SerializedName("Speed")
     @Expose
     private int speed;
-    @SerializedName("GroundBallPct")
-    @Expose
-    private int groundBallPct;
     @SerializedName("LineDrivePct")
     @Expose
     private int lineDrivePct;
-    @SerializedName("HardPct")
+    @SerializedName("GroundBallPct")
+    @Expose
+    private int groundBallPct;
+    @SerializedName("hardPct")
     @Expose
     private int hardPct;
-    @SerializedName("MedPct")
+    @SerializedName("medPct")
     @Expose
     private int medPct;
     @SerializedName("PullPct")
@@ -78,6 +80,9 @@ public class HittingPercentages implements Parcelable
     @SerializedName("Stamina")
     @Expose
     private int stamina;
+    @SerializedName("StaminaUsed")
+    @Expose
+    private int staminaUsed;
     public final static Parcelable.Creator<HittingPercentages> CREATOR = new Creator<HittingPercentages>() {
 
 
@@ -101,8 +106,8 @@ public class HittingPercentages implements Parcelable
         this.oContactPct = ((int) in.readValue((int.class.getClassLoader())));
         this.zContactPct = ((int) in.readValue((int.class.getClassLoader())));
         this.speed = ((int) in.readValue((int.class.getClassLoader())));
-        this.groundBallPct = ((int) in.readValue((int.class.getClassLoader())));
         this.lineDrivePct = ((int) in.readValue((int.class.getClassLoader())));
+        this.groundBallPct = ((int) in.readValue((int.class.getClassLoader())));
         this.hardPct = ((int) in.readValue((int.class.getClassLoader())));
         this.medPct = ((int) in.readValue((int.class.getClassLoader())));
         this.pullPct = ((int) in.readValue((int.class.getClassLoader())));
@@ -119,6 +124,7 @@ public class HittingPercentages implements Parcelable
         this.baseRunning = ((int) in.readValue((int.class.getClassLoader())));
         this.errorPct = ((int) in.readValue((int.class.getClassLoader())));
         this.stamina = ((int) in.readValue((int.class.getClassLoader())));
+        this.staminaUsed = ((int) in.readValue((int.class.getClassLoader())));
     }
 
     /**
@@ -130,6 +136,7 @@ public class HittingPercentages implements Parcelable
 
     /**
      *
+     * @param staminaUsed
      * @param baseRunning
      * @param triplePct
      * @param zContactPct
@@ -154,15 +161,15 @@ public class HittingPercentages implements Parcelable
      * @param foulBallPct
      * @param battingAverageBallsInPlay
      */
-    public HittingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int speed, int groundBallPct, int lineDrivePct, int hardPct, int medPct, int pullPct, int centerPct, int homeRunPct, int triplePct, int doublePct, int stolenBasePct, int infieldFlyBallPct, int hitByPitchPct, int battingAverageBallsInPlay, int foulBallPct, int stolenBaseRate, int baseRunning, int errorPct, int stamina) {
+    public HittingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int speed, int lineDrivePct, int groundBallPct, int hardPct, int medPct, int pullPct, int centerPct, int homeRunPct, int triplePct, int doublePct, int stolenBasePct, int infieldFlyBallPct, int hitByPitchPct, int battingAverageBallsInPlay, int foulBallPct, int stolenBaseRate, int baseRunning, int errorPct, int stamina, int staminaUsed) {
         super();
         this.oSwingPct = oSwingPct;
         this.zSwingPct = zSwingPct;
         this.oContactPct = oContactPct;
         this.zContactPct = zContactPct;
         this.speed = speed;
-        this.groundBallPct = groundBallPct;
         this.lineDrivePct = lineDrivePct;
+        this.groundBallPct = groundBallPct;
         this.hardPct = hardPct;
         this.medPct = medPct;
         this.pullPct = pullPct;
@@ -179,6 +186,7 @@ public class HittingPercentages implements Parcelable
         this.baseRunning = baseRunning;
         this.errorPct = errorPct;
         this.stamina = stamina;
+        this.staminaUsed = staminaUsed;
     }
 
     public int getOSwingPct() {
@@ -221,20 +229,20 @@ public class HittingPercentages implements Parcelable
         this.speed = speed;
     }
 
-    public int getGroundBallPct() {
-        return groundBallPct;
-    }
-
-    public void setGroundBallPct(int groundBallPct) {
-        this.groundBallPct = groundBallPct;
-    }
-
     public int getLineDrivePct() {
         return lineDrivePct;
     }
 
     public void setLineDrivePct(int lineDrivePct) {
         this.lineDrivePct = lineDrivePct;
+    }
+
+    public int getGroundBallPct() {
+        return groundBallPct;
+    }
+
+    public void setGroundBallPct(int groundBallPct) {
+        this.groundBallPct = groundBallPct;
     }
 
     public int getHardPct() {
@@ -365,14 +373,22 @@ public class HittingPercentages implements Parcelable
         this.stamina = stamina;
     }
 
+    public int getStaminaUsed() {
+        return staminaUsed;
+    }
+
+    public void setStaminaUsed(int staminaUsed) {
+        this.staminaUsed = staminaUsed;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(oSwingPct);
         dest.writeValue(zSwingPct);
         dest.writeValue(oContactPct);
         dest.writeValue(zContactPct);
         dest.writeValue(speed);
-        dest.writeValue(groundBallPct);
         dest.writeValue(lineDrivePct);
+        dest.writeValue(groundBallPct);
         dest.writeValue(hardPct);
         dest.writeValue(medPct);
         dest.writeValue(pullPct);
@@ -389,13 +405,14 @@ public class HittingPercentages implements Parcelable
         dest.writeValue(baseRunning);
         dest.writeValue(errorPct);
         dest.writeValue(stamina);
+        dest.writeValue(staminaUsed);
     }
 
     public int describeContents() {
         return 0;
     }
 
-
+    @NotNull
     @Override
     public String toString() {
         return "O Swing Pct : " + formatPct(oSwingPct) + ", Z Swing Pct : " + formatPct(zSwingPct) + ", O Contact Pct : " + formatPct(oContactPct) + ", Z Contact Pct : " + formatPct(zContactPct) +
@@ -403,7 +420,7 @@ public class HittingPercentages implements Parcelable
                 ", HR Pct : " + formatPct(homeRunPct) + ", 3B Pct : " + formatPct(triplePct) +
                 ", 2B Pct : " + formatPct(doublePct) + ", SB Pct : " + formatPct(stolenBasePct) + ", IFFB Pct : " + formatPct(infieldFlyBallPct) + ", HBP Pct : " + formatPct(hitByPitchPct) +
                 ", BABIP Pct : " + formatPct(battingAverageBallsInPlay) + ", Foul Pct : " + formatPct(foulBallPct) + ", Pull Pct : " + formatPct(pullPct) + ", Center Pct : " + formatPct(centerPct) +
-                ", SB Rate : " + formatPct(stolenBaseRate) + ", Baserunning : " + baseRunning/100 + ", Speed : " + speed/100 + ", Error Pct : " + errorPct + ", Fielding Stamina : " + stamina;
+                ", SB Rate : " + formatPct(stolenBaseRate) + ", Baserunning : " + baseRunning/100 + ", Speed : " + speed/100 + ", Error Pct : " + formatPct(errorPct) + ", Fielding Stamina : " + stamina;
     }
 
     private String formatPct(int percentAsInteger) {

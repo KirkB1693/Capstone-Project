@@ -72,6 +72,9 @@ public class PitchingPercentages implements Parcelable
     @SerializedName("pitchingStamina")
     @Expose
     private int pitchingStamina;
+    @SerializedName("pitchingStaminaUsed")
+    @Expose
+    private int pitchingStaminaUsed;
     public final static Parcelable.Creator<PitchingPercentages> CREATOR = new Creator<PitchingPercentages>() {
 
 
@@ -111,6 +114,7 @@ public class PitchingPercentages implements Parcelable
         this.splitFingerPct = ((int) in.readValue((int.class.getClassLoader())));
         this.knuckleballPct = ((int) in.readValue((int.class.getClassLoader())));
         this.pitchingStamina = ((int) in.readValue((int.class.getClassLoader())));
+        this.pitchingStaminaUsed = ((int) in.readValue((int.class.getClassLoader())));
     }
 
     /**
@@ -125,10 +129,10 @@ public class PitchingPercentages implements Parcelable
      * @param balkPct
      * @param zContactPct
      * @param hitByPitchPct
-     * @param pitchingStamina
      * @param cutterPct
      * @param oSwingPct
      * @param groundBallPct
+     * @param pitchingStaminaUsed
      * @param oContactPct
      * @param knuckleballPct
      * @param zSwingPct
@@ -138,13 +142,14 @@ public class PitchingPercentages implements Parcelable
      * @param wildPitchPct
      * @param zonePct
      * @param curveballPct
+     * @param pitchingStamina
      * @param infieldFlyBallPct
      * @param homeRunPct
      * @param splitFingerPct
      * @param firstPitchStrikePct
      * @param fastballPct
      */
-    public PitchingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int groundBallPct, int lineDrivePct, int homeRunPct, int infieldFlyBallPct, int hitByPitchPct, int wildPitchPct, int balkPct, int zonePct, int firstPitchStrikePct, int fastballPct, int sliderPct, int cutterPct, int curveballPct, int changeUpPct, int splitFingerPct, int knuckleballPct, int pitchingStamina) {
+    public PitchingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int groundBallPct, int lineDrivePct, int homeRunPct, int infieldFlyBallPct, int hitByPitchPct, int wildPitchPct, int balkPct, int zonePct, int firstPitchStrikePct, int fastballPct, int sliderPct, int cutterPct, int curveballPct, int changeUpPct, int splitFingerPct, int knuckleballPct, int pitchingStamina, int pitchingStaminaUsed) {
         super();
         this.oSwingPct = oSwingPct;
         this.zSwingPct = zSwingPct;
@@ -167,6 +172,7 @@ public class PitchingPercentages implements Parcelable
         this.splitFingerPct = splitFingerPct;
         this.knuckleballPct = knuckleballPct;
         this.pitchingStamina = pitchingStamina;
+        this.pitchingStaminaUsed = pitchingStaminaUsed;
     }
 
     public int getOSwingPct() {
@@ -329,28 +335,20 @@ public class PitchingPercentages implements Parcelable
         this.knuckleballPct = knuckleballPct;
     }
 
-    public int getpitchingStamina() {
+    public int getPitchingStamina() {
         return pitchingStamina;
     }
 
-    public void setpitchingStamina(int pitchingStamina) {
+    public void setPitchingStamina(int pitchingStamina) {
         this.pitchingStamina = pitchingStamina;
     }
 
-
-    @Override
-    public String toString() {
-        return "O Swing Pct : " + formatPct(oSwingPct) + ", Z Swing Pct : " + formatPct(zSwingPct) + ", O Contact Pct : " + formatPct(oContactPct) + ", Z Contact Pct : " + formatPct(zContactPct) +
-                ", GB Pct : " + formatPct(groundBallPct) + ", LD Pct : " + formatPct(lineDrivePct) + ", HR Pct : " + formatPct(homeRunPct) + ", 3B Pct : " +
-                ", IFFB Pct : " + formatPct(infieldFlyBallPct) + ", HBP Pct : " + formatPct(hitByPitchPct) + ", WP Pct : " + formatPct(wildPitchPct) + ", Balk Pct : " + formatPct(balkPct) +
-                ", Zone Pct : " + formatPct(zonePct) + ", F-Strike Pct : " + formatPct(firstPitchStrikePct) + ", Fastball Pct : " + formatPct(fastballPct) + ", Slider Pct : " + formatPct(sliderPct) +
-                ", Cutter Pct : " + formatPct(cutterPct) + ", Curve Pct : " + formatPct(curveballPct) + ", Change Up Pct : " + formatPct(changeUpPct) + ", Splitter Pct : " + formatPct(splitFingerPct) +
-                ", Knuckler Pct : " + formatPct(knuckleballPct) + ", Pitching Stamina : " + pitchingStamina/100;
+    public int getPitchingStaminaUsed() {
+        return pitchingStaminaUsed;
     }
 
-    private String formatPct(int percentAsInteger) {
-        double percent = ((double) percentAsInteger)/100.0;
-        return percent + "%";
+    public void setPitchingStaminaUsed(int pitchingStaminaUsed) {
+        this.pitchingStaminaUsed = pitchingStaminaUsed;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
@@ -375,10 +373,27 @@ public class PitchingPercentages implements Parcelable
         dest.writeValue(splitFingerPct);
         dest.writeValue(knuckleballPct);
         dest.writeValue(pitchingStamina);
+        dest.writeValue(pitchingStaminaUsed);
     }
 
     public int describeContents() {
         return 0;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "O Swing Pct : " + formatPct(oSwingPct) + ", Z Swing Pct : " + formatPct(zSwingPct) + ", O Contact Pct : " + formatPct(oContactPct) + ", Z Contact Pct : " + formatPct(zContactPct) +
+                ", GB Pct : " + formatPct(groundBallPct) + ", LD Pct : " + formatPct(lineDrivePct) + ", HR Pct : " + formatPct(homeRunPct) + ", 3B Pct : " +
+                ", IFFB Pct : " + formatPct(infieldFlyBallPct) + ", HBP Pct : " + formatPct(hitByPitchPct) + ", WP Pct : " + formatPct(wildPitchPct) + ", Balk Pct : " + formatPct(balkPct) +
+                ", Zone Pct : " + formatPct(zonePct) + ", F-Strike Pct : " + formatPct(firstPitchStrikePct) + ", Fastball Pct : " + formatPct(fastballPct) + ", Slider Pct : " + formatPct(sliderPct) +
+                ", Cutter Pct : " + formatPct(cutterPct) + ", Curve Pct : " + formatPct(curveballPct) + ", Change Up Pct : " + formatPct(changeUpPct) + ", Splitter Pct : " + formatPct(splitFingerPct) +
+                ", Knuckler Pct : " + formatPct(knuckleballPct) + ", Pitching Stamina : " + pitchingStamina/100;
+    }
+
+    private String formatPct(int percentAsInteger) {
+        double percent = ((double) percentAsInteger)/100.0;
+        return percent + "%";
+    }
 }

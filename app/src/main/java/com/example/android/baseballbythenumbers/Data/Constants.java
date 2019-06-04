@@ -246,7 +246,7 @@ public class Constants {
 
         public static final int PITCHER_BATTING_ERROR_PCT_MEAN = 507;
         public static final int PITCHER_BATTING_ERROR_PCT_STD_DEV = 405;
-        public static final int PITCHER_BATTING_ERROR_PCT_MIN = 0;
+        public static final int PITCHER_BATTING_ERROR_PCT_MIN = 1;
         public static final int PITCHER_BATTING_ERROR_PCT_MAX = 2308;
 
         public static final int PITCHER_BATTING_STAMINA_MEAN = 14615;
@@ -363,7 +363,7 @@ public class Constants {
 
         public static final int BATTING_ERROR_PCT_MEAN = 205;
         public static final int BATTING_ERROR_PCT_STD_DEV = 168;
-        public static final int BATTING_ERROR_PCT_MIN = 0;
+        public static final int BATTING_ERROR_PCT_MIN = 1;
         public static final int BATTING_ERROR_PCT_MAX = 1120;
 
         public static final int BATTING_STAMINA_MEAN = 14615;
@@ -393,6 +393,24 @@ public class Constants {
         public static final int FIRST_HITS_LEFT_PCT = 5500;
         public static final int OF_HITS_LEFT_PCT = 4300;
         public static final int POPULATION_LEFT_PCT = 2000;
+    }
+
+    public static class TypeOfHit {
+        public static final int GROUNDBALL = 1;
+        public static final int LINE_DRIVE = 2;
+        public static final int FLYBALL = 3;
+    }
+
+    public static class QualityOfContact {
+        public static final int SOFT = 100;
+        public static final int MEDIUM = 200;
+        public static final int HARD = 300;
+    }
+
+    public static class FieldArea {
+        public static final int LEFT = 100;
+        public static final int CENTER = 200;
+        public static final int RIGHT = 300;
     }
 }
 

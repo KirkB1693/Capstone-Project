@@ -15,6 +15,16 @@ public class Positions {
     public static final int LONG_RELIEVER = 1024;
     public static final int SHORT_RELEIVER = 2048;
 
+    public static final int SCOREKEEPING_PITCHER = 1;
+    public static final int SCOREKEEPING_CATCHER = 2;
+    public static final int SCOREKEEPING_FIRST_BASE = 3;
+    public static final int SCOREKEEPING_SECOND_BASE = 4;
+    public static final int SCOREKEEPING_THIRD_BASE = 5;
+    public static final int SCOREKEEPING_SHORTSTOP = 6;
+    public static final int SCOREKEEPING_LEFT_FIELD = 7;
+    public static final int SCOREKEEPING_CENTER_FIELD = 8;
+    public static final int SCOREKEEPING_RIGHT_FIELD = 9;
+
     public static String getPositionName(int primaryPosition) {
         switch (primaryPosition) {
             case STARTING_PITCHER:

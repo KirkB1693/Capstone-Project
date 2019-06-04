@@ -2,8 +2,10 @@ package com.example.android.baseballbythenumbers.TeamGenerator;
 
 import android.content.Context;
 
+import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.HittingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingPercentages;
+import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.NameGenerator.Name;
 import com.example.android.baseballbythenumbers.NameGenerator.NameGenerator;
@@ -181,6 +183,10 @@ public class PitcherGenerator {
 
     private List<Player> generateStarters() {
         List<Player> startersList = new ArrayList<>();
+        List<BattingStats> newBattingStats = new ArrayList<>();
+        newBattingStats.add(0,new BattingStats(0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0));
+        List<PitchingStats> newPitchingStats = new ArrayList<>();
+        newPitchingStats.add(0,new PitchingStats(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
         for (int i = 0; i < startingPitchers; i++) {
             Name newName = nameGenerator.generateName();
             double trueAge = ((random.nextGaussian() * PITCHER_AGE_STD_DEV) + PITCHER_AGE_MEAN);
@@ -198,14 +204,17 @@ public class PitcherGenerator {
                 throwingSide = rightHanded;
             }
             String hittingSide = throwingSide;
+
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), STARTING_PITCHER, LONG_RELIEVER + SHORT_RELEIVER,
-                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER));
+                    age, birthdate, hittingSide, throwingSide, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER));
             startersList.add(newPitcher);
         }
         return startersList;
     }
     private List<Player> generateLongRelievers() {
         List<Player> longRelieversList = new ArrayList<>();
+        List<BattingStats> newBattingStats = new ArrayList<>();
+        List<PitchingStats> newPitchingStats = new ArrayList<>();
         for (int i = 0; i < longReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
             double trueAge = ((random.nextGaussian() * PITCHER_AGE_STD_DEV) + PITCHER_AGE_MEAN);
@@ -224,7 +233,7 @@ public class PitcherGenerator {
             }
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LONG_RELIEVER, STARTING_PITCHER + SHORT_RELEIVER,
-                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER));
+                    age, birthdate, hittingSide, throwingSide, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER));
             longRelieversList.add(newPitcher);
         }
         return longRelieversList;
@@ -232,6 +241,8 @@ public class PitcherGenerator {
 
     private List<Player> generateShortRelievers() {
         List<Player> shortRelieversList = new ArrayList<>();
+        List<BattingStats> newBattingStats = new ArrayList<>();
+        List<PitchingStats> newPitchingStats = new ArrayList<>();
         for (int i = 0; i < shortReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
             double trueAge = ((random.nextGaussian() * PITCHER_AGE_STD_DEV) + PITCHER_AGE_MEAN);
@@ -250,7 +261,7 @@ public class PitcherGenerator {
             }
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORT_RELEIVER, LONG_RELIEVER,
-                    age, birthdate, hittingSide, throwingSide, "", "", generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER));
+                    age, birthdate, hittingSide, throwingSide, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER));
             shortRelieversList.add(newPitcher);
         }
         return shortRelieversList;
@@ -358,7 +369,7 @@ public class PitcherGenerator {
 
 
         return new PitchingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, groundBallPct, lineDrivePct, homeRunPct, infieldFlyBallPct, hitByPitchPct, wildPitchPct, balkPct, zonePct,
-                firstStrikePct, fastballPct, sliderPct, cutterPct, curveballPct, changeUpPct, splitFingerPct, knuckleballPct, stamina);
+                firstStrikePct, fastballPct, sliderPct, cutterPct, curveballPct, changeUpPct, splitFingerPct, knuckleballPct, stamina, 0);
     }
 
 
@@ -467,7 +478,7 @@ public class PitcherGenerator {
         int centerPct = (int) (random.nextGaussian() * PITCHER_BATTING_CENTER_STD_DEV) + PITCHER_BATTING_CENTER_PCT_MEAN;
         centerPct = checkBounds(centerPct, PITCHER_BATTING_CENTER_PCT_MIN, PITCHER_BATTING_CENTER_PCT_MAX);
 
-        int battingAverageBallsInPlay = 150 + ((hardPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
+        int battingAverageBallsInPlay = ((hardPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((medPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_MED_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((ONE_HUNDRED_PERCENT-hardPct-medPct)*lineDrivePct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((hardPct*groundBallPct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
@@ -475,9 +486,8 @@ public class PitcherGenerator {
                 ((ONE_HUNDRED_PERCENT-hardPct-medPct)*groundBallPct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((hardPct*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT)* BATTING_HARD_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((medPct*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT)* BATTING_MED_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
-                ((ONE_HUNDRED_PERCENT-hardPct-medPct)*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT * BATTING_SOFT_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
-                (PITCHER_BATTING_PULL_PCT_MEAN - pullPct)/5 + (centerPct - PITCHER_BATTING_CENTER_PCT_MEAN)/5 + (((ONE_HUNDRED_PERCENT - pullPct - centerPct) -
-                (ONE_HUNDRED_PERCENT - PITCHER_BATTING_PULL_PCT_MEAN - PITCHER_BATTING_CENTER_PCT_MEAN))/5);
+                ((ONE_HUNDRED_PERCENT-hardPct-medPct)*(ONE_HUNDRED_PERCENT-lineDrivePct-groundBallPct))/ONE_HUNDRED_PERCENT * BATTING_SOFT_FLYBALL_HIT_PCT / ONE_HUNDRED_PERCENT
+                - 300;
         battingAverageBallsInPlay = checkBounds(battingAverageBallsInPlay, PITCHER_BATTING_BABIP_PCT_MIN, PITCHER_BATTING_BABIP_PCT_MAX);
 
         int foulBallPct = (int) (random.nextGaussian() * PITCHER_BATTING_FOUL_BALL_STD_DEV) + PITCHER_BATTING_FOUL_BALL_PCT_MEAN;
@@ -494,7 +504,7 @@ public class PitcherGenerator {
 
 
         return new HittingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, speed, groundBallPct, lineDrivePct, hardPct, medPct, pullPct, centerPct, homeRunPct, triplePct, doublePct,
-                stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina);
+                stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina, 0);
     }
 
 }
