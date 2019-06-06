@@ -3,7 +3,6 @@ package com.example.android.baseballbythenumbers.LineupAndDefense;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
@@ -23,7 +22,7 @@ import static com.example.android.baseballbythenumbers.Data.Positions.THIRD_BASE
 
 public class DefenseGenerator {
 
-    public ArrayList<Player> defenseFromLineup (ArrayList<Player> lineup){
+    public TreeMap<Integer, Player> defenseFromLineup (TreeMap<Integer, Player> lineup){
         return lineup;
     }
 

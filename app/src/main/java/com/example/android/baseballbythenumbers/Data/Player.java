@@ -9,11 +9,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Comparator;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Positions.getPositionName;
+import static com.example.android.baseballbythenumbers.Data.Positions.getPositionNameFromPrimaryPosition;
+import static com.example.android.baseballbythenumbers.TeamGenerator.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
 public class Player implements Parcelable
 {
@@ -259,7 +262,7 @@ public class Player implements Parcelable
     @Override
     public String toString() {
         return "Name : " + firstName + " " + middleName + " " + lastName + "\n"+
-                "Position : " + getPositionName(primaryPosition) + "\n"+
+                "Position : " + getPositionNameFromPrimaryPosition(primaryPosition) + "\n"+
                 "Age : " + age + "\n"+
                 "Date of Birth : " + dateOfBirth + "\n"+
                 "Batting Stats : " + battingStats + "\n"+
@@ -303,24 +306,48 @@ public class Player implements Parcelable
     public static Comparator<Player> BestOnBaseComparator = new Comparator<Player>() {
         @Override
         public int compare(Player player1, Player player2) {
-            int onBasePlayer1 = BATTING_Z_SWING_PCT_MEAN - player1.hittingPercentages.getZSwingPct() + player1.hittingPercentages.getBattingAverageBallsInPlay();
-            int onBaseplayer2 = BATTING_Z_SWING_PCT_MEAN - player2.hittingPercentages.getZSwingPct() + player2.hittingPercentages.getBattingAverageBallsInPlay();
+            int ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player1.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
+            int adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
+            int onBasePlayer1 = (player1.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd);
+            Timber.i("OBP Comparator for Player 1 : %s = %s", player1.getName(), onBasePlayer1);
+            ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player2.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
+            adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
+            int onBasePlayer2 = player2.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd;
+            Timber.i("OBP Comparator for Player 2 : %s = %s", player2.getName(), onBasePlayer2);
             //descending order so player2-player1, want highest on base rate (best onbase pct) first
-            return onBaseplayer2-onBasePlayer1;
+            return onBasePlayer2-onBasePlayer1;
         }
+
     };
 
     public static Comparator<Player> BestCombinedOnBaseAndPowerComparator = new Comparator<Player>() {
         @Override
         public int compare(Player player1, Player player2) {
-            int powerPlayer1 = BATTING_Z_SWING_PCT_MEAN - player1.hittingPercentages.getZSwingPct() + player1.hittingPercentages.getBattingAverageBallsInPlay() +
-                    ((player1.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player1.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
+            int ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player1.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
+            int adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
+            int combinedPlayer1 = (player1.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd) +
+                    player1.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN +
+                    player1.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
                     player1.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
-            int powerplayer2 = BATTING_Z_SWING_PCT_MEAN - player2.hittingPercentages.getZSwingPct() + player2.hittingPercentages.getBattingAverageBallsInPlay() +
-                    ((player2.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN)) + player2.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
+            Timber.i("Combined Comparator for Player 1 : %s = %s", player1.getName(), combinedPlayer1);
+            ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player2.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
+            adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
+            int combinedPlayer2 = player2.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd +
+                    player2.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN + player2.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
                     player2.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
+            Timber.i("Combined Comparator for Player 2 : %s = %s", player2.getName(), combinedPlayer2);
+
             //descending order so player2-player1, want highest combined rate (best onbase pct + power) first
-            return powerplayer2-powerPlayer1;
+            return combinedPlayer2-combinedPlayer1;
         }
+
     };
+
+    private static int getIntToPower(int number, int power) {
+        int product = number;
+        for (int i = 0; i < power-1; i++) {
+            product = (product * number)/(ONE_HUNDRED_PERCENT);
+        }
+        return product;
+    }
 }

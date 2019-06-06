@@ -293,10 +293,6 @@ public class HitterGenerator {
         String rightHanded = context.getResources().getString(R.string.right_handed);
         String switchHitter = context.getResources().getString(R.string.switch_hitter);
         List<Player> hitters = new ArrayList<>();
-        List<BattingStats> newBattingStats = new ArrayList<>();
-        newBattingStats.add(0,new BattingStats(0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0));
-        List<PitchingStats> newPitchingStats = new ArrayList<>();
-        newPitchingStats.add(0,new PitchingStats(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
         for (int i = 0; i < catchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -315,7 +311,7 @@ public class HitterGenerator {
             hittingSide = getInfielderHittingSide();
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CATCHER, FIRST_BASE + LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -351,7 +347,7 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), FIRST_BASE,  LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -371,7 +367,7 @@ public class HitterGenerator {
             hittingSide = getInfielderHittingSide();
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SECOND_BASE, FIRST_BASE + SHORTSTOP + THIRD_BASE + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -391,7 +387,7 @@ public class HitterGenerator {
             hittingSide = getInfielderHittingSide();
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), THIRD_BASE, FIRST_BASE + SECOND_BASE + SHORTSTOP + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -411,7 +407,7 @@ public class HitterGenerator {
             hittingSide = getInfielderHittingSide();
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORTSTOP, SECOND_BASE + THIRD_BASE + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -447,7 +443,7 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LEFT_FIELD, FIRST_BASE + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -483,7 +479,7 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CENTER_FIELD, FIRST_BASE + LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -519,7 +515,7 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), RIGHT_FIELD, FIRST_BASE + LEFT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -539,7 +535,7 @@ public class HitterGenerator {
             hittingSide = getInfielderHittingSide();
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SECOND_BASE, FIRST_BASE + THIRD_BASE + SHORTSTOP + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -575,7 +571,7 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CENTER_FIELD, FIRST_BASE +LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -596,7 +592,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORTSTOP, CATCHER + FIRST_BASE + SECOND_BASE +
                     THIRD_BASE + LEFT_FIELD + CENTER_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
@@ -632,11 +628,23 @@ public class HitterGenerator {
             }
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), DESIGNATED_HITTER, FIRST_BASE + LEFT_FIELD,
-                    age, birthdate, hittingSide, throwingHand, newBattingStats, newPitchingStats, generateHittingPercentages(), generatePitchingPercentages());
+                    age, birthdate, hittingSide, throwingHand, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages());
             hitters.add(newHitter);
         }
 
         return hitters;
+    }
+
+    private List<PitchingStats> generatePitchingStats() {
+        List<PitchingStats> newPitchingStats = new ArrayList<>();
+        newPitchingStats.add(0,new PitchingStats(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        return newPitchingStats;
+    }
+
+    private List<BattingStats> generateBattingStats() {
+        List<BattingStats> newBattingStats = new ArrayList<>();
+        newBattingStats.add(0,new BattingStats(0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0));
+        return newBattingStats;
     }
 
     private String getInfielderHittingSide() {
@@ -677,6 +685,8 @@ public class HitterGenerator {
 
         int lineDrivePct = getRandomNormalizedPercentage(BATTING_LINE_DRIVE_PCT_STD_DEV, BATTING_LINE_DRIVE_PCT_MEAN, BATTING_LINE_DRIVE_PCT_MIN, BATTING_LINE_DRIVE_PCT_MAX);
 
+        int flyBallPct = ONE_HUNDRED_PERCENT - groundBallPct - lineDrivePct;
+
         int hardPct = getRandomNormalizedPercentage(BATTING_HARD_HIT_PCT_STD_DEV, BATTING_HARD_HIT_PCT_MEAN, BATTING_HARD_HIT_PCT_MIN, BATTING_HARD_HIT_PCT_MAX);
 
         int medPctMax =BATTING_MED_HIT_PCT_MAX;
@@ -685,14 +695,14 @@ public class HitterGenerator {
         }
         int medPct = getRandomNormalizedPercentage(BATTING_MED_HIT_PCT_STD_DEV, BATTING_MED_HIT_PCT_MEAN, BATTING_MED_HIT_PCT_MIN, medPctMax);
 
-        int homeRunPct = (((ONE_HUNDRED_PERCENT-groundBallPct-lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) + getRandomNormalizedPercentage(350, 0, -ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT);
+        int homeRunPct = ((((ONE_HUNDRED_PERCENT-groundBallPct-lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) + ((((lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) * 3))/4 - 250;
         homeRunPct = checkBounds(homeRunPct, BATTING_HOME_RUN_PCT_MIN, BATTING_HOME_RUN_PCT_MAX);
 
         int speed = getRandomNormalizedPercentage(BATTING_SPEED_STD_DEV, BATTING_SPEED_MEAN, BATTING_SPEED_MIN, BATTING_SPEED_MAX);
 
         int baseRunning = getRandomNormalizedPercentage(BATTING_BASERUNNING_STD_DEV, BATTING_BASERUNNING_MEAN, BATTING_BASERUNNING_MIN, BATTING_BASERUNNING_MAX);
 
-        int triplePct = (int) ((speed - BATTING_SPEED_MEAN) / 2.5 + BATTING_TRIPLE_PCT_MEAN);
+        int triplePct = (int) ((speed - BATTING_SPEED_MEAN) * .9 + BATTING_TRIPLE_PCT_MEAN);
         triplePct = checkBounds(triplePct, BATTING_TRIPLE_PCT_MIN, BATTING_TRIPLE_PCT_MAX);
 
         int doublePct = (int) (random.nextGaussian() * BATTING_DOUBLE_STD_DEV) + BATTING_DOUBLE_PCT_MEAN;
@@ -713,7 +723,7 @@ public class HitterGenerator {
         int centerPct = (int) (random.nextGaussian() * BATTING_CENTER_STD_DEV) + BATTING_CENTER_PCT_MEAN;
         centerPct = checkBounds(centerPct, BATTING_CENTER_PCT_MIN, BATTING_CENTER_PCT_MAX);
 
-        int battingAverageBallsInPlay = 150 + ((hardPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
+        int battingAverageBallsInPlay = 150 + ((hardPct*lineDrivePct)* BATTING_HARD_LINE_DRIVE_HIT_PCT) / ONE_HUNDRED_PERCENT +
                 ((medPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_MED_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((ONE_HUNDRED_PERCENT-hardPct-medPct)*lineDrivePct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((hardPct*groundBallPct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +
@@ -739,7 +749,7 @@ public class HitterGenerator {
         stamina = checkBounds(stamina, BATTING_STAMINA_MIN, BATTING_STAMINA_MAX);
 
 
-        return new HittingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, speed, groundBallPct, lineDrivePct, hardPct, medPct, pullPct, centerPct, homeRunPct, triplePct, doublePct,
+        return new HittingPercentages(oSwingPct, zSwingPct, oContactPct, zContactPct, speed, lineDrivePct, groundBallPct, hardPct, medPct, pullPct, centerPct, homeRunPct, triplePct, doublePct,
                 stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina, 0);
     }
 

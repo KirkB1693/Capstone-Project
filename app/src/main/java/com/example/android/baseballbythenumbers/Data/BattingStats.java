@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 public class BattingStats implements Parcelable
 {
 
@@ -311,10 +309,6 @@ public class BattingStats implements Parcelable
         this.errors = errors;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("year", year).append("games", games).append("plateAppearances", plateAppearances).append("hits", hits).append("singles", singles).append("doubles", doubles).append("triples", triples).append("homeRuns", homeRuns).append("runs", runs).append("runsBattedIn", runsBattedIn).append("walks", walks).append("strikeOuts", strikeOuts).append("hitByPitch", hitByPitch).append("stolenBases", stolenBases).append("caughtStealing", caughtStealing).append("groundBalls", groundBalls).append("lineDrives", lineDrives).append("flyBalls", flyBalls).append("errors", errors).toString();
-    }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(year);
@@ -336,6 +330,32 @@ public class BattingStats implements Parcelable
         dest.writeValue(lineDrives);
         dest.writeValue(flyBalls);
         dest.writeValue(errors);
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append("\nYear : ").append(year).append(", Games : ").append(games).append(", Plate Appearances : ").append(plateAppearances)
+                .append("\nHits : ").append(hits).append(", Singles : ").append(singles).append(", Doubles : ").append(doubles).append(", Triples : ").append(triples).append(" Home Runs : ").append(homeRuns)
+                .append("\nRuns : ").append(runs).append(", RBI : ").append(runsBattedIn).append(", BB : ").append(walks).append(", SO : ").append(strikeOuts).append(", HBP : ").append(hitByPitch)
+                .append(", SB : ").append(stolenBases).append(", CS : ").append(caughtStealing).append("\nGround Balls : ").append(groundBalls).append(", Line Drives : ").append(lineDrives)
+                .append(", Fly Balls : ").append(flyBalls).append("\nErrors : ").append(errors).append(", Avg : ").append(getAvg()).append(", OBP : ").append(getOBP()).toString();
+    }
+
+    private int getOBP() {
+        if ((plateAppearances) != 0) {
+            return (hits + walks + hitByPitch)*1000/(plateAppearances);
+        } else {
+            return 0;
+        }
+    }
+
+    private int getAvg() {
+        if ((plateAppearances-walks) != 0) {
+            return hits*1000/(plateAppearances-walks);
+        } else {
+            return 0;
+        }
+
     }
 
     public int describeContents() {

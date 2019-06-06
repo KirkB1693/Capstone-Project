@@ -301,19 +301,19 @@ public class Constants {
         public static final int BATTING_HOME_RUN_PCT_MIN = 71;
         public static final int BATTING_HOME_RUN_PCT_MAX = 3180;
 
-        public static final int BATTING_TRIPLE_PCT_MEAN = 71;
-        public static final int BATTING_TRIPLE_STD_RATE = 51;
-        public static final int BATTING_TRIPLE_PCT_MIN = 0;
-        public static final int BATTING_TRIPLE_PCT_MAX = 267;
+        public static final int BATTING_TRIPLE_PCT_MEAN = 214;
+        public static final int BATTING_TRIPLE_STD_RATE = 149;
+        public static final int BATTING_TRIPLE_PCT_MIN = 177;
+        public static final int BATTING_TRIPLE_PCT_MAX = 743;
 
-        public static final int BATTING_DOUBLE_PCT_MEAN = 663;
-        public static final int BATTING_DOUBLE_STD_DEV = 111;
-        public static final int BATTING_DOUBLE_PCT_MIN = 311;
-        public static final int BATTING_DOUBLE_PCT_MAX = 1020;
+        public static final int BATTING_DOUBLE_PCT_MEAN = 1997;
+        public static final int BATTING_DOUBLE_STD_DEV = 293;
+        public static final int BATTING_DOUBLE_PCT_MIN = 987;
+        public static final int BATTING_DOUBLE_PCT_MAX = 2744;
 
         public static final int BATTING_STOLEN_BASE_PCT_MEAN = 6551;
         public static final int BATTING_STOLEN_BASE_STD_DEV = 1667;
-        public static final int BATTING_STOLEN_BASE_PCT_MIN = 0;
+        public static final int BATTING_STOLEN_BASE_PCT_MIN = 1;
         public static final int BATTING_STOLEN_BASE_PCT_MAX = 9000;
 
         public static final int BATTING_INFIELD_FLY_BALL_PCT_MEAN = 956;
@@ -348,7 +348,7 @@ public class Constants {
 
         public static final int BATTING_STOLEN_BASE_RATE_MEAN = 519;
         public static final int BATTING_STOLEN_BASE_RATE_STD_DEV = 566;
-        public static final int BATTING_STOLEN_BASE_RATE_MIN = 0;
+        public static final int BATTING_STOLEN_BASE_RATE_MIN = 1;
         public static final int BATTING_STOLEN_BASE_RATE_MAX = 4756;
 
         public static final int BATTING_BASERUNNING_MEAN = 3;

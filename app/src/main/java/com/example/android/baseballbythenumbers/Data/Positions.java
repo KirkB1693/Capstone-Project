@@ -25,7 +25,7 @@ public class Positions {
     public static final int SCOREKEEPING_CENTER_FIELD = 8;
     public static final int SCOREKEEPING_RIGHT_FIELD = 9;
 
-    public static String getPositionName(int primaryPosition) {
+    public static String getPositionNameFromPrimaryPosition(int primaryPosition) {
         switch (primaryPosition) {
             case STARTING_PITCHER:
                 return "P";
@@ -51,6 +51,31 @@ public class Positions {
                 return "RF";
             case DESIGNATED_HITTER:
                 return "DH";
+            default:
+                return "Position Not Found";
+        }
+    }
+
+    public static String getPositionNameFromScorekeeperPosition(int scorekeeperPosition) {
+        switch (scorekeeperPosition) {
+            case SCOREKEEPING_PITCHER:
+                return "P";
+            case SCOREKEEPING_CATCHER:
+                return "C";
+            case SCOREKEEPING_FIRST_BASE:
+                return "1B";
+            case SCOREKEEPING_SECOND_BASE:
+                return "2B";
+            case SCOREKEEPING_THIRD_BASE:
+                return "3B";
+            case SCOREKEEPING_SHORTSTOP:
+                return "SS";
+            case SCOREKEEPING_LEFT_FIELD:
+                return "LF";
+            case SCOREKEEPING_CENTER_FIELD:
+                return "CF";
+            case SCOREKEEPING_RIGHT_FIELD:
+                return "RF";
             default:
                 return "Position Not Found";
         }
