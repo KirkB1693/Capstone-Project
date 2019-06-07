@@ -695,7 +695,7 @@ public class HitterGenerator {
         }
         int medPct = getRandomNormalizedPercentage(BATTING_MED_HIT_PCT_STD_DEV, BATTING_MED_HIT_PCT_MEAN, BATTING_MED_HIT_PCT_MIN, medPctMax);
 
-        int homeRunPct = ((((ONE_HUNDRED_PERCENT-groundBallPct-lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) + ((((lineDrivePct) * hardPct)/ONE_HUNDRED_PERCENT) * 3))/4 - 250;
+        int homeRunPct = (((((flyBallPct) * hardPct) / ONE_HUNDRED_PERCENT) * 3) + (lineDrivePct * hardPct)/ONE_HUNDRED_PERCENT)/4 - 250;
         homeRunPct = checkBounds(homeRunPct, BATTING_HOME_RUN_PCT_MIN, BATTING_HOME_RUN_PCT_MAX);
 
         int speed = getRandomNormalizedPercentage(BATTING_SPEED_STD_DEV, BATTING_SPEED_MEAN, BATTING_SPEED_MIN, BATTING_SPEED_MAX);

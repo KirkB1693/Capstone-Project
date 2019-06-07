@@ -1,5 +1,7 @@
 package com.example.android.baseballbythenumbers.NameGenerator;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Name
 {
 
@@ -9,7 +11,7 @@ public class Name
 
     private final String middleName;
 
-    public Name(final String firstName, final String middleName, final String lastName) {
+    Name(final String firstName, final String middleName, final String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
@@ -27,6 +29,7 @@ public class Name
         return lastName;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return this.firstName + " " + this.middleName + " " + this.lastName;
@@ -51,11 +54,7 @@ public class Name
             return false;
         }
 
-        if (lastName != null ? !lastName.equals(name.lastName) : name.lastName != null) {
-            return false;
-        }
-
-        return true;
+        return lastName != null ? lastName.equals(name.lastName) : name.lastName == null;
     }
 
     @Override

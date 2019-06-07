@@ -80,4 +80,36 @@ public class Positions {
                 return "Position Not Found";
         }
     }
+
+    public static int getScorkeeperPositionFromPrimaryPosition(int primaryPosition) {
+        switch (primaryPosition) {
+            case STARTING_PITCHER:
+                return SCOREKEEPING_PITCHER;
+            case LONG_RELIEVER:
+                return SCOREKEEPING_PITCHER;
+            case SHORT_RELEIVER:
+                return SCOREKEEPING_PITCHER;
+            case CATCHER:
+                return SCOREKEEPING_CATCHER;
+            case FIRST_BASE:
+                return SCOREKEEPING_FIRST_BASE;
+            case SECOND_BASE:
+                return SCOREKEEPING_SECOND_BASE;
+            case THIRD_BASE:
+                return SCOREKEEPING_THIRD_BASE;
+            case SHORTSTOP:
+                return SCOREKEEPING_SHORTSTOP;
+            case LEFT_FIELD:
+                return SCOREKEEPING_LEFT_FIELD;
+            case CENTER_FIELD:
+                return SCOREKEEPING_CENTER_FIELD;
+            case RIGHT_FIELD:
+                return SCOREKEEPING_RIGHT_FIELD;
+            case DESIGNATED_HITTER:
+                return 0;
+            default:
+                return 0;
+        }
+    }
+
 }

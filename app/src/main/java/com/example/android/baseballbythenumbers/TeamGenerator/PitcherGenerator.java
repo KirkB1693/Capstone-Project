@@ -435,13 +435,15 @@ public class PitcherGenerator {
 
         int hardPct = getRandomNormalizedPercentage(PITCHER_BATTING_HARD_HIT_PCT_STD_DEV, PITCHER_BATTING_HARD_HIT_PCT_MEAN, PITCHER_BATTING_HARD_HIT_PCT_MIN, PITCHER_BATTING_HARD_HIT_PCT_MAX);
 
+        int flyBallPct = ONE_HUNDRED_PERCENT - groundBallPct - lineDrivePct;
+
         int medPctMax = PITCHER_BATTING_MED_HIT_PCT_MAX;
         if ((ONE_HUNDRED_PERCENT - hardPct - 1040) < medPctMax) {
             medPctMax = ONE_HUNDRED_PERCENT - hardPct - 1040;
         }
         int medPct = getRandomNormalizedPercentage(PITCHER_BATTING_MED_HIT_PCT_STD_DEV, PITCHER_BATTING_MED_HIT_PCT_MEAN, PITCHER_BATTING_MED_HIT_PCT_MIN, medPctMax);
 
-        int homeRunPct = (((ONE_HUNDRED_PERCENT - groundBallPct - lineDrivePct) * hardPct) / ONE_HUNDRED_PERCENT) + getRandomNormalizedPercentage(350, 0, -ONE_HUNDRED_PERCENT, ONE_HUNDRED_PERCENT);
+        int homeRunPct = (((((flyBallPct) * hardPct) / ONE_HUNDRED_PERCENT) * 3) + (lineDrivePct * hardPct)/ONE_HUNDRED_PERCENT)/4 - 250;
         homeRunPct = checkBounds(homeRunPct, PITCHER_BATTING_HOME_RUN_PCT_MIN, PITCHER_BATTING_HOME_RUN_PCT_MAX);
 
         int speed = getRandomNormalizedPercentage(PITCHER_BATTING_SPEED_STD_DEV, PITCHER_BATTING_SPEED_MEAN, PITCHER_BATTING_SPEED_MIN, PITCHER_BATTING_SPEED_MAX);

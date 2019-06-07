@@ -2229,8 +2229,8 @@ public class AtBatSimulator {
             }
             //Otherwise advance runners and adjust stats
             if (runnerOnThird != null) {
-                BattingStats runnerOnThirdStats = runnerOnThird.getBattingStats().get(0);
-                runnerOnThirdStats.setRuns(runnerOnThirdStats.getRuns() + 1);
+                runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
+                pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
                 //We've advanced the runner and adjusted stats, now empty third base
                 runnerOnThird = null;
             }
@@ -2248,6 +2248,7 @@ public class AtBatSimulator {
             return false;
         } else {
             //Throw Pitch
+            pitcher.getPitchingPercentages().setPitchingStaminaUsed(pitcher.getPitchingPercentages().getPitchingStaminaUsed() + 1);
             return true;
         }
     }

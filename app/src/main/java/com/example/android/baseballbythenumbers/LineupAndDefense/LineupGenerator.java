@@ -21,6 +21,7 @@ import static com.example.android.baseballbythenumbers.Data.Positions.THIRD_BASE
 
 public class LineupGenerator {
 
+    private static final int LAST_BATTER = 9;
     private static int[] positionsNoDH = {STARTING_PITCHER, CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD};
     private static int[] positionsWithDH = {CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP, LEFT_FIELD, CENTER_FIELD, RIGHT_FIELD, DESIGNATED_HITTER};
     private static int[] idealOrderToFillLineup = {1, 4, 2, 5, 3, 6, 7, 8, 9};
@@ -201,10 +202,7 @@ public class LineupGenerator {
         if (position != STARTING_PITCHER) {
             return true;
         }
-        if (lineupPosition == 9) {
-            return true;
-        }
-        return false;
+        return lineupPosition == LAST_BATTER;
     }
 
     private static boolean playerNotAlreadyInLineup(Player playerToCheck, TreeMap<Integer, Player> lineup) {
@@ -229,14 +227,14 @@ public class LineupGenerator {
 
     private static boolean positionIsInValidPositions(int position, boolean useDH) {
         if (useDH) {
-            for (int i = 0; i < positionsWithDH.length; i++) {
-                if (position == positionsWithDH[i]) {
+            for (int positionFromListOfValidPositions : positionsWithDH) {
+                if (position == positionFromListOfValidPositions) {
                     return true;
                 }
             }
         } else {
-            for (int i = 0; i < positionsNoDH.length; i++) {
-                if (position == positionsNoDH[i]) {
+            for (int positionFromListOfValidPositions : positionsNoDH) {
+                if (position == positionFromListOfValidPositions) {
                     return true;
                 }
             }
