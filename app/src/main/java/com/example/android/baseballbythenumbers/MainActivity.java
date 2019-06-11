@@ -6,14 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.android.baseballbythenumbers.CityGenerator.CityGenerator;
 import com.example.android.baseballbythenumbers.Data.Division;
+import com.example.android.baseballbythenumbers.Data.League;
+import com.example.android.baseballbythenumbers.Data.Level;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
-import com.example.android.baseballbythenumbers.DivisionGenerator.DivisionGenerator;
+import com.example.android.baseballbythenumbers.Generators.CityGenerator;
+import com.example.android.baseballbythenumbers.Generators.LevelGenerator;
+import com.example.android.baseballbythenumbers.Generators.TeamGenerator;
+import com.example.android.baseballbythenumbers.Generators.TeamNameGenerator;
 import com.example.android.baseballbythenumbers.Simulators.AtBatSimulator;
-import com.example.android.baseballbythenumbers.TeamGenerator.TeamGenerator;
-import com.example.android.baseballbythenumbers.TeamNameGenerator.TeamNameGenerator;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -23,10 +25,8 @@ import java.util.TreeMap;
 
 import timber.log.Timber;
 
-import static com.example.android.baseballbythenumbers.Data.GameStates.getGameStateString;
-import static com.example.android.baseballbythenumbers.LineupAndDefense.DefenseGenerator.defenseFromLineup;
-import static com.example.android.baseballbythenumbers.LineupAndDefense.LineupGenerator.lineupFromTeam;
-import static com.example.android.baseballbythenumbers.Simulators.AtBatSimulator.getAtBatSummary;
+import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.DefenseGenerator.defenseFromLineup;
+import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator.lineupFromTeam;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     TeamNameGenerator teamNameGenerator;
     CityGenerator cityGenerator;
     List<Team> teams;
-    DivisionGenerator divisionGenerator;
+    List<League> leagues;
+    LevelGenerator levelGenerator;
     List<Division> divisions;
     int currentBatterVisitor;
     int currentBatterHome;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
         JodaTimeAndroid.init(this);
 
-        divisionGenerator = new DivisionGenerator(this);
+        levelGenerator = new LevelGenerator(this);
         divisions = new ArrayList<>();
        /* teamNameGenerator = new TeamNameGenerator(this);
         String teamName = teamNameGenerator.generateTeamName();
@@ -89,17 +90,44 @@ public class MainActivity extends AppCompatActivity {
         runners = basesEmpty;
         isVisitorHitting = true;
         int numberOfTeamsInDivision = 5;
+        int numberOfDivisions = 3;
+        int countriesToInclude = 9;
+
+        Level mlbClone = levelGenerator.generateLevel("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
+                , numberOfDivisions, countriesToInclude, null);
+
+        leagues = mlbClone.getLeagues();
+        divisions = leagues.get(0).getDivisions();
+        /*int[] teamMakeup = new int[]{5, 3, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0};
 
 
-        int[] teamMakeup = new int[]{5, 3, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0};
-        String divisionName;
-        if (divisions.isEmpty()) {
-            divisionName = "Division 1";
-        } else {
-            divisionName = "Division " + (divisions.size() + 1);
-        }
-
-        divisions.add(divisionGenerator.generateDivision(divisionName, false, numberOfTeamsInDivision, teamMakeup));
+        String divisionName = EAST;
+        switch (numberOfDivisions) {
+            case 0:
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+            case 1:
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+            case 2:
+                divisions.add(divisionGenerator.generateDivision(WEST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(EAST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+            case 3:
+                divisions.add(divisionGenerator.generateDivision(WEST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(CENTRAL, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(EAST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+            case 4:
+                divisions.add(divisionGenerator.generateDivision(WEST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(NORTH, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(SOUTH, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                divisions.add(divisionGenerator.generateDivision(EAST, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+            default:
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, false, numberOfTeamsInDivision, teamMakeup, numberOfDivisions, countriesToInclude));
+                break;
+        }*/
 
         //Team 1 Plays : Team 2
 
@@ -130,14 +158,19 @@ public class MainActivity extends AppCompatActivity {
         // int teamNumber = 0;
         boolean switchSides = false;
 
-        for (Division division : divisions) {
-            displayText.append("\n\n");
-            displayText.append("Division Name : ").append(division.getDivisionName()).append("\n");
-            for (Team team : division.getTeams()) {
-                displayText.append("    ").append(team.getTeamCity()).append(" ").append(team.getTeamName()).append("\n");
-                displayText.append("        Team has ").append(team.getPlayers().size()).append(" players. Player 1) ").append(team.getPlayers().get(0).getName()).append("\n");
+        for (League league : leagues) {
+            displayText.append("\n\n").append(league.getLeagueName()).append(" League : \n");
+            divisions = league.getDivisions();
+            for (Division division : divisions) {
+                displayText.append("\n\n");
+                displayText.append("Division Name : ").append(division.getDivisionName()).append("\n");
+                for (Team team : division.getTeams()) {
+                    displayText.append("    ").append(team.getTeamCity()).append(" ").append(team.getTeamName()).append("\n");
+                    displayText.append("        Team has ").append(team.getPlayers().size()).append(" players. Player 1) ").append(team.getPlayers().get(0).getName()).append("\n");
+                }
             }
         }
+       /*
         boolean gameNotOver = true;
         boolean homeTeamFinishedAtBat = false;
 
@@ -149,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
             displayText.append("\n\n");
             AtBatSimulator currentAtBat = generateNewAtBat(this, freshCount, outs, currentBatter, lineup, runners, defense);
-            displayText.append(defense.get(1).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n");
+            displayText.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n");
             displayText.append(lineup.get(currentBatter).getName()).append(" At Bat for the ").append(batttingTeamName).append(" Result : \n");
             int atBatResult = currentAtBat.simulateAtBat();
             int playerWhoJustHit = currentBatter;
@@ -220,12 +253,13 @@ public class MainActivity extends AppCompatActivity {
                 defense = defenseHome;
                 visitorScore = 0;
                 homeScore = 0;
+                isVisitorHitting = true;
                 gameNotOver = false;
             }
             homeTeamFinishedAtBat = false;
             displayText.append("\n\n\n\n");
 
-        }
+        }*/
       /*  for (Team team : teams) {
             TreeMap<Integer, Player> defense = defenseFromTeam(team);
             TreeMap<Integer, Player> lineupFromDefense = lineupFromDefense(defense, team);

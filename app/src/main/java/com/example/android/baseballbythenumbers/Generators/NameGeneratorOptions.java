@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.NameGenerator;
+package com.example.android.baseballbythenumbers.Generators;
 
 public class NameGeneratorOptions
 {

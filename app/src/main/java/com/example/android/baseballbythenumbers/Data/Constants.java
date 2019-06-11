@@ -412,5 +412,23 @@ public class Constants {
         public static final int CENTER = 200;
         public static final int RIGHT = 300;
     }
+
+    public static class DivisionNames {
+        public static final String NO_DIVISONS = "";
+        public static final String WEST = "West";
+        public static final String EAST = "East";
+        public static final String CENTRAL = "Central";
+        public static final String NORTH = "North";
+        public static final String SOUTH = "South";
+    }
+
+
+    public static class Countries {
+        public static final int ALL_COUNTRIES = 0;
+        public static final int USA = 1;
+        public static final int JAPAN = 2;
+        public static final int MEXICO = 4;
+        public static final int CANADA = 8;
+    }
 }
 

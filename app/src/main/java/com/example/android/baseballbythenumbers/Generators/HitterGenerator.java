@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.TeamGenerator;
+package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
 
@@ -7,8 +7,8 @@ import com.example.android.baseballbythenumbers.Data.HittingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.NameGenerator.Name;
-import com.example.android.baseballbythenumbers.NameGenerator.NameGenerator;
+import com.example.android.baseballbythenumbers.Data.Name;
+import com.example.android.baseballbythenumbers.Generators.NameGenerator;
 import com.example.android.baseballbythenumbers.R;
 
 import org.joda.time.DateTime;

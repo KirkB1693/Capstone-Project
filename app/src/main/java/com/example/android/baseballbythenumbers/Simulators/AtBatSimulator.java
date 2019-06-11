@@ -202,6 +202,7 @@ public class AtBatSimulator {
 
         while (gameStateAfterAtBat == 0) {
             if (isPitchThrown(pitcher)) {
+                pitcher.getPitchingPercentages().setPitchingStaminaUsed(pitcher.getPitchingPercentages().getPitchingStaminaUsed() + 1);
                 if (isPitchInStrikeZone(pitcher)) {
                     //Pitch in Strike Zone, check for batter swing
                     int pitcherZSwingPct = pitcher.getPitchingPercentages().getZSwingPct();
@@ -249,6 +250,7 @@ public class AtBatSimulator {
             }
         }
 
+        batter.getHittingPercentages().setStaminaUsed(batter.getHittingPercentages().getStaminaUsed() + 5);
         return gameStateAfterAtBat;
     }
 
@@ -324,6 +326,7 @@ public class AtBatSimulator {
     private void atBatOver() {
         atBatSummary.append("\nEnd of At Bat :\nRuns Scored This At Bat : ").append(runsScored).append("\nOuts : ").append(outs);
         addRunnersToAtBatSummary();
+        atBatSummary.append("\nPitchers stamina used : ").append(defense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed());
         gameStateAfterAtBat = getGameState();
     }
 

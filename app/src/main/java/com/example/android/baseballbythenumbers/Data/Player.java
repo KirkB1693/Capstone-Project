@@ -16,7 +16,7 @@ import static com.example.android.baseballbythenumbers.Data.Constants.BatterBase
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Positions.getPositionNameFromPrimaryPosition;
-import static com.example.android.baseballbythenumbers.TeamGenerator.PitcherGenerator.ONE_HUNDRED_PERCENT;
+import static com.example.android.baseballbythenumbers.Generators.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
 public class Player implements Parcelable
 {

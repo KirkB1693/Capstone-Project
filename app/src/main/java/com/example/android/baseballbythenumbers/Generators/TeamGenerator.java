@@ -1,10 +1,9 @@
-package com.example.android.baseballbythenumbers.TeamGenerator;
+package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
-import com.example.android.baseballbythenumbers.NameGenerator.NameGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,7 @@ public class TeamGenerator {
     }
 
 
-    public Team generateTeam(String teamName, String teamCity, Boolean useDH, int teamBudget) {
+    public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget) {
         Team newTeam = new Team();
 
         newTeam.setTeamName(teamName);

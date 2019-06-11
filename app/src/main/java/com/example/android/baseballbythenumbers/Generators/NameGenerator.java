@@ -1,7 +1,8 @@
-package com.example.android.baseballbythenumbers.NameGenerator;
+package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
 
+import com.example.android.baseballbythenumbers.Data.Name;
 import com.example.android.baseballbythenumbers.R;
 
 import java.io.BufferedReader;

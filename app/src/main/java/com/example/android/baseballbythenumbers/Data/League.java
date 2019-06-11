@@ -39,7 +39,7 @@ public class League implements Parcelable
     }
             ;
 
-    protected League(Parcel in) {
+    public League(Parcel in) {
         this.leagueName = ((String) in.readValue((String.class.getClassLoader())));
         this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
         in.readList(this.divisions, (com.example.android.baseballbythenumbers.Data.Division.class.getClassLoader()));

@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.LineupAndDefense;
+package com.example.android.baseballbythenumbers.Generators.LineupAndDefense;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;

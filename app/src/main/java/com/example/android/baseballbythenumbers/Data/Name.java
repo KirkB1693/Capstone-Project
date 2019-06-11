@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.NameGenerator;
+package com.example.android.baseballbythenumbers.Data;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class Name
 
     private final String middleName;
 
-    Name(final String firstName, final String middleName, final String lastName) {
+    public Name(final String firstName, final String middleName, final String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;

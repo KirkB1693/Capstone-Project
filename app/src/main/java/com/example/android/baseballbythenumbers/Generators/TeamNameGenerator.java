@@ -1,8 +1,7 @@
-package com.example.android.baseballbythenumbers.TeamNameGenerator;
+package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
 
-import com.example.android.baseballbythenumbers.NameGenerator.NameGeneratorOptions;
 import com.example.android.baseballbythenumbers.R;
 
 import java.io.BufferedReader;
