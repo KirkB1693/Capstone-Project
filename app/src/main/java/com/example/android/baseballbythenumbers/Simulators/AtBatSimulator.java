@@ -133,7 +133,11 @@ public class AtBatSimulator {
                 throw new IllegalArgumentException("Runners passed to AtBatSimulator are Invalid!");
             }
         } catch (IllegalArgumentException e) {
-            Timber.e(e, " The runners passed in were : %s", runners.toString());
+            if (runners == null){
+                Timber.e(e, " The runners passed in were : null");
+            } else {
+                Timber.e(e, " The runners passed in were : %s", runners.toString());
+            }
         }
     }
 
