@@ -6,7 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -75,9 +76,10 @@ public class Division implements Parcelable
         this.teams = teams;
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("divisionName", divisionName).append("teams", teams).toString();
+        return "Division Name : " + divisionName + "\nTeams : \n" + teams;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

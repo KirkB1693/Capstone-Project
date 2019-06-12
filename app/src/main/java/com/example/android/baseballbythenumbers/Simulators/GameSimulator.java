@@ -4,18 +4,21 @@ import android.content.Context;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 
 import java.util.TreeMap;
 
 import static com.example.android.baseballbythenumbers.Data.GameStates.getGameStateString;
+import static com.example.android.baseballbythenumbers.Data.Positions.LONG_RELIEVER;
 import static com.example.android.baseballbythenumbers.Data.Positions.SCOREKEEPING_PITCHER;
+import static com.example.android.baseballbythenumbers.Data.Positions.STARTING_PITCHER;
 import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.DefenseGenerator.defenseFromLineup;
 import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator.lineupFromTeam;
 import static com.example.android.baseballbythenumbers.Simulators.AtBatSimulator.getAtBatSummary;
 
 public class GameSimulator {
 
-    public static final int DEFAULT_RECOVERY = 25;
+    public static final int DEFAULT_RECOVERY = 15;
     private Context context;
 
     private Team homeTeam;
@@ -34,7 +37,11 @@ public class GameSimulator {
     private int currentBatterVisitor;
     private int currentBatterHome;
     private int currentBatter;
+    private int batterStaminaAdjustment;
+    private int pitcherStaminaAdjustment;
     private boolean isVisitorHitting;
+    private boolean homeCloserUsed;
+    private boolean visitorCloserUsed;
     private Player[] runners;
     private static final Player[] basesEmpty = new Player[]{null, null, null};
     private static final int[] freshCount = new int[]{0, 0};
@@ -43,7 +50,8 @@ public class GameSimulator {
     private TreeMap<Integer, Player> defenseHome;
     private TreeMap<Integer, Player> lineupVisitor;
     private TreeMap<Integer, Player> defenseVisitor;
-
+    private TreeMap<Integer, Player> visitorRelievers;
+    private TreeMap<Integer, Player> homeRelievers;
     private TreeMap<Integer, Player> lineup;
     private TreeMap<Integer, Player> defense;
     private String visitingTeamName;
@@ -52,6 +60,8 @@ public class GameSimulator {
     private String fieldingTeamName;
 
     private static StringBuilder displayText;
+    private static StringBuilder homePitchersUsed;
+    private static StringBuilder visitorPitchersUsed;
 
     public GameSimulator(Context context, Team homeTeam, boolean homeTeamManualControl, Team visitingTeam, boolean visitingTeamManualControl) {
         this.context = context;
@@ -92,7 +102,9 @@ public class GameSimulator {
             AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense);
             displayText.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n");
             displayText.append(lineup.get(currentBatter).getName()).append(" At Bat for the ").append(batttingTeamName).append(" Result : \n");
-            int atBatResult = currentAtBat.simulateAtBat();
+            getBatterStaminaAdjustment(lineup.get(currentBatter));
+            getPitcherStaminaAdjustment(defense.get(SCOREKEEPING_PITCHER));
+            int atBatResult = currentAtBat.simulateAtBat(pitcherStaminaAdjustment, batterStaminaAdjustment);
             int playerWhoJustHit = currentBatter;
             currentBatter = currentAtBat.getCurrentBatter();
             outs = currentAtBat.getOuts();
@@ -148,24 +160,218 @@ public class GameSimulator {
                 switchSides = false;
             }
 
+            Player currentPitcher = defense.get(SCOREKEEPING_PITCHER);
+            boolean didWeSwitchPitchers = shouldWeSwitchPitchers(currentPitcher);
+            if (didWeSwitchPitchers) {
+                if (isVisitorHitting) {
+                    defense = defenseHome;
+                } else {
+                    defense = defenseVisitor;
+                }
+            }
             if (((inningsPlayed > 80 && homeScore > visitorScore) || inningsPlayed > 85) && ifScoreNotTiedAtEndOfInning(inningsPlayed, homeScore, visitorScore, homeTeamFinishedAtBat)) {
                 displayText.append("\n\nGAME OVER!!!\n").append("Final Score :\n").append(homeTeamName).append(" ").append(homeScore).append(" - ")
                         .append(visitingTeamName).append(" ").append(visitorScore);
-                inningsPlayed = 0;
-                currentBatter = 1;
-                currentBatterVisitor = 1;
-                currentBatterHome = 1;
-                batttingTeamName = visitingTeamName;
-                fieldingTeamName = homeTeamName;
-                lineup = lineupVisitor;
-                defense = defenseHome;
-                visitorScore = 0;
-                homeScore = 0;
-                isVisitorHitting = true;
                 gameNotOver = false;
             }
             homeTeamFinishedAtBat = false;
             displayText.append("\n\n\n\n");
+        }
+    }
+
+    private boolean shouldWeSwitchPitchers(Player currentPitcher) {
+        boolean didWeSwitch;
+        int pitchingScore = visitorScore;
+        int battingScore = homeScore;
+        TreeMap<Integer, Player> relievers = visitorRelievers;
+        boolean closerUsed = visitorCloserUsed;
+        if (isVisitorHitting) {
+            pitchingScore = homeScore;
+            battingScore = visitorScore;
+            relievers = homeRelievers;
+            closerUsed = homeCloserUsed;
+        }
+        didWeSwitch = false;
+        if (relievers.size() > 0) {
+            getPitcherStaminaAdjustment(currentPitcher);
+            if (pitcherStaminaAdjustment > 500) {                      // If pitcher is tired switch pitchers
+                switchPitchers(currentPitcher);
+                didWeSwitch = true;
+            } else {                                                   // Pitcher not tired, but other reasons to switch...
+
+                if (inningsPlayed < 50 && (battingScore-pitchingScore) > 5  && defense.get(SCOREKEEPING_PITCHER).getPrimaryPosition() == STARTING_PITCHER) {  // Starter is losing by more than 5 runs before the 5th inning
+                    switchPitchers(currentPitcher);
+                    didWeSwitch =true;
+                } else if (inningsPlayed >= 50 && (battingScore-pitchingScore) > 2  && defense.get(SCOREKEEPING_PITCHER).getPrimaryPosition() == STARTING_PITCHER) {  // Starter is losing by more than 2 runs after the 5th inning
+                    switchPitchers(currentPitcher);
+                    didWeSwitch =true;
+                } else if (inningsPlayed >=80 && (pitchingScore > battingScore) && (pitchingScore-battingScore <= 3) && !closerUsed) {  // After 8th in save situation, switch pitchers
+                    switchPitchers(currentPitcher);
+                    didWeSwitch =true;
+                } else if (inningsPlayed >=60 && (pitcherStaminaAdjustment > 0)) {   // After the sixth inning make sure pitcher is not tiring
+                    switchPitchers(currentPitcher);
+                    didWeSwitch =true;
+                } else if (inningsPlayed >= 50 && currentPitcher.getPrimaryPosition() == STARTING_PITCHER && pitcherStaminaAdjustment > 0) { // Starter has pitched more than 5 innings and is starting to tire
+                    switchPitchers(currentPitcher);
+                    didWeSwitch =true;
+                }
+            }
+        }
+        return didWeSwitch;
+    }
+
+    private void switchPitchers(Player currentPitcher) {
+        int pitchingScore = visitorScore;
+        int battingScore = homeScore;
+        Team pitchingTeam = visitingTeam;
+        TreeMap<Integer, Player> relievers = visitorRelievers;
+        TreeMap<Integer, Player> lineupToModify = lineupVisitor;
+        TreeMap<Integer, Player> defenseToModify = defenseVisitor;
+        boolean closerUsed = visitorCloserUsed;
+        if (isVisitorHitting) {
+            pitchingScore = homeScore;
+            battingScore = visitorScore;
+            pitchingTeam = homeTeam;
+            relievers = homeRelievers;
+            lineupToModify = lineupHome;
+            defenseToModify = defenseHome;
+            closerUsed = homeCloserUsed;
+        }
+        if (inningsPlayed >=80 && pitchingScore > battingScore && (pitchingScore-battingScore <= 3) && !closerUsed) {     // Save situation = after 8 innings are played and pitching team ahead by less than 3
+
+            Player closer =  PitchingRotationGenerator.getBestCloserAvailable(pitchingTeam);
+            defenseToModify.put(SCOREKEEPING_PITCHER, closer);
+            for (TreeMap.Entry<Integer, Player> entry: lineupToModify.entrySet()) {
+                if (entry.getValue() == currentPitcher) {
+                    lineupToModify.put(entry.getKey(),closer);
+                }
+            }
+            if (isVisitorHitting) {
+                homeCloserUsed = true;
+            } else {
+                visitorCloserUsed = true;
+            }
+            if(isVisitorHitting) {
+                homePitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n").append(defenseHome.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+            } else {
+                visitorPitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n").append(defenseVisitor.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+            }
+            return;
+        }
+        int relieverChoice = checkSituationForBestRelieverToBringIn();
+        if (relievers.containsKey(relieverChoice)) {
+
+            defenseToModify.put(SCOREKEEPING_PITCHER, relievers.get(relieverChoice));
+            for (TreeMap.Entry<Integer, Player> entry: lineupToModify.entrySet()) {
+                if (entry.getValue() == currentPitcher) {
+                    lineupToModify.put(entry.getKey(), relievers.get(relieverChoice));
+                }
+            }
+            relievers.remove(relieverChoice);
+            if(isVisitorHitting) {
+                homePitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed())
+                        .append("\n").append(defenseHome.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+            } else {
+                visitorPitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed())
+                        .append("\n").append(defenseVisitor.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+            }
+            return;
+        } else {
+            for (TreeMap.Entry<Integer, Player> entry: relievers.entrySet()){       // put in best reliever available
+                relieverChoice = entry.getKey();
+
+
+
+                for (TreeMap.Entry<Integer, Player> lineupEntry: lineupToModify.entrySet()) {
+                    if (lineupEntry.getValue() == currentPitcher) {
+                        lineupToModify.put(lineupEntry.getKey(), relievers.get(relieverChoice));
+                        defenseToModify.put(SCOREKEEPING_PITCHER, relievers.get(relieverChoice));
+                    }
+                }
+                relievers.remove(relieverChoice);
+                if(isVisitorHitting) {
+                    homePitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n").append(defenseHome.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+                } else {
+                    visitorPitchersUsed.append(currentPitcher.getName()).append(" Pitches Thrown when subbed : ").append(currentPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n").append(defenseVisitor.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+                }
+                return;
+            }
+        }
+    }
+
+    private int checkSituationForBestRelieverToBringIn() {
+        int pitchingScore = visitorScore;
+        int battingScore = homeScore;
+        TreeMap<Integer, Player> relievers = visitorRelievers;
+        if (isVisitorHitting) {
+            pitchingScore = homeScore;
+            battingScore = visitorScore;
+            relievers = homeRelievers;
+        }
+        int reliverToBringIn = -1;
+        if (inningsPlayed < 50) {  // Things are bad bring in worst long reliever
+            for (TreeMap.Entry<Integer, Player> entry: relievers.entrySet()) {
+                if (entry.getValue().getPrimaryPosition() == LONG_RELIEVER) {
+                    reliverToBringIn = entry.getKey();
+                }
+            }
+            return reliverToBringIn;
+        }
+        int relieverPositionToStartSearch = 1;    // Best available reliever = 1
+        if (pitchingScore-battingScore < -2) {
+            relieverPositionToStartSearch += 2;
+        }
+        if (relievers.size() < relieverPositionToStartSearch) {
+            relieverPositionToStartSearch = relievers.size();
+        }
+        int count = 0;
+        if (inningsPlayed >= 70) {
+            for (TreeMap.Entry<Integer, Player> entry: relievers.entrySet()) {
+                count++;
+                if (relieverPositionToStartSearch <= count) {
+                    reliverToBringIn = entry.getKey();
+                    return reliverToBringIn;
+                }
+            }
+        }
+        if (inningsPlayed >= 60) {
+            relieverPositionToStartSearch++;
+            for (TreeMap.Entry<Integer, Player> entry: relievers.entrySet()) {
+                count++;
+                if (relieverPositionToStartSearch <= count) {
+                    reliverToBringIn = entry.getKey();
+                    return reliverToBringIn;
+                }
+            }
+        }
+        if (inningsPlayed >= 50) {
+            relieverPositionToStartSearch += 2;
+            for (TreeMap.Entry<Integer, Player> entry: relievers.entrySet()) {
+                count++;
+                if (relieverPositionToStartSearch <= count) {
+                    reliverToBringIn = entry.getKey();
+                    return reliverToBringIn;
+                }
+            }
+        }
+        return reliverToBringIn;
+    }
+
+    private void getBatterStaminaAdjustment(Player batter) {
+        int batterStaminaLeft = batter.getHittingPercentages().getStamina() - batter.getHittingPercentages().getStaminaUsed();
+        if (batterStaminaLeft >= 0) {
+            batterStaminaAdjustment = 0;
+        } else {
+            batterStaminaAdjustment = (Math.abs(batterStaminaLeft)/10) * 5;
+        }
+    }
+
+    private void getPitcherStaminaAdjustment(Player pitcher) {
+        int pitcherStaminaLeft = pitcher.getPitchingPercentages().getPitchingStamina() - pitcher.getPitchingPercentages().getPitchingStaminaUsed();
+        if (pitcherStaminaLeft >= 0) {
+            pitcherStaminaAdjustment = 0;
+        } else {
+            pitcherStaminaAdjustment = Math.abs(pitcherStaminaLeft) * 50;
         }
     }
 
@@ -188,6 +394,9 @@ public class GameSimulator {
         batttingTeamName = visitingTeamName;
         fieldingTeamName = homeTeamName;
 
+        homeRelievers = PitchingRotationGenerator.getAvailableRelievers(homeTeam);
+        visitorRelievers = PitchingRotationGenerator.getAvailableRelievers(visitingTeam);
+
         homeScore = 0;
         visitorScore = 0;
 
@@ -198,6 +407,12 @@ public class GameSimulator {
 
         currentBatterHome = 1;
         currentBatterVisitor =1;
+
+        homePitchersUsed = new StringBuilder();
+        visitorPitchersUsed = new StringBuilder();
+
+        homePitchersUsed.append(homeTeamName).append(" Pitchers Used : \n").append(defenseHome.get(SCOREKEEPING_PITCHER).getName()).append("\n");
+        visitorPitchersUsed.append(visitingTeamName).append(" Pitchers Used : \n").append(defenseVisitor.get(SCOREKEEPING_PITCHER).getName()).append("\n");
     }
 
     private void reduceFatigueforPlayers(Team team) {
@@ -206,7 +421,11 @@ public class GameSimulator {
             if (newHittingStaminaUsed < 0) {
                 newHittingStaminaUsed = 0;
             }
-            int newPitchingStaminaUsed = player.getPitchingPercentages().getPitchingStaminaUsed() - DEFAULT_RECOVERY;
+            int pitcherRecovery = DEFAULT_RECOVERY;
+            if (player.getPrimaryPosition() == STARTING_PITCHER) {
+                pitcherRecovery = 25;
+            }
+            int newPitchingStaminaUsed = player.getPitchingPercentages().getPitchingStaminaUsed() - pitcherRecovery;
             if (newPitchingStaminaUsed < 0) {
                 newPitchingStaminaUsed = 0;
             }
@@ -283,4 +502,14 @@ public class GameSimulator {
     public static StringBuilder getGameRecapString()  {
         return displayText;
     }
+
+    public static StringBuilder getHomePitchersUsed() {
+        return homePitchersUsed;
+    }
+
+    public static StringBuilder getVisitorPitchersUsed(){
+        return visitorPitchersUsed;
+    }
+
+
 }

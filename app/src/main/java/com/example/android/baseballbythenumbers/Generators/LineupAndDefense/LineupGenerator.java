@@ -187,7 +187,11 @@ public class LineupGenerator {
                     Player player = (Player) entry.getValue();
                     final int position = player.getPrimaryPosition();
                     if (playerNotAlreadyInLineup(player, lineup) && positionIsInValidPositions(position, team.isUseDh()) && positionNotAlreadyInLineup(position, lineup) && okToPlacePitcher(position, lineupPosition)) {
-                            lineup.put(lineupPosition, player);
+                            if (player.getPrimaryPosition() == STARTING_PITCHER) {
+                                lineup.put(lineupPosition, PitchingRotationGenerator.getBestStarterAvailable(team));
+                            } else{
+                                lineup.put(lineupPosition, player);
+                            }
                             break;
                         }
 

@@ -82,20 +82,20 @@ public class Constants {
         public static final int RELIEVER_NUM_PITCH_TYPES_MIN = 200;
         public static final int RELIEVER_NUM_PITCH_TYPES_MAX = 700;
 
-        public static final int STARTER_STAMINA_MEAN = 9048;
-        public static final int STARTER_STAMINA_STD_DEV = 732;
-        public static final int STARTER_STAMINA_MIN = 6152;
-        public static final int STARTER_STAMINA_MAX = 10953;
+        public static final int STARTER_STAMINA_MEAN = 90;
+        public static final int STARTER_STAMINA_STD_DEV = 73;
+        public static final int STARTER_STAMINA_MIN = 62;
+        public static final int STARTER_STAMINA_MAX = 110;
 
-        public static final int LONG_RELIEVER_STAMINA_MEAN = 4990;
-        public static final int LONG_RELIEVER_STAMINA_STD_DEV = 1936;
-        public static final int LONG_RELIEVER_STAMINA_MIN = 2102;
-        public static final int LONG_RELIEVER_STAMINA_MAX = 8684;
+        public static final int LONG_RELIEVER_STAMINA_MEAN = 50;
+        public static final int LONG_RELIEVER_STAMINA_STD_DEV = 19;
+        public static final int LONG_RELIEVER_STAMINA_MIN = 21;
+        public static final int LONG_RELIEVER_STAMINA_MAX = 87;
 
-        public static final int SHORT_RELIEVER_STAMINA_MEAN = 1629;
-        public static final int SHORT_RELIEVER_STAMINA_STD_DEV = 204;
-        public static final int SHORT_RELIEVER_STAMINA_MIN = 807;
-        public static final int SHORT_RELIEVER_STAMINA_MAX = 2099;
+        public static final int SHORT_RELIEVER_STAMINA_MEAN = 16;
+        public static final int SHORT_RELIEVER_STAMINA_STD_DEV = 2;
+        public static final int SHORT_RELIEVER_STAMINA_MIN = 8;
+        public static final int SHORT_RELIEVER_STAMINA_MAX = 21;
 
         public static final int PITCHERS_THAT_THROW_SLIDER_PCT = 8840;
         public static final int PITCHERS_THAT_THROW_CUTTER_PCT = 4212;

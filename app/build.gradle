@@ -26,9 +26,6 @@ dependencies {
     //Cardview
     implementation 'com.android.support:cardview-v7:28.0.0'
 
-    //JavaFaker
-    implementation 'com.github.javafaker:javafaker:0.18'
-
     //GSON
     implementation 'com.google.code.gson:gson:2.8.5'
 

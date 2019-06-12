@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import timber.log.Timber;
 
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_CENTER_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_CONTACT_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_PULL_PCT_MEAN;
@@ -190,7 +191,7 @@ public class AtBatSimulator {
     }
 
 
-    public int simulateAtBat() {
+    public int simulateAtBat(int pitcherStaminaAdjustment, int batterStaminaAdjustment) {
         runsScored = 0;
 
         Player batter = lineup.get(currentBatter);
@@ -206,18 +207,17 @@ public class AtBatSimulator {
 
         while (gameStateAfterAtBat == 0) {
             if (isPitchThrown(pitcher)) {
-                pitcher.getPitchingPercentages().setPitchingStaminaUsed(pitcher.getPitchingPercentages().getPitchingStaminaUsed() + 1);
                 if (isPitchInStrikeZone(pitcher)) {
                     //Pitch in Strike Zone, check for batter swing
-                    int pitcherZSwingPct = pitcher.getPitchingPercentages().getZSwingPct();
-                    int batterZSwingPct = batter.getHittingPercentages().getZSwingPct();
+                    int pitcherZSwingPct = pitcher.getPitchingPercentages().getZSwingPct() + pitcherStaminaAdjustment;  //swinging at pitches in zone is worse for pitcher (less strikeouts), so add adjustment
+                    int batterZSwingPct = batter.getHittingPercentages().getZSwingPct() - batterStaminaAdjustment; // swinging at pitches in zone is better for batter so subtract adjustment
                     if (oddsRatioMethod(batterZSwingPct, pitcherZSwingPct, BATTING_Z_SWING_PCT_MEAN)) {
                         //Batter swings at the pitch, check for contact
-                        int batterZContact = batter.getHittingPercentages().getZContactPct();
-                        int pitcherZContactPct = pitcher.getPitchingPercentages().getZContactPct();
+                        int batterZContact = batter.getHittingPercentages().getZContactPct() - batterStaminaAdjustment;
+                        int pitcherZContactPct = pitcher.getPitchingPercentages().getZContactPct() + pitcherStaminaAdjustment;
                         if (oddsRatioMethod(batterZContact, pitcherZContactPct, BATTING_Z_CONTACT_PCT_MEAN)) {
                             // Batter makes contact
-                            resolveContact(batter, pitcher);
+                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment);
                         } else {
                             // Batter swings and misses
                             atBatSummary.append("Strike Swinging, ");
@@ -230,15 +230,15 @@ public class AtBatSimulator {
                     }
                 } else {
                     //Pitch out of strike zone, check for batter swing
-                    int pitcherOSwingPct = pitcher.getPitchingPercentages().getOSwingPct();
-                    int batterOSwingPct = batter.getHittingPercentages().getOSwingPct();
+                    int pitcherOSwingPct = pitcher.getPitchingPercentages().getOSwingPct() - pitcherStaminaAdjustment;  //Swinging at pitchers out of the strike zone is better for the pitcher so subtract adjustment
+                    int batterOSwingPct = batter.getHittingPercentages().getOSwingPct() + batterStaminaAdjustment;  //Worse for batter so add adjustment
                     if (oddsRatioMethod(batterOSwingPct, pitcherOSwingPct, BATTING_O_SWING_PCT_MEAN)) {
                         //Batter swings at the pitch
-                        int batterOContact = batter.getHittingPercentages().getOContactPct();
-                        int pitcherOContactPct = pitcher.getPitchingPercentages().getOContactPct();
+                        int batterOContact = batter.getHittingPercentages().getOContactPct() - batterStaminaAdjustment;
+                        int pitcherOContactPct = pitcher.getPitchingPercentages().getOContactPct() + pitcherStaminaAdjustment;
                         if (oddsRatioMethod(batterOContact, pitcherOContactPct, BATTING_O_CONTACT_PCT_MEAN)) {
                             // Batter makes contact
-                            resolveContact(batter, pitcher);
+                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment);
                         } else {
                             // Batter swings and misses
                             atBatSummary.append("Strike Swinging, ");
@@ -334,9 +334,9 @@ public class AtBatSimulator {
         gameStateAfterAtBat = getGameState();
     }
 
-    private void resolveContact(Player batter, Player pitcher) {
-        int typeOfHit = getTypeOfHit(batter, pitcher);
-        if (isHomeRun(batter, typeOfHit)) {
+    private void resolveContact(Player batter, Player pitcher, int batterStaminaAdjustment, int pitcherStaminaAdjustment) {
+        int typeOfHit = getTypeOfHit(batter, pitcher, batterStaminaAdjustment);
+        if (isHomeRun(batter, pitcher, typeOfHit, batterStaminaAdjustment, pitcherStaminaAdjustment)) {
 
             int numberOfRunners = 0;
             if (runnerOnFirst != null) {
@@ -388,7 +388,7 @@ public class AtBatSimulator {
             } else {
                 // ball in play
                 atBatSummary.append("\nBall in Play : ");
-                int contactQuality = getQualityOfContact(batter);
+                int contactQuality = getQualityOfContact(batter, batterStaminaAdjustment);
                 if (isHit(batter, typeOfHit, contactQuality)) {
                     atBatSummary.append("\nLooks Like it's a hit! : ");
                     resolveHit(batter, pitcher, typeOfHit, contactQuality);
@@ -1784,9 +1784,9 @@ public class AtBatSimulator {
     }
 
 
-    private boolean isHomeRun(Player batter, int typeOfHit) {
+    private boolean isHomeRun(Player batter, Player pitcher, int typeOfHit, int batterAdjustment, int pitcherAdjustment) {
         if (typeOfHit == LINE_DRIVE || typeOfHit == FLYBALL) {
-            return random.nextInt(ONE_HUNDERED_PERCENT) < batter.getHittingPercentages().getHomeRunPct();
+            return oddsRatioMethod(batter.getHittingPercentages().getHomeRunPct() - batterAdjustment, pitcher.getPitchingPercentages().getHomeRunPct() + pitcherAdjustment, BATTING_HOME_RUN_PCT_MEAN);
         } else {
             return false;
         }
@@ -1824,11 +1824,11 @@ public class AtBatSimulator {
     }
 
 
-    private int getQualityOfContact(Player batter) {
+    private int getQualityOfContact(Player batter, int batterAdjustment) {
         int checkForHitQuality = random.nextInt(ONE_HUNDERED_PERCENT);
-        if (checkForHitQuality < batter.getHittingPercentages().getHardPct()) {
+        if (checkForHitQuality < batter.getHittingPercentages().getHardPct() - batterAdjustment) {
             return HARD;
-        } else if (checkForHitQuality < (batter.getHittingPercentages().getHardPct() + batter.getHittingPercentages().getMedPct())) {
+        } else if (checkForHitQuality < (batter.getHittingPercentages().getHardPct() - batterAdjustment + batter.getHittingPercentages().getMedPct() - batterAdjustment)) {
             return MEDIUM;
         } else {
             return SOFT;
@@ -1839,9 +1839,9 @@ public class AtBatSimulator {
         return random.nextInt(ONE_HUNDERED_PERCENT) < batter.getHittingPercentages().getFoulBallPct();
     }
 
-    private int getTypeOfHit(Player batter, Player pitcher) {
+    private int getTypeOfHit(Player batter, Player pitcher, int batterAdjustment) {
         int checkForHitType = random.nextInt(ONE_HUNDERED_PERCENT);
-        if (checkForHitType < batter.getHittingPercentages().getGroundBallPct()) {
+        if (checkForHitType < batter.getHittingPercentages().getGroundBallPct() + batterAdjustment) {
             batter.getBattingStats().get(0).setGroundBalls(batter.getBattingStats().get(0).getGroundBalls() + 1);
             pitcher.getPitchingStats().get(0).setGroundBalls(pitcher.getPitchingStats().get(0).getGroundBalls() + 1);
             return GROUNDBALL;

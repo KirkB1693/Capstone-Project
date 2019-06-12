@@ -15,6 +15,12 @@ import static com.example.android.baseballbythenumbers.Data.Constants.BatterBase
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Data.Positions.getPositionNameFromPrimaryPosition;
 import static com.example.android.baseballbythenumbers.Generators.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
@@ -339,6 +345,30 @@ public class Player implements Parcelable
 
             //descending order so player2-player1, want highest combined rate (best onbase pct + power) first
             return combinedPlayer2-combinedPlayer1;
+        }
+
+    };
+
+    public static Comparator<Player> BestPitcherComparator = new Comparator<Player>() {
+        @Override
+        public int compare(Player player1, Player player2) {
+            int pitchingPlayer1 = (((PITCHER_O_SWING_PCT_MEAN - player1.pitchingPercentages.getOSwingPct())*4) +
+                    ( player1.pitchingPercentages.getZSwingPct() - PITCHER_Z_SWING_PCT_MEAN) * 2 +
+                    (player1.pitchingPercentages.getZContactPct() - PITCHER_Z_CONTACT_PCT_MEAN) * 2  +
+                    (PITCHER_ZONE_PCT_MEAN - player1.pitchingPercentages.getZonePct())  +
+                    (player1.pitchingPercentages.getOContactPct() - PITCHER_O_CONTACT_PCT_MEAN)) * 4  +
+                    (player1.pitchingPercentages.getHomeRunPct() - PITCHER_HOME_RUN_PCT_MEAN) * 13;
+            Timber.i("Pitching Comparator for Player 1 : %s = %s", player1.getName(), pitchingPlayer1);
+            int pitchingPlayer2 = (((PITCHER_O_SWING_PCT_MEAN - player2.pitchingPercentages.getOSwingPct())*4) +
+                    ( player2.pitchingPercentages.getZSwingPct() - PITCHER_Z_SWING_PCT_MEAN) * 2 +
+                    (player2.pitchingPercentages.getZContactPct() - PITCHER_Z_CONTACT_PCT_MEAN) * 2  +
+                    (PITCHER_ZONE_PCT_MEAN - player2.pitchingPercentages.getZonePct())  +
+                    (player2.pitchingPercentages.getOContactPct() - PITCHER_O_CONTACT_PCT_MEAN)) * 4  +
+                    (player2.pitchingPercentages.getHomeRunPct() - PITCHER_HOME_RUN_PCT_MEAN) * 13;
+            Timber.i("Pitching Comparator for Player 2 : %s = %s", player2.getName(), pitchingPlayer2);
+
+            //ascending order so player1-player2, want lowest pitching rate (best fip = lowest runs allowed projection) first
+            return pitchingPlayer1-pitchingPlayer2;
         }
 
     };

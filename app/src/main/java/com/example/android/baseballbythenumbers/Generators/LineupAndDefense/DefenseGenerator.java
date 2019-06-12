@@ -19,11 +19,7 @@ public class DefenseGenerator {
         List<Player> lineupPlayers = new ArrayList<>();
 
         if (team.isUseDh()){
-            for (Player player: team.getPlayers()) {
-                if (player.getPrimaryPosition() == STARTING_PITCHER) {
-                    lineupPlayers.add(player);
-                }
-            }
+            lineupPlayers.add(PitchingRotationGenerator.getBestStarterAvailable(team));
             for (TreeMap.Entry entry : lineup.entrySet() ) {
                 lineupPlayers.add((Player) entry.getValue());
             }
@@ -57,10 +53,19 @@ public class DefenseGenerator {
             int position = player.getPrimaryPosition();
             if (position < DESIGNATED_HITTER) {
                 if (defense.isEmpty()) {
-                    defense.put(getScorkeeperPositionFromPrimaryPosition(position), player);
+                    if (position == STARTING_PITCHER) {
+                        defense.put(getScorkeeperPositionFromPrimaryPosition(position), PitchingRotationGenerator.getBestStarterAvailable(team));
+                    } else {
+                        defense.put(getScorkeeperPositionFromPrimaryPosition(position), player);
+                    }
+
                 } else {
                     if (!defense.containsKey(getScorkeeperPositionFromPrimaryPosition(position))) {
-                        defense.put(getScorkeeperPositionFromPrimaryPosition(position), player);
+                        if (position == STARTING_PITCHER) {
+                            defense.put(getScorkeeperPositionFromPrimaryPosition(position), PitchingRotationGenerator.getBestStarterAvailable(team));
+                        } else {
+                            defense.put(getScorkeeperPositionFromPrimaryPosition(position), player);
+                        }
                     }
                 }
             }

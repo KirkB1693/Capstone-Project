@@ -80,11 +80,13 @@ public class MainActivity extends AppCompatActivity {
         Team visitingTeam = getRandomTeam(leagues);
 
         GameSimulator gameSimulator = new GameSimulator(this, homeTeam, false, visitingTeam, false);
-        gameSimulator.simulateGame();
+        int[] result = gameSimulator.simulateGame();
 
         displayText.append(getGameRecapString());
 
         displayText.delete(0,displayText.length()-500);
+
+        displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
 
         textView.setText(displayText);
     }
