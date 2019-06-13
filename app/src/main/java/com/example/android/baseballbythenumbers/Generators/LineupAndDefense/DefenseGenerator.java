@@ -14,11 +14,11 @@ import static com.example.android.baseballbythenumbers.Data.Positions.getScorkee
 
 public class DefenseGenerator {
 
-    public static TreeMap<Integer, Player> defenseFromLineup (TreeMap<Integer, Player> lineup, Team team){
+    public static TreeMap<Integer, Player> defenseFromLineup (TreeMap<Integer, Player> lineup, Team team, boolean useDH){
 
         List<Player> lineupPlayers = new ArrayList<>();
 
-        if (team.isUseDh()){
+        if (useDH){
             lineupPlayers.add(PitchingRotationGenerator.getBestStarterAvailable(team));
             for (TreeMap.Entry entry : lineup.entrySet() ) {
                 lineupPlayers.add((Player) entry.getValue());

@@ -1,10 +1,12 @@
 package com.example.android.baseballbythenumbers.Simulators;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
+import com.example.android.baseballbythenumbers.Data.Runner;
 import com.example.android.baseballbythenumbers.R;
 
 import java.util.ArrayList;
@@ -75,17 +77,17 @@ public class AtBatSimulator {
 
     private TreeMap<Integer, Player> lineup;
 
-    private Player[] runners;
+    private Runner[] runners;
 
     private TreeMap<Integer, Player> defense;
 
     private Random random;
 
-    private Player runnerOnFirst;
+    private Runner runnerOnFirst;
 
-    private Player runnerOnSecond;
+    private Runner runnerOnSecond;
 
-    private Player runnerOnThird;
+    private Runner runnerOnThird;
 
     private int balls;
 
@@ -93,11 +95,15 @@ public class AtBatSimulator {
 
     private int gameStateAfterAtBat;
 
+    private boolean errorOnPlay;
+
     private Context context;
 
     private static StringBuilder atBatSummary;
 
-    public AtBatSimulator(Context context, int[] count, int outs, int currentBatter, TreeMap<Integer, Player> lineup, Player[] runners, TreeMap<Integer, Player> defense) {
+    private boolean areRunsEarned;
+
+    public AtBatSimulator(Context context, int[] count, int outs, int currentBatter, @NonNull TreeMap<Integer, Player> lineup, @NonNull Runner[] runners, @NonNull TreeMap<Integer, Player> defense) {
         this.count = count;
         this.outs = outs;
         this.currentBatter = currentBatter;
@@ -110,9 +116,6 @@ public class AtBatSimulator {
         checkForValidCount(count);
         checkForValidOuts(outs);
         checkForValidCurrentBatter(currentBatter);
-        checkForValidLineupOrDefense(lineup);
-        checkForValidRunners(runners);
-        checkForValidLineupOrDefense(defense);
 
         balls = this.count[0];
         strikes = this.count[1];
@@ -124,35 +127,12 @@ public class AtBatSimulator {
         atBatSummary = new StringBuilder();
 
         gameStateAfterAtBat = 0;
+
+        errorOnPlay = false;
+
+        areRunsEarned = true;
     }
 
-    private void checkForValidRunners(Player[] runners) {
-        try {
-            if (runners == null) {
-                throw new IllegalArgumentException("Runners passed to AtBatSimulator is Null, that is Invalid!");
-            } else if (runners.length != 3) {
-                throw new IllegalArgumentException("Runners passed to AtBatSimulator are Invalid!");
-            }
-        } catch (IllegalArgumentException e) {
-            if (runners == null){
-                Timber.e(e, " The runners passed in were : null");
-            } else {
-                Timber.e(e, " The runners passed in were : %s", runners.toString());
-            }
-        }
-    }
-
-    private void checkForValidLineupOrDefense(TreeMap<Integer, Player> lineupOrDefense) {
-        try {
-            if (lineupOrDefense.isEmpty()) {
-                throw new IllegalArgumentException("Lineup or Defense passed to AtBatSimulator is Empty!");
-            } else if (lineupOrDefense.size() != 9) {
-                throw new IllegalArgumentException("Lineup or Defense passed to AtBatSimulator is Invalid!");
-            }
-        } catch (IllegalArgumentException e) {
-            Timber.e(e, " The lineup or defense passed in was : %s", lineupOrDefense);
-        }
-    }
 
     private void checkForValidCurrentBatter(int currentBatter) {
         //if the currentBatter passed in is more than 9 it is invalid, throw an error
@@ -191,8 +171,16 @@ public class AtBatSimulator {
     }
 
 
-    public int simulateAtBat(int pitcherStaminaAdjustment, int batterStaminaAdjustment) {
+    public int simulateAtBat(int pitcherStaminaAdjustment, int batterStaminaAdjustment, boolean areRunsEarned) {
         runsScored = 0;
+        this.areRunsEarned = areRunsEarned;
+        if (!areRunsEarned) {
+            for (Runner runner : runners) {
+                if (runner != null) {
+                    runner.setEarnedRun(false);
+                }
+            }
+        }
 
         Player batter = lineup.get(currentBatter);
         Player pitcher = defense.get(1);
@@ -217,7 +205,7 @@ public class AtBatSimulator {
                         int pitcherZContactPct = pitcher.getPitchingPercentages().getZContactPct() + pitcherStaminaAdjustment;
                         if (oddsRatioMethod(batterZContact, pitcherZContactPct, BATTING_Z_CONTACT_PCT_MEAN)) {
                             // Batter makes contact
-                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment);
+                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment, areRunsEarned);
                         } else {
                             // Batter swings and misses
                             atBatSummary.append("Strike Swinging, ");
@@ -238,7 +226,7 @@ public class AtBatSimulator {
                         int pitcherOContactPct = pitcher.getPitchingPercentages().getOContactPct() + pitcherStaminaAdjustment;
                         if (oddsRatioMethod(batterOContact, pitcherOContactPct, BATTING_O_CONTACT_PCT_MEAN)) {
                             // Batter makes contact
-                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment);
+                            resolveContact(batter, pitcher, batterStaminaAdjustment, pitcherStaminaAdjustment, areRunsEarned);
                         } else {
                             // Batter swings and misses
                             atBatSummary.append("Strike Swinging, ");
@@ -269,14 +257,14 @@ public class AtBatSimulator {
             pitcher.getPitchingStats().get(0).setWalks(pitcher.getPitchingStats().get(0).getWalks() + 1);
             if (runnerOnFirst == null) {
                 // No runner on first, move batter to first and game state
-                runnerOnFirst = batter;
+                runnerOnFirst = new Runner(batter, pitcher, true);
                 moveToNextBatterInLineup();
                 atBatOver();
             } else {
                 if (runnerOnSecond == null) {
                     // runner on first, nobody on second, move batter to first and runner on first to second
                     runnerOnSecond = runnerOnFirst;
-                    runnerOnFirst = batter;
+                    runnerOnFirst = new Runner(batter, pitcher, true);
                     moveToNextBatterInLineup();
                     atBatOver();
                 } else {
@@ -284,19 +272,21 @@ public class AtBatSimulator {
                         // runners on first and second
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = runnerOnFirst;
-                        runnerOnFirst = batter;
+                        runnerOnFirst = new Runner(batter, pitcher, true);
                         moveToNextBatterInLineup();
                         atBatOver();
                     } else {
                         // bases loaded
                         runsScored++;
                         batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
-                        pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
-                        pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1);
-                        runnerOnThird.getBattingStats().get(0).setRunsBattedIn(runnerOnThird.getBattingStats().get(0).getRunsBattedIn() + 1);
+                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                        if (runnerOnThird.isEarnedRun()) {
+                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                        }
+                        runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = runnerOnFirst;
-                        runnerOnFirst = batter;
+                        runnerOnFirst = new Runner(batter, pitcher, true);
                         moveToNextBatterInLineup();
                         atBatOver();
                     }
@@ -309,13 +299,13 @@ public class AtBatSimulator {
 
     private void addRunnersToAtBatSummary() {
         if (runnerOnFirst != null) {
-            atBatSummary.append("\n").append("Runner on First : ").append(runnerOnFirst.getName());
+            atBatSummary.append("\n").append("Runner on First : ").append(runnerOnFirst.getRunner().getName());
         }
         if (runnerOnSecond != null) {
-            atBatSummary.append("\n").append("Runner on Second : ").append(runnerOnSecond.getName());
+            atBatSummary.append("\n").append("Runner on Second : ").append(runnerOnSecond.getRunner().getName());
         }
         if (runnerOnThird != null) {
-            atBatSummary.append("\n").append("Runner on Third : ").append(runnerOnThird.getName());
+            atBatSummary.append("\n").append("Runner on Third : ").append(runnerOnThird.getRunner().getName());
         }
     }
 
@@ -334,7 +324,7 @@ public class AtBatSimulator {
         gameStateAfterAtBat = getGameState();
     }
 
-    private void resolveContact(Player batter, Player pitcher, int batterStaminaAdjustment, int pitcherStaminaAdjustment) {
+    private void resolveContact(Player batter, Player pitcher, int batterStaminaAdjustment, int pitcherStaminaAdjustment, boolean areRunsEarned) {
         int typeOfHit = getTypeOfHit(batter, pitcher, batterStaminaAdjustment);
         if (isHomeRun(batter, pitcher, typeOfHit, batterStaminaAdjustment, pitcherStaminaAdjustment)) {
 
@@ -342,19 +332,30 @@ public class AtBatSimulator {
             if (runnerOnFirst != null) {
                 numberOfRunners++;
                 runsScored++;
-                runnerOnFirst.getBattingStats().get(0).setRuns(runnerOnFirst.getBattingStats().get(0).getRuns() + 1);
+                runnerOnFirst.getRunner().getBattingStats().get(0).setRuns(runnerOnFirst.getRunner().getBattingStats().get(0).getRuns() + 1);
+                if (runnerOnFirst.isEarnedRun()) {
+                    runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                }
+                runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                 runnerOnFirst = null;
             }
             if (runnerOnSecond != null) {
                 numberOfRunners++;
                 runsScored++;
-                runnerOnSecond.getBattingStats().get(0).setRuns(runnerOnSecond.getBattingStats().get(0).getRuns() + 1);
+                runnerOnSecond.getRunner().getBattingStats().get(0).setRuns(runnerOnSecond.getRunner().getBattingStats().get(0).getRuns() + 1);
+                if (runnerOnSecond.isEarnedRun()) {
+                    runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                }
+                runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                 runnerOnSecond = null;
             }
             if (runnerOnThird != null) {
                 numberOfRunners++;
                 runsScored++;
-                runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
+                if (runnerOnThird.isEarnedRun()) {
+                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                }
+                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                 runnerOnThird = null;
             }
             runsScored++;
@@ -370,7 +371,7 @@ public class AtBatSimulator {
             batter.getBattingStats().get(0).setHits(batter.getBattingStats().get(0).getHits() + 1);
             batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1 + numberOfRunners);
 
-            pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1 + numberOfRunners);
+            pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
             pitcher.getPitchingStats().get(0).setHomeRuns(pitcher.getPitchingStats().get(0).getHomeRuns() + 1);
             pitcher.getPitchingStats().get(0).setHits(pitcher.getPitchingStats().get(0).getHits() + 1);
             pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1 + numberOfRunners);
@@ -401,6 +402,7 @@ public class AtBatSimulator {
     }
 
     private void resolveOut(Player batter, Player pitcher, int typeOfHit, int contactQuality) {
+        int outsAtStartOfAtBat = outs;
         int whereBallIsHit = getHitLocation(batter, typeOfHit, contactQuality, true);
         int gameStateIgnoringOuts = getGameState() - (outs * 8);
         boolean errorMade = false;
@@ -425,14 +427,14 @@ public class AtBatSimulator {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 500;
                         } else {
-                            oddsOfDoublePlay = 7500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 7500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL && contactQuality != SOFT) {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 5000;
                         } else {
-                            oddsOfDoublePlay = 9500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 9500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL) {
@@ -451,16 +453,24 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
                             }
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 if (fielderWhoMadeError == FIRST_BASE) {
                                     // Still got out at second, but no double play
                                     atBatSummary.append("throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" for one out, but batter reaches first on an error! ");
                                     outs++;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), false);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append("all runners safe on Error! ");
@@ -489,7 +499,12 @@ public class AtBatSimulator {
                             if (runnerSteals) {
                                 // no play at second, runner goes to second, possible out at first
                                 errorMade = checkForError(whereBallIsHit);
+
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = whereBallIsHit;
                                 }
                                 if (!errorMade && whereBallIsHit != SCOREKEEPING_FIRST_BASE) {
@@ -497,6 +512,10 @@ public class AtBatSimulator {
                                     fielderWhoMadeError = SCOREKEEPING_FIRST_BASE;
                                 }
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     // everyone is safe
                                     atBatSummary.append("runner on first was stealing, only play is to first base, SAFE at first on Error! ");
                                     defense.get(fielderWhoMadeError).getBattingStats().get(0).setErrors(defense.get(fielderWhoMadeError).getBattingStats().get(0).getErrors() + 1);
@@ -511,6 +530,10 @@ public class AtBatSimulator {
                                 for (Integer fielder : fieldersWhoTouchedBall) {
                                     errorMade = checkForError(fielder);
                                     if (errorMade) {
+                                        errorOnPlay = true;
+                                        if (outs == 2) {
+                                            areRunsEarned = false;
+                                        }
                                         fielderWhoMadeError = fielder;
                                         break;
                                     }
@@ -519,17 +542,18 @@ public class AtBatSimulator {
                                     if (fielderWhoMadeError == SCOREKEEPING_FIRST_BASE) {
                                         atBatSummary.append("throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" for one OUT, throw to first gets away, batter goes to Second!!!");
                                         outs++;
-                                        runnerOnSecond = batter;
+                                        runnerOnSecond = new Runner(batter, pitcher, false);
                                     } else {
                                         atBatSummary.append("throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append("...Error on ")
                                                 .append(getPositionNameFromScorekeeperPosition(fielderWhoMadeError)).append(" everyone is SAFE!!!");
                                         runnerOnSecond = runnerOnFirst;
-                                        runnerOnFirst = batter;
+                                        runnerOnFirst = new Runner(batter, pitcher, false);
                                     }
                                 } else {
+                                    // Fielder's Choice, no error, pitcher responsible for previous runner is now responsible for current runner since an out was made.
                                     atBatSummary.append("throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" for one OUT, but batter beats the throw to first, SAFE! ");
                                     outs++;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), runnerOnFirst.isEarnedRun());
                                 }
 
                             }
@@ -549,11 +573,19 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
                             }
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 if (fielderWhoMadeError == whereBallIsHit) {
                                     // muffed line drive, everone safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -609,6 +641,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -618,7 +654,7 @@ public class AtBatSimulator {
                                     // Still got out at third, but no double play
                                     outs++;
                                     runnerOnSecond = null;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, pitcher, false);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -639,11 +675,19 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
                             }
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 // everyone safe
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
                             } else {
@@ -674,11 +718,19 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
                             }
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 if (fielderWhoMadeError == whereBallIsHit) {
                                     // muffed line drive, everone safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -696,6 +748,10 @@ public class AtBatSimulator {
                             // no double play
                             errorMade = checkForError(whereBallIsHit);
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
                             } else {
                                 // batter is out on caught line drive, runner holds
@@ -729,6 +785,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -738,7 +798,7 @@ public class AtBatSimulator {
                                     // Still got out at home, but no double play
                                     outs++;
                                     runnerOnThird = null;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, pitcher, false);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -759,6 +819,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -796,6 +860,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -818,6 +886,10 @@ public class AtBatSimulator {
                             // no double play
                             errorMade = checkForError(whereBallIsHit);
                             if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
                             } else {
                                 // batter is out on caught line drive, runner holds
@@ -839,14 +911,14 @@ public class AtBatSimulator {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 500;
                         } else {
-                            oddsOfDoublePlay = 7500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 7500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL && contactQuality != SOFT) {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 5000;
                         } else {
-                            oddsOfDoublePlay = 9500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 9500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL) {
@@ -864,6 +936,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -872,7 +948,7 @@ public class AtBatSimulator {
                                 if (fielderWhoMadeError == FIRST_BASE) {
                                     // Still got out at second, but no double play
                                     outs++;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), runnerOnFirst.isEarnedRun());
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -891,7 +967,7 @@ public class AtBatSimulator {
                             } else {
                                 // batter beats throw to first
                                 outs++;
-                                runnerOnFirst = batter;
+                                runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), areRunsEarned);
                             }
                         }
 
@@ -908,6 +984,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -943,14 +1023,14 @@ public class AtBatSimulator {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 500;
                         } else {
-                            oddsOfDoublePlay = 7500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 7500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL && contactQuality != SOFT) {
                         if (runnerSteals) {
                             oddsOfDoublePlay = 5000;
                         } else {
-                            oddsOfDoublePlay = 9500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                            oddsOfDoublePlay = 9500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
                         }
                     }
                     if (typeOfHit == GROUNDBALL) {
@@ -968,6 +1048,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -976,7 +1060,7 @@ public class AtBatSimulator {
                                 if (fielderWhoMadeError == FIRST_BASE) {
                                     // Still got out at second, but no double play
                                     outs++;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), areRunsEarned);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -995,7 +1079,7 @@ public class AtBatSimulator {
                             } else {
                                 // batter beats throw to first
                                 outs++;
-                                runnerOnFirst = batter;
+                                runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), areRunsEarned);
                             }
                         }
 
@@ -1012,6 +1096,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -1035,6 +1123,142 @@ public class AtBatSimulator {
                     }
                     break;
                 case NO_OUTS_RUNNER_ON_SECOND_AND_THIRD:
+                    if (typeOfHit == LINE_DRIVE) {
+                        oddsOfDoublePlay = 500;
+                    }
+                    if (typeOfHit == GROUNDBALL && contactQuality == SOFT) {
+                        oddsOfDoublePlay = 500;
+                    }
+                    if (typeOfHit == GROUNDBALL && contactQuality != SOFT) {
+                        oddsOfDoublePlay = 100;
+                    }
+                    if (typeOfHit == GROUNDBALL) {
+                        if (chanceOfDoublePlay < oddsOfDoublePlay) {
+                            // Turn double play
+                            if (whereBallIsHit == SCOREKEEPING_CATCHER) {
+                                // Throw home tag runner and throw to first
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                                fieldersWhoTouchedBall.add(SCOREKEEPING_FIRST_BASE);
+                            } else {
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                                fieldersWhoTouchedBall.add(SCOREKEEPING_CATCHER);
+                                fieldersWhoTouchedBall.add(SCOREKEEPING_FIRST_BASE);
+                            }
+                            for (Integer fielder : fieldersWhoTouchedBall) {
+                                errorMade = checkForError(fielder);
+                                if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
+                                    fielderWhoMadeError = fielder;
+                                    break;
+                                }
+                            }
+                            if (errorMade) {
+                                if (fielderWhoMadeError == FIRST_BASE) {
+                                    // Still got out at home, but no double play
+                                    outs++;
+                                    runnerOnThird = null;
+                                    runnerOnFirst = new Runner(batter, pitcher, false);
+                                } else {
+                                    // Error was made trying to get lead runner, all runners safe
+                                    advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
+                                }
+                            } else {
+                                // no error made, turn double play
+                                outs = outs + 2;
+                                runnerOnThird = null;
+                            }
+                        } else {
+                            if (whereBallIsHit != SCOREKEEPING_CATCHER) {
+                                // throw out runner at first
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                                fieldersWhoTouchedBall.add(SCOREKEEPING_FIRST_BASE);
+                            } else {
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                            }
+                            for (Integer fielder : fieldersWhoTouchedBall) {
+                                errorMade = checkForError(fielder);
+                                if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
+                                    fielderWhoMadeError = fielder;
+                                    break;
+                                }
+                            }
+                            if (errorMade) {
+                                // everyone safe
+                                advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
+                            } else {
+                                // Get a single out
+                                if (whereBallIsHit == SCOREKEEPING_THIRD_BASE || whereBallIsHit == SCOREKEEPING_FIRST_BASE || whereBallIsHit == SCOREKEEPING_PITCHER || whereBallIsHit == SCOREKEEPING_CATCHER) {
+                                    // runner stays, out at first
+                                    outs++;
+                                } else {
+                                    // runner advances, out at first
+                                    outs++;
+                                    if (outs < 3) {
+                                        advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, true);
+                                        runnerOnFirst = null;
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                    if (typeOfHit == LINE_DRIVE) {
+                        if (chanceOfDoublePlay < oddsOfDoublePlay) {
+                            // Turn double play
+                            if (whereBallIsHit != SCOREKEEPING_THIRD_BASE) {
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                                fieldersWhoTouchedBall.add(SCOREKEEPING_THIRD_BASE);
+                            } else {
+                                fieldersWhoTouchedBall.add(whereBallIsHit);
+                            }
+                            for (Integer fielder : fieldersWhoTouchedBall) {
+                                errorMade = checkForError(fielder);
+                                if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
+                                    fielderWhoMadeError = fielder;
+                                    break;
+                                }
+                            }
+                            if (errorMade) {
+                                if (fielderWhoMadeError == whereBallIsHit) {
+                                    // muffed line drive, everone safe
+                                    advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
+                                } else {
+                                    // catch made batter is out, error made trying to double off runner, runner advances
+                                    outs++;
+                                    advanceAllRunnersOneBaseOnBattedBall(null, pitcher, false);
+                                }
+                            } else {
+                                // no error, turn double play
+                                outs = outs + 2;
+                                runnerOnSecond = null;
+                            }
+                        } else {
+                            // no double play
+                            errorMade = checkForError(whereBallIsHit);
+                            if (errorMade) {
+                                errorOnPlay = true;
+                                if (outs == 2) {
+                                    areRunsEarned = false;
+                                }
+                                advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
+                            } else {
+                                // batter is out on caught line drive, runner holds
+                                outs++;
+                            }
+                        }
+                    }
                     break;
                 case NO_OUTS_BASES_LOADED:
                     if (typeOfHit == LINE_DRIVE) {
@@ -1044,12 +1268,12 @@ public class AtBatSimulator {
                     }
                     if (typeOfHit == GROUNDBALL && contactQuality == SOFT) {
 
-                        oddsOfDoublePlay = 7500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                        oddsOfDoublePlay = 7500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
 
                     }
                     if (typeOfHit == GROUNDBALL && contactQuality != SOFT) {
 
-                        oddsOfDoublePlay = 9500 - runnerOnFirst.getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
+                        oddsOfDoublePlay = 9500 - runnerOnFirst.getRunner().getHittingPercentages().getSpeed() - batter.getHittingPercentages().getSpeed();
 
                     }
                     if (typeOfHit == GROUNDBALL) {
@@ -1067,6 +1291,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -1075,7 +1303,7 @@ public class AtBatSimulator {
                                 if (fielderWhoMadeError == FIRST_BASE) {
                                     // Still got out at second, but no double play
                                     outs++;
-                                    runnerOnFirst = batter;
+                                    runnerOnFirst = new Runner(batter, runnerOnFirst.getPitcherResponsible(), areRunsEarned);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false);
@@ -1089,7 +1317,7 @@ public class AtBatSimulator {
                             // TODO : Check for errors
                             // Get a single out
                             outs++;
-                            runnerOnFirst = batter;
+                            runnerOnFirst = new Runner(batter, pitcher, areRunsEarned);
                         }
                     }
 
@@ -1105,6 +1333,10 @@ public class AtBatSimulator {
                             for (Integer fielder : fieldersWhoTouchedBall) {
                                 errorMade = checkForError(fielder);
                                 if (errorMade) {
+                                    errorOnPlay = true;
+                                    if (outs == 2) {
+                                        areRunsEarned = false;
+                                    }
                                     fielderWhoMadeError = fielder;
                                     break;
                                 }
@@ -1142,6 +1374,10 @@ public class AtBatSimulator {
             for (Integer fielder : fieldersWhoTouchedBall) {
                 errorMade = checkForError(fielder);
                 if (errorMade) {
+                    errorOnPlay = true;
+                    if (outs == 2) {
+                        areRunsEarned = false;
+                    }
                     fielderWhoMadeError = fielder;
                     break;
                 }
@@ -1175,6 +1411,10 @@ public class AtBatSimulator {
 
             errorMade = checkForError(whereBallIsHit);
             if (errorMade) {
+                errorOnPlay = true;
+                if (outs == 2) {
+                    areRunsEarned = false;
+                }
                 // error made on catch, everyone is safe
                 if (typeOfHit == FLYBALL) {
                     atBatSummary.append("\nFlyball to ").append(getPositionNameFromScorekeeperPosition(whereBallIsHit)).append(" and he cant't hold on, Error!!! ");
@@ -1196,7 +1436,15 @@ public class AtBatSimulator {
                 }
             }
         }
-
+        if (outs > outsAtStartOfAtBat) {
+            float currentInningsPitched = pitcher.getPitchingStats().get(0).getInningsPitched();
+            currentInningsPitched += (outs - outsAtStartOfAtBat) * .1;
+            if (Math.round(currentInningsPitched * 10) >= (((Math.round(currentInningsPitched) * 10) + 3))) {
+                currentInningsPitched = currentInningsPitched + 1.0f - 0.3f;
+                currentInningsPitched = Math.round(currentInningsPitched * 10) / 10.0f;
+            }
+            pitcher.getPitchingStats().get(0).setInningsPitched(currentInningsPitched);
+        }
         moveToNextBatterInLineup();
         atBatOver();
     }
@@ -1205,34 +1453,36 @@ public class AtBatSimulator {
         int chanceOfTaggingUp = random.nextInt(ONE_HUNDERED_PERCENT);
         boolean runnerThrownOutTaggingUp = random.nextInt(ONE_HUNDERED_PERCENT) < 1000;
         if (runnerOnThird != null) {
-            if (chanceOfTaggingUp < runnerOnThird.getHittingPercentages().getBaseRunning() + 5000) {
+            if (chanceOfTaggingUp < runnerOnThird.getRunner().getHittingPercentages().getBaseRunning() + 5000) {
                 if (runnerThrownOutTaggingUp) {
                     // runner thrown out trying to tag up
-                    atBatSummary.append("\n").append(runnerOnThird.getName()).append(" thrown out trying to tag up! OUT!!! ");
+                    atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" thrown out trying to tag up! OUT!!! ");
                     outs++;
                     runnerOnThird = null;
                 } else {
                     // runner tags up successfully
-                    atBatSummary.append("\n").append(runnerOnThird.getName()).append(" tags up...SAFE!!! ");
+                    atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" tags up...SAFE!!! ");
                     runsScored++;
                     batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
-                    runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                    pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
-                    pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1);
+                    runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                    if (runnerOnThird.isEarnedRun()) {
+                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                    }
                     runnerOnThird = null;
                 }
             }
         } else if (runnerOnSecond != null) {
             // no runner on third
             if (whereBallWasHit < 8) {
-                if (chanceOfTaggingUp < runnerOnSecond.getHittingPercentages().getBaseRunning() - 4000) {
+                if (chanceOfTaggingUp < runnerOnSecond.getRunner().getHittingPercentages().getBaseRunning() - 4000) {
                     if (runnerThrownOutTaggingUp) {
                         // runner thrown out trying to tag up
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" thrown out trying to tag up! OUT!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" thrown out trying to tag up! OUT!!! ");
                         outs++;
                         runnerOnSecond = null;
                     } else {
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" tags up...SAFE!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" tags up...SAFE!!! ");
                         // runner tags up successfully
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
@@ -1240,30 +1490,30 @@ public class AtBatSimulator {
                 }
             }
             if (whereBallWasHit == 8) {
-                if (chanceOfTaggingUp < runnerOnSecond.getHittingPercentages().getBaseRunning() - 3000) {
+                if (chanceOfTaggingUp < runnerOnSecond.getRunner().getHittingPercentages().getBaseRunning() - 3000) {
                     if (runnerThrownOutTaggingUp) {
                         // runner thrown out trying to tag up
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" thrown out trying to tag up! OUT!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" thrown out trying to tag up! OUT!!! ");
                         outs++;
                         runnerOnSecond = null;
                     } else {
                         // runner tags up successfully
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" tags up...SAFE!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" tags up...SAFE!!! ");
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
                     }
                 }
             } else {
                 // Ball hit to right field
-                if (chanceOfTaggingUp < runnerOnSecond.getHittingPercentages().getBaseRunning() - 2000) {
+                if (chanceOfTaggingUp < runnerOnSecond.getRunner().getHittingPercentages().getBaseRunning() - 2000) {
                     if (runnerThrownOutTaggingUp) {
                         // runner thrown out trying to tag up
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" thrown out trying to tag up! OUT!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" thrown out trying to tag up! OUT!!! ");
                         outs++;
                         runnerOnSecond = null;
                     } else {
                         // runner tags up successfully
-                        atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" tags up...SAFE!!! ");
+                        atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" tags up...SAFE!!! ");
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
                     }
@@ -1272,15 +1522,15 @@ public class AtBatSimulator {
 
         } else if (runnerOnFirst != null) {
             // no runner on second or third
-            if (chanceOfTaggingUp < runnerOnFirst.getHittingPercentages().getBaseRunning() - 4000) {
+            if (chanceOfTaggingUp < runnerOnFirst.getRunner().getHittingPercentages().getBaseRunning() - 4000) {
                 if (runnerThrownOutTaggingUp) {
                     // runner thrown out trying to tag up
-                    atBatSummary.append("\n").append(runnerOnFirst.getName()).append(" thrown out trying to tag up! OUT!!! ");
+                    atBatSummary.append("\n").append(runnerOnFirst.getRunner().getName()).append(" thrown out trying to tag up! OUT!!! ");
                     outs++;
                     runnerOnSecond = null;
                 } else {
                     // runner tags up successfully
-                    atBatSummary.append("\n").append(runnerOnFirst.getName()).append(" tags up...SAFE!!! ");
+                    atBatSummary.append("\n").append(runnerOnFirst.getRunner().getName()).append(" tags up...SAFE!!! ");
                     runnerOnSecond = runnerOnFirst;
                     runnerOnFirst = null;
                 }
@@ -1290,17 +1540,22 @@ public class AtBatSimulator {
 
     private void advanceAllRunnersOneBaseOnBattedBall(Player batter, Player pitcher, boolean earnedRun) {
         if (runnerOnThird != null) {
-            atBatSummary.append("\n").append(runnerOnThird.getName()).append(" Scored On The Play");
+            atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" Scored On The Play");
             runsScored++;
-            runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
+            runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
             pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
-            if (earnedRun) {
-                pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1);
+            if (earnedRun && runnerOnThird.isEarnedRun()) {
+                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
             }
         }
         runnerOnThird = runnerOnSecond;
         runnerOnSecond = runnerOnFirst;
-        runnerOnFirst = batter;
+        if (batter == null) {
+            runnerOnFirst = null;
+        } else {
+            runnerOnFirst = new Runner(batter, pitcher, earnedRun);
+        }
+
     }
 
     private void resolveHit(Player batter, Player pitcher, int typeOfHit, int contactQuality) {
@@ -1392,21 +1647,23 @@ public class AtBatSimulator {
             if (wasRunnerRunningWhenBallHit) {
                 baserunnningAdjustment += FIFTY_PERCENT;
             }
-            if (chanceOfAdvancing < runnerOnThird.getHittingPercentages().getBaseRunning() + baserunnningAdjustment) {
+            if (chanceOfAdvancing < runnerOnThird.getRunner().getHittingPercentages().getBaseRunning() + baserunnningAdjustment) {
                 if (runnerThrownOutAdvancing) {
                     // runner thrown out trying to tag up
-                    atBatSummary.append("\n").append(runnerOnThird.getName()).append(" thrown out trying to advance! OUT!!! ");
+                    atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" thrown out trying to advance! OUT!!! ");
                     outs++;
                     runnerOnThird = null;
                 } else {
                     // runner tags up successfully
-                    atBatSummary.append("\n").append(runnerOnThird.getName()).append(" takes an additional base...SAFE!!! ");
-                    atBatSummary.append("\n").append(runnerOnThird.getName()).append(" SCORES!!! ");
+                    atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" takes an additional base...SAFE!!! ");
+                    atBatSummary.append("\n").append(runnerOnThird.getRunner().getName()).append(" SCORES!!! ");
                     runsScored++;
                     batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
-                    runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                    pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
-                    pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1);
+                    runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                    if (runnerOnThird.isEarnedRun()) {
+                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                    }
                     runnerOnThird = null;
                 }
             }
@@ -1427,14 +1684,14 @@ public class AtBatSimulator {
             if (whereBallIsHit == 9) {
                 baserunnningAdjustment -= TEN_PERCENT;
             }
-            if (chanceOfAdvancing < runnerOnSecond.getHittingPercentages().getBaseRunning() - baserunnningAdjustment) {
+            if (chanceOfAdvancing < runnerOnSecond.getRunner().getHittingPercentages().getBaseRunning() - baserunnningAdjustment) {
                 if (runnerOnSecondThrownOutAdvancing) {
                     // runner thrown out trying to advance
-                    atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" thrown out trying advance! OUT!!! ");
+                    atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" thrown out trying advance! OUT!!! ");
                     outs++;
                     runnerOnSecond = null;
                 } else {
-                    atBatSummary.append("\n").append(runnerOnSecond.getName()).append(" takes an additional base...SAFE!!! ");
+                    atBatSummary.append("\n").append(runnerOnSecond.getRunner().getName()).append(" takes an additional base...SAFE!!! ");
                     // runner tags up successfully
                     runnerOnThird = runnerOnSecond;
                     runnerOnSecond = null;
@@ -1795,7 +2052,7 @@ public class AtBatSimulator {
     private boolean isHit(Player batter, int typeOfHit, int contactQuality) {
         int checkForHit = random.nextInt(ONE_HUNDERED_PERCENT);
         int defensiveShiftAdjustment = (BATTING_PULL_PCT_MEAN - batter.getHittingPercentages().getPullPct()) / 45 + (batter.getHittingPercentages().getCenterPct() - BATTING_CENTER_PCT_MEAN) / 45 +
-                ((ONE_HUNDERED_PERCENT - batter.getHittingPercentages().getPullPct() - batter.getHittingPercentages().getCenterPct())- (ONE_HUNDERED_PERCENT - BATTING_CENTER_PCT_MEAN - BATTING_PULL_PCT_MEAN)) / 45;
+                ((ONE_HUNDERED_PERCENT - batter.getHittingPercentages().getPullPct() - batter.getHittingPercentages().getCenterPct()) - (ONE_HUNDERED_PERCENT - BATTING_CENTER_PCT_MEAN - BATTING_PULL_PCT_MEAN)) / 45;
         if (typeOfHit == GROUNDBALL) {
             if (contactQuality == HARD) {
                 return checkForHit < BATTING_HARD_GROUNDBALL_HIT_PCT + defensiveShiftAdjustment;
@@ -1865,8 +2122,8 @@ public class AtBatSimulator {
             pitcher.getPitchingStats().get(0).setWildPitches(pitcher.getPitchingStats().get(0).getWildPitches() + 1);
             if (runnerOnThird != null) {
                 runsScored++;
-                runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
+                runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                 runnerOnThird = null;
             }
             runnerOnThird = runnerOnSecond;
@@ -1920,30 +2177,36 @@ public class AtBatSimulator {
                     fielderReceivingThrow = getFielderRecevingThrow();
                     // check for error on throw (catcher) or on catch (fielderReceivingThrow)
                     error = (checkForError(SCOREKEEPING_CATCHER) || checkForError(fielderReceivingThrow));
+                    if (error) {
+                        errorOnPlay = true;
+                        if (outs == 2) {
+                            areRunsEarned = false;
+                        }
+                    }
                     if (ifRunnerIsSuccessful(runnerOnFirst)) {
                         //Runner stole the base
-                        atBatSummary.append(runnerOnFirst.getName()).append(" Stole Second Base! \n");
+                        atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" Stole Second Base! \n");
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
-                        runnerOnSecond.getBattingStats().get(0).setStolenBases(runnerOnSecond.getBattingStats().get(0).getStolenBases() + 1);
+                        runnerOnSecond.getRunner().getBattingStats().get(0).setStolenBases(runnerOnSecond.getRunner().getBattingStats().get(0).getStolenBases() + 1);
 
                         if (error) {
-                            atBatSummary.append(runnerOnSecond.getName()).append(" Advances to Third on Error! \n");
+                            atBatSummary.append(runnerOnSecond.getRunner().getName()).append(" Advances to Third on Error! \n");
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
                         }
                         return;
                     } else {
                         if (error) {
-                            atBatSummary.append(runnerOnFirst.getName()).append(" Safe at Second Base on Error! \n");
+                            atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" Safe at Second Base on Error! \n");
                             runnerOnSecond = runnerOnFirst;
                             runnerOnFirst = null;
                             return;
                         } else {
                             //Runner is caught stealing
-                            atBatSummary.append(runnerOnFirst.getName()).append(" OUT! Caught Stealing Second Base! \n");
+                            atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" OUT! Caught Stealing Second Base! \n");
                             outs++;
-                            runnerOnFirst.getBattingStats().get(0).setCaughtStealing(runnerOnFirst.getBattingStats().get(0).getCaughtStealing() + 1);
+                            runnerOnFirst.getRunner().getBattingStats().get(0).setCaughtStealing(runnerOnFirst.getRunner().getBattingStats().get(0).getCaughtStealing() + 1);
                             runnerOnFirst = null;
                             if (outs == 3) {
                                 atBatOver();
@@ -1957,33 +2220,39 @@ public class AtBatSimulator {
                     atBatSummary.append("\nStolen Base Attempt : ");
                     // check for error on throw (catcher) or on catch (third base)
                     error = (checkForError(SCOREKEEPING_CATCHER) || checkForError(SCOREKEEPING_THIRD_BASE));
+                    if (error) {
+                        errorOnPlay = true;
+                        if (outs == 2) {
+                            areRunsEarned = false;
+                        }
+                    }
                     if (ifRunnerIsSuccessful(runnerOnSecond)) {
                         //Runner stole the base
-                        atBatSummary.append(runnerOnSecond.getName()).append(" Stole Third Base! \n");
+                        atBatSummary.append(runnerOnSecond.getRunner().getName()).append(" Stole Third Base! \n");
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
-                        runnerOnThird.getBattingStats().get(0).setStolenBases(runnerOnThird.getBattingStats().get(0).getStolenBases() + 1);
+                        runnerOnThird.getRunner().getBattingStats().get(0).setStolenBases(runnerOnThird.getRunner().getBattingStats().get(0).getStolenBases() + 1);
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runner
-                            atBatSummary.append(runnerOnThird.getName()).append(" Scores on the Error! \n");
+                            atBatSummary.append(runnerOnThird.getRunner().getName()).append(" Scores on the Error! \n");
                             runsScored++;
-                            runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                            defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).setRuns(defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                             runnerOnThird = null;
                         }
                         return;
                     } else {
                         if (error) {
                             // Runner safe on error, advance runner but no credit for stolen base
-                            atBatSummary.append(runnerOnSecond.getName()).append(" Safe at Third Base on the Error! \n");
+                            atBatSummary.append(runnerOnSecond.getRunner().getName()).append(" Safe at Third Base on the Error! \n");
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
                             return;
                         } else {
                             //Runner is caught stealing
-                            atBatSummary.append(runnerOnSecond.getName()).append(" OUT! Caught Stealing Third Base! \n");
+                            atBatSummary.append(runnerOnSecond.getRunner().getName()).append(" OUT! Caught Stealing Third Base! \n");
                             outs++;
-                            runnerOnSecond.getBattingStats().get(0).setCaughtStealing(runnerOnSecond.getBattingStats().get(0).getCaughtStealing() + 1);
+                            runnerOnSecond.getRunner().getBattingStats().get(0).setCaughtStealing(runnerOnSecond.getRunner().getBattingStats().get(0).getCaughtStealing() + 1);
                             runnerOnSecond = null;
                             if (outs == 3) {
                                 atBatOver();
@@ -2000,21 +2269,27 @@ public class AtBatSimulator {
                     // check for error on throw (catcher) or on catch (third base)
                     atBatSummary.append("\nStolen Base Attempt : ");
                     error = (checkForError(SCOREKEEPING_CATCHER) || checkForError(SCOREKEEPING_THIRD_BASE));
+                    if (error) {
+                        errorOnPlay = true;
+                        if (outs == 2) {
+                            areRunsEarned = false;
+                        }
+                    }
                     if (ifRunnerIsSuccessful(runnerOnSecond)) {
                         //Runner stole the base
-                        atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getName()).append(" Stole Third Base! and ").append(runnerOnFirst.getName()).append(" Stole Second Base! \n");
-                        runnerOnSecond.getBattingStats().get(0).setStolenBases(runnerOnSecond.getBattingStats().get(0).getStolenBases() + 1);
-                        runnerOnFirst.getBattingStats().get(0).setStolenBases(runnerOnFirst.getBattingStats().get(0).getStolenBases() + 1);
+                        atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getRunner().getName()).append(" Stole Third Base! and ").append(runnerOnFirst.getRunner().getName()).append(" Stole Second Base! \n");
+                        runnerOnSecond.getRunner().getBattingStats().get(0).setStolenBases(runnerOnSecond.getRunner().getBattingStats().get(0).getStolenBases() + 1);
+                        runnerOnFirst.getRunner().getBattingStats().get(0).setStolenBases(runnerOnFirst.getRunner().getBattingStats().get(0).getStolenBases() + 1);
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
 
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runners
-                            atBatSummary.append("Runners advance on Error ").append(runnerOnThird.getName()).append(" Scores!!! ").append(runnerOnSecond.getName()).append(" advances to Third.\n");
+                            atBatSummary.append("Runners advance on Error ").append(runnerOnThird.getRunner().getName()).append(" Scores!!! ").append(runnerOnSecond.getRunner().getName()).append(" advances to Third.\n");
                             runsScored++;
-                            runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                            defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).setRuns(defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
                         }
@@ -2022,16 +2297,16 @@ public class AtBatSimulator {
                     } else {
                         if (error) {
                             // Runner safe on error, advance runner but no credit for stolen base
-                            atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getName()).append(" safe at Third on Error and ").append(runnerOnFirst.getName()).append(" advances to Second Base! \n");
+                            atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getRunner().getName()).append(" safe at Third on Error and ").append(runnerOnFirst.getRunner().getName()).append(" advances to Second Base! \n");
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = runnerOnFirst;
                             runnerOnFirst = null;
                             return;
                         } else {
                             //Runner is caught stealing
-                            atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getName()).append(" OUT at Third Base! and ").append(runnerOnFirst.getName()).append(" advances to Second Base! \n");
+                            atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getRunner().getName()).append(" OUT at Third Base! and ").append(runnerOnFirst.getRunner().getName()).append(" advances to Second Base! \n");
                             outs++;
-                            runnerOnSecond.getBattingStats().get(0).setCaughtStealing(runnerOnSecond.getBattingStats().get(0).getCaughtStealing() + 1);
+                            runnerOnSecond.getRunner().getBattingStats().get(0).setCaughtStealing(runnerOnSecond.getRunner().getBattingStats().get(0).getCaughtStealing() + 1);
                             runnerOnSecond = null;
                             if (outs == 3) {
                                 atBatOver();
@@ -2051,19 +2326,25 @@ public class AtBatSimulator {
                     fielderReceivingThrow = getFielderRecevingThrow();
                     // check for error on throw (catcher) or on catch (fielderReceivingThrow)
                     error = (checkForError(SCOREKEEPING_CATCHER) || checkForError(fielderReceivingThrow));
+                    if (error) {
+                        errorOnPlay = true;
+                        if (outs == 2) {
+                            areRunsEarned = false;
+                        }
+                    }
                     if (ifRunnerIsSuccessful(runnerOnFirst)) {
                         //Runner stole the base
-                        atBatSummary.append(runnerOnFirst.getName()).append(" Stole Second Base! \n");
-                        runnerOnFirst.getBattingStats().get(0).setStolenBases(runnerOnFirst.getBattingStats().get(0).getStolenBases() + 1);
+                        atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" Stole Second Base! \n");
+                        runnerOnFirst.getRunner().getBattingStats().get(0).setStolenBases(runnerOnFirst.getRunner().getBattingStats().get(0).getStolenBases() + 1);
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
 
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runners
-                            atBatSummary.append(runnerOnSecond.getName()).append(" advances to Third on Error, ").append(runnerOnThird.getName()).append(" Scores on Error!!!\n");
+                            atBatSummary.append(runnerOnSecond.getRunner().getName()).append(" advances to Third on Error, ").append(runnerOnThird.getRunner().getName()).append(" Scores on Error!!!\n");
                             runsScored++;
-                            runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                            defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).setRuns(defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
                         }
@@ -2071,18 +2352,18 @@ public class AtBatSimulator {
                     } else {
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runners
-                            atBatSummary.append(runnerOnFirst.getName()).append(" Safe at Second on Error, ").append(runnerOnThird.getName()).append(" Scores on Error!!!\n");
+                            atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" Safe at Second on Error, ").append(runnerOnThird.getRunner().getName()).append(" Scores on Error!!!\n");
                             runsScored++;
-                            runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                            defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).setRuns(defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                             runnerOnThird = null;
                             runnerOnSecond = runnerOnFirst;
                             runnerOnFirst = null;
                             return;
                         } else {
                             //Runner is caught stealing
-                            atBatSummary.append(runnerOnFirst.getName()).append(" Caught Stealing, OUT at Second!!! \n");
-                            runnerOnFirst.getBattingStats().get(0).setCaughtStealing(runnerOnFirst.getBattingStats().get(0).getCaughtStealing() + 1);
+                            atBatSummary.append(runnerOnFirst.getRunner().getName()).append(" Caught Stealing, OUT at Second!!! \n");
+                            runnerOnFirst.getRunner().getBattingStats().get(0).setCaughtStealing(runnerOnFirst.getRunner().getBattingStats().get(0).getCaughtStealing() + 1);
                             outs++;
                             runnerOnFirst = null;
 
@@ -2130,8 +2411,8 @@ public class AtBatSimulator {
         return false;
     }
 
-    private boolean ifRunnerIsSuccessful(Player runner) {
-        int stolenBasePct = runner.getHittingPercentages().getStolenBasePct();
+    private boolean ifRunnerIsSuccessful(Runner runner) {
+        int stolenBasePct = runner.getRunner().getHittingPercentages().getStolenBasePct();
         if (runnerOnSecond != null) {
             stolenBasePct -= 500;
 
@@ -2139,8 +2420,8 @@ public class AtBatSimulator {
         return (random.nextInt(ONE_HUNDERED_PERCENT) < stolenBasePct);
     }
 
-    private boolean ifRunnerSteals(Player runner) {
-        int stolenBaseRate = runner.getHittingPercentages().getStolenBaseRate();
+    private boolean ifRunnerSteals(Runner runner) {
+        int stolenBaseRate = runner.getRunner().getHittingPercentages().getStolenBaseRate();
         if (runnerOnSecond == runner) {
             stolenBaseRate = stolenBaseRate / 5;
 
@@ -2204,7 +2485,7 @@ public class AtBatSimulator {
 
     private boolean isPitchInStrikeZone(Player pitcher) {
         int randomToCheck = random.nextInt(ONE_HUNDERED_PERCENT);
-        if (balls == 0 && strikes == 0) {
+        /*if (balls == 0 && strikes == 0) {
             if (randomToCheck < pitcher.getPitchingPercentages().getFirstPitchStrikePct()) {
                 //In the strike zone
                 return true;
@@ -2212,7 +2493,7 @@ public class AtBatSimulator {
                 //Outside the strike zone
                 return false;
             }
-        } else if (randomToCheck < pitcher.getPitchingPercentages().getZonePct()) {
+        } else */if (randomToCheck < pitcher.getPitchingPercentages().getZonePct()) {
             //In the strike zone
             return true;
         } else {
@@ -2236,8 +2517,8 @@ public class AtBatSimulator {
             }
             //Otherwise advance runners and adjust stats
             if (runnerOnThird != null) {
-                runnerOnThird.getBattingStats().get(0).setRuns(runnerOnThird.getBattingStats().get(0).getRuns() + 1);
-                pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
+                runnerOnThird.getRunner().getBattingStats().get(0).setRuns(runnerOnThird.getRunner().getBattingStats().get(0).getRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
                 //We've advanced the runner and adjusted stats, now empty third base
                 runnerOnThird = null;
             }
@@ -2268,7 +2549,7 @@ public class AtBatSimulator {
         return runsScored;
     }
 
-    public Player[] getRunners() {
+    public Runner[] getRunners() {
         runners[0] = runnerOnFirst;
         runners[1] = runnerOnSecond;
         runners[2] = runnerOnThird;
@@ -2305,7 +2586,7 @@ public class AtBatSimulator {
         return currentBatter;
     }
 
-    public void setRunners(Player[] runners) {
+    public void setRunners(Runner[] runners) {
         for (int i = 0; i < runners.length; i++) {
             this.runners[i] = runners[i];
         }
@@ -2325,7 +2606,9 @@ public class AtBatSimulator {
     public TreeMap<Integer, Player> getLineup() {
         return lineup;
     }
-
+    public boolean wasErrorMade() {
+        return errorOnPlay;
+    }
     public static StringBuilder getAtBatSummary() {
         return atBatSummary;
     }

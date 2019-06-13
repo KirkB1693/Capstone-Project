@@ -70,8 +70,9 @@ public class TeamNameGenerator {
                     //Do nothing.
                 }
             }
-
-            return map.get(key);
+            String teamName = map.get(key);
+            map.remove(key);                       // Remove the name from the list so it isn't picked again
+            return teamName;
         }
 
         /**

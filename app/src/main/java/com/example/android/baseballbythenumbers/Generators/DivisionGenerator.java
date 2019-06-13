@@ -14,18 +14,17 @@ public class DivisionGenerator {
     private static final int[] DEFAULT_TEAM_MAKEUP = new int[]{5, 3, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1};
     private static final int DEFAULT_BUDGET = 1000000;
     private CityGenerator cityGenerator;
-    private TeamNameGenerator teamNameGenerator;
 
     public DivisionGenerator(Context context) {
         this.context = context;
     }
 
-    public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup, int numberOfDivisions, int countriesToInclude) {
+    public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup, int numberOfDivisions, int countriesToInclude, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator) {
         Division newDivision = new Division();
         newDivision.setDivisionName(divisionName);
         int[] teamMakeupToUse = DEFAULT_TEAM_MAKEUP;
-        teamNameGenerator = new TeamNameGenerator(context);
-        cityGenerator = new CityGenerator(context, numberOfDivisions, countriesToInclude);
+
+        this.cityGenerator = cityGenerator;
 
         TeamGenerator teamGenerator;
 
@@ -42,7 +41,7 @@ public class DivisionGenerator {
 
         List<Team> newTeamList = new ArrayList<>();
         for (int i = 0; i < divisionSize; i++) {
-            String teamName = getUniqueTeamName(newTeamList);
+            String teamName = teamNameGenerator.generateTeamName();
             String cityName = getUniqueCity(newTeamList, divisionName);
 
             newTeamList.add(teamGenerator.generateTeam(teamName, cityName, doesDivisionUseDH, DEFAULT_BUDGET));
@@ -51,21 +50,6 @@ public class DivisionGenerator {
         return newDivision;
     }
 
-
-    private String getUniqueTeamName(List<Team> newTeamList) {
-        if (newTeamList.isEmpty()) {
-            return teamNameGenerator.generateTeamName();
-        }
-        List<String> teamNames = new ArrayList<>();
-        for (Team team: newTeamList) {
-            teamNames.add(team.getTeamName());
-        }
-        String teamName = teamNameGenerator.generateTeamName();
-        while (teamNames.contains(teamName)) {
-            teamName = teamNameGenerator.generateTeamName();
-        }
-        return teamName;
-    }
 
     private String getUniqueCity(List<Team> newTeamList, String divisionName) {
         if (newTeamList.isEmpty()) {

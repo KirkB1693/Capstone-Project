@@ -3,12 +3,12 @@ package com.example.android.baseballbythenumbers.Generators;
 import android.content.Context;
 
 import com.example.android.baseballbythenumbers.Data.League;
-import com.example.android.baseballbythenumbers.Data.Level;
+import com.example.android.baseballbythenumbers.Data.Organization;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LevelGenerator {
+public class OrganizationGenerator {
 
     Context context;
 
@@ -24,13 +24,17 @@ public class LevelGenerator {
 
     private static final int[] DEFAULT_TEAM_MAKEUP_WITHOUT_DH = new int[]{5, 3, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 0};
 
-    public LevelGenerator(Context context) {
+    public OrganizationGenerator(Context context) {
         this.context = context;
     }
 
-    public Level generateLevel(String levelName, int currentYear, int numberOfLeagues, String[] leagueNames, boolean[] useDH, int divisionSize, int numberOfDivisions, int countriesToInclude, int[] teamMakeup) {
+    public Organization generateOrganization(String organizationName, int currentYear, int numberOfLeagues, String[] leagueNames, boolean[] useDH, int divisionSize, int numberOfDivisions, int countriesToInclude, int[] teamMakeup) {
         List<League> leagues = new ArrayList<>();
         LeagueGenerator leagueGenerator = new LeagueGenerator(context);
+
+
+        TeamNameGenerator teamNameGenerator = new TeamNameGenerator(context);
+        CityGenerator cityGenerator = new CityGenerator(context, numberOfDivisions, countriesToInclude);
 
         if (numberOfLeagues < 1 || numberOfLeagues > 4) {
             numberOfLeagues = DEFAULT_LEAGUES;
@@ -64,14 +68,13 @@ public class LevelGenerator {
                 teamMakeup = DEFAULT_TEAM_MAKEUP_WITHOUT_DH;
             }
             if (i < leagueNames.length) {
-
-                leagues.add(leagueGenerator.generateLeague(leagueNames[i], useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup));
+                leagues.add(leagueGenerator.generateLeague(leagueNames[i], useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator));
             } else {
-                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME+(i+1), useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup));
+                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME+(i+1), useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator));
             }
 
         }
 
-        return new Level(levelName, currentYear, leagues);
+        return new Organization(organizationName, currentYear, leagues);
     }
 }

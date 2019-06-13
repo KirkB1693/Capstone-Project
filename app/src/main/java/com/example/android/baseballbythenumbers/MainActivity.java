@@ -7,14 +7,15 @@ import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.League;
-import com.example.android.baseballbythenumbers.Data.Level;
+import com.example.android.baseballbythenumbers.Data.Organization;
 import com.example.android.baseballbythenumbers.Data.Team;
-import com.example.android.baseballbythenumbers.Generators.LevelGenerator;
+import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Random;
 
@@ -24,9 +25,8 @@ import static com.example.android.baseballbythenumbers.Simulators.GameSimulator.
 
 public class MainActivity extends AppCompatActivity {
 
-    List<Team> teams;
     List<League> leagues;
-    LevelGenerator levelGenerator;
+    OrganizationGenerator organizationGenerator;
     List<Division> divisions;
     StringBuilder displayText;
 
@@ -41,19 +41,17 @@ public class MainActivity extends AppCompatActivity {
         }
         JodaTimeAndroid.init(this);
 
-        levelGenerator = new LevelGenerator(this);
-        divisions = new ArrayList<>();
+        organizationGenerator = new OrganizationGenerator(this);
         displayText = new StringBuilder();
 
         int numberOfTeamsInDivision = 5;
         int numberOfDivisions = 3;
         int countriesToInclude = 9;
 
-        Level mlbClone = levelGenerator.generateLevel("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
+        Organization mlbClone = organizationGenerator.generateOrganization("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
                 , numberOfDivisions, countriesToInclude, null);
 
         leagues = mlbClone.getLeagues();
-        divisions = leagues.get(0).getDivisions();
 /*
         for (League league : leagues) {
             displayText.append("\n\n").append(league.getLeagueName()).append(" League : \n");
@@ -67,18 +65,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }*/
-        simAtBat(null);
+        simGame(null);
     }
 
-    public void simAtBat(View view) {
+    public void simGame(View view) {
 
         displayText = new StringBuilder();
 
         TextView textView = findViewById(R.id.helloWorld);
 
         Team homeTeam = getRandomTeam(leagues);
-        Team visitingTeam = getRandomTeam(leagues);
-
+        Team visitingTeam = homeTeam;
+        while (visitingTeam == homeTeam) {
+            visitingTeam = getRandomTeam(leagues);
+        }
         GameSimulator gameSimulator = new GameSimulator(this, homeTeam, false, visitingTeam, false);
         int[] result = gameSimulator.simulateGame();
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(displayText);
     }
 
-    private Team getRandomTeam(List<League> leagues) {
+    private Team getRandomTeam(@NotNull List<League> leagues) {
         Random random = new Random();
         League randomLeague = leagues.get(random.nextInt(leagues.size()));
         Division randomDivision = randomLeague.getDivisions().get(random.nextInt(randomLeague.getDivisions().size()));

@@ -8,37 +8,37 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Level implements Parcelable
+public class Organization implements Parcelable
 {
 
-    @SerializedName("levelName")
+    @SerializedName("organizationName")
     @Expose
-    private String levelName;
+    private String organizationName;
     @SerializedName("currentYear")
     @Expose
     private int currentYear;
     @SerializedName("leagues")
     @Expose
     private List<League> leagues = null;
-    public final static Parcelable.Creator<Level> CREATOR = new Creator<Level>() {
+    public final static Parcelable.Creator<Organization> CREATOR = new Creator<Organization>() {
 
 
         @SuppressWarnings({
                 "unchecked"
         })
-        public Level createFromParcel(Parcel in) {
-            return new Level(in);
+        public Organization createFromParcel(Parcel in) {
+            return new Organization(in);
         }
 
-        public Level[] newArray(int size) {
-            return (new Level[size]);
+        public Organization[] newArray(int size) {
+            return (new Organization[size]);
         }
 
     }
             ;
 
-    protected Level(Parcel in) {
-        this.levelName = ((String) in.readValue((String.class.getClassLoader())));
+    protected Organization(Parcel in) {
+        this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
         this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
     }
@@ -47,7 +47,7 @@ public class Level implements Parcelable
      * No args constructor for use in serialization
      *
      */
-    public Level() {
+    public Organization() {
     }
 
     /**
@@ -56,19 +56,19 @@ public class Level implements Parcelable
      * @param currentYear
      * @param levelName
      */
-    public Level(String levelName, int currentYear, List<League> leagues) {
+    public Organization(String levelName, int currentYear, List<League> leagues) {
         super();
-        this.levelName = levelName;
+        this.organizationName = levelName;
         this.currentYear = currentYear;
         this.leagues = leagues;
     }
 
-    public String getLevelName() {
-        return levelName;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
-    public void setLevelName(String levelName) {
-        this.levelName = levelName;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
     public int getCurrentYear() {
@@ -88,7 +88,7 @@ public class Level implements Parcelable
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(levelName);
+        dest.writeValue(organizationName);
         dest.writeValue(currentYear);
         dest.writeList(leagues);
     }

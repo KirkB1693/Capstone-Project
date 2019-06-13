@@ -67,23 +67,28 @@ public class CityGenerator {
         try {
             switch (numberOfDivisions) {
                 case 0:
-                    allCityNames = loadTeamNames(R.raw.cities, NO_DIVISONS);
+                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
+                    break;
                 case 1:
-                    allCityNames = loadTeamNames(R.raw.cities, NO_DIVISONS);
+                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
+                    break;
                 case 2:
-                    westCityNames = loadTeamNames(R.raw.cities, WEST);
-                    eastCityNames = loadTeamNames(R.raw.cities, EAST);
+                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
+                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    break;
                 case 3:
-                    westCityNames = loadTeamNames(R.raw.cities, WEST);
-                    centralCityNames = loadTeamNames(R.raw.cities, CENTRAL);
-                    eastCityNames = loadTeamNames(R.raw.cities, EAST);
+                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
+                    centralCityNames = loadTeamNames(R.raw.cities_metroarea, CENTRAL);
+                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    break;
                 case 4:
-                    westCityNames = loadTeamNames(R.raw.cities, WEST);
-                    northCityNames = loadTeamNames(R.raw.cities, NORTH);
-                    southCityNames = loadTeamNames(R.raw.cities, SOUTH);
-                    eastCityNames = loadTeamNames(R.raw.cities, EAST);
+                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
+                    northCityNames = loadTeamNames(R.raw.cities_metroarea, NORTH);
+                    southCityNames = loadTeamNames(R.raw.cities_metroarea, SOUTH);
+                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    break;
                 default:
-                    allCityNames = loadTeamNames(R.raw.cities, NO_DIVISONS);
+                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
             }
 
         } catch (IOException e) {
@@ -176,7 +181,11 @@ public class CityGenerator {
             }
         }
 
-        return map.get(key);
+        String city = map.get(key);
+        if (!key.equals(map.ceilingKey(0f))) {
+            map.remove(key);                       // Remove this city from the list unless it is the largest city
+        }
+        return city;
     }
 
     /**
@@ -191,28 +200,34 @@ public class CityGenerator {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line = reader.readLine();
+        float runningFloatTotal = 0;
         while (line != null) {
+
             String[] fields = line.split(",");
             switch (numberOfDivisions) {
                 case 0:
                     if (countryIncluded(Integer.parseInt(fields[3]))) {
-                        names.put(Float.parseFloat(fields[1]), fields[0]);
+                        runningFloatTotal += Float.parseFloat(fields[1]);
+                        names.put(runningFloatTotal, fields[0]);
                     }
                     break;
                 case 1:
                     if (countryIncluded(Integer.parseInt(fields[3]))) {
-                        names.put(Float.parseFloat(fields[1]), fields[0]);
+                        runningFloatTotal += Float.parseFloat(fields[1]);
+                        names.put(runningFloatTotal, fields[0]);
                     }
                     break;
                 case 2:
                     if (countryIncluded(Integer.parseInt(fields[3]))) {
                         if (divisionName.equals(WEST)) {
                             if (Float.parseFloat(fields[6]) <= -100 || Float.parseFloat(fields[6]) > 0) {
-                                names.put(Float.parseFloat(fields[1]), fields[0]);
+                                runningFloatTotal += Float.parseFloat(fields[1]);
+                                names.put(runningFloatTotal, fields[0]);
                             }
                         } else {
                             if (Float.parseFloat(fields[6]) > -100 && Float.parseFloat(fields[6]) < 0) {
-                                names.put(Float.parseFloat(fields[1]), fields[0]);
+                                runningFloatTotal += Float.parseFloat(fields[1]);
+                                names.put(runningFloatTotal, fields[0]);
                             }
                         }
                     }
@@ -221,15 +236,18 @@ public class CityGenerator {
                     if (countryIncluded(Integer.parseInt(fields[3]))) {
                         if (divisionName.equals(WEST)) {
                             if (Float.parseFloat(fields[6]) <= -110 || Float.parseFloat(fields[6]) > 0) {
-                                names.put(Float.parseFloat(fields[1]), fields[0]);
+                                runningFloatTotal += Float.parseFloat(fields[1]);
+                                names.put(runningFloatTotal, fields[0]);
                             }
                         } else if (divisionName.equals(CENTRAL)) {
                             if (Float.parseFloat(fields[6]) > -110 && Float.parseFloat(fields[6]) <= -84.5) {
-                                names.put(Float.parseFloat(fields[1]), fields[0]);
+                                runningFloatTotal += Float.parseFloat(fields[1]);
+                                names.put(runningFloatTotal, fields[0]);
                             }
                         } else {
                             if (Float.parseFloat(fields[6]) > -84.5 && Float.parseFloat(fields[6]) < 0) {
-                                names.put(Float.parseFloat(fields[1]), fields[0]);
+                                runningFloatTotal += Float.parseFloat(fields[1]);
+                                names.put(runningFloatTotal, fields[0]);
                             }
                         }
                     }
@@ -239,22 +257,26 @@ public class CityGenerator {
                         switch (divisionName) {
                             case WEST:
                                 if (Float.parseFloat(fields[6]) <= -110 || Float.parseFloat(fields[6]) > 0) {
-                                    names.put(Float.parseFloat(fields[1]), fields[0]);
+                                    runningFloatTotal += Float.parseFloat(fields[1]);
+                                    names.put(runningFloatTotal, fields[0]);
                                 }
                                 break;
                             case NORTH:
                                 if (Float.parseFloat(fields[6]) > -110 && Float.parseFloat(fields[6]) <= -84.5 && Float.parseFloat(fields[5]) > 36.15) {
-                                    names.put(Float.parseFloat(fields[1]), fields[0]);
+                                    runningFloatTotal += Float.parseFloat(fields[1]);
+                                    names.put(runningFloatTotal, fields[0]);
                                 }
                                 break;
                             case SOUTH:
                                 if (Float.parseFloat(fields[6]) > -110 && Float.parseFloat(fields[6]) <= -84.5 && Float.parseFloat(fields[5]) <= 36.15) {
-                                    names.put(Float.parseFloat(fields[1]), fields[0]);
+                                    runningFloatTotal += Float.parseFloat(fields[1]);
+                                    names.put(runningFloatTotal, fields[0]);
                                 }
                                 break;
                             default:
                                 if (Float.parseFloat(fields[6]) > -84.5 && Float.parseFloat(fields[6]) < 0) {
-                                    names.put(Float.parseFloat(fields[1]), fields[0]);
+                                    runningFloatTotal += Float.parseFloat(fields[1]);
+                                    names.put(runningFloatTotal, fields[0]);
                                 }
                                 break;
                         }
@@ -262,7 +284,8 @@ public class CityGenerator {
                     break;
                 default:
                     if (countryIncluded(Integer.parseInt(fields[3]))) {
-                        names.put(Float.parseFloat(fields[1]), fields[0]);
+                        runningFloatTotal += Float.parseFloat(fields[1]);
+                        names.put(runningFloatTotal, fields[0]);
                     }
             }
             line = reader.readLine();
