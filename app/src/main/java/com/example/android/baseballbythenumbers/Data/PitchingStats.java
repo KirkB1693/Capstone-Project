@@ -1,13 +1,25 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "pitching_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId", unique = true))
 public class PitchingStats implements Parcelable
 {
+    @PrimaryKey (autoGenerate = true)
+    private long pitchingStatsId;
+
+    private long playerId;
 
     @SerializedName("Year")
     @Expose
@@ -99,6 +111,8 @@ public class PitchingStats implements Parcelable
             ;
 
     protected PitchingStats(Parcel in) {
+        this.pitchingStatsId = ((long) in.readValue((long.class.getClassLoader())));
+        this.playerId = ((long) in.readValue((long.class.getClassLoader())));
         this.year = ((int) in.readValue((int.class.getClassLoader())));
         this.wins = ((int) in.readValue((int.class.getClassLoader())));
         this.losses = ((int) in.readValue((int.class.getClassLoader())));
@@ -159,7 +173,10 @@ public class PitchingStats implements Parcelable
      * @param groundBalls
      * @param wins
      */
-    public PitchingStats(int year, int wins, int losses, int games, int gamesStarted, int completeGames, int shutOuts, int saves, int holds, int blownSaves, float inningsPitched, int totalBattersFaced, int hits, int runs, int earnedRuns, int homeRuns, int walks, int strikeOuts, int hitByPitch, int wildPitches, int balks, int groundBalls, int lineDrives, int flyBalls) {
+    @Ignore
+    public PitchingStats(int year, int wins, int losses, int games, int gamesStarted, int completeGames, int shutOuts, int saves, int holds, int blownSaves, float inningsPitched,
+                         int totalBattersFaced, int hits, int runs, int earnedRuns, int homeRuns, int walks, int strikeOuts, int hitByPitch, int wildPitches, int balks, int groundBalls,
+                         int lineDrives, int flyBalls, long playerId) {
         super();
         this.year = year;
         this.wins = wins;
@@ -185,6 +202,7 @@ public class PitchingStats implements Parcelable
         this.groundBalls = groundBalls;
         this.lineDrives = lineDrives;
         this.flyBalls = flyBalls;
+        this.playerId = playerId;
     }
 
     public int getYear() {
@@ -379,7 +397,25 @@ public class PitchingStats implements Parcelable
         this.flyBalls = flyBalls;
     }
 
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+
+    public long getPitchingStatsId() {
+        return pitchingStatsId;
+    }
+
+    public void setPitchingStatsId(long pitchingStatsId) {
+        this.pitchingStatsId = pitchingStatsId;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(pitchingStatsId);
+        dest.writeValue(playerId);
         dest.writeValue(year);
         dest.writeValue(wins);
         dest.writeValue(losses);

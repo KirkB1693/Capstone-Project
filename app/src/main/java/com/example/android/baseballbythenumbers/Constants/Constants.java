@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.Data;
+package com.example.android.baseballbythenumbers.Constants;
 
 public class Constants {
 

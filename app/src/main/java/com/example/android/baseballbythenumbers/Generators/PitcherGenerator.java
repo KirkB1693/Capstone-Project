@@ -8,7 +8,6 @@ import com.example.android.baseballbythenumbers.Data.PitchingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Name;
-import com.example.android.baseballbythenumbers.Generators.NameGenerator;
 import com.example.android.baseballbythenumbers.R;
 
 import org.joda.time.DateTime;
@@ -21,113 +20,113 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static com.example.android.baseballbythenumbers.Data.Constants.Handedness.PITCHER_THROWS_LEFT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_FLYBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_GROUNDBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_HARD_LINE_DRIVE_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_FLYBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_GROUNDBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_MED_LINE_DRIVE_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_FLYBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_GROUNDBALL_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.HitRates.BATTING_SOFT_LINE_DRIVE_HIT_PCT;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.*;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_CENTER_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_PULL_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_SPEED_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MAX;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_STD_DEV;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.CHANGE_UP;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.CURVEBALL;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.CUTTER;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.FASTBALL;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.KNUCKLEBALL;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.SLIDER;
-import static com.example.android.baseballbythenumbers.Data.PitchTypes.SPLIT_FINGER;
-import static com.example.android.baseballbythenumbers.Data.Positions.LONG_RELIEVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.SHORT_RELEIVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Handedness.PITCHER_THROWS_LEFT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_HARD_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_HARD_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_HARD_LINE_DRIVE_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_MED_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_MED_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_MED_LINE_DRIVE_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_SOFT_FLYBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_SOFT_GROUNDBALL_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.HitRates.BATTING_SOFT_LINE_DRIVE_HIT_PCT;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.*;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BABIP_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_BASERUNNING_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_CENTER_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_CENTER_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_DOUBLE_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_ERROR_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_FOUL_BALL_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_GROUND_BALL_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HARD_HIT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HIT_BY_PITCH_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_HOME_RUN_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_INFIELD_FLY_BALL_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_LINE_DRIVE_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_MED_HIT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_CONTACT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_O_SWING_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_PULL_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_PULL_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_SPEED_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_SPEED_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STAMINA_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_STOLEN_BASE_RATE_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_TRIPLE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_CONTACT_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MAX;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBatting.PITCHER_BATTING_Z_SWING_PCT_STD_DEV;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.CHANGE_UP;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.CURVEBALL;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.CUTTER;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.FASTBALL;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.KNUCKLEBALL;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.SLIDER;
+import static com.example.android.baseballbythenumbers.Constants.PitchTypes.SPLIT_FINGER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
 
 public class PitcherGenerator {
 
@@ -156,6 +155,7 @@ public class PitcherGenerator {
 
     private String rightHanded;
 
+
     public PitcherGenerator(Context context, NameGenerator nameGenerator, int startingPitchers, int longReliefPitchers, int shortReliefPitchers) {
         this.startingPitchers = startingPitchers;
         this.longReliefPitchers = longReliefPitchers;
@@ -167,21 +167,21 @@ public class PitcherGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generatePitchers() {
+    public List<Player> generatePitchers(long teamId) {
         List<Player> starters = new ArrayList<>();
         List<Player> longRelievers = new ArrayList<>();
         List<Player> shortRelievers = new ArrayList<>();
 
-        starters = generateStarters();
-        longRelievers = generateLongRelievers();
-        shortRelievers = generateShortRelievers();
+        starters = generateStarters(teamId);
+        longRelievers = generateLongRelievers(teamId);
+        shortRelievers = generateShortRelievers(teamId);
 
         starters.addAll(longRelievers);
         starters.addAll(shortRelievers);
         return starters;
     }
 
-    private List<Player> generateStarters() {
+    private List<Player> generateStarters(long teamId) {
         List<Player> startersList = new ArrayList<>();
         for (int i = 0; i < startingPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -202,13 +202,15 @@ public class PitcherGenerator {
             String hittingSide = throwingSide;
 
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), STARTING_PITCHER, LONG_RELIEVER + SHORT_RELEIVER,
-                    age, birthdate, hittingSide, throwingSide, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER));
+                    age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER), teamId);
+            newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
+            newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
             startersList.add(newPitcher);
         }
         return startersList;
     }
 
-    private List<Player> generateLongRelievers() {
+    private List<Player> generateLongRelievers(long teamId) {
         List<Player> longRelieversList = new ArrayList<>();
             for (int i = 0; i < longReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -228,13 +230,15 @@ public class PitcherGenerator {
             }
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LONG_RELIEVER, STARTING_PITCHER + SHORT_RELEIVER,
-                    age, birthdate, hittingSide, throwingSide, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER));
+                    age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER), teamId);
+                newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
+                newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
             longRelieversList.add(newPitcher);
         }
         return longRelieversList;
     }
 
-    private List<Player> generateShortRelievers() {
+    private List<Player> generateShortRelievers(long teamId) {
         List<Player> shortRelieversList = new ArrayList<>();
         for (int i = 0; i < shortReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -254,7 +258,9 @@ public class PitcherGenerator {
             }
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORT_RELEIVER, LONG_RELIEVER,
-                    age, birthdate, hittingSide, throwingSide, generateBattingStats(), generatePitchingStats(), generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER));
+                    age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER), teamId);
+            newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
+            newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
             shortRelieversList.add(newPitcher);
         }
         return shortRelieversList;
@@ -500,15 +506,15 @@ public class PitcherGenerator {
                 stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina, 0);
     }
 
-    private List<PitchingStats> generatePitchingStats() {
+    private List<PitchingStats> generatePitchingStats(long playerId) {
         List<PitchingStats> newPitchingStats = new ArrayList<>();
-        newPitchingStats.add(0, new PitchingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        newPitchingStats.add(0, new PitchingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newPitchingStats;
     }
 
-    private List<BattingStats> generateBattingStats() {
+    private List<BattingStats> generateBattingStats(long playerId) {
         List<BattingStats> newBattingStats = new ArrayList<>();
-        newBattingStats.add(0, new BattingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        newBattingStats.add(0, new BattingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newBattingStats;
     }
 

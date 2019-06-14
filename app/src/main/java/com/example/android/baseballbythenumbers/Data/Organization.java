@@ -1,5 +1,9 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,24 +12,29 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity (tableName = "organizations")
 public class Organization implements Parcelable
 {
+    @PrimaryKey (autoGenerate = true)
+    private long id;
 
     @SerializedName("organizationName")
     @Expose
+    @ColumnInfo(name = "organization_name")
     private String organizationName;
+
     @SerializedName("currentYear")
     @Expose
+    @ColumnInfo(name = "current_year")
     private int currentYear;
+
     @SerializedName("leagues")
     @Expose
+    @Ignore
     private List<League> leagues = null;
     public final static Parcelable.Creator<Organization> CREATOR = new Creator<Organization>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Organization createFromParcel(Parcel in) {
             return new Organization(in);
         }
@@ -38,6 +47,7 @@ public class Organization implements Parcelable
             ;
 
     protected Organization(Parcel in) {
+        this.id = ((long) in.readValue((long.class.getClassLoader())));
         this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
         this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
@@ -47,6 +57,7 @@ public class Organization implements Parcelable
      * No args constructor for use in serialization
      *
      */
+
     public Organization() {
     }
 
@@ -87,7 +98,16 @@ public class Organization implements Parcelable
         this.leagues = leagues;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
         dest.writeValue(organizationName);
         dest.writeValue(currentYear);
         dest.writeList(leagues);

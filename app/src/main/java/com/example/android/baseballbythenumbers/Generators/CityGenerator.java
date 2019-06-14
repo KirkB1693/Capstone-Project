@@ -15,17 +15,17 @@ import java.util.TreeMap;
 
 import timber.log.Timber;
 
-import static com.example.android.baseballbythenumbers.Data.Constants.Countries.ALL_COUNTRIES;
-import static com.example.android.baseballbythenumbers.Data.Constants.Countries.CANADA;
-import static com.example.android.baseballbythenumbers.Data.Constants.Countries.JAPAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.Countries.MEXICO;
-import static com.example.android.baseballbythenumbers.Data.Constants.Countries.USA;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.CENTRAL;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.EAST;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.NORTH;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.NO_DIVISONS;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.SOUTH;
-import static com.example.android.baseballbythenumbers.Data.Constants.DivisionNames.WEST;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.ALL_COUNTRIES;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.CANADA;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.JAPAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.MEXICO;
+import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.USA;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.CENTRAL;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.EAST;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NORTH;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NO_DIVISONS;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.SOUTH;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.WEST;
 
 public class CityGenerator {
     private final Random random;

@@ -12,12 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import static com.example.android.baseballbythenumbers.Data.GameStates.getGameStateString;
+import static com.example.android.baseballbythenumbers.Constants.GameStates.getGameStateString;
 import static com.example.android.baseballbythenumbers.Data.Player.BestOnBaseComparator;
-import static com.example.android.baseballbythenumbers.Data.Positions.LONG_RELIEVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.SCOREKEEPING_PITCHER;
-import static com.example.android.baseballbythenumbers.Data.Positions.SHORT_RELEIVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SCOREKEEPING_PITCHER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
 import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.DefenseGenerator.defenseFromLineup;
 import static com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator.lineupFromTeam;
 import static com.example.android.baseballbythenumbers.Simulators.AtBatSimulator.getAtBatSummary;

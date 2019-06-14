@@ -61,6 +61,8 @@ public class OrganizationGenerator {
             numberOfDivisions = DEFAULT_NUMBER_OF_DIVISIONS;
         }
 
+        Organization newOrganization = new Organization(organizationName, currentYear, null);
+
         for (int i = 0; i < numberOfLeagues; i++) {
             if (useDH[i]) {
                 teamMakeup = DEFAULT_TEAM_MAKEUP_WITH_DH;
@@ -68,13 +70,15 @@ public class OrganizationGenerator {
                 teamMakeup = DEFAULT_TEAM_MAKEUP_WITHOUT_DH;
             }
             if (i < leagueNames.length) {
-                leagues.add(leagueGenerator.generateLeague(leagueNames[i], useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator));
+                leagues.add(leagueGenerator.generateLeague(leagueNames[i], useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator, newOrganization.getId()));
             } else {
-                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME+(i+1), useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator));
+                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME+(i+1), useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator, newOrganization.getId()));
             }
 
         }
 
-        return new Organization(organizationName, currentYear, leagues);
+        newOrganization.setLeagues(leagues);
+
+        return newOrganization;
     }
 }

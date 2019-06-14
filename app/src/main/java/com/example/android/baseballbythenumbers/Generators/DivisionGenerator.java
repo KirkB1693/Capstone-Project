@@ -19,7 +19,8 @@ public class DivisionGenerator {
         this.context = context;
     }
 
-    public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup, int numberOfDivisions, int countriesToInclude, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator) {
+    public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup, int numberOfDivisions, int countriesToInclude,
+                                     CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, long leagueId) {
         Division newDivision = new Division();
         newDivision.setDivisionName(divisionName);
         int[] teamMakeupToUse = DEFAULT_TEAM_MAKEUP;
@@ -44,9 +45,10 @@ public class DivisionGenerator {
             String teamName = teamNameGenerator.generateTeamName();
             String cityName = getUniqueCity(newTeamList, divisionName);
 
-            newTeamList.add(teamGenerator.generateTeam(teamName, cityName, doesDivisionUseDH, DEFAULT_BUDGET));
+            newTeamList.add(teamGenerator.generateTeam(teamName, cityName, doesDivisionUseDH, DEFAULT_BUDGET, newDivision.getDivisionId()));
         }
         newDivision.setTeams(newTeamList);
+        newDivision.setLeagueId(leagueId);
         return newDivision;
     }
 

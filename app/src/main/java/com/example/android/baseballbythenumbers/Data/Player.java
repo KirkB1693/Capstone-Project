@@ -1,5 +1,11 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,21 +17,27 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MEAN;
-import static com.example.android.baseballbythenumbers.Data.Positions.getPositionNameFromPrimaryPosition;
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Positions.getPositionNameFromPrimaryPosition;
 import static com.example.android.baseballbythenumbers.Generators.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
+@Entity (tableName = "players", foreignKeys = @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId", onDelete = CASCADE), indices = @Index(value = "teamId"))
 public class Player implements Parcelable
 {
+    @PrimaryKey (autoGenerate = true)
+    private long playerId;
+
+    private long teamId;
 
     @SerializedName("firstName")
     @Expose
@@ -56,15 +68,19 @@ public class Player implements Parcelable
     private String throwingHand;
     @SerializedName("battingStats")
     @Expose
+    @Ignore
     private List<BattingStats> battingStats = null;
     @SerializedName("pitchingStats")
     @Expose
+    @Ignore
     private List<PitchingStats> pitchingStats = null;
     @SerializedName("hittingPercentages")
     @Expose
+    @Embedded
     private HittingPercentages hittingPercentages;
     @SerializedName("pitchingPercentages")
     @Expose
+    @Embedded
     private PitchingPercentages pitchingPercentages;
     public final static Parcelable.Creator<Player> CREATOR = new Creator<Player>() {
 
@@ -84,6 +100,8 @@ public class Player implements Parcelable
             ;
 
     protected Player(Parcel in) {
+        this.playerId = ((long) in.readValue((long.class.getClassLoader())));
+        this.teamId = ((long) in.readValue((long.class.getClassLoader())));
         this.firstName = ((String) in.readValue((String.class.getClassLoader())));
         this.middleName = ((String) in.readValue((String.class.getClassLoader())));
         this.lastName = ((String) in.readValue((String.class.getClassLoader())));
@@ -103,6 +121,7 @@ public class Player implements Parcelable
      * No args constructor for use in serialization
      *
      */
+
     public Player() {
     }
 
@@ -122,7 +141,8 @@ public class Player implements Parcelable
      * @param firstName
      * @param throwingHand
      */
-    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages) {
+    @Ignore
+    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages, long teamId) {
         super();
         this.firstName = firstName;
         this.middleName = middleName;
@@ -137,6 +157,7 @@ public class Player implements Parcelable
         this.pitchingStats = pitchingStats;
         this.hittingPercentages = hittingPercentages;
         this.pitchingPercentages = pitchingPercentages;
+        this.teamId = teamId;
     }
 
     public String getFirstName() {
@@ -243,7 +264,25 @@ public class Player implements Parcelable
         this.pitchingPercentages = pitchingPercentages;
     }
 
+    public long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(long teamId) {
+        this.teamId = teamId;
+    }
+
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(playerId);
+        dest.writeValue(teamId);
         dest.writeValue(firstName);
         dest.writeValue(middleName);
         dest.writeValue(lastName);

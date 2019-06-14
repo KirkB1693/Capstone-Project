@@ -8,17 +8,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import static com.example.android.baseballbythenumbers.Data.Positions.CATCHER;
-import static com.example.android.baseballbythenumbers.Data.Positions.CENTER_FIELD;
-import static com.example.android.baseballbythenumbers.Data.Positions.DESIGNATED_HITTER;
-import static com.example.android.baseballbythenumbers.Data.Positions.FIRST_BASE;
-import static com.example.android.baseballbythenumbers.Data.Positions.LEFT_FIELD;
-import static com.example.android.baseballbythenumbers.Data.Positions.LONG_RELIEVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.RIGHT_FIELD;
-import static com.example.android.baseballbythenumbers.Data.Positions.SECOND_BASE;
-import static com.example.android.baseballbythenumbers.Data.Positions.SHORTSTOP;
-import static com.example.android.baseballbythenumbers.Data.Positions.STARTING_PITCHER;
-import static com.example.android.baseballbythenumbers.Data.Positions.THIRD_BASE;
+import static com.example.android.baseballbythenumbers.Constants.Positions.CATCHER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.CENTER_FIELD;
+import static com.example.android.baseballbythenumbers.Constants.Positions.DESIGNATED_HITTER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.FIRST_BASE;
+import static com.example.android.baseballbythenumbers.Constants.Positions.LEFT_FIELD;
+import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.RIGHT_FIELD;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SECOND_BASE;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SHORTSTOP;
+import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.THIRD_BASE;
 
 public class LineupGenerator {
 

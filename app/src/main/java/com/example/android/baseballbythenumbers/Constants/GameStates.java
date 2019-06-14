@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers.Data;
+package com.example.android.baseballbythenumbers.Constants;
 
 public class GameStates {
     public static final int NO_OUTS_NOBODY_ON = 1;

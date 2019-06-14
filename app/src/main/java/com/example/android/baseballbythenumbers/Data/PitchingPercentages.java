@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -149,6 +150,7 @@ public class PitchingPercentages implements Parcelable
      * @param firstPitchStrikePct
      * @param fastballPct
      */
+    @Ignore
     public PitchingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int groundBallPct, int lineDrivePct, int homeRunPct, int infieldFlyBallPct, int hitByPitchPct, int wildPitchPct, int balkPct, int zonePct, int firstPitchStrikePct, int fastballPct, int sliderPct, int cutterPct, int curveballPct, int changeUpPct, int splitFingerPct, int knuckleballPct, int pitchingStamina, int pitchingStaminaUsed) {
         super();
         this.oSwingPct = oSwingPct;

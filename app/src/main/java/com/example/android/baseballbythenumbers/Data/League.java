@@ -1,5 +1,10 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,8 +16,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity (tableName = "leagues", foreignKeys = @ForeignKey(entity = Organization.class, parentColumns = "id", childColumns = "orgId", onDelete = CASCADE), indices = {@Index(value = "orgId")})
 public class League implements Parcelable
 {
+    @PrimaryKey (autoGenerate = true)
+    private long leagueId;
+
+    private long orgId;
 
     @SerializedName("leagueName")
     @Expose
@@ -22,6 +34,7 @@ public class League implements Parcelable
     private boolean useDh;
     @SerializedName("divisions")
     @Expose
+    @Ignore
     private List<Division> divisions = null;
     public final static Parcelable.Creator<League> CREATOR = new Creator<League>() {
 
@@ -41,6 +54,8 @@ public class League implements Parcelable
             ;
 
     public League(Parcel in) {
+        this.leagueId = ((long) in.readValue((long.class.getClassLoader())));
+        this.orgId = ((long) in.readValue((long.class.getClassLoader())));
         this.leagueName = ((String) in.readValue((String.class.getClassLoader())));
         this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
         in.readList(this.divisions, (com.example.android.baseballbythenumbers.Data.Division.class.getClassLoader()));
@@ -50,6 +65,7 @@ public class League implements Parcelable
      * No args constructor for use in serialization
      *
      */
+
     public League() {
     }
 
@@ -58,12 +74,14 @@ public class League implements Parcelable
      * @param leagueName
      * @param divisions
      * @param useDh
+     * @param orgId
      */
-    public League(String leagueName, boolean useDh, List<Division> divisions) {
+    public League(String leagueName, boolean useDh, List<Division> divisions, long orgId) {
         super();
         this.leagueName = leagueName;
         this.useDh = useDh;
         this.divisions = divisions;
+        this.orgId = orgId;
     }
 
     public String getLeagueName() {
@@ -90,6 +108,22 @@ public class League implements Parcelable
         this.divisions = divisions;
     }
 
+    public long getLeagueId() {
+        return leagueId;
+    }
+
+    public void setLeagueId(long leagueId) {
+        this.leagueId = leagueId;
+    }
+
+    public long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(long orgId) {
+        this.orgId = orgId;
+    }
+
     @NotNull
     @Override
     public String toString() {
@@ -97,6 +131,8 @@ public class League implements Parcelable
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(leagueId);
+        dest.writeValue(orgId);
         dest.writeValue(leagueName);
         dest.writeValue(useDh);
         dest.writeList(divisions);

@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MIN;
-import static com.example.android.baseballbythenumbers.Data.Constants.PitcherBaseStats.STARTER_STAMINA_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.STARTER_STAMINA_MIN;
 import static com.example.android.baseballbythenumbers.Data.Player.BestPitcherComparator;
-import static com.example.android.baseballbythenumbers.Data.Positions.LONG_RELIEVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.SHORT_RELEIVER;
-import static com.example.android.baseballbythenumbers.Data.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
+import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
 
 public class PitchingRotationGenerator {
 

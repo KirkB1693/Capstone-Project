@@ -1,13 +1,25 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BattingStats implements Parcelable
-{
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "batting_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId", unique = true))
+public class BattingStats implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private long battingStatsId;
+
+    private long playerId;
 
     @SerializedName("Year")
     @Expose
@@ -80,10 +92,11 @@ public class BattingStats implements Parcelable
             return (new BattingStats[size]);
         }
 
-    }
-            ;
+    };
 
     protected BattingStats(Parcel in) {
+        this.battingStatsId = ((long) in.readValue((long.class.getClassLoader())));
+        this.playerId = ((long) in.readValue((long.class.getClassLoader())));
         this.year = ((int) in.readValue((int.class.getClassLoader())));
         this.games = ((int) in.readValue((int.class.getClassLoader())));
         this.plateAppearances = ((int) in.readValue((int.class.getClassLoader())));
@@ -107,13 +120,11 @@ public class BattingStats implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public BattingStats() {
     }
 
     /**
-     *
      * @param games
      * @param stolenBases
      * @param singles
@@ -134,7 +145,8 @@ public class BattingStats implements Parcelable
      * @param runs
      * @param groundBalls
      */
-    public BattingStats(int year, int games, int plateAppearances, int hits, int singles, int doubles, int triples, int homeRuns, int runs, int runsBattedIn, int walks, int strikeOuts, int hitByPitch, int stolenBases, int caughtStealing, int groundBalls, int lineDrives, int flyBalls, int errors) {
+    @Ignore
+    public BattingStats(int year, int games, int plateAppearances, int hits, int singles, int doubles, int triples, int homeRuns, int runs, int runsBattedIn, int walks, int strikeOuts, int hitByPitch, int stolenBases, int caughtStealing, int groundBalls, int lineDrives, int flyBalls, int errors, long playerId) {
         super();
         this.year = year;
         this.games = games;
@@ -155,6 +167,7 @@ public class BattingStats implements Parcelable
         this.lineDrives = lineDrives;
         this.flyBalls = flyBalls;
         this.errors = errors;
+        this.playerId = playerId;
     }
 
     public int getYear() {
@@ -309,8 +322,25 @@ public class BattingStats implements Parcelable
         this.errors = errors;
     }
 
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+
+    public long getBattingStatsId() {
+        return battingStatsId;
+    }
+
+    public void setBattingStatsId(long battingStatsId) {
+        this.battingStatsId = battingStatsId;
+    }
 
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(battingStatsId);
+        dest.writeValue(playerId);
         dest.writeValue(year);
         dest.writeValue(games);
         dest.writeValue(plateAppearances);
@@ -343,15 +373,15 @@ public class BattingStats implements Parcelable
 
     private int getOBP() {
         if ((plateAppearances) != 0) {
-            return (hits + walks + hitByPitch)*1000/(plateAppearances);
+            return (hits + walks + hitByPitch) * 1000 / (plateAppearances);
         } else {
             return 0;
         }
     }
 
     private int getAvg() {
-        if ((plateAppearances-walks) != 0) {
-            return hits*1000/(plateAppearances-walks);
+        if ((plateAppearances - walks) != 0) {
+            return hits * 1000 / (plateAppearances - walks);
         } else {
             return 0;
         }

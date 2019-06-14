@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         int numberOfTeamsInDivision = 5;
         int numberOfDivisions = 3;
         int countriesToInclude = 9;
-
         Organization mlbClone = organizationGenerator.generateOrganization("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
                 , numberOfDivisions, countriesToInclude, null);
 

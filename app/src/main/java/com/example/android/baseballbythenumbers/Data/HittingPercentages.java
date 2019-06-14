@@ -1,5 +1,7 @@
 package com.example.android.baseballbythenumbers.Data;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,75 +15,99 @@ public class HittingPercentages implements Parcelable
 
     @SerializedName("OSwingPct")
     @Expose
+    @ColumnInfo(name = "batting_o_swing_pct")
     private int oSwingPct;
     @SerializedName("ZSwingPct")
     @Expose
+    @ColumnInfo(name = "batting_z_swing_pct")
     private int zSwingPct;
     @SerializedName("OContactPct")
     @Expose
+    @ColumnInfo(name = "batting_o_contact_pct")
     private int oContactPct;
     @SerializedName("ZContactPct")
     @Expose
+    @ColumnInfo(name = "batting_z_contact_pct")
     private int zContactPct;
     @SerializedName("Speed")
     @Expose
+    @ColumnInfo(name = "speed")
     private int speed;
     @SerializedName("LineDrivePct")
     @Expose
+    @ColumnInfo(name = "batting_line_drive_pct")
     private int lineDrivePct;
     @SerializedName("GroundBallPct")
     @Expose
+    @ColumnInfo(name = "batting_ground_ball_pct")
     private int groundBallPct;
     @SerializedName("hardPct")
     @Expose
+    @ColumnInfo(name = "batting_hard_pct")
     private int hardPct;
     @SerializedName("medPct")
     @Expose
+    @ColumnInfo(name = "batting_med_pct")
     private int medPct;
     @SerializedName("PullPct")
     @Expose
+    @ColumnInfo(name = "batting_pull_pct")
     private int pullPct;
     @SerializedName("CenterPct")
     @Expose
+    @ColumnInfo(name = "batting_center_pct")
     private int centerPct;
     @SerializedName("HomeRunPct")
     @Expose
+    @ColumnInfo(name = "batting_home_run_pct")
     private int homeRunPct;
     @SerializedName("TriplePct")
     @Expose
+    @ColumnInfo(name = "batting_triple_pct")
     private int triplePct;
     @SerializedName("DoublePct")
     @Expose
+    @ColumnInfo(name = "batting_double_pct")
     private int doublePct;
     @SerializedName("StolenBasePct")
     @Expose
+    @ColumnInfo(name = "batting_stolen_base_pct")
     private int stolenBasePct;
     @SerializedName("InfieldFlyBallPct")
     @Expose
+    @ColumnInfo(name = "batting_infield_fly_pct")
     private int infieldFlyBallPct;
     @SerializedName("HitByPitchPct")
     @Expose
+    @ColumnInfo(name = "batting_hit_by_pitch_pct")
     private int hitByPitchPct;
     @SerializedName("BattingAverageBallsInPlay")
     @Expose
+    @ColumnInfo(name = "batting_BABIP")
     private int battingAverageBallsInPlay;
     @SerializedName("FoulBallPct")
     @Expose
+    @ColumnInfo(name = "batting_foul_ball_pct")
     private int foulBallPct;
     @SerializedName("StolenBaseRate")
     @Expose
+    @ColumnInfo(name = "batting_stolen_base_rate")
     private int stolenBaseRate;
     @SerializedName("BaseRunning")
     @Expose
+    @ColumnInfo(name = "batting_baserunning")
     private int baseRunning;
     @SerializedName("ErrorPct")
     @Expose
+    @ColumnInfo(name = "fielding_error_pct")
     private int errorPct;
     @SerializedName("Stamina")
     @Expose
+    @ColumnInfo(name = "batting_stamina")
     private int stamina;
     @SerializedName("StaminaUsed")
     @Expose
+    @ColumnInfo(name = "batting_stamina_used")
     private int staminaUsed;
     public final static Parcelable.Creator<HittingPercentages> CREATOR = new Creator<HittingPercentages>() {
 
@@ -161,6 +187,7 @@ public class HittingPercentages implements Parcelable
      * @param foulBallPct
      * @param battingAverageBallsInPlay
      */
+    @Ignore
     public HittingPercentages(int oSwingPct, int zSwingPct, int oContactPct, int zContactPct, int speed, int lineDrivePct, int groundBallPct, int hardPct, int medPct, int pullPct, int centerPct, int homeRunPct, int triplePct, int doublePct, int stolenBasePct, int infieldFlyBallPct, int hitByPitchPct, int battingAverageBallsInPlay, int foulBallPct, int stolenBaseRate, int baseRunning, int errorPct, int stamina, int staminaUsed) {
         super();
         this.oSwingPct = oSwingPct;
