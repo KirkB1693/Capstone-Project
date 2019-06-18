@@ -16,7 +16,7 @@ import java.util.List;
 public class Organization implements Parcelable
 {
     @PrimaryKey (autoGenerate = true)
-    private long id;
+    private int id;
 
     @SerializedName("organizationName")
     @Expose
@@ -47,7 +47,7 @@ public class Organization implements Parcelable
             ;
 
     protected Organization(Parcel in) {
-        this.id = ((long) in.readValue((long.class.getClassLoader())));
+        this.id = ((int) in.readValue((int.class.getClassLoader())));
         this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
         this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
@@ -98,11 +98,11 @@ public class Organization implements Parcelable
         this.leagues = leagues;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

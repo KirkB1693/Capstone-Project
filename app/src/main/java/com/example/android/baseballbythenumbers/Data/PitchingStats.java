@@ -17,9 +17,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class PitchingStats implements Parcelable
 {
     @PrimaryKey (autoGenerate = true)
-    private long pitchingStatsId;
+    private int pitchingStatsId;
 
-    private long playerId;
+    private int playerId;
 
     @SerializedName("Year")
     @Expose
@@ -111,8 +111,8 @@ public class PitchingStats implements Parcelable
             ;
 
     protected PitchingStats(Parcel in) {
-        this.pitchingStatsId = ((long) in.readValue((long.class.getClassLoader())));
-        this.playerId = ((long) in.readValue((long.class.getClassLoader())));
+        this.pitchingStatsId = ((int) in.readValue((int.class.getClassLoader())));
+        this.playerId = ((int) in.readValue((int.class.getClassLoader())));
         this.year = ((int) in.readValue((int.class.getClassLoader())));
         this.wins = ((int) in.readValue((int.class.getClassLoader())));
         this.losses = ((int) in.readValue((int.class.getClassLoader())));
@@ -176,7 +176,7 @@ public class PitchingStats implements Parcelable
     @Ignore
     public PitchingStats(int year, int wins, int losses, int games, int gamesStarted, int completeGames, int shutOuts, int saves, int holds, int blownSaves, float inningsPitched,
                          int totalBattersFaced, int hits, int runs, int earnedRuns, int homeRuns, int walks, int strikeOuts, int hitByPitch, int wildPitches, int balks, int groundBalls,
-                         int lineDrives, int flyBalls, long playerId) {
+                         int lineDrives, int flyBalls, int playerId) {
         super();
         this.year = year;
         this.wins = wins;
@@ -397,19 +397,19 @@ public class PitchingStats implements Parcelable
         this.flyBalls = flyBalls;
     }
 
-    public long getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(long playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
-    public long getPitchingStatsId() {
+    public int getPitchingStatsId() {
         return pitchingStatsId;
     }
 
-    public void setPitchingStatsId(long pitchingStatsId) {
+    public void setPitchingStatsId(int pitchingStatsId) {
         this.pitchingStatsId = pitchingStatsId;
     }
 

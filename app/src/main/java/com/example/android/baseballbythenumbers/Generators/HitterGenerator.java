@@ -286,7 +286,7 @@ public class HitterGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generateHitters(long teamId) {
+    public List<Player> generateHitters(int teamId) {
 
         String leftHanded = context.getResources().getString(R.string.left_handed);
         String rightHanded = context.getResources().getString(R.string.right_handed);
@@ -658,13 +658,13 @@ public class HitterGenerator {
         return hitters;
     }
 
-    private List<PitchingStats> generatePitchingStats(long playerId) {
+    private List<PitchingStats> generatePitchingStats(int playerId) {
         List<PitchingStats> newPitchingStats = new ArrayList<>();
         newPitchingStats.add(0,new PitchingStats(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newPitchingStats;
     }
 
-    private List<BattingStats> generateBattingStats(long playerId) {
+    private List<BattingStats> generateBattingStats(int playerId) {
         List<BattingStats> newBattingStats = new ArrayList<>();
         newBattingStats.add(0,new BattingStats(0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, playerId));
         return newBattingStats;

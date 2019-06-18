@@ -26,7 +26,7 @@ public class LeagueGenerator {
     }
 
     public League generateLeague(String leagueName, boolean useDH, int divisionSize, int numberOfDivisions, int countriesToInclude,
-                                 int[] teamMakeup, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, long orgId) {
+                                 int[] teamMakeup, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, int orgId) {
         List<Division> divisions = new ArrayList<>();
         DivisionGenerator divisionGenerator = new DivisionGenerator(context);
 

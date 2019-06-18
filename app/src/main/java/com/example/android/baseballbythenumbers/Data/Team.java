@@ -19,9 +19,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Team implements Parcelable
 {
     @PrimaryKey (autoGenerate = true)
-    private long teamId;
+    private int teamId;
 
-    private long divisionId;
+    private int divisionId;
 
     @SerializedName("teamName")
     @Expose
@@ -35,6 +35,13 @@ public class Team implements Parcelable
     @SerializedName("teamBudget")
     @Expose
     private int teamBudget;
+    @SerializedName("wins")
+    @Expose
+    private int wins;
+    @SerializedName("losses")
+    @Expose
+    private int losses;
+
     @SerializedName("players")
     @Expose
     @Ignore
@@ -57,12 +64,14 @@ public class Team implements Parcelable
             ;
 
     protected Team(Parcel in) {
-        this.teamId = ((long) in.readValue((long.class.getClassLoader())));
-        this.divisionId = ((long) in.readValue((long.class.getClassLoader())));
+        this.teamId = ((int) in.readValue((int.class.getClassLoader())));
+        this.divisionId = ((int) in.readValue((int.class.getClassLoader())));
         this.teamName = ((String) in.readValue((String.class.getClassLoader())));
         this.teamCity = ((String) in.readValue((String.class.getClassLoader())));
         this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
         this.teamBudget = ((int) in.readValue((int.class.getClassLoader())));
+        this.wins = ((int) in.readValue((int.class.getClassLoader())));
+        this.losses = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.players, (com.example.android.baseballbythenumbers.Data.Player.class.getClassLoader()));
     }
 
@@ -82,14 +91,16 @@ public class Team implements Parcelable
      * @param players
      * @param useDh
      */
-    public Team(String teamName, String teamCity, boolean useDh, int teamBudget, List<Player> players, long divisionId) {
-        super();
+    @Ignore
+    public Team(String teamName, String teamCity, boolean useDh, int teamBudget, List<Player> players, int divisionId, int wins, int losses) {
         this.teamName = teamName;
         this.teamCity = teamCity;
         this.useDh = useDh;
         this.teamBudget = teamBudget;
         this.players = players;
         this.divisionId = divisionId;
+        this.wins = wins;
+        this.losses = losses;
     }
 
     public String getTeamName() {
@@ -132,20 +143,36 @@ public class Team implements Parcelable
         this.players = players;
     }
 
-    public long getTeamId() {
+    public int getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(long teamId) {
+    public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
 
-    public long getDivisionId() {
+    public int getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(long divisionId) {
+    public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
     }
 
     @Override
@@ -160,6 +187,8 @@ public class Team implements Parcelable
         dest.writeValue(teamCity);
         dest.writeValue(useDh);
         dest.writeValue(teamBudget);
+        dest.writeValue(wins);
+        dest.writeValue(losses);
         dest.writeList(players);
     }
 

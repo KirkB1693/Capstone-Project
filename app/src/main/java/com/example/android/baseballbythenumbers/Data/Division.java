@@ -21,9 +21,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Division implements Parcelable
 {
     @PrimaryKey (autoGenerate = true)
-    private long divisionId;
+    private int divisionId;
 
-    private long leagueId;
+    private int leagueId;
 
     @SerializedName("divisionName")
     @Expose
@@ -50,8 +50,8 @@ public class Division implements Parcelable
             ;
 
     protected Division(Parcel in) {
-        this.divisionId = ((long) in.readValue((long.class.getClassLoader())));
-        this.leagueId = ((long) in.readValue((long.class.getClassLoader())));
+        this.divisionId = ((int) in.readValue((int.class.getClassLoader())));
+        this.leagueId = ((int) in.readValue((int.class.getClassLoader())));
         this.divisionName = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.teams, (com.example.android.baseballbythenumbers.Data.Team.class.getClassLoader()));
     }
@@ -69,7 +69,7 @@ public class Division implements Parcelable
      * @param divisionName
      * @param leagueId
      */
-    public Division(String divisionName, List<Team> teams, long leagueId) {
+    public Division(String divisionName, List<Team> teams, int leagueId) {
         super();
         this.divisionName = divisionName;
         this.teams = teams;
@@ -92,19 +92,19 @@ public class Division implements Parcelable
         this.teams = teams;
     }
 
-    public long getLeagueId() {
+    public int getLeagueId() {
         return leagueId;
     }
 
-    public void setLeagueId(long leagueId) {
+    public void setLeagueId(int leagueId) {
         this.leagueId = leagueId;
     }
 
-    public long getDivisionId() {
+    public int getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(long divisionId) {
+    public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
     }
 

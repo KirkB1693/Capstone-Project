@@ -21,9 +21,13 @@ public interface TeamDao {
 
     @Delete
     void delete(Team... teams);
+
     @Query("SELECT * FROM teams")
-    List<Team> getAllRepos();
+    List<Team> getAllTeams();
 
     @Query("SELECT * FROM teams WHERE divisionId=:divisionId")
     List<Team> findTeamsForDivision(final long divisionId);
+
+    @Query("SELECT * FROM teams WHERE teamId=:teamId")
+    Team getTeamWithTeamId(final long teamId);
 }

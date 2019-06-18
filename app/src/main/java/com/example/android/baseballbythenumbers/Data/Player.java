@@ -35,9 +35,9 @@ import static com.example.android.baseballbythenumbers.Generators.PitcherGenerat
 public class Player implements Parcelable
 {
     @PrimaryKey (autoGenerate = true)
-    private long playerId;
+    private int playerId;
 
-    private long teamId;
+    private int teamId;
 
     @SerializedName("firstName")
     @Expose
@@ -100,8 +100,8 @@ public class Player implements Parcelable
             ;
 
     protected Player(Parcel in) {
-        this.playerId = ((long) in.readValue((long.class.getClassLoader())));
-        this.teamId = ((long) in.readValue((long.class.getClassLoader())));
+        this.playerId = ((int) in.readValue((int.class.getClassLoader())));
+        this.teamId = ((int) in.readValue((int.class.getClassLoader())));
         this.firstName = ((String) in.readValue((String.class.getClassLoader())));
         this.middleName = ((String) in.readValue((String.class.getClassLoader())));
         this.lastName = ((String) in.readValue((String.class.getClassLoader())));
@@ -142,7 +142,8 @@ public class Player implements Parcelable
      * @param throwingHand
      */
     @Ignore
-    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits, String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages, long teamId) {
+    public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits,
+                  String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages, int teamId) {
         super();
         this.firstName = firstName;
         this.middleName = middleName;
@@ -264,19 +265,19 @@ public class Player implements Parcelable
         this.pitchingPercentages = pitchingPercentages;
     }
 
-    public long getTeamId() {
+    public int getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(long teamId) {
+    public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
 
-    public long getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(long playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
