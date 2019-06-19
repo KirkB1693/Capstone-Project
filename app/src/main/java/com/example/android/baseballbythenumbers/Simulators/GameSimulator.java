@@ -147,17 +147,7 @@ public class GameSimulator {
             Player playerWePinchHitFor = shouldWePinchHit(lineup.get(currentBatter));
             int atBatResult = currentAtBat.simulateAtBat(pitcherStaminaAdjustment, batterStaminaAdjustment, areRunsEarned);
             gameLog.append(getAtBatSummary());
-            if (playerWePinchHitFor != null) {
-                if (isPitcher(playerWePinchHitFor)) {
-                    isVisitorHitting = !isVisitorHitting;             // switchPitchers assumes we change the pitcher on defense so change the hitting team temporarily
-                    if (!isVisitorHitting) {
-                        switchPitchers(visitingDefense.get(SCOREKEEPING_PITCHER));
-                    } else {
-                        switchPitchers(homeDefense.get(SCOREKEEPING_PITCHER));
-                    }
-                    isVisitorHitting = !isVisitorHitting;             // now that we have subbed change the hitting team back to the correct team
-                }
-            }
+
             int playerWhoJustHit = currentBatter;
             currentBatter = currentAtBat.getCurrentBatter();
             outs = currentAtBat.getOuts();
@@ -257,6 +247,9 @@ public class GameSimulator {
                             gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                         gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                    if (!isPitcher(defense.get(SCOREKEEPING_PITCHER))) {     // if we pinch hit for pitcher with a position player, we need a new pitcher
+                        switchPitchers(defense.get(SCOREKEEPING_PITCHER));
                     }
                     gameLog.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
                     gameLog.append(batttingTeamName).append(" now at bat : ");
@@ -375,7 +368,7 @@ public class GameSimulator {
                     .append(pinchHitter.getName()).append(" pinch hits in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
         }
         int start = gameLog.length();
-        gameLog.append("\n\nNow Pinch Hitting for ").append(pitcher.getName()).append(" : \n").append(pinchHitter.getName()).append(" : ");
+        gameLog.append("\n\nNow Pinch Hitting for ").append(pitcher.getName()).append(" : \n\n").append(pinchHitter.getName()).append(" : ");
         formatSubstitution(start);
     }
 
