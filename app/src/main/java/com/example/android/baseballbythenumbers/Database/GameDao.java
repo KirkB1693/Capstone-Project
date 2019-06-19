@@ -20,10 +20,13 @@ public interface GameDao {
 
         @Delete
         void delete(Game... games);
+
         @Query("SELECT * FROM games")
         List<Game> getAllGames();
 
         @Query("SELECT * FROM games WHERE schedule_id=:scheduleId")
         List<Game> findGamesForSchedule(final int scheduleId);
 
+        @Query("SELECT * FROM games WHERE day=:day")
+        List<Game> findGamesForDay(final int day);
 }

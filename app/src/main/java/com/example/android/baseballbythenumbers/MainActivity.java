@@ -2,14 +2,18 @@ package com.example.android.baseballbythenumbers;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Division;
+import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
 import com.example.android.baseballbythenumbers.Data.Organization;
+import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
+import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -28,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     List<League> leagues;
     OrganizationGenerator organizationGenerator;
     List<Division> divisions;
-    StringBuilder displayText;
+    SpannableStringBuilder displayText;
+    Schedule schedule;
+    int gameToPlay;
 
 
     @Override
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         JodaTimeAndroid.init(this);
 
         organizationGenerator = new OrganizationGenerator(this);
-        displayText = new StringBuilder();
+        displayText = new SpannableStringBuilder();
 
         int numberOfTeamsInDivision = 5;
         int numberOfDivisions = 3;
@@ -51,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 , numberOfDivisions, countriesToInclude, null);
 
         leagues = mlbClone.getLeagues();
-/*
+
+        ScheduleGenerator scheduleGenerator = new ScheduleGenerator(mlbClone);
+        schedule = scheduleGenerator.generateSchedule(1, true);
+        gameToPlay = schedule.getGameList().size();
+        /*
         for (League league : leagues) {
             displayText.append("\n\n").append(league.getLeagueName()).append(" League : \n");
             divisions = league.getDivisions();
@@ -69,25 +79,44 @@ public class MainActivity extends AppCompatActivity {
 
     public void simGame(View view) {
 
-        displayText = new StringBuilder();
+        gameToPlay ++;
+        if (gameToPlay > schedule.getGameList().size()-1) {
+            gameToPlay = 0;
+        }
+        displayText = new SpannableStringBuilder();
 
         TextView textView = findViewById(R.id.helloWorld);
+        Game nextGame = schedule.getGameList().get(gameToPlay);
 
-        Team homeTeam = getRandomTeam(leagues);
-        Team visitingTeam = homeTeam;
-        while (visitingTeam == homeTeam) {
-            visitingTeam = getRandomTeam(leagues);
-        }
-        GameSimulator gameSimulator = new GameSimulator(this, homeTeam, false, visitingTeam, false);
+        Team homeTeam = getTeamFromId(leagues, nextGame.getHomeTeamId());
+        Team visitingTeam = getTeamFromId(leagues, nextGame.getVisitingTeamId());
+
+        GameSimulator gameSimulator = new GameSimulator(this, nextGame, homeTeam, false, visitingTeam, false);
         int[] result = gameSimulator.simulateGame();
 
-        displayText.append(getGameRecapString());
+        nextGame.setHomeScore(result[0]);
+        nextGame.setVisitorScore(result[1]);
 
-        displayText.delete(0,displayText.length()-500);
+        displayText.append(getGameRecapString()).append("\n\n\n");
 
-        displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
+       // displayText.delete(0,displayText.length()-2000);
+
+        // displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
 
         textView.setText(displayText);
+    }
+
+    private Team getTeamFromId(List<League> leagues, String teamId) {
+        for (League league : leagues) {
+            for (Division division: league.getDivisions()) {
+                for (Team team: division.getTeams()) {
+                    if (team.getTeamName().equals(teamId)) {
+                        return team;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private Team getRandomTeam(@NotNull List<League> leagues) {

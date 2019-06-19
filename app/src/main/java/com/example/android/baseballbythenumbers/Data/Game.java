@@ -22,10 +22,10 @@ public class Game {
     private int day;
 
     @ColumnInfo(name = "home_team_id")
-    private int homeTeamId;
+    private String homeTeamId;
 
     @ColumnInfo(name = "visiting_team_id")
-    private int visitingTeamId;
+    private String visitingTeamId;
 
     @ColumnInfo(name = "home_score")
     private int homeScore;
@@ -108,11 +108,11 @@ public class Game {
         this.gameLog = gameLog;
     }
 
-    public int getHomeTeamId() {
+    public String getHomeTeamId() {
         return homeTeamId;
     }
 
-    public void setHomeTeamId(int homeTeamId) {
+    public void setHomeTeamId(String homeTeamId) {
         this.homeTeamId = homeTeamId;
     }
 
@@ -124,11 +124,11 @@ public class Game {
         this.homeBoxScore = homeBoxScore;
     }
 
-    public int getVisitingTeamId() {
+    public String getVisitingTeamId() {
         return visitingTeamId;
     }
 
-    public void setVisitingTeamId(int visitingTeamId) {
+    public void setVisitingTeamId(String visitingTeamId) {
         this.visitingTeamId = visitingTeamId;
     }
 

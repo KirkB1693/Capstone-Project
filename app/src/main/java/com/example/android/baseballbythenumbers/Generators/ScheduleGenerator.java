@@ -49,12 +49,17 @@ public class ScheduleGenerator {
 
     private List<Game> gameListWithEvenNumberOfTeams(int seriesLength, List<Team> teamList, int scheduleId) {
         List<Game> gameList = new ArrayList<>();
-        List<Team> homeList = teamList.subList(0, (teamList.size()/2-1));
-        List<Team> visitorList = teamList.subList(teamList.size()/2, teamList.size()-1);
+        List<Team> homeList = new ArrayList<>();
+        List<Team> visitorList = new ArrayList<>();
+        for (int i = 0; i < teamList.size()/2; i++) {
+            homeList.add(teamList.get(i));
+            visitorList.add(teamList.get(i+(teamList.size()/2)));
+        }
+
         for (int i = 0; i < teamList.size()-1; i++) {
-            for (int j = 0; j < teamList.size()/2; j++) {
+            for (int j = 0; j < homeList.size(); j++) {
                 if (homeList.get(j) != null && visitorList.get(j) != null) {
-                    gameList.add(createNewGame(scheduleId, i, homeList.get(j).getTeamId(), visitorList.get(j).getTeamId()));
+                    gameList.add(createNewGame(scheduleId, i, homeList.get(j).getTeamName(), visitorList.get(j).getTeamName()));
                 }
             }
             rotateTeams(homeList, visitorList);
@@ -93,7 +98,7 @@ public class ScheduleGenerator {
         visitorList.add(teamToMoveFromHomeList);
     }
 
-    private Game createNewGame(int scheduleId, int day, int homeTeamId, int visitingTeamId) {
+    private Game createNewGame(int scheduleId, int day, String homeTeamId, String visitingTeamId) {
         Game newGame = new Game(scheduleId);
         newGame.setDay(day);
         newGame.setHomeTeamId(homeTeamId);

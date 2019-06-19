@@ -7,6 +7,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -29,6 +30,8 @@ public class BoxScore {
 
     public BoxScore (int gameId) {
         this.gameId = gameId;
+        battingLines = new ArrayList<>();
+        pitchingLines = new ArrayList<>();
     }
 
     public int getBoxScoreId() {
@@ -65,5 +68,9 @@ public class BoxScore {
 
     public void setPitchingLines(List<PitchingLine> pitchingLines) {
         this.pitchingLines = pitchingLines;
+    }
+
+    public void addPitchingLine(PitchingLine pitchingLine) {
+        pitchingLines.add(pitchingLine);
     }
 }

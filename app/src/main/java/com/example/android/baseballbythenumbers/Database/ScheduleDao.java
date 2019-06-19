@@ -26,5 +26,4 @@ public interface ScheduleDao {
 
         @Query("SELECT * FROM schedules WHERE organization_id=:orgId")
         List<Schedule> findSchedulesForOrganization(final int orgId);
-
 }
