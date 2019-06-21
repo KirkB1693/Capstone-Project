@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         // displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
 
         textView.setText(displayText);
+
     }
 
     private Team getTeamFromId(List<League> leagues, String teamId) {

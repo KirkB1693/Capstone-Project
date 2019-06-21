@@ -167,12 +167,20 @@ public class Team implements Parcelable
         this.wins = wins;
     }
 
+    public void incrementWins() {
+        wins ++;
+    }
+
     public int getLosses() {
         return losses;
     }
 
     public void setLosses(int losses) {
         this.losses = losses;
+    }
+
+    public void incrementLosses() {
+        losses ++;
     }
 
     @Override

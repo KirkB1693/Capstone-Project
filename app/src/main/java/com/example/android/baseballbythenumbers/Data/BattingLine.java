@@ -56,10 +56,11 @@ public class BattingLine {
     }
 
     @Ignore
-    public BattingLine(int boxScoreId, int positionInBattingOrder, boolean substitute, String batterName){
+    public BattingLine(int boxScoreId, int positionInBattingOrder, boolean substitute, int substituteNumber, String batterName){
         this.boxScoreId = boxScoreId;
         this.positionInBattingOrder = positionInBattingOrder;
         this.substitute = substitute;
+        this.substituteNumber = substituteNumber;
         this.batterName = batterName;
     }
 
@@ -103,6 +104,10 @@ public class BattingLine {
         this.atBats = atBats;
     }
 
+    public void incrementAtBats() {
+        atBats ++;
+    }
+
     public int getBattingLineId() {
         return battingLineId;
     }
@@ -117,6 +122,10 @@ public class BattingLine {
 
     public void setHits(int hits) {
         this.hits = hits;
+    }
+
+    public void incrementHits() {
+        hits ++;
     }
 
     public double getAverage() {
@@ -143,6 +152,10 @@ public class BattingLine {
         this.homeRuns = homeRuns;
     }
 
+    public void incrementHomeRuns() {
+        homeRuns ++;
+    }
+
     public int getLeftOnBase() {
         return leftOnBase;
     }
@@ -167,6 +180,10 @@ public class BattingLine {
         this.runs = runs;
     }
 
+    public void incrementRuns() {
+        runs ++;
+    }
+
     public int getStrikeOuts() {
         return strikeOuts;
     }
@@ -175,12 +192,20 @@ public class BattingLine {
         this.strikeOuts = strikeOuts;
     }
 
+    public void incrementStrikeOuts() {
+        strikeOuts ++;
+    }
+
     public int getWalks() {
         return walks;
     }
 
     public void setWalks(int walks) {
         this.walks = walks;
+    }
+
+    public void incrementWalks() {
+        walks ++;
     }
 
     public int getSubstituteNumber() {

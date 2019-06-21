@@ -26,7 +26,7 @@ public class PitchingLine {
     private String pitcherName;
 
     @ColumnInfo(name = "innings_pitched")
-    private int inningsPitched;
+    private float inningsPitched;
 
     @ColumnInfo(name = "hits_allowed")
     private int hitsAllowed;
@@ -105,6 +105,10 @@ public class PitchingLine {
         this.hitsAllowed = hitsAllowed;
     }
 
+    public void incrementHitsAllowed() {
+        hitsAllowed ++;
+    }
+
     public int getHomeRunsAllowed() {
         return homeRunsAllowed;
     }
@@ -113,11 +117,15 @@ public class PitchingLine {
         this.homeRunsAllowed = homeRunsAllowed;
     }
 
-    public int getInningsPitched() {
+    public void incrementHomeRunsAllowed() {
+        homeRunsAllowed ++;
+    }
+
+    public float getInningsPitched() {
         return inningsPitched;
     }
 
-    public void setInningsPitched(int inningsPitched) {
+    public void setInningsPitched(float inningsPitched) {
         this.inningsPitched = inningsPitched;
     }
 
@@ -153,12 +161,20 @@ public class PitchingLine {
         this.walksAllowed = walksAllowed;
     }
 
+    public void incrementWalksAllowed() {
+        walksAllowed ++;
+    }
+
     public int getStrikeOutsMade() {
         return strikeOutsMade;
     }
 
     public void setStrikeOutsMade(int strikeOutsMade) {
         this.strikeOutsMade = strikeOutsMade;
+    }
+
+    public void incrementStirkeOutsMade() {
+        strikeOutsMade ++;
     }
 
     public String getPitcherName() {
@@ -177,11 +193,29 @@ public class PitchingLine {
         this.pitchesThrown = pitchesThrown;
     }
 
+    public void incrementPitchesThrown() {
+        pitchesThrown ++;
+    }
+
     public int getStrikesThrown() {
         return strikesThrown;
     }
 
     public void setStrikesThrown(int strikesThrown) {
         this.strikesThrown = strikesThrown;
+    }
+
+    public void incrementStrikesThrown() {
+        strikesThrown ++;
+    }
+
+    public void addToInningsPitched(int outs) {
+        for (int i = 0; i < outs; i++) {
+            inningsPitched += .1;
+            if (Math.round(inningsPitched * 100) > (((Math.round(inningsPitched) * 100) + 25))) {
+                inningsPitched = inningsPitched + 1.0f - 0.3f;
+                inningsPitched = Math.round(inningsPitched * 10) / 10.0f;
+            }
+        }
     }
 }

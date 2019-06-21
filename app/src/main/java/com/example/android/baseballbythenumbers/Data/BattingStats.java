@@ -187,12 +187,20 @@ public class BattingStats implements Parcelable {
         this.games = games;
     }
 
+    public void incrementGames() {
+        games ++;
+    }
+
     public int getPlateAppearances() {
         return plateAppearances;
     }
 
     public void setPlateAppearances(int plateAppearances) {
         this.plateAppearances = plateAppearances;
+    }
+
+    public void incrementPlateAppearances() {
+        plateAppearances ++;
     }
 
     public int getHits() {
@@ -203,12 +211,20 @@ public class BattingStats implements Parcelable {
         this.hits = hits;
     }
 
+    public void incrementHits() {
+        hits ++;
+    }
+
     public int getSingles() {
         return singles;
     }
 
     public void setSingles(int singles) {
         this.singles = singles;
+    }
+
+    public void incrementSingles() {
+        singles ++;
     }
 
     public int getDoubles() {
@@ -219,12 +235,20 @@ public class BattingStats implements Parcelable {
         this.doubles = doubles;
     }
 
+    public void incrementDoubles() {
+        doubles ++;
+    }
+
     public int getTriples() {
         return triples;
     }
 
     public void setTriples(int triples) {
         this.triples = triples;
+    }
+
+    public void incrementTriples() {
+        triples ++;
     }
 
     public int getHomeRuns() {
@@ -235,12 +259,20 @@ public class BattingStats implements Parcelable {
         this.homeRuns = homeRuns;
     }
 
+    public void incrementHomeRuns() {
+        homeRuns ++;
+    }
+
     public int getRuns() {
         return runs;
     }
 
     public void setRuns(int runs) {
         this.runs = runs;
+    }
+
+    public void incrementRuns() {
+        runs ++;
     }
 
     public int getRunsBattedIn() {
@@ -259,12 +291,20 @@ public class BattingStats implements Parcelable {
         this.walks = walks;
     }
 
+    public void incrementWalks() {
+        walks ++;
+    }
+
     public int getStrikeOuts() {
         return strikeOuts;
     }
 
     public void setStrikeOuts(int strikeOuts) {
         this.strikeOuts = strikeOuts;
+    }
+
+    public void incrementStrikeOuts() {
+        strikeOuts ++;
     }
 
     public int getHitByPitch() {
@@ -275,12 +315,20 @@ public class BattingStats implements Parcelable {
         this.hitByPitch = hitByPitch;
     }
 
+    public void incrementHitByPitch() {
+        hitByPitch ++;
+    }
+
     public int getStolenBases() {
         return stolenBases;
     }
 
     public void setStolenBases(int stolenBases) {
         this.stolenBases = stolenBases;
+    }
+
+    public void incrementStolenBases() {
+        stolenBases ++;
     }
 
     public int getCaughtStealing() {
@@ -291,12 +339,20 @@ public class BattingStats implements Parcelable {
         this.caughtStealing = caughtStealing;
     }
 
+    public void incrementCaughtStealing() {
+        caughtStealing ++;
+    }
+
     public int getGroundBalls() {
         return groundBalls;
     }
 
     public void setGroundBalls(int groundBalls) {
         this.groundBalls = groundBalls;
+    }
+
+    public void incrementGroundBalls() {
+        groundBalls ++;
     }
 
     public int getLineDrives() {
@@ -307,6 +363,10 @@ public class BattingStats implements Parcelable {
         this.lineDrives = lineDrives;
     }
 
+    public void incrementLineDrives() {
+        lineDrives ++;
+    }
+
     public int getFlyBalls() {
         return flyBalls;
     }
@@ -315,12 +375,20 @@ public class BattingStats implements Parcelable {
         this.flyBalls = flyBalls;
     }
 
+    public void incrementFlyBalls() {
+        flyBalls ++;
+    }
+
     public int getErrors() {
         return errors;
     }
 
     public void setErrors(int errors) {
         this.errors = errors;
+    }
+
+    public void incrementErrors() {
+        errors ++;
     }
 
     public int getPlayerId() {
@@ -337,6 +405,22 @@ public class BattingStats implements Parcelable {
 
     public void setBattingStatsId(int battingStatsId) {
         this.battingStatsId = battingStatsId;
+    }
+
+    public double getAverage(){
+        if ((plateAppearances - walks - hitByPitch) != 0) {
+            return ((double) hits / (double) (plateAppearances - walks - hitByPitch));
+        } else {
+            return 0.0;
+        }
+    }
+
+    public double getOnBasePct() {
+        if (plateAppearances != 0) {
+            return ((double) (hits + walks + hitByPitch) / (double) plateAppearances);
+        } else {
+            return 0.0;
+        }
     }
 
     public void writeToParcel(Parcel dest, int flags) {

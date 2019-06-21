@@ -81,6 +81,11 @@ public class GameSimulator {
     private Player pitcherOfRecordForLoss;
     private boolean isHomeTeamWinning;
     private boolean isVisitingTeamWinning;
+    private Player pitcherOfRecordForSave;
+    private int visitorSubstituteNumber;
+    private int homeSubstituteNumber;
+    private int homePitcherNumber;
+    private int visitorPitcherNumber;
 
     private static SpannableStringBuilder gameLog;
     private static StringBuilder homePitchersUsed;
@@ -124,16 +129,16 @@ public class GameSimulator {
         gameLog.append("                             --- ").append(getInningString(inningsPlayed / 10 + 1)).append(" Inning ---                             \n\n");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        gameLog.setSpan(new StyleSpan(Typeface.BOLD),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         gameLog.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
         gameLog.append(batttingTeamName).append(" now at bat : ");
         while (gameNotOver) {
             gameLog.append("\n\n");
 
 
-            AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense);
+            AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher());
 
             gameLog.append(lineup.get(currentBatter).getName()).append(" : ");
             getBatterStaminaAdjustment(lineup.get(currentBatter));
@@ -148,7 +153,6 @@ public class GameSimulator {
             int atBatResult = currentAtBat.simulateAtBat(pitcherStaminaAdjustment, batterStaminaAdjustment, areRunsEarned);
             gameLog.append(getAtBatSummary());
 
-            int playerWhoJustHit = currentBatter;
             currentBatter = currentAtBat.getCurrentBatter();
             outs = currentAtBat.getOuts();
             if (currentAtBat.wasErrorMade()) {
@@ -164,28 +168,33 @@ public class GameSimulator {
             }
             runsScoredInInning += currentAtBat.getRunsScored();
 
-            if(homeScore == visitorScore) {
+            if (homeScore == visitorScore) {
                 pitcherOfRecordForWin = null;
                 pitcherOfRecordForLoss = null;
+                checkForBlownSave();
+                pitcherOfRecordForSave = null;
                 isHomeTeamWinning = false;
                 isVisitingTeamWinning = false;
             } else {
                 List<Player> pitchersToCheck = currentAtBat.getPitchersResponsible();
-                if (homeScore > visitorScore && !isHomeTeamWinning){                                     // did lead change
-                    pitcherOfRecordForLoss = pitchersToCheck.get((homeScore-visitorScore) - 1);
+                if (homeScore > visitorScore && !isHomeTeamWinning) {                                     // did lead change
+                    pitcherOfRecordForLoss = pitchersToCheck.get((homeScore - visitorScore) - 1);
                     pitcherOfRecordForWin = pitcherOfRecordForHittingTeam;
+                    checkForBlownSave();
+                    pitcherOfRecordForSave = null;
                     isHomeTeamWinning = true;
                     isVisitingTeamWinning = false;
                 }
-                if (visitorScore > homeScore && !isVisitingTeamWinning){                                // did lead change
-                    pitcherOfRecordForLoss = pitchersToCheck.get((visitorScore-homeScore) - 1);
+                if (visitorScore > homeScore && !isVisitingTeamWinning) {                                // did lead change
+                    pitcherOfRecordForLoss = pitchersToCheck.get((visitorScore - homeScore) - 1);
                     pitcherOfRecordForWin = pitcherOfRecordForHittingTeam;
+                    checkForBlownSave();
+                    pitcherOfRecordForSave = null;
                     isVisitingTeamWinning = true;
                     isHomeTeamWinning = false;
                 }
 
             }
-
 
 
             // gameLog.append("Currently - Outs in Inning : ").append(Integer.toString(outs)).append(", Runs In Inning : ").append(Integer.toString(runsScoredInInning)).append("\n\n");
@@ -196,10 +205,10 @@ public class GameSimulator {
                 start = gameLog.length();
                 if (isVisitorHitting) {
                     gameLog.append("--- That's the end of the top of the ").append(getInningString(inningsPlayed / 10 + 1)).append(" ---\n\n");
-                    gameLog.setSpan(new StyleSpan(Typeface.BOLD),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
                     gameLog.append("--- That's the end of the bottom of the ").append(getInningString(inningsPlayed / 10 + 1)).append(" ---\n\n");
-                    gameLog.setSpan(new StyleSpan(Typeface.BOLD),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 for (int i = 0; i < runners.length; i++) {
                     runners[i] = null;
@@ -258,35 +267,7 @@ public class GameSimulator {
 
 
             if (((inningsPlayed > 80 && homeScore > visitorScore) || inningsPlayed > 85) && ifScoreNotTiedAtEndOfInning(inningsPlayed, homeScore, visitorScore, homeTeamFinishedAtBat)) {
-                homePitchersUsed.append(homeDefense.get(SCOREKEEPING_PITCHER).getName()).append(" pitches thrown : ").append(homeDefense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
-                visitorPitchersUsed.append(visitingDefense.get(SCOREKEEPING_PITCHER).getName()).append(" pitches thrown : ").append(visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
-                start = gameLog.length();
-                gameLog.append("\n\n                             --- GAME OVER!!! ---                             \n\n");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                gameLog.setSpan(new StyleSpan(Typeface.BOLD),start,gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                gameLog.append("Final Score :\n").append(homeTeamName).append(" ").append(Integer.toString(homeScore)).append(" - ")
-                        .append(visitingTeamName).append(" ").append(Integer.toString(visitorScore));
-                pitcherOfRecordForWin.getPitchingStats().get(0).setWins(pitcherOfRecordForWin.getPitchingStats().get(0).getWins() + 1);
-                pitcherOfRecordForLoss.getPitchingStats().get(0).setLosses(pitcherOfRecordForLoss.getPitchingStats().get(0).getLosses() + 1);
-                if (homeScore > visitorScore) {
-                    gameLog.append("\nWP : ").append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getWins())).append("-")
-                            .append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getLosses())).append(") - LP : ")
-                            .append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getWins())).append("-")
-                            .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getLosses())).append(")");
-                    homeTeam.setWins(homeTeam.getWins() + 1);
-                    visitingTeam.setLosses(visitingTeam.getLosses() + 1);
-                } else {
-                    gameLog.append("\nLP : ").append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getWins())).append("-")
-                            .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getLosses())).append(") - WP : ")
-                            .append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getWins())).append("-")
-                            .append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getLosses())).append(")");
-                    visitingTeam.setWins(visitingTeam.getWins() + 1);
-                    homeTeam.setLosses(homeTeam.getLosses() + 1);
-                }
-
+                updateEndOfGameStats();
                 gameNotOver = false;
             }
 
@@ -305,6 +286,144 @@ public class GameSimulator {
             // gameLog.append("\n\n");
         }
         game.setGameLog(String.valueOf(gameLog));
+    }
+
+    private PitchingLine getPitchingLineForCurrentPitcher() {
+        String currentPitcherName = defense.get(SCOREKEEPING_PITCHER).getName();
+        List<PitchingLine> pitchingLines;
+        if (isVisitorHitting) {
+            pitchingLines = game.getHomeBoxScore().getPitchingLines();
+        } else {
+            pitchingLines = game.getVisitorBoxScore().getPitchingLines();
+        }
+        for (PitchingLine pitchingLine: pitchingLines) {
+            if (pitchingLine.getPitcherName().equals(currentPitcherName)) {
+                return pitchingLine;
+            }
+        }
+        return null;
+    }
+
+    private BattingLine getBattingLineForCurrentBatter() {
+        String currentBatterName = lineup.get(currentBatter).getName();
+        List<BattingLine> battingLines;
+        if (isVisitorHitting) {
+            battingLines = game.getVisitorBoxScore().getBattingLines();
+        } else {
+            battingLines = game.getHomeBoxScore().getBattingLines();
+        }
+        for (BattingLine battingline: battingLines) {
+            if (battingline.getBatterName().equals(currentBatterName)) {
+                return battingline;
+            }
+        }
+        return null;                            //  This should never happen, if batter is in lineup they should have a batting line
+    }
+
+    private void updateEndOfGameStats() {
+        int start;
+        homePitchersUsed.append(homeDefense.get(SCOREKEEPING_PITCHER).getName()).append(" pitches thrown : ").append(homeDefense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
+        visitorPitchersUsed.append(visitingDefense.get(SCOREKEEPING_PITCHER).getName()).append(" pitches thrown : ").append(visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
+        start = gameLog.length();
+        gameLog.append("\n\n                             --- GAME OVER!!! ---                             \n\n");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        gameLog.append("Final Score :\n").append(homeTeamName).append(" ").append(Integer.toString(homeScore)).append(" - ")
+                .append(visitingTeamName).append(" ").append(Integer.toString(visitorScore));
+
+        game.setHomeScore(homeScore);
+        game.setVisitorScore(visitorScore);
+        game.setPlayedGame(true);
+
+        updateBattingLines();
+        updatePitchingLines();
+
+        pitcherOfRecordForWin.getPitchingStats().get(0).incrementWins();
+        pitcherOfRecordForLoss.getPitchingStats().get(0).incrementLosses();
+        if (pitcherOfRecordForWin.getPrimaryPosition() == STARTING_PITCHER) {
+            pitcherOfRecordForWin.getPitchingStats().get(0).incrementCompleteGames();
+            if(homeScore == 0 || visitorScore == 0) {
+                pitcherOfRecordForWin.getPitchingStats().get(0).incrementShutOuts();
+            }
+        }
+        if (pitcherOfRecordForLoss.getPrimaryPosition() == STARTING_PITCHER) {
+            pitcherOfRecordForLoss.getPitchingStats().get(0).incrementCompleteGames();
+        }
+        if (homeScore > visitorScore) {
+            gameLog.append("\nWP : ").append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getWins())).append("-")
+                    .append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getLosses())).append(") - LP : ")
+                    .append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getWins())).append("-")
+                    .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getLosses())).append(")");
+            homeTeam.incrementWins();
+            visitingTeam.incrementLosses();
+        } else {
+            gameLog.append("\nLP : ").append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getWins())).append("-")
+                    .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStats().get(0).getLosses())).append(") - WP : ")
+                    .append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getWins())).append("-")
+                    .append(Integer.toString(pitcherOfRecordForWin.getPitchingStats().get(0).getLosses())).append(")");
+            visitingTeam.incrementWins();
+            homeTeam.incrementLosses();
+        }
+        if (pitcherOfRecordForSave != null) {
+            pitcherOfRecordForSave.getPitchingStats().get(0).incrementSaves();
+            gameLog.append("\nSAVE : ").append(pitcherOfRecordForSave.getName()).append(" (").append(Integer.toString(pitcherOfRecordForSave.getPitchingStats().get(0).getSaves())).append(")");
+        }
+    }
+
+    private void updatePitchingLines() {
+        for (PitchingLine pitchingLine : game.getHomeBoxScore().getPitchingLines()) {
+            String playerName = pitchingLine.getPitcherName();
+            for (Player player : homeTeam.getPlayers()) {
+                if (player.getName().equals(playerName)) {
+                    pitchingLine.setEra(player.getPitchingStats().get(0).getERA());
+                    pitchingLine.setWhip(player.getPitchingStats().get(0).getWHIP());
+                    break;
+                }
+            }
+        }
+        for (PitchingLine pitchingLine : game.getVisitorBoxScore().getPitchingLines()) {
+            String playerName = pitchingLine.getPitcherName();
+            for (Player player : visitingTeam.getPlayers()) {
+                if (player.getName().equals(playerName)) {
+                    pitchingLine.setEra(player.getPitchingStats().get(0).getERA());
+                    pitchingLine.setWhip(player.getPitchingStats().get(0).getWHIP());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void updateBattingLines() {
+        for (BattingLine battingLine : game.getHomeBoxScore().getBattingLines()) {
+            String playerName = battingLine.getBatterName();
+            for (Player player : homeTeam.getPlayers()) {
+                if (player.getName().equals(playerName)) {
+                    battingLine.setAverage(player.getBattingStats().get(0).getAverage());
+                    battingLine.setOnBasePct(player.getBattingStats().get(0).getOnBasePct());
+                    break;
+                }
+            }
+        }
+        for (BattingLine battingLine : game.getVisitorBoxScore().getBattingLines()) {
+            String playerName = battingLine.getBatterName();
+            for (Player player : visitingTeam.getPlayers()) {
+                if (player.getName().equals(playerName)) {
+                    battingLine.setAverage(player.getBattingStats().get(0).getAverage());
+                    battingLine.setOnBasePct(player.getBattingStats().get(0).getOnBasePct());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkForBlownSave() {
+        if (pitcherOfRecordForSave != null) {
+            pitcherOfRecordForSave.getPitchingStats().get(0).incrementBlownSaves();
+        }
     }
 
     private Player shouldWePinchHit(Player player) {
@@ -334,11 +453,11 @@ public class GameSimulator {
                 return pinchHitForPitcher(player, lineupToChange, defenseToChange);
             }
             // if after the eighth inning and pitcher is up
-            if (inningsPlayed >=80) {
+            if (inningsPlayed >= 80) {
                 return pinchHitForPitcher(player, lineupToChange, defenseToChange);
             }
             // if after the ninth inning and starter is still in the game
-            if (inningsPlayed >=90 && player.getPrimaryPosition() == STARTING_PITCHER) {
+            if (inningsPlayed >= 90 && player.getPrimaryPosition() == STARTING_PITCHER) {
                 return pinchHitForPitcher(player, lineupToChange, defenseToChange);
             }
         }
@@ -351,12 +470,30 @@ public class GameSimulator {
 
     private Player pinchHitForPitcher(Player pitcher, TreeMap<Integer, Player> lineupToChange, TreeMap<Integer, Player> defenseToChange) {
         Player pinchHitter = getBestPinchHitter();
-        if (pinchHitter == null) { return null; }
+        if (pinchHitter == null) {
+            return null;
+        }
         lineupToChange.put(currentBatter, pinchHitter);
         defenseToChange.put(SCOREKEEPING_PITCHER, pinchHitter);
         lineup = lineupToChange;
+        pinchHitter.getBattingStats().get(0).incrementGames();
         addPinchHitterForPitcherToLog(pitcher, pinchHitter);
+        addBattingLineForSub(currentBatter, pinchHitter);
         return pitcher;
+    }
+
+    private void addBattingLineForSub(int placeInOrder, Player newHitter) {
+        boolean visitorHitting = isVisitorHitting;
+        if (isPitcher(newHitter)) {
+            visitorHitting = !visitorHitting;               // Pitchers are only subbed in on defense so need to switch which boxscore the batting line is added to
+        }
+        if (visitorHitting) {
+            game.getVisitorBoxScore().addBattingLine(new BattingLine(game.getVisitorBoxScore().getBoxScoreId(), placeInOrder, true , visitorSubstituteNumber, newHitter.getName()));
+            visitorSubstituteNumber++;
+        } else {
+            game.getHomeBoxScore().addBattingLine(new BattingLine(game.getHomeBoxScore().getBoxScoreId(), placeInOrder, true , homeSubstituteNumber, newHitter.getName()));
+            homeSubstituteNumber++;
+        }
     }
 
     private void addPinchHitterForPitcherToLog(Player pitcher, Player pinchHitter) {
@@ -384,8 +521,8 @@ public class GameSimulator {
         }
         if (runnerInScoringPosition()) {
             while (pinchHitterKey == -1) {
-                    if (pinchHittersAvailable.ceilingKey(1) != null) {
-                        pinchHitterKey = pinchHittersAvailable.ceilingKey(1);               // Get best available pinchhitter
+                if (pinchHittersAvailable.ceilingKey(1) != null) {
+                    pinchHitterKey = pinchHittersAvailable.ceilingKey(1);               // Get best available pinchhitter
                 }
             }
             pinchHitter = pinchHittersAvailable.get(pinchHitterKey);
@@ -393,7 +530,7 @@ public class GameSimulator {
             return pinchHitter;
         }
 
-        if (inningsPlayed<=70) {
+        if (inningsPlayed <= 70) {
             int pinchHitterPosition = 5;
             while (pinchHitterKey == -1) {
                 if (pinchHittersAvailable.ceilingKey(pinchHitterPosition) != null) {
@@ -475,9 +612,11 @@ public class GameSimulator {
     }
 
     private void switchPitchers(Player currentPitcher) {
+        Player newPitcher;
         int pitchingScore = visitorScore;
         int battingScore = homeScore;
         Team pitchingTeam = visitingTeam;
+        int lineupPosition = 0;
         TreeMap<Integer, Player> relievers = visitorRelievers;
         TreeMap<Integer, Player> lineupToModify = visitingLineup;
         TreeMap<Integer, Player> defenseToModify = visitingDefense;
@@ -491,13 +630,15 @@ public class GameSimulator {
             defenseToModify = homeDefense;
             closerUsed = homeCloserUsed;
         }
+
         if (inningsPlayed >= 80 && pitchingScore > battingScore && (pitchingScore - battingScore <= 3) && !closerUsed) {     // Save situation = after 8 innings are played and pitching team ahead by less than 3
 
             Player closer = PitchingRotationGenerator.getBestCloserAvailable(pitchingTeam);
             defenseToModify.put(SCOREKEEPING_PITCHER, closer);
             for (TreeMap.Entry<Integer, Player> entry : lineupToModify.entrySet()) {
                 if (entry.getValue() == currentPitcher) {
-                    lineupToModify.put(entry.getKey(), closer);
+                    lineupPosition = entry.getKey();
+                    lineupToModify.put(lineupPosition, closer);
                 }
             }
             if (isVisitorHitting) {
@@ -505,37 +646,114 @@ public class GameSimulator {
             } else {
                 visitorCloserUsed = true;
             }
+            if (isSaveOrHoldSituation()) {
+                updateSaveAndHoldSituation(currentPitcher, closer);
+            }
+            closer.getPitchingStats().get(0).incrementGames();
+            closer.getBattingStats().get(0).incrementGames();
+            addPitchingLineForNewPitcher(closer);
+            if (lineupPosition != 0) {
+                addBattingLineForSub(lineupPosition, closer);
+            }
             addPitchingChangeToLog(currentPitcher, defenseToModify.get(SCOREKEEPING_PITCHER));
             return;
         }
+
         int relieverChoice = checkSituationForBestRelieverToBringIn();
         if (relievers.containsKey(relieverChoice)) {
-
-            defenseToModify.put(SCOREKEEPING_PITCHER, relievers.get(relieverChoice));
+            newPitcher = relievers.get(relieverChoice);
+            defenseToModify.put(SCOREKEEPING_PITCHER, newPitcher);
             for (TreeMap.Entry<Integer, Player> entry : lineupToModify.entrySet()) {
                 if (entry.getValue() == currentPitcher) {
-                    lineupToModify.put(entry.getKey(), relievers.get(relieverChoice));
+                    lineupPosition = entry.getKey();
+                    lineupToModify.put(lineupPosition, newPitcher);
                 }
             }
             relievers.remove(relieverChoice);
-            addPitchingChangeToLog(currentPitcher, defenseToModify.get(SCOREKEEPING_PITCHER));
-            return;
+            if (isSaveOrHoldSituation()) {
+                updateSaveAndHoldSituation(currentPitcher, newPitcher);
+            }
+            newPitcher.getPitchingStats().get(0).incrementGames();
+            newPitcher.getBattingStats().get(0).incrementGames();
+            addPitchingLineForNewPitcher(newPitcher);
+            if (lineupPosition != 0) {
+                addBattingLineForSub(lineupPosition, newPitcher);
+            }
+            addPitchingChangeToLog(currentPitcher, newPitcher);
         } else {
-            for (TreeMap.Entry<Integer, Player> entry : relievers.entrySet()) {       // put in best reliever available
-                relieverChoice = entry.getKey();
+            // put in best reliever available
+            relieverChoice = relievers.ceilingKey(0);
 
-
-                for (TreeMap.Entry<Integer, Player> lineupEntry : lineupToModify.entrySet()) {
-                    if (lineupEntry.getValue() == currentPitcher) {
-                        lineupToModify.put(lineupEntry.getKey(), relievers.get(relieverChoice));
-                        defenseToModify.put(SCOREKEEPING_PITCHER, relievers.get(relieverChoice));
-                    }
+            newPitcher = relievers.get(relieverChoice);
+            defenseToModify.put(SCOREKEEPING_PITCHER, newPitcher);
+            for (TreeMap.Entry<Integer, Player> lineupEntry : lineupToModify.entrySet()) {
+                if (lineupEntry.getValue() == currentPitcher) {
+                    lineupPosition = lineupEntry.getKey();
+                    lineupToModify.put(lineupPosition, newPitcher);
                 }
-                relievers.remove(relieverChoice);
-                addPitchingChangeToLog(currentPitcher, defenseToModify.get(SCOREKEEPING_PITCHER));
-                return;
+            }
+
+            relievers.remove(relieverChoice);
+            if (isSaveOrHoldSituation()) {
+                updateSaveAndHoldSituation(currentPitcher, newPitcher);
+            }
+            newPitcher.getPitchingStats().get(0).incrementGames();
+            newPitcher.getBattingStats().get(0).incrementGames();
+            addPitchingLineForNewPitcher(newPitcher);
+            if (lineupPosition != 0) {
+                addBattingLineForSub(lineupPosition, newPitcher);
+            }
+            addPitchingChangeToLog(currentPitcher, newPitcher);
+        }
+    }
+
+    private void addPitchingLineForNewPitcher(Player newPitcher) {
+        if (isVisitorHitting) {
+            homePitcherNumber ++;
+            game.getHomeBoxScore().addPitchingLine(new PitchingLine(game.getHomeBoxScore().getBoxScoreId(), homePitcherNumber, newPitcher.getName()));
+        } else {
+            visitorPitcherNumber ++;
+            game.getVisitorBoxScore().addPitchingLine(new PitchingLine(game.getVisitorBoxScore().getBoxScoreId(), visitorPitcherNumber, newPitcher.getName()));
+        }
+    }
+
+    private void updateSaveAndHoldSituation(Player currentPitcher, Player newPitcher) {
+        if (pitcherOfRecordForSave != null) {
+            if (currentPitcher == pitcherOfRecordForSave) {
+                // add a hold to current pitcher
+                currentPitcher.getPitchingStats().get(0).incrementHolds();
             }
         }
+        pitcherOfRecordForSave = newPitcher;
+    }
+
+    private boolean isSaveOrHoldSituation() {
+        if (isVisitorHitting) {
+            if (homeScore > visitorScore) {
+                // save situation if 1) winning by three runs or less, 2) potential tying run is on base, at bat, or on deck
+                if ((homeScore - visitorScore <= 3) || (homeScore - visitorScore - countRunners() - 2 <= 0)) {
+                    return true;
+                }
+            }
+        } else {
+            if (visitorScore > homeScore) {
+                // save situation if 1) winning by three runs or less, 2) potential tying run is on base, at bat, or on deck
+                if ((visitorScore - homeScore <= 3) || (visitorScore - homeScore - countRunners() - 2 <= 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private int countRunners() {
+        int count = 0;
+        for (Runner runner : runners) {
+            if (runner != null) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void addPitchingChangeToLog(Player oldPitcher, Player newPitcher) {
@@ -657,6 +875,22 @@ public class GameSimulator {
         visitorPinchHitters = getPinchHitters(visitingLineup, visitingTeam);
         homePinchHitters = getPinchHitters(homeLineup, homeTeam);
 
+        homeDefense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).incrementGamesStarted();
+        homeDefense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).incrementGames();
+        homeDefense.get(SCOREKEEPING_PITCHER).getBattingStats().get(0).incrementGames();
+        visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).incrementGamesStarted();
+        visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).incrementGames();
+        visitingDefense.get(SCOREKEEPING_PITCHER).getBattingStats().get(0).incrementGames();
+
+        for (int i = 1; i < 10; i++) {
+            if (homeLineup.get(i).getPrimaryPosition() != STARTING_PITCHER) {
+                homeLineup.get(i).getBattingStats().get(0).incrementGames();
+            }
+            if (visitingLineup.get(i).getPrimaryPosition() != STARTING_PITCHER) {
+                visitingLineup.get(i).getBattingStats().get(0).incrementGames();
+            }
+        }
+
         lineup = visitingLineup;
         defense = homeDefense;
 
@@ -689,6 +923,8 @@ public class GameSimulator {
         homePitchersUsed.append(homeTeamName).append(" Pitchers Used : \n").append(homeDefense.get(SCOREKEEPING_PITCHER).getName()).append("\n");
         visitorPitchersUsed.append(visitingTeamName).append(" Pitchers Used : \n").append(visitingDefense.get(SCOREKEEPING_PITCHER).getName()).append("\n");
 
+
+
         game.setVisitorScore(visitorScore);
         game.setHomeScore(homeScore);
         game.setVisitorBoxScore(new BoxScore(game.getGameId()));
@@ -697,14 +933,20 @@ public class GameSimulator {
         initializeBoxScore(game.getVisitorBoxScore(), visitingLineup, visitingDefense);
         game.setGameLog("");
         game.setPlayedGame(false);
+
+        homeSubstituteNumber = 1;
+        visitorSubstituteNumber = 1;
+
+        homePitcherNumber = 1;
+        visitorPitcherNumber = 1;
     }
 
     private void initializeBoxScore(BoxScore boxScore, TreeMap<Integer, Player> lineup, TreeMap<Integer, Player> defense) {
-        for (TreeMap.Entry entry: lineup.entrySet()) {
+        for (TreeMap.Entry entry : lineup.entrySet()) {
             Player player = (Player) entry.getValue();
-            boxScore.addBattingLine(new BattingLine(boxScore.getBoxScoreId(), (int) entry.getKey(), false, player.getName()));
+            boxScore.addBattingLine(new BattingLine(boxScore.getBoxScoreId(), (int) entry.getKey(), false, 0, player.getName()));
         }
-        boxScore.addPitchingLine(new PitchingLine(boxScore.getBoxScoreId(),1,defense.get(SCOREKEEPING_PITCHER).getName()));
+        boxScore.addPitchingLine(new PitchingLine(boxScore.getBoxScoreId(), 1, defense.get(SCOREKEEPING_PITCHER).getName()));
     }
 
     private TreeMap<Integer, Player> getPinchHitters(TreeMap<Integer, Player> currentLineup, Team currentTeam) {
@@ -818,8 +1060,8 @@ public class GameSimulator {
         }
     }
 
-    private AtBatSimulator generateNewAtBat(Context context, int[] freshCount, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense) {
-        return new AtBatSimulator(context, freshCount, outs, currentBatter, lineupFromDefense, runners, defense);
+    private AtBatSimulator generateNewAtBat(Context context, int[] freshCount, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense, BattingLine battingLine, PitchingLine pitchingLine) {
+        return new AtBatSimulator(context, freshCount, outs, currentBatter, lineupFromDefense, runners, defense, battingLine, pitchingLine);
     }
 
     public static SpannableStringBuilder getGameRecapString() {

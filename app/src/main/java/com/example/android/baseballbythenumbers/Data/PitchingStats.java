@@ -14,9 +14,8 @@ import com.google.gson.annotations.SerializedName;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "pitching_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId", unique = true))
-public class PitchingStats implements Parcelable
-{
-    @PrimaryKey (autoGenerate = true)
+public class PitchingStats implements Parcelable {
+    @PrimaryKey(autoGenerate = true)
     private int pitchingStatsId;
 
     private int playerId;
@@ -93,6 +92,7 @@ public class PitchingStats implements Parcelable
     @SerializedName("FlyBalls")
     @Expose
     private int flyBalls;
+
     public final static Parcelable.Creator<PitchingStats> CREATOR = new Creator<PitchingStats>() {
 
 
@@ -107,8 +107,7 @@ public class PitchingStats implements Parcelable
             return (new PitchingStats[size]);
         }
 
-    }
-            ;
+    };
 
     protected PitchingStats(Parcel in) {
         this.pitchingStatsId = ((int) in.readValue((int.class.getClassLoader())));
@@ -141,13 +140,11 @@ public class PitchingStats implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public PitchingStats() {
     }
 
     /**
-     *
      * @param blownSaves
      * @param games
      * @param gamesStarted
@@ -221,12 +218,20 @@ public class PitchingStats implements Parcelable
         this.wins = wins;
     }
 
+    public void incrementWins() {
+        wins++;
+    }
+
     public int getLosses() {
         return losses;
     }
 
     public void setLosses(int losses) {
         this.losses = losses;
+    }
+
+    public void incrementLosses() {
+        losses++;
     }
 
     public int getGames() {
@@ -237,12 +242,20 @@ public class PitchingStats implements Parcelable
         this.games = games;
     }
 
+    public void incrementGames() {
+        games++;
+    }
+
     public int getGamesStarted() {
         return gamesStarted;
     }
 
     public void setGamesStarted(int gamesStarted) {
         this.gamesStarted = gamesStarted;
+    }
+
+    public void incrementGamesStarted() {
+        gamesStarted++;
     }
 
     public int getCompleteGames() {
@@ -253,12 +266,20 @@ public class PitchingStats implements Parcelable
         this.completeGames = completeGames;
     }
 
+    public void incrementCompleteGames() {
+        completeGames++;
+    }
+
     public int getShutOuts() {
         return shutOuts;
     }
 
     public void setShutOuts(int shutOuts) {
         this.shutOuts = shutOuts;
+    }
+
+    public void incrementShutOuts() {
+        shutOuts ++;
     }
 
     public int getSaves() {
@@ -269,12 +290,20 @@ public class PitchingStats implements Parcelable
         this.saves = saves;
     }
 
+    public void incrementSaves() {
+        saves ++;
+    }
+
     public int getHolds() {
         return holds;
     }
 
     public void setHolds(int holds) {
         this.holds = holds;
+    }
+
+    public void incrementHolds() {
+        holds ++;
     }
 
     public int getBlownSaves() {
@@ -285,12 +314,27 @@ public class PitchingStats implements Parcelable
         this.blownSaves = blownSaves;
     }
 
+    public void incrementBlownSaves() {
+        blownSaves ++;
+    }
+
     public float getInningsPitched() {
         return inningsPitched;
     }
 
     public void setInningsPitched(float inningsPitched) {
         this.inningsPitched = inningsPitched;
+    }
+
+    public void addToInningsPitched(int outs) {
+        for (int i = 0; i < outs; i++) {
+            inningsPitched += .1;
+            if (Math.round(inningsPitched * 10) >= (((Math.round(inningsPitched) * 10) + 3))) {
+                inningsPitched = inningsPitched + 1.0f - 0.3f;
+                inningsPitched = Math.round(inningsPitched * 10) / 10.0f;
+            }
+        }
+
     }
 
     public int getTotalBattersFaced() {
@@ -301,12 +345,20 @@ public class PitchingStats implements Parcelable
         this.totalBattersFaced = totalBattersFaced;
     }
 
+    public void incrementTotalBattersFaced() {
+        totalBattersFaced ++;
+    }
+
     public int getHits() {
         return hits;
     }
 
     public void setHits(int hits) {
         this.hits = hits;
+    }
+
+    public void incrementHits() {
+        hits ++;
     }
 
     public int getRuns() {
@@ -333,12 +385,20 @@ public class PitchingStats implements Parcelable
         this.homeRuns = homeRuns;
     }
 
+    public void incrementHomeRuns() {
+        homeRuns ++;
+    }
+
     public int getWalks() {
         return walks;
     }
 
     public void setWalks(int walks) {
         this.walks = walks;
+    }
+
+    public void incrementWalks() {
+        walks ++;
     }
 
     public int getStrikeOuts() {
@@ -349,12 +409,20 @@ public class PitchingStats implements Parcelable
         this.strikeOuts = strikeOuts;
     }
 
+    public void incrementStrikeOuts() {
+        strikeOuts ++;
+    }
+
     public int getHitByPitch() {
         return hitByPitch;
     }
 
     public void setHitByPitch(int hitByPitch) {
         this.hitByPitch = hitByPitch;
+    }
+
+    public void incrementHitByPitch() {
+        hitByPitch ++;
     }
 
     public int getWildPitches() {
@@ -365,12 +433,20 @@ public class PitchingStats implements Parcelable
         this.wildPitches = wildPitches;
     }
 
+    public void incrementWildPitches() {
+        wildPitches ++;
+    }
+
     public int getBalks() {
         return balks;
     }
 
     public void setBalks(int balks) {
         this.balks = balks;
+    }
+
+    public void incrementBalks() {
+        balks ++;
     }
 
     public int getGroundBalls() {
@@ -381,6 +457,10 @@ public class PitchingStats implements Parcelable
         this.groundBalls = groundBalls;
     }
 
+    public void incrementGroundBalls() {
+        groundBalls ++;
+    }
+
     public int getLineDrives() {
         return lineDrives;
     }
@@ -389,12 +469,20 @@ public class PitchingStats implements Parcelable
         this.lineDrives = lineDrives;
     }
 
+    public void incrementLineDrives() {
+        lineDrives ++;
+    }
+
     public int getFlyBalls() {
         return flyBalls;
     }
 
     public void setFlyBalls(int flyBalls) {
         this.flyBalls = flyBalls;
+    }
+
+    public void incrementFlyBalls() {
+        flyBalls ++;
     }
 
     public int getPlayerId() {
@@ -411,6 +499,30 @@ public class PitchingStats implements Parcelable
 
     public void setPitchingStatsId(int pitchingStatsId) {
         this.pitchingStatsId = pitchingStatsId;
+    }
+
+    public double getERA() {
+        if (inningsPitched > 0) {
+            double ip = ((inningsPitched % 1) * 3.333333333) + Math.round(inningsPitched);
+            return Math.round(earnedRuns / (ip / 9) * 100.0) / 100.0;
+        } else {
+            if (earnedRuns > 0) {
+                return 1000000;
+            }
+            return 0;
+        }
+    }
+
+    public double getWHIP() {
+        if (inningsPitched > 0) {
+            double ip = ((inningsPitched % 1) * 3.333333333) + Math.round(inningsPitched);
+            return Math.round(((walks + hits) / (ip)) * 100.0) / 100.0;
+        } else {
+            if ((walks + hits) > 0) {
+                return 1000000;
+            }
+            return 0;
+        }
     }
 
     public void writeToParcel(Parcel dest, int flags) {
