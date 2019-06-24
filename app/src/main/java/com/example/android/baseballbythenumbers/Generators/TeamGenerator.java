@@ -71,7 +71,7 @@ public class TeamGenerator {
     }
 
 
-    public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget, int divisionId) {
+    public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget, String divisionId) {
         Team newTeam = new Team();
 
         newTeam.setTeamName(teamName);
@@ -93,11 +93,11 @@ public class TeamGenerator {
         return newTeam;
     }
 
-    private List<Player> generateHitters(int teamId) {
+    private List<Player> generateHitters(String teamId) {
         return hitterGenerator.generateHitters(teamId);
     }
 
-    private List<Player> generatePitchers(int teamId) {
+    private List<Player> generatePitchers(String teamId) {
         return pitcherGenerator.generatePitchers(teamId);
     }
 }

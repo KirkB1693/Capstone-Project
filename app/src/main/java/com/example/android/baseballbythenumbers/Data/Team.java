@@ -7,21 +7,24 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity (tableName = "teams", foreignKeys = @ForeignKey(entity = Division.class, parentColumns = "divisionId", childColumns = "divisionId", onDelete = CASCADE),indices = @Index(value = "divisionId"))
 public class Team implements Parcelable
 {
-    @PrimaryKey (autoGenerate = true)
-    private int teamId;
+    @PrimaryKey
+    @NonNull
+    private String teamId;
 
-    private int divisionId;
+    private String divisionId;
 
     @SerializedName("teamName")
     @Expose
@@ -64,8 +67,8 @@ public class Team implements Parcelable
             ;
 
     protected Team(Parcel in) {
-        this.teamId = ((int) in.readValue((int.class.getClassLoader())));
-        this.divisionId = ((int) in.readValue((int.class.getClassLoader())));
+        this.teamId = ((String) in.readValue((String.class.getClassLoader())));
+        this.divisionId = ((String) in.readValue((String.class.getClassLoader())));
         this.teamName = ((String) in.readValue((String.class.getClassLoader())));
         this.teamCity = ((String) in.readValue((String.class.getClassLoader())));
         this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
@@ -92,7 +95,7 @@ public class Team implements Parcelable
      * @param useDh
      */
     @Ignore
-    public Team(String teamName, String teamCity, boolean useDh, int teamBudget, List<Player> players, int divisionId, int wins, int losses) {
+    public Team(String teamName, String teamCity, boolean useDh, int teamBudget, List<Player> players, String divisionId, int wins, int losses) {
         this.teamName = teamName;
         this.teamCity = teamCity;
         this.useDh = useDh;
@@ -101,6 +104,7 @@ public class Team implements Parcelable
         this.divisionId = divisionId;
         this.wins = wins;
         this.losses = losses;
+        this.teamId = UUID.randomUUID().toString();
     }
 
     public String getTeamName() {
@@ -143,19 +147,19 @@ public class Team implements Parcelable
         this.players = players;
     }
 
-    public int getTeamId() {
+    public String getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(String teamId) {
         this.teamId = teamId;
     }
 
-    public int getDivisionId() {
+    public String getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(int divisionId) {
+    public void setDivisionId(String divisionId) {
         this.divisionId = divisionId;
     }
 

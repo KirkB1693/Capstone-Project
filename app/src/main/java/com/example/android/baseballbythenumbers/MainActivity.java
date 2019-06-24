@@ -1,11 +1,13 @@
 package com.example.android.baseballbythenumbers;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
@@ -14,12 +16,14 @@ import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
+import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -32,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
     List<League> leagues;
     OrganizationGenerator organizationGenerator;
     List<Division> divisions;
-    SpannableStringBuilder displayText;
+    static SpannableStringBuilder displayText;
     Schedule schedule;
     int gameToPlay;
+    Organization mlbClone;
+    static TextView textView;
+    static Repository repository;
 
 
     @Override
@@ -47,13 +54,15 @@ public class MainActivity extends AppCompatActivity {
         }
         JodaTimeAndroid.init(this);
 
+        repository = new Repository(getApplication());
+
         organizationGenerator = new OrganizationGenerator(this);
         displayText = new SpannableStringBuilder();
 
         int numberOfTeamsInDivision = 5;
         int numberOfDivisions = 3;
         int countriesToInclude = 9;
-        Organization mlbClone = organizationGenerator.generateOrganization("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
+        mlbClone = organizationGenerator.generateOrganization("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
                 , numberOfDivisions, countriesToInclude, null);
 
         leagues = mlbClone.getLeagues();
@@ -85,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
         displayText = new SpannableStringBuilder();
 
-        TextView textView = findViewById(R.id.helloWorld);
+        textView = findViewById(R.id.helloWorld);
         Game nextGame = schedule.getGameList().get(gameToPlay);
 
         Team homeTeam = getTeamFromId(leagues, nextGame.getHomeTeamId());
@@ -99,13 +108,68 @@ public class MainActivity extends AppCompatActivity {
 
         displayText.append(getGameRecapString()).append("\n\n\n");
 
-       // displayText.delete(0,displayText.length()-2000);
+        displayText.delete(0,displayText.length()-500);
 
         // displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
 
-        textView.setText(displayText);
+        //displayText.append("Schedule : \n").append(schedule.toString()).append("\n\n\n");
+
+        displayText.append("BattingLines : \n").append(nextGame.getHomeBoxScore().getBattingLines().toString()).append("\n\n\n");
+
+
+
+        repository.insertOrganization(mlbClone);
+
+        List<Schedule> scheduleList = new ArrayList<>();
+
+        scheduleList.add(schedule);
+
+        mlbClone.setSchedules(scheduleList);
+
+        repository.insertAllSchedules(mlbClone.getSchedules());
+
+        repository.insertAllGames(mlbClone.getSchedules().get(0).getGameList());
+
+        repository.insertBoxScore(nextGame.getHomeBoxScore());
+
+        repository.insertAllBattingLines(nextGame.getHomeBoxScore().getBattingLines());
+
+        //displayText.append("Schedule from Database : \n").append(repository.getAllSchedules().toString()).append("\n\n\n");
+
+        displayText.append("Box Score ID Searched : ").append(nextGame.getHomeBoxScore().getBoxScoreId()).append("\n");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        BattingLinesAsyncTask battingLinesAsyncTask = (BattingLinesAsyncTask) new BattingLinesAsyncTask().execute(nextGame.getHomeBoxScore().getBoxScoreId());
+
+
+
 
     }
+
+
+    private static class BattingLinesAsyncTask extends AsyncTask<String, Void, List<BattingLine>> {
+
+        @Override
+        protected List<BattingLine> doInBackground(String... strings) {
+            String boxScoreId = strings[0];
+            return repository.getBattingLinesForBoxScore(boxScoreId);
+        }
+
+        @Override
+        protected void onPostExecute (List<BattingLine> result) {
+            displayText.append("BattingLines from Database : \n").append(result.toString()).append("\n\n\n");
+
+            textView.setText(displayText);
+
+            repository.deleteAll();
+        }
+    }
+
 
     private Team getTeamFromId(List<League> leagues, String teamId) {
         for (League league : leagues) {

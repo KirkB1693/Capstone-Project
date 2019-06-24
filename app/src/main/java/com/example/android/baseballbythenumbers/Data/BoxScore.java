@@ -6,9 +6,11 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -16,11 +18,12 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class BoxScore {
 
     @ColumnInfo(name = "game_id")
-    private int gameId;
+    private String gameId;
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "box_score_id")
-    private int boxScoreId;
+    private String boxScoreId;
 
     @Ignore
     List<BattingLine> battingLines;
@@ -28,25 +31,26 @@ public class BoxScore {
     @Ignore
     List<PitchingLine> pitchingLines;
 
-    public BoxScore (int gameId) {
+    public BoxScore (String gameId) {
         this.gameId = gameId;
         battingLines = new ArrayList<>();
         pitchingLines = new ArrayList<>();
+        boxScoreId = UUID.randomUUID().toString();
     }
 
-    public int getBoxScoreId() {
+    public String getBoxScoreId() {
         return boxScoreId;
     }
 
-    public void setBoxScoreId(int boxScoreId) {
+    public void setBoxScoreId(String boxScoreId) {
         this.boxScoreId = boxScoreId;
     }
 
-    public int getGameId() {
+    public String getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(String gameId) {
         this.gameId = gameId;
     }
 

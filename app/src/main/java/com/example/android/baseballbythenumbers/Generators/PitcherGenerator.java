@@ -167,7 +167,7 @@ public class PitcherGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generatePitchers(int teamId) {
+    public List<Player> generatePitchers(String teamId) {
         List<Player> starters = new ArrayList<>();
         List<Player> longRelievers = new ArrayList<>();
         List<Player> shortRelievers = new ArrayList<>();
@@ -181,7 +181,7 @@ public class PitcherGenerator {
         return starters;
     }
 
-    private List<Player> generateStarters(int teamId) {
+    private List<Player> generateStarters(String teamId) {
         List<Player> startersList = new ArrayList<>();
         for (int i = 0; i < startingPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -210,7 +210,7 @@ public class PitcherGenerator {
         return startersList;
     }
 
-    private List<Player> generateLongRelievers(int teamId) {
+    private List<Player> generateLongRelievers(String teamId) {
         List<Player> longRelieversList = new ArrayList<>();
             for (int i = 0; i < longReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -238,7 +238,7 @@ public class PitcherGenerator {
         return longRelieversList;
     }
 
-    private List<Player> generateShortRelievers(int teamId) {
+    private List<Player> generateShortRelievers(String teamId) {
         List<Player> shortRelieversList = new ArrayList<>();
         for (int i = 0; i < shortReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
@@ -506,13 +506,13 @@ public class PitcherGenerator {
                 stolenBasePct, infieldFlyBallPct, hitByPitchPct, battingAverageBallsInPlay, foulBallPct, stolenBaseRate, baseRunning, errorPct, stamina, 0);
     }
 
-    private List<PitchingStats> generatePitchingStats(int playerId) {
+    private List<PitchingStats> generatePitchingStats(String playerId) {
         List<PitchingStats> newPitchingStats = new ArrayList<>();
         newPitchingStats.add(0, new PitchingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newPitchingStats;
     }
 
-    private List<BattingStats> generateBattingStats(int playerId) {
+    private List<BattingStats> generateBattingStats(String playerId) {
         List<BattingStats> newBattingStats = new ArrayList<>();
         newBattingStats.add(0, new BattingStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newBattingStats;

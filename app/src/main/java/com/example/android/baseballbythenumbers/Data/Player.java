@@ -8,12 +8,14 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import timber.log.Timber;
 
@@ -34,10 +36,11 @@ import static com.example.android.baseballbythenumbers.Generators.PitcherGenerat
 @Entity (tableName = "players", foreignKeys = @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId", onDelete = CASCADE), indices = @Index(value = "teamId"))
 public class Player implements Parcelable
 {
-    @PrimaryKey (autoGenerate = true)
-    private int playerId;
+    @PrimaryKey
+    @NonNull
+    private String playerId;
 
-    private int teamId;
+    private String teamId;
 
     @SerializedName("firstName")
     @Expose
@@ -100,8 +103,8 @@ public class Player implements Parcelable
             ;
 
     protected Player(Parcel in) {
-        this.playerId = ((int) in.readValue((int.class.getClassLoader())));
-        this.teamId = ((int) in.readValue((int.class.getClassLoader())));
+        this.playerId = ((String) in.readValue((String.class.getClassLoader())));
+        this.teamId = ((String) in.readValue((String.class.getClassLoader())));
         this.firstName = ((String) in.readValue((String.class.getClassLoader())));
         this.middleName = ((String) in.readValue((String.class.getClassLoader())));
         this.lastName = ((String) in.readValue((String.class.getClassLoader())));
@@ -143,7 +146,8 @@ public class Player implements Parcelable
      */
     @Ignore
     public Player(String firstName, String middleName, String lastName, int primaryPosition, int alternatePositions, int age, String dateOfBirth, String hits,
-                  String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages, int teamId) {
+                  String throwingHand, List<BattingStats> battingStats, List<PitchingStats> pitchingStats, HittingPercentages hittingPercentages, PitchingPercentages pitchingPercentages,
+                  String teamId) {
         super();
         this.firstName = firstName;
         this.middleName = middleName;
@@ -159,6 +163,7 @@ public class Player implements Parcelable
         this.hittingPercentages = hittingPercentages;
         this.pitchingPercentages = pitchingPercentages;
         this.teamId = teamId;
+        this.playerId = UUID.randomUUID().toString();
     }
 
     public String getFirstName() {
@@ -265,19 +270,19 @@ public class Player implements Parcelable
         this.pitchingPercentages = pitchingPercentages;
     }
 
-    public int getTeamId() {
+    public String getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(String teamId) {
         this.teamId = teamId;
     }
 
-    public int getPlayerId() {
+    public String getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(int playerId) {
+    public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
 

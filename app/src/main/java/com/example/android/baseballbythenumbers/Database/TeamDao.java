@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.Database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -16,6 +17,9 @@ public interface TeamDao {
     @Insert
     void insert(Team team);
 
+    @Insert
+    void insertAll(List<Team> teamList);
+
     @Update
     void update(Team... teams);
 
@@ -23,7 +27,7 @@ public interface TeamDao {
     void delete(Team... teams);
 
     @Query("SELECT * FROM teams")
-    List<Team> getAllTeams();
+    LiveData<List<Team>> getAllTeams();
 
     @Query("SELECT * FROM teams WHERE divisionId=:divisionId")
     List<Team> findTeamsForDivision(final long divisionId);

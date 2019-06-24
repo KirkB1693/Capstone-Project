@@ -6,17 +6,22 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.UUID;
 
-@Entity (tableName = "organizations")
+import static com.example.android.baseballbythenumbers.Constants.TableNames.ORGANIZATION_TABLE_NAME;
+
+@Entity (tableName = ORGANIZATION_TABLE_NAME)
 public class Organization implements Parcelable
 {
-    @PrimaryKey (autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
     @SerializedName("organizationName")
     @Expose
@@ -32,6 +37,9 @@ public class Organization implements Parcelable
     @Expose
     @Ignore
     private List<League> leagues = null;
+
+    @Ignore
+    private List<Schedule> schedules = null;
     public final static Parcelable.Creator<Organization> CREATOR = new Creator<Organization>() {
 
 
@@ -47,10 +55,11 @@ public class Organization implements Parcelable
             ;
 
     protected Organization(Parcel in) {
-        this.id = ((int) in.readValue((int.class.getClassLoader())));
+        this.id = ((String) in.readValue((String.class.getClassLoader())));
         this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
         this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
+        in.readList(this.schedules, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
     }
 
     /**
@@ -67,11 +76,13 @@ public class Organization implements Parcelable
      * @param currentYear
      * @param levelName
      */
-    public Organization(String levelName, int currentYear, List<League> leagues) {
+    public Organization(String levelName, int currentYear, List<League> leagues, List<Schedule> schedules) {
         super();
         this.organizationName = levelName;
         this.currentYear = currentYear;
         this.leagues = leagues;
+        this.schedules = schedules;
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getOrganizationName() {
@@ -98,12 +109,23 @@ public class Organization implements Parcelable
         this.leagues = leagues;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        for (Schedule s: schedules) {
+            s.setOrganizationId(id);
+        }
+        this.schedules = schedules;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
@@ -111,6 +133,7 @@ public class Organization implements Parcelable
         dest.writeValue(organizationName);
         dest.writeValue(currentYear);
         dest.writeList(leagues);
+        dest.writeList(schedules);
     }
 
     public int describeContents() {

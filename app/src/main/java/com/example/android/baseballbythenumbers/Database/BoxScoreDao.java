@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.Database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -20,8 +21,9 @@ public interface BoxScoreDao {
 
         @Delete
         void delete(BoxScore... boxScores);
+
         @Query("SELECT * FROM box_scores")
-        List<BoxScore> getAllBoxScores();
+        LiveData<List<BoxScore>> getAllBoxScores();
 
         @Query("SELECT * FROM box_scores WHERE game_id=:gameId")
         List<BoxScore> findBoxScoresForGame(final int gameId);

@@ -7,18 +7,23 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "pitching_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId", unique = true))
 public class PitchingStats implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    private int pitchingStatsId;
 
-    private int playerId;
+    @PrimaryKey
+    @NonNull
+    private String pitchingStatsId;
+
+    private String playerId;
 
     @SerializedName("Year")
     @Expose
@@ -110,8 +115,8 @@ public class PitchingStats implements Parcelable {
     };
 
     protected PitchingStats(Parcel in) {
-        this.pitchingStatsId = ((int) in.readValue((int.class.getClassLoader())));
-        this.playerId = ((int) in.readValue((int.class.getClassLoader())));
+        this.pitchingStatsId = ((String) in.readValue((String.class.getClassLoader())));
+        this.playerId = ((String) in.readValue((String.class.getClassLoader())));
         this.year = ((int) in.readValue((int.class.getClassLoader())));
         this.wins = ((int) in.readValue((int.class.getClassLoader())));
         this.losses = ((int) in.readValue((int.class.getClassLoader())));
@@ -173,7 +178,7 @@ public class PitchingStats implements Parcelable {
     @Ignore
     public PitchingStats(int year, int wins, int losses, int games, int gamesStarted, int completeGames, int shutOuts, int saves, int holds, int blownSaves, float inningsPitched,
                          int totalBattersFaced, int hits, int runs, int earnedRuns, int homeRuns, int walks, int strikeOuts, int hitByPitch, int wildPitches, int balks, int groundBalls,
-                         int lineDrives, int flyBalls, int playerId) {
+                         int lineDrives, int flyBalls, String playerId) {
         super();
         this.year = year;
         this.wins = wins;
@@ -200,6 +205,7 @@ public class PitchingStats implements Parcelable {
         this.lineDrives = lineDrives;
         this.flyBalls = flyBalls;
         this.playerId = playerId;
+        this.pitchingStatsId = UUID.randomUUID().toString();
     }
 
     public int getYear() {
@@ -485,19 +491,19 @@ public class PitchingStats implements Parcelable {
         flyBalls ++;
     }
 
-    public int getPlayerId() {
+    public String getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(int playerId) {
+    public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
 
-    public int getPitchingStatsId() {
+    public String getPitchingStatsId() {
         return pitchingStatsId;
     }
 
-    public void setPitchingStatsId(int pitchingStatsId) {
+    public void setPitchingStatsId(String pitchingStatsId) {
         this.pitchingStatsId = pitchingStatsId;
     }
 

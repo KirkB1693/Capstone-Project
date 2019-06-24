@@ -6,18 +6,22 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "games", foreignKeys = @ForeignKey(entity = Schedule.class, parentColumns = "schedule_id", childColumns = "schedule_id", onDelete = CASCADE),indices = @Index(value = "schedule_id"))
 public class Game {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "game_id")
-    private int gameId;
+    private String gameId;
 
     @ColumnInfo(name = "schedule_id")
-    private int scheduleId;
+    private String scheduleId;
 
     private int day;
 
@@ -47,16 +51,16 @@ public class Game {
     @ColumnInfo(name = "visitor_box_score")
     private BoxScore visitorBoxScore;
 
-    public Game(int scheduleId) {
+    public Game(String scheduleId) {
         this.scheduleId = scheduleId;
-
+        this.gameId = UUID.randomUUID().toString();
     }
 
-    public int getGameId() {
+    public String getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(String gameId) {
         this.gameId = gameId;
     }
 
@@ -84,11 +88,11 @@ public class Game {
         this.homeScore = homeScore;
     }
 
-    public int getScheduleId() {
+    public String getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(int scheduleId) {
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
 

@@ -6,16 +6,24 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
-@Entity(tableName = "batting_line", foreignKeys = @ForeignKey(entity = BoxScore.class, parentColumns = "box_score_id", childColumns = "box_score_id"), indices = @Index(value = "box_score_id"))
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "batting_line", foreignKeys = @ForeignKey(entity = BoxScore.class, parentColumns = "box_score_id", childColumns = "box_score_id", onDelete = CASCADE), indices = @Index(value = "box_score_id"))
 public class BattingLine {
 
     @ColumnInfo(name = "box_score_id")
-    private int boxScoreId;
+    private String boxScoreId;
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "batting_line_id")
-    private int battingLineId;
+    private String battingLineId;
 
     @ColumnInfo(name = "position_in_batting_order")
     private int positionInBattingOrder;
@@ -56,19 +64,20 @@ public class BattingLine {
     }
 
     @Ignore
-    public BattingLine(int boxScoreId, int positionInBattingOrder, boolean substitute, int substituteNumber, String batterName){
+    public BattingLine(String boxScoreId, int positionInBattingOrder, boolean substitute, int substituteNumber, String batterName){
         this.boxScoreId = boxScoreId;
         this.positionInBattingOrder = positionInBattingOrder;
         this.substitute = substitute;
         this.substituteNumber = substituteNumber;
         this.batterName = batterName;
+        this.battingLineId = UUID.randomUUID().toString();
     }
 
-    public int getBoxScoreId() {
+    public String getBoxScoreId() {
         return boxScoreId;
     }
 
-    public void setBoxScoreId(int boxScoreId) {
+    public void setBoxScoreId(String boxScoreId) {
         this.boxScoreId = boxScoreId;
     }
 
@@ -108,11 +117,11 @@ public class BattingLine {
         atBats ++;
     }
 
-    public int getBattingLineId() {
+    public String getBattingLineId() {
         return battingLineId;
     }
 
-    public void setBattingLineId(int battingLineId) {
+    public void setBattingLineId(String battingLineId) {
         this.battingLineId = battingLineId;
     }
 
@@ -214,5 +223,11 @@ public class BattingLine {
 
     public void setSubstituteNumber(int substituteNumber) {
         this.substituteNumber = substituteNumber;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "Box Score Id : " + boxScoreId + ", \nPosition In Order : " + positionInBattingOrder + ", Name : " + batterName + "\n";
     }
 }

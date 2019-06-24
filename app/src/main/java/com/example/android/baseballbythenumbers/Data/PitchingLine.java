@@ -6,6 +6,9 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -13,11 +16,12 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class PitchingLine {
 
     @ColumnInfo(name = "box_score_id")
-    private int boxScoreId;
+    private String boxScoreId;
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "pitching_line_id")
-    private int pitchingLineId;
+    private String pitchingLineId;
 
     @ColumnInfo(name = "pitcher_number")
     private int pitcherNumber;
@@ -59,17 +63,18 @@ public class PitchingLine {
     public PitchingLine(){}
 
     @Ignore
-    public PitchingLine(int boxScoreId, int pitcherNumber, String pitcherName){
+    public PitchingLine(String boxScoreId, int pitcherNumber, String pitcherName){
         this.boxScoreId = boxScoreId;
         this.pitcherNumber = pitcherNumber;
         this.pitcherName = pitcherName;
+        this.pitchingLineId = UUID.randomUUID().toString();
     }
 
-    public int getBoxScoreId() {
+    public String getBoxScoreId() {
         return boxScoreId;
     }
 
-    public void setBoxScoreId(int boxScoreId) {
+    public void setBoxScoreId(String boxScoreId) {
         this.boxScoreId = boxScoreId;
     }
 
@@ -137,11 +142,11 @@ public class PitchingLine {
         this.pitcherNumber = pitcherNumber;
     }
 
-    public int getPitchingLineId() {
+    public String getPitchingLineId() {
         return pitchingLineId;
     }
 
-    public void setPitchingLineId(int pitchingLineId) {
+    public void setPitchingLineId(String pitchingLineId) {
         this.pitchingLineId = pitchingLineId;
     }
 

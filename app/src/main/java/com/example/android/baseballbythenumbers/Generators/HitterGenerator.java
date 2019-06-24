@@ -286,7 +286,7 @@ public class HitterGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generateHitters(int teamId) {
+    public List<Player> generateHitters(String teamId) {
 
         String leftHanded = context.getResources().getString(R.string.left_handed);
         String rightHanded = context.getResources().getString(R.string.right_handed);
@@ -312,7 +312,7 @@ public class HitterGenerator {
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CATCHER, FIRST_BASE + LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
             newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
+            newHitter.setPitchingStats(generatePitchingStats(newHitter.getPlayerId()));
             hitters.add(newHitter);
         }
 
@@ -658,13 +658,13 @@ public class HitterGenerator {
         return hitters;
     }
 
-    private List<PitchingStats> generatePitchingStats(int playerId) {
+    private List<PitchingStats> generatePitchingStats(String playerId) {
         List<PitchingStats> newPitchingStats = new ArrayList<>();
         newPitchingStats.add(0,new PitchingStats(0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, playerId));
         return newPitchingStats;
     }
 
-    private List<BattingStats> generateBattingStats(int playerId) {
+    private List<BattingStats> generateBattingStats(String playerId) {
         List<BattingStats> newBattingStats = new ArrayList<>();
         newBattingStats.add(0,new BattingStats(0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, playerId));
         return newBattingStats;

@@ -61,7 +61,7 @@ public class OrganizationGenerator {
             numberOfDivisions = DEFAULT_NUMBER_OF_DIVISIONS;
         }
 
-        Organization newOrganization = new Organization(organizationName, currentYear, null);
+        Organization newOrganization = new Organization(organizationName, currentYear, null, null);
 
         for (int i = 0; i < numberOfLeagues; i++) {
             if (useDH[i]) {

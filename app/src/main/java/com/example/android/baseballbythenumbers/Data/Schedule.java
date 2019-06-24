@@ -6,8 +6,10 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -15,11 +17,12 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Schedule {
 
     @ColumnInfo(name = "organization_id")
-    private int organizationId;
+    private String organizationId;
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "schedule_id")
-    private int scheduleId;
+    private String scheduleId;
 
     @Ignore
     private List<Game> gameList;
@@ -28,24 +31,25 @@ public class Schedule {
     }
 
     @Ignore
-    public Schedule(int organizationId, List<Game> games){
+    public Schedule(String organizationId, List<Game> games){
         this.organizationId = organizationId;
         this.gameList = games;
+        this.scheduleId = UUID.randomUUID().toString();
     }
 
-    public int getScheduleId() {
+    public String getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(int scheduleId) {
+    public void setScheduleId(String scheduleId) {
         this.scheduleId = scheduleId;
     }
 
-    public int getOrganizationId() {
+    public String getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(int organizationId) {
+    public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
     }
 
@@ -55,5 +59,11 @@ public class Schedule {
 
     public void setGameList(List<Game> gameList) {
         this.gameList = gameList;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "OrgId : " + organizationId + ", SchedId : " + scheduleId + "\n";
     }
 }

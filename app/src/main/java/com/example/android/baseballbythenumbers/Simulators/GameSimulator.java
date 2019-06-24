@@ -731,16 +731,12 @@ public class GameSimulator {
         if (isVisitorHitting) {
             if (homeScore > visitorScore) {
                 // save situation if 1) winning by three runs or less, 2) potential tying run is on base, at bat, or on deck
-                if ((homeScore - visitorScore <= 3) || (homeScore - visitorScore - countRunners() - 2 <= 0)) {
-                    return true;
-                }
+                return (homeScore - visitorScore <= 3) || (homeScore - visitorScore - countRunners() - 2 <= 0);
             }
         } else {
             if (visitorScore > homeScore) {
                 // save situation if 1) winning by three runs or less, 2) potential tying run is on base, at bat, or on deck
-                if ((visitorScore - homeScore <= 3) || (visitorScore - homeScore - countRunners() - 2 <= 0)) {
-                    return true;
-                }
+                return (visitorScore - homeScore <= 3) || (visitorScore - homeScore - countRunners() - 2 <= 0);
             }
         }
         return false;

@@ -7,6 +7,7 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -14,16 +15,18 @@ import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "divisions", foreignKeys = @ForeignKey(entity = League.class, parentColumns = "leagueId", childColumns = "leagueId", onDelete = CASCADE), indices = @Index(value = "leagueId"))
 public class Division implements Parcelable
 {
-    @PrimaryKey (autoGenerate = true)
-    private int divisionId;
+    @PrimaryKey
+    @NonNull
+    private String divisionId;
 
-    private int leagueId;
+    private String leagueId;
 
     @SerializedName("divisionName")
     @Expose
@@ -50,8 +53,8 @@ public class Division implements Parcelable
             ;
 
     protected Division(Parcel in) {
-        this.divisionId = ((int) in.readValue((int.class.getClassLoader())));
-        this.leagueId = ((int) in.readValue((int.class.getClassLoader())));
+        this.divisionId = ((String) in.readValue((String.class.getClassLoader())));
+        this.leagueId = ((String) in.readValue((String.class.getClassLoader())));
         this.divisionName = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.teams, (com.example.android.baseballbythenumbers.Data.Team.class.getClassLoader()));
     }
@@ -69,11 +72,12 @@ public class Division implements Parcelable
      * @param divisionName
      * @param leagueId
      */
-    public Division(String divisionName, List<Team> teams, int leagueId) {
+    public Division(String divisionName, List<Team> teams, String leagueId) {
         super();
         this.divisionName = divisionName;
         this.teams = teams;
         this.leagueId = leagueId;
+        this.divisionId = UUID.randomUUID().toString();
     }
 
     public String getDivisionName() {
@@ -92,19 +96,19 @@ public class Division implements Parcelable
         this.teams = teams;
     }
 
-    public int getLeagueId() {
+    public String getLeagueId() {
         return leagueId;
     }
 
-    public void setLeagueId(int leagueId) {
+    public void setLeagueId(String leagueId) {
         this.leagueId = leagueId;
     }
 
-    public int getDivisionId() {
+    public String getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(int divisionId) {
+    public void setDivisionId(String divisionId) {
         this.divisionId = divisionId;
     }
 

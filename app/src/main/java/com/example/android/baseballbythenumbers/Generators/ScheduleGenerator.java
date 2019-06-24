@@ -24,7 +24,7 @@ public class ScheduleGenerator {
         return newSchedule;
     }
 
-    private List<Game> generateListOfGames(int seriesLength, boolean interLeaguePlay, int scheduleId) {
+    private List<Game> generateListOfGames(int seriesLength, boolean interLeaguePlay, String scheduleId) {
         List<Team> teamList;
         List<Game> gameList = new ArrayList<>();
         if (interLeaguePlay) {
@@ -47,7 +47,7 @@ public class ScheduleGenerator {
         return gameList;
     }
 
-    private List<Game> gameListWithEvenNumberOfTeams(int seriesLength, List<Team> teamList, int scheduleId) {
+    private List<Game> gameListWithEvenNumberOfTeams(int seriesLength, List<Team> teamList, String scheduleId) {
         List<Game> gameList = new ArrayList<>();
         List<Team> homeList = new ArrayList<>();
         List<Team> visitorList = new ArrayList<>();
@@ -98,7 +98,7 @@ public class ScheduleGenerator {
         visitorList.add(teamToMoveFromHomeList);
     }
 
-    private Game createNewGame(int scheduleId, int day, String homeTeamId, String visitingTeamId) {
+    private Game createNewGame(String scheduleId, int day, String homeTeamId, String visitingTeamId) {
         Game newGame = new Game(scheduleId);
         newGame.setDay(day);
         newGame.setHomeTeamId(homeTeamId);
@@ -106,7 +106,7 @@ public class ScheduleGenerator {
         return newGame;
     }
 
-    private List<Game> gameListWithOddNumberOfTeams(int seriesLength, List<Team> teamList, int scheduleId) {
+    private List<Game> gameListWithOddNumberOfTeams(int seriesLength, List<Team> teamList, String scheduleId) {
         Team nullTeam = null;
         teamList.add(nullTeam);
         return gameListWithEvenNumberOfTeams(seriesLength, teamList, scheduleId);

@@ -20,7 +20,7 @@ public class DivisionGenerator {
     }
 
     public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup, int numberOfDivisions, int countriesToInclude,
-                                     CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, int leagueId) {
+                                     CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, String leagueId) {
         Division newDivision = new Division();
         newDivision.setDivisionName(divisionName);
         int[] teamMakeupToUse = DEFAULT_TEAM_MAKEUP;
