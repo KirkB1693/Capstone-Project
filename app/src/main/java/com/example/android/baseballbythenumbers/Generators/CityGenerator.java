@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
@@ -118,6 +119,20 @@ public class CityGenerator {
             }
         }
         return countriesList;
+    }
+
+    public List<String> getAllCityNames() {
+        if (numberOfDivisions == 0) {
+            List<String> citiesList = new ArrayList<>();
+            for (TreeMap.Entry entry: allCityNames.entrySet()) {
+                citiesList.add((String) entry.getValue());
+            }
+            Collections.sort(citiesList);
+            return citiesList;
+        } else {
+            return null;
+        }
+
     }
 
     /**

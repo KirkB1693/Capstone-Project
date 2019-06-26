@@ -1,36 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-    <TextView
-        android:id="@+id/helloWorld"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        />
-    </android.support.v4.widget.NestedScrollView>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Simulate Another Game"
-        android:onClick="simGame"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    xmlns:tools="http://schemas.android.com/tools">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cityIV" />
+
+        <ImageView
+            android:id="@+id/cityIV"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/picture_of_preferred_city_content_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ballpark_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/simulateGameButton">
+
+            <TextView
+                android:id="@+id/helloWorld"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!" />
+        </android.support.v4.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/simulateGameButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:onClick="simGame"
+            android:text="@string/simulate_game_button_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+
+        <TextView
+            android:id="@+id/cityNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:contentDescription="@string/city_name_for_preferred_team_content_desc"
+            android:text="City Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/cityIV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cityIV"
+            tools:text="City Name" />
+
+        <TextView
+            android:id="@+id/nextGameLabelTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/next_game_label_content_desc"
+            android:text="@string/next_game_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
+            app:layout_constraintTop_toBottomOf="@+id/cityIV" />
+
+        <TextView
+            android:id="@+id/homeTeamNameTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
+            app:layout_constraintTop_toBottomOf="@+id/nextGameLabelTV"
+            tools:text="Home Team Name" />
+
+        <TextView
+            android:id="@+id/visitingTeamNameTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:clickable="false"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="@+id/nestedScrollView"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/homeTeamNameTV"
+            tools:text="Visiting Team Name" />
+
+        <TextView
+            android:id="@+id/visitingTeamWLTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="@+id/visitingTeamNameTV"
+            app:layout_constraintStart_toStartOf="@+id/visitingTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/visitingTeamNameTV"
+            tools:text="0 - 0" />
+
+        <TextView
+            android:id="@+id/homeTeamWLTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
+            app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/homeTeamNameTV"
+            tools:text="0 - 0" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/homeTeamLogoIV"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/no_image_available"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
+            app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@id/homeTeamWLTV" />
+
+        <ImageView
+            android:id="@+id/visitingTeamLogoIV"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/no_image_available"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
+            app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@id/visitingTeamWLTV" />
+
+        <TextView
+            android:id="@+id/homeStarterTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
+            app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/homeTeamLogoIV"
+            tools:text="Home Starting Pitcher" />
+
+        <TextView
+            android:id="@+id/visitingStarterTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
+            app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/visitingTeamLogoIV"
+            tools:text="Visiting Starting Pitcher" />
+
+        <TextView
+            android:id="@+id/homeStarterStatsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
+            app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@+id/homeStarterTV"
+            tools:text="ERA : 3.14  WHIP 1.25" />
+
+        <TextView
+            android:id="@+id/visitingStarterStatsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
+            app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
+            app:layout_constraintTop_toBottomOf="@id/visitingStarterTV"
+            tools:text="ERA : 3.14  WHIP 1.25" />
+
+        <TextView
+            android:id="@+id/vsLabelTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/vs_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toBottomOf="@+id/homeStarterStatsTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/homeTeamNameTV" />
+
+        <View
+            android:id="@+id/seperatorV"
+            style="@style/Divider"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeStarterStatsTV" />
+
+        <Button
+            android:id="@+id/editLineupButton"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/edit_lineup_button_label"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seperatorV" />
+
+        <Button
+            android:id="@+id/coachSetsLineupButton"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/have_coach_set_lineup_button_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/editLineupButton" />
+
+        <Button
+            android:id="@+id/startGameButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/start_game_button_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coachSetsLineupButton" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

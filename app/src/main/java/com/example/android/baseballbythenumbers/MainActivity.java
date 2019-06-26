@@ -1,5 +1,7 @@
 package com.example.android.baseballbythenumbers;
 
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
+import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -26,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import timber.log.Timber;
 
@@ -42,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
     Organization mlbClone;
     static TextView textView;
     static Repository repository;
+    static ActivityMainBinding mainBinding;
+    static boolean orgInDatabase;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -55,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
         JodaTimeAndroid.init(this);
 
         repository = new Repository(getApplication());
+
+        mainBinding.progressBar.setVisibility(View.VISIBLE);
+
+        if (!isOrganizationCreated()) {
+            mainBinding.progressBar.setVisibility(View.INVISIBLE);
+            // Create a new League...
+            mainBinding.helloWorld.setText("Database not created!!!");
+            // Go to NewLeagueSetupActivity
+            Intent intent = new Intent(this, NewLeagueSetupActivity.class);
+            this.startActivity(intent);
+        } else {
+            mainBinding.progressBar.setVisibility(View.INVISIBLE);
+            mainBinding.helloWorld.setText("Database created??");
+        }
 
         organizationGenerator = new OrganizationGenerator(this);
         displayText = new SpannableStringBuilder();
@@ -83,7 +104,42 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }*/
-        simGame(null);
+        // simGame(null);
+    }
+
+    private boolean isOrganizationCreated() {
+        final CountDownLatch taskcomplete = new CountDownLatch(1);
+        CheckDatabaseAsyncTask task = new CheckDatabaseAsyncTask(taskcomplete);
+        task.execute();
+        try {
+            taskcomplete.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return orgInDatabase;
+    }
+
+
+    private static class CheckDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
+        private CountDownLatch latch;
+
+        public CheckDatabaseAsyncTask(CountDownLatch latch){
+            this.latch = latch;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Organization[] anyOrganization = repository.getAnyOrganization();
+            if (anyOrganization.length > 0) {
+                orgInDatabase = true;
+                latch.countDown();
+            } else {
+                orgInDatabase = false;
+                latch.countDown();
+            }
+            return null;
+        }
+
     }
 
     public void simGame(View view) {

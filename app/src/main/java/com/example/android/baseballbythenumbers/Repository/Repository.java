@@ -2,6 +2,7 @@ package com.example.android.baseballbythenumbers.Repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
 import com.example.android.baseballbythenumbers.Data.BattingLine;
@@ -36,6 +37,7 @@ public class Repository {
 
     private BattingLineDao mBattingLineDao;
     private LiveData<List<BattingLine>> mBattingLines;
+    private MutableLiveData<List<BattingLine>> mBattingLineSearchResults;
 
     private BattingStatsDao mBattingStatsDao;
     private LiveData<List<BattingStats>> mBattingStats;
