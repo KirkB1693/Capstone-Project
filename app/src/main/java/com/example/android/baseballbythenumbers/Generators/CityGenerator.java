@@ -321,4 +321,40 @@ public class CityGenerator {
             }
         }
     }
+
+    public boolean cityPossibleInDivision(String divisionName, String userCity) {
+        switch (numberOfDivisions) {
+            case 0:
+                return (allCityNames.containsValue(userCity));
+            case 1:
+                return (allCityNames.containsValue(userCity));
+            case 2:
+                if (divisionName.equals(WEST)) {
+                    return westCityNames.containsValue(userCity);
+                } else {
+                    return eastCityNames.containsValue(userCity);
+                }
+            case 3:
+                if (divisionName.equals(WEST)) {
+                    return westCityNames.containsValue(userCity);
+                } else if (divisionName.equals(CENTRAL)) {
+                    return centralCityNames.containsValue(userCity);
+                } else {
+                    return eastCityNames.containsValue(userCity);
+                }
+
+            case 4:
+                if (divisionName.equals(WEST)) {
+                    return westCityNames.containsValue(userCity);
+                } else if (divisionName.equals(NORTH)) {
+                    return northCityNames.containsValue(userCity);
+                } else if (divisionName.equals(SOUTH)) {
+                    return southCityNames.containsValue(userCity);
+                } else {
+                    return eastCityNames.containsValue(userCity);
+                }
+            default:
+                return allCityNames.containsValue(userCity);
+        }
+    }
 }

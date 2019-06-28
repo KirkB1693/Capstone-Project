@@ -1,6 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.HittingPercentages;
@@ -286,7 +287,7 @@ public class HitterGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generateHitters(String teamId) {
+    public List<Player> generateHitters(String teamId, ProgressBar progressBar) {
 
         String leftHanded = context.getResources().getString(R.string.left_handed);
         String rightHanded = context.getResources().getString(R.string.right_handed);
@@ -311,9 +312,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CATCHER, FIRST_BASE + LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats(generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < firstBasemen; i++) {
@@ -349,9 +348,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), FIRST_BASE,  LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < secondBasemen; i++) {
@@ -371,9 +368,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SECOND_BASE, FIRST_BASE + SHORTSTOP + THIRD_BASE + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < thirdBasemen; i++) {
@@ -393,9 +388,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), THIRD_BASE, FIRST_BASE + SECOND_BASE + SHORTSTOP + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < shortstops; i++) {
@@ -415,9 +408,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORTSTOP, SECOND_BASE + THIRD_BASE + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < leftField; i++) {
@@ -453,9 +444,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LEFT_FIELD, FIRST_BASE + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < centerField; i++) {
@@ -491,9 +480,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CENTER_FIELD, FIRST_BASE + LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < rightField; i++) {
@@ -529,9 +516,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), RIGHT_FIELD, FIRST_BASE + LEFT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < utilityInfield; i++) {
@@ -551,9 +536,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SECOND_BASE, FIRST_BASE + THIRD_BASE + SHORTSTOP + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < utilityOutfield; i++) {
@@ -589,9 +572,7 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), CENTER_FIELD, FIRST_BASE +LEFT_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < utility; i++) {
@@ -612,9 +593,7 @@ public class HitterGenerator {
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORTSTOP, CATCHER + FIRST_BASE + SECOND_BASE +
                     THIRD_BASE + LEFT_FIELD + CENTER_FIELD + RIGHT_FIELD + DESIGNATED_HITTER,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(), teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats( generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         for (int i = 0; i < designatedHitter; i++) {
@@ -650,12 +629,19 @@ public class HitterGenerator {
 
             Player newHitter = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), DESIGNATED_HITTER, FIRST_BASE + LEFT_FIELD,
                     age, birthdate, hittingSide, throwingHand, null, null, generateHittingPercentages(), generatePitchingPercentages(),teamId);
-            newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
-            newHitter.setPitchingStats(generatePitchingStats(newHitter.getPlayerId()));
-            hitters.add(newHitter);
+            generateStatsAndUpdateProgress(hitters, progressBar, newHitter);
         }
 
         return hitters;
+    }
+
+    private void generateStatsAndUpdateProgress(List<Player> hitters, ProgressBar progressBar, Player newHitter) {
+        newHitter.setBattingStats(generateBattingStats(newHitter.getPlayerId()));
+        newHitter.setPitchingStats(generatePitchingStats(newHitter.getPlayerId()));
+        hitters.add(newHitter);
+        if (progressBar != null) {
+            progressBar.setProgress(progressBar.getProgress() + 1);
+        }
     }
 
     private List<PitchingStats> generatePitchingStats(String playerId) {

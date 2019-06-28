@@ -1,6 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.League;
@@ -25,8 +26,8 @@ public class LeagueGenerator {
         this.context = context;
     }
 
-    public League generateLeague(String leagueName, boolean useDH, int divisionSize, int numberOfDivisions, int countriesToInclude,
-                                 int[] teamMakeup, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, String orgId) {
+    public League generateLeague(String leagueName, boolean useDH, int divisionSize, int numberOfDivisions,
+                                 int[] teamMakeup, CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, String orgId, String userTeamName, String userTeamCity, ProgressBar progressBar) {
         List<Division> divisions = new ArrayList<>();
         DivisionGenerator divisionGenerator = new DivisionGenerator(context);
 
@@ -38,29 +39,29 @@ public class LeagueGenerator {
 
         switch (numberOfDivisions) {
             case 0:
-                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 1:
-                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 2:
-                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 3:
-                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(CENTRAL, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(CENTRAL, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 4:
-                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(NORTH, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(SOUTH, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
-                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(NORTH, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(SOUTH, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(EAST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             default:
                 for (int i = 0; i < divisionSize; i++) {
-                    divisions.add(divisionGenerator.generateDivision(String.valueOf(i), useDH, divisionSize, teamMakeup, numberOfDivisions, countriesToInclude, cityGenerator, teamNameGenerator, newLeague.getLeagueId()));
+                    divisions.add(divisionGenerator.generateDivision(String.valueOf(i), useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 }
                 break;
         }

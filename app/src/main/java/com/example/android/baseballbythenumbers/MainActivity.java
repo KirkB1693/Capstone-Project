@@ -17,7 +17,6 @@ import com.example.android.baseballbythenumbers.Data.Organization;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
-import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             mainBinding.helloWorld.setText("Database created??");
         }
 
-        organizationGenerator = new OrganizationGenerator(this);
+/*        organizationGenerator = new OrganizationGenerator(this);
         displayText = new SpannableStringBuilder();
 
         int numberOfTeamsInDivision = 5;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         ScheduleGenerator scheduleGenerator = new ScheduleGenerator(mlbClone);
         schedule = scheduleGenerator.generateSchedule(1, true);
-        gameToPlay = schedule.getGameList().size();
+        gameToPlay = schedule.getGameList().size();*/
         /*
         for (League league : leagues) {
             displayText.append("\n\n").append(league.getLeagueName()).append(" League : \n");

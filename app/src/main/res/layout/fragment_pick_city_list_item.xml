@@ -5,9 +5,7 @@
         android:id="@+id/city_list_item_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="@dimen/text_margin">
+        android:layout_marginTop="@dimen/text_margin">
 
         <TextView
             android:id="@+id/city_List_item_tv"

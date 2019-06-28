@@ -1,5 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
+import android.widget.ProgressBar;
+
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
@@ -8,17 +10,22 @@ import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScheduleGenerator {
 
     private Organization organization;
+    private ProgressBar progressBar;
+    private int progress;
 
     public ScheduleGenerator(Organization organization){
         this.organization = organization;
     }
 
-    public Schedule generateSchedule(int seriesLength, boolean interLeaguePlay){
+    public Schedule generateSchedule(int seriesLength, boolean interLeaguePlay, ProgressBar generateOrgProgressbar){
+        progressBar = generateOrgProgressbar;
+        progress = progressBar.getProgress();
         Schedule newSchedule = new Schedule(organization.getId(), null);
         newSchedule.setGameList(generateListOfGames(seriesLength, interLeaguePlay, newSchedule.getScheduleId()));
         return newSchedule;
@@ -44,6 +51,7 @@ public class ScheduleGenerator {
                 }
             }
         }
+        Collections.sort(gameList);
         return gameList;
     }
 
@@ -60,6 +68,10 @@ public class ScheduleGenerator {
             for (int j = 0; j < homeList.size(); j++) {
                 if (homeList.get(j) != null && visitorList.get(j) != null) {
                     gameList.add(createNewGame(scheduleId, i, homeList.get(j).getTeamName(), visitorList.get(j).getTeamName()));
+                    progress++;
+                    if (progressBar != null) {
+                        progressBar.setProgress(progress);
+                    }
                 }
             }
             rotateTeams(homeList, visitorList);
@@ -67,6 +79,10 @@ public class ScheduleGenerator {
         List<Game> reverseGameList = new ArrayList<>();
         for (Game game: gameList) {
             reverseGameList.add(createNewGame(scheduleId, (game.getDay()+teamList.size()), game.getVisitingTeamId(), game.getHomeTeamId()));
+            progress++;
+            if (progressBar != null) {
+                progressBar.setProgress(progress);
+            }
         }
         gameList.addAll(reverseGameList);
         if (seriesLength > 1) {
@@ -80,13 +96,14 @@ public class ScheduleGenerator {
         for (int i = 0; i < gameList.size() ; i++) {
             gameList.get(i).setDay(gameList.get(i).getDay()*seriesLength);  // change all existing game days by multiplying by series length so there are empty days to add games in.
             for (int j = 1; j < seriesLength; j++) {
-                gamesToAdd.add(gameList.get(i));   // copy the game from the list at i position
-                gamesToAdd.get(gamesToAdd.size()-1).setDay(gamesToAdd.get(gamesToAdd.size()-1).getDay() + j);   //change the day on the last game copied (i.e. last added to the list)
+                gamesToAdd.add(createNewGame(gameList.get(i).getScheduleId(),gameList.get(i).getDay() + j, gameList.get(i).getHomeTeamId(), gameList.get(i).getVisitingTeamId()));   // copy the game from the list at i position
+                progress++;
+                if (progressBar != null) {
+                    progressBar.setProgress(progress);
+                }
             }
-            gameList.addAll(gamesToAdd);  // add all the copied games with adjusted dates to the list
-            gamesToAdd = new ArrayList<>();
         }
-
+        gameList.addAll(gamesToAdd);  // add all the copied games with adjusted dates to the list
     }
 
     private void rotateTeams(List<Team> homeList, List<Team> visitorList) {

@@ -4,37 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/create_league_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".NewLeagueSetupActivity"
-        android:background="#E8EAF6">
+        android:layout_height="wrap_content"
+        tools:context=".CreateOrganizationFragment">
 
         <TextView
-            android:id="@+id/newLeagueSetupLabel"
+            android:id="@+id/org_generator_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="New League Setup"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:text="Generating Players..."
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/fragmentPlaceholder"
-            android:name="com.example.android.baseballbythenumbers.PickCountriesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ProgressBar
+            android:id="@+id/generate_org_progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newLeagueSetupLabel"
-            app:layout_constraintVertical_bias="0.30" />
+            app:layout_constraintTop_toBottomOf="@+id/org_generator_tv" />
     </android.support.constraint.ConstraintLayout>
 </layout>

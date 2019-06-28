@@ -1,6 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.League;
 import com.example.android.baseballbythenumbers.Data.Organization;
@@ -28,51 +29,58 @@ public class OrganizationGenerator {
         this.context = context;
     }
 
-    public Organization generateOrganization(String organizationName, int currentYear, int numberOfLeagues, String[] leagueNames, boolean[] useDH, int divisionSize, int numberOfDivisions, int countriesToInclude, int[] teamMakeup) {
+    public Organization generateOrganization(String organizationName, int currentYear, int numberOfLeagues, List<String> leagueNames, List<Boolean> useDH, int numOfTeamsPerDivision,
+                                             int numberOfDivisions, int countriesToInclude, int[] teamMakeup, String userTeamName, String userTeamCity, ProgressBar progressBar) {
         List<League> leagues = new ArrayList<>();
         LeagueGenerator leagueGenerator = new LeagueGenerator(context);
 
-
         TeamNameGenerator teamNameGenerator = new TeamNameGenerator(context);
+        teamNameGenerator.removeUserTeamNameFromList(userTeamName);  // Makes sure that another team doesn't have the same name as the user picked
+        teamNameGenerator.addUserTeamNameToList(userTeamName);      // Adds the name where it won't be picked
         CityGenerator cityGenerator = new CityGenerator(context, numberOfDivisions, countriesToInclude);
 
         if (numberOfLeagues < 1 || numberOfLeagues > 4) {
             numberOfLeagues = DEFAULT_LEAGUES;
         }
 
-        if (useDH == null) {
-            useDH = new boolean[numberOfLeagues];
-        }
-        if (useDH.length != numberOfLeagues) {
-            useDH = new boolean[numberOfLeagues];
-        }
-
-        if (leagueNames == null) {
-            leagueNames = new String[numberOfLeagues];
-            for (int i = 0; i < numberOfLeagues; i++) {
-                leagueNames[i] = DEFAULT_LEAGUE_NAME + (i + 1);
+        if (useDH.isEmpty() || useDH.size() != numberOfLeagues) {
+            for (int j = 0; j < numberOfLeagues; j++) {
+                if (useDH.get(j) == null) {
+                    useDH.add(j, false);
+                }
             }
         }
 
-        if (divisionSize < 0) {
-            divisionSize = DEFAULT_DIVISION_SIZE;
+        if (leagueNames.isEmpty()) {
+            for (int i = 0; i < numberOfLeagues; i++) {
+                leagueNames.add(DEFAULT_LEAGUE_NAME + (i + 1));
+            }
         }
-        if (numberOfDivisions < 0) {
+
+        if (numOfTeamsPerDivision < 3 || numOfTeamsPerDivision > 8) {
+            numOfTeamsPerDivision = DEFAULT_DIVISION_SIZE;
+        }
+        if (numberOfDivisions < 0 || numberOfDivisions > 4) {
             numberOfDivisions = DEFAULT_NUMBER_OF_DIVISIONS;
         }
+
+
+
 
         Organization newOrganization = new Organization(organizationName, currentYear, null, null);
 
         for (int i = 0; i < numberOfLeagues; i++) {
-            if (useDH[i]) {
+            if (useDH.get(i)) {
                 teamMakeup = DEFAULT_TEAM_MAKEUP_WITH_DH;
             } else {
                 teamMakeup = DEFAULT_TEAM_MAKEUP_WITHOUT_DH;
             }
-            if (i < leagueNames.length) {
-                leagues.add(leagueGenerator.generateLeague(leagueNames[i], useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator, newOrganization.getId()));
+            if (i < leagueNames.size()) {
+                leagues.add(leagueGenerator.generateLeague(leagueNames.get(i), useDH.get(i), numOfTeamsPerDivision, numberOfDivisions, teamMakeup,
+                        cityGenerator, teamNameGenerator, newOrganization.getId(), userTeamName, userTeamCity, progressBar));
             } else {
-                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME+(i+1), useDH[i], divisionSize, numberOfDivisions, countriesToInclude, teamMakeup, cityGenerator, teamNameGenerator, newOrganization.getId()));
+                leagues.add(leagueGenerator.generateLeague(DEFAULT_LEAGUE_NAME + (i + 1), useDH.get(i), numOfTeamsPerDivision, numberOfDivisions,
+                        teamMakeup, cityGenerator, teamNameGenerator, newOrganization.getId(), userTeamName, userTeamCity, progressBar));
             }
 
         }
@@ -80,5 +88,9 @@ public class OrganizationGenerator {
         newOrganization.setLeagues(leagues);
 
         return newOrganization;
+    }
+
+    public interface buildProgressStatus{
+        void onProgressUpdate(int progressStatus);
     }
 }

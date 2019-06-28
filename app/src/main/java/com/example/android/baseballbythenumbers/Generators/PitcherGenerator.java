@@ -1,13 +1,14 @@
 package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.HittingPercentages;
+import com.example.android.baseballbythenumbers.Data.Name;
 import com.example.android.baseballbythenumbers.Data.PitchingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Name;
 import com.example.android.baseballbythenumbers.R;
 
 import org.joda.time.DateTime;
@@ -155,6 +156,8 @@ public class PitcherGenerator {
 
     private String rightHanded;
 
+    private ProgressBar progressBar;
+
 
     public PitcherGenerator(Context context, NameGenerator nameGenerator, int startingPitchers, int longReliefPitchers, int shortReliefPitchers) {
         this.startingPitchers = startingPitchers;
@@ -167,10 +170,11 @@ public class PitcherGenerator {
         this.random = new Random();
     }
 
-    public List<Player> generatePitchers(String teamId) {
+    public List<Player> generatePitchers(String teamId, ProgressBar progressBar) {
         List<Player> starters = new ArrayList<>();
         List<Player> longRelievers = new ArrayList<>();
         List<Player> shortRelievers = new ArrayList<>();
+        this.progressBar = progressBar;
 
         starters = generateStarters(teamId);
         longRelievers = generateLongRelievers(teamId);
@@ -203,8 +207,7 @@ public class PitcherGenerator {
 
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), STARTING_PITCHER, LONG_RELIEVER + SHORT_RELEIVER,
                     age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(STARTING_PITCHER), teamId);
-            newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
-            newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
+            generateStatsAndUpdateProgress(newPitcher);
             startersList.add(newPitcher);
         }
         return startersList;
@@ -212,7 +215,7 @@ public class PitcherGenerator {
 
     private List<Player> generateLongRelievers(String teamId) {
         List<Player> longRelieversList = new ArrayList<>();
-            for (int i = 0; i < longReliefPitchers; i++) {
+        for (int i = 0; i < longReliefPitchers; i++) {
             Name newName = nameGenerator.generateName();
             double trueAge = ((random.nextGaussian() * PITCHER_AGE_STD_DEV) + PITCHER_AGE_MEAN);
             int age = checkBounds((int) trueAge, PITCHER_AGE_MIN, PITCHER_AGE_MAX);
@@ -231,8 +234,7 @@ public class PitcherGenerator {
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), LONG_RELIEVER, STARTING_PITCHER + SHORT_RELEIVER,
                     age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(LONG_RELIEVER), teamId);
-                newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
-                newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
+            generateStatsAndUpdateProgress(newPitcher);
             longRelieversList.add(newPitcher);
         }
         return longRelieversList;
@@ -259,11 +261,18 @@ public class PitcherGenerator {
             String hittingSide = throwingSide;
             Player newPitcher = new Player(newName.getFirstName(), newName.getMiddleName(), newName.getLastName(), SHORT_RELEIVER, LONG_RELIEVER,
                     age, birthdate, hittingSide, throwingSide, null, null, generateHittingPercentages(), generatePitchingPercentages(SHORT_RELEIVER), teamId);
-            newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
-            newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
+            generateStatsAndUpdateProgress(newPitcher);
             shortRelieversList.add(newPitcher);
         }
         return shortRelieversList;
+    }
+
+    private void generateStatsAndUpdateProgress(Player newPitcher) {
+        newPitcher.setBattingStats(generateBattingStats(newPitcher.getPlayerId()));
+        newPitcher.setPitchingStats(generatePitchingStats(newPitcher.getPlayerId()));
+        if (progressBar != null) {
+            progressBar.setProgress(progressBar.getProgress() + 1);
+        }
     }
 
     private String getFormattedBirthdate(double trueAge) {
@@ -449,7 +458,7 @@ public class PitcherGenerator {
         }
         int medPct = getRandomNormalizedPercentage(PITCHER_BATTING_MED_HIT_PCT_STD_DEV, PITCHER_BATTING_MED_HIT_PCT_MEAN, PITCHER_BATTING_MED_HIT_PCT_MIN, medPctMax);
 
-        int homeRunPct = (((((flyBallPct) * hardPct) / ONE_HUNDRED_PERCENT) * 3) + (lineDrivePct * hardPct)/ONE_HUNDRED_PERCENT)/4 - 250;
+        int homeRunPct = (((((flyBallPct) * hardPct) / ONE_HUNDRED_PERCENT) * 3) + (lineDrivePct * hardPct) / ONE_HUNDRED_PERCENT) / 4 - 250;
         homeRunPct = checkBounds(homeRunPct, PITCHER_BATTING_HOME_RUN_PCT_MIN, PITCHER_BATTING_HOME_RUN_PCT_MAX);
 
         int speed = getRandomNormalizedPercentage(PITCHER_BATTING_SPEED_STD_DEV, PITCHER_BATTING_SPEED_MEAN, PITCHER_BATTING_SPEED_MIN, PITCHER_BATTING_SPEED_MAX);

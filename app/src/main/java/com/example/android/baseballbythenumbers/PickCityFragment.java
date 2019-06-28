@@ -23,9 +23,10 @@ import java.util.List;
 public class PickCityFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String ARG_COUNTRIES = "countries_picked";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private static int countries;
+    private int mCountries;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,8 +40,8 @@ public class PickCityFragment extends Fragment {
         PickCityFragment fragment = new PickCityFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putInt(ARG_COUNTRIES, countriesPicked);
         fragment.setArguments(args);
-        countries = countriesPicked;
         return fragment;
     }
 
@@ -50,6 +51,7 @@ public class PickCityFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mCountries = getArguments().getInt(ARG_COUNTRIES);
         }
     }
 
@@ -58,7 +60,7 @@ public class PickCityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pick_city_list, container, false);
 
-        CityGenerator cityGenerator = new CityGenerator(view.getContext(), 0, countries);
+        CityGenerator cityGenerator = new CityGenerator(view.getContext(), 0, mCountries);
         List<String> cities = cityGenerator.getAllCityNames();
         // Set the adapter
         if (view instanceof RecyclerView) {

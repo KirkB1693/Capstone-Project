@@ -1,6 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
@@ -71,7 +72,7 @@ public class TeamGenerator {
     }
 
 
-    public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget, String divisionId) {
+    public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget, String divisionId, ProgressBar progressBar) {
         Team newTeam = new Team();
 
         newTeam.setTeamName(teamName);
@@ -80,9 +81,9 @@ public class TeamGenerator {
         newTeam.setTeamBudget(teamBudget);
         newTeam.setDivisionId(divisionId);
 
-        List<Player> pitchers = generatePitchers(newTeam.getTeamId());
+        List<Player> pitchers = generatePitchers(newTeam.getTeamId(), progressBar);
 
-        List<Player> hitters = generateHitters(newTeam.getTeamId());
+        List<Player> hitters = generateHitters(newTeam.getTeamId(), progressBar);
 
         List<Player> teamRoster = new ArrayList<>();
         teamRoster.addAll(pitchers);
@@ -93,11 +94,11 @@ public class TeamGenerator {
         return newTeam;
     }
 
-    private List<Player> generateHitters(String teamId) {
-        return hitterGenerator.generateHitters(teamId);
+    private List<Player> generateHitters(String teamId, ProgressBar progressBar) {
+        return hitterGenerator.generateHitters(teamId, progressBar);
     }
 
-    private List<Player> generatePitchers(String teamId) {
-        return pitcherGenerator.generatePitchers(teamId);
+    private List<Player> generatePitchers(String teamId, ProgressBar progressBar) {
+        return pitcherGenerator.generatePitchers(teamId, progressBar);
     }
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "games", foreignKeys = @ForeignKey(entity = Schedule.class, parentColumns = "schedule_id", childColumns = "schedule_id", onDelete = CASCADE),indices = @Index(value = "schedule_id"))
-public class Game {
+public class Game implements Comparable<Game> {
 
     @PrimaryKey
     @NonNull
@@ -142,5 +142,17 @@ public class Game {
 
     public void setVisitorBoxScore(BoxScore visitorBoxScore) {
         this.visitorBoxScore = visitorBoxScore;
+    }
+
+
+    @Override
+    public int compareTo(Game game) {
+        if (day > game.day) {
+            return 1;
+        } else if (day < game.day) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +44,13 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         pickCountriesBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pick_countries,container, false);
-        View view = pickCountriesBinding.getRoot();
+        return pickCountriesBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         pickCountriesBinding.doneWithCountriesButton.setOnClickListener(this);
-        return view;
     }
 
     public void onDoneWithCountriesButtonPressed(View view) {
@@ -59,7 +66,7 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
             View view = toast.getView();
             view.getBackground().setColorFilter(getResources().getColor(R.color.secondaryColor), PorterDuff.Mode.SRC_IN);
             TextView text = view.findViewById(android.R.id.message);
-            text.setTextColor(getResources().getColor(R.color.secondaryTextColor));
+            text.setTextColor(ContextCompat.getColor(getContext(), R.color.secondaryTextColor));
             text.setGravity(Gravity.CENTER);
             toast.show();
             pickCountriesBinding.unitedStatesCB.setChecked(true);
