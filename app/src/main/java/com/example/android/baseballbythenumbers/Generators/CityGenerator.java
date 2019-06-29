@@ -51,10 +51,6 @@ public class CityGenerator {
 
     private Context context;
 
-    public CityGenerator(Context context) {
-        this(context, 0, ALL_COUNTRIES);
-    }
-
     public CityGenerator(Context context, int numberOfDivisions, int citiesFromCountries) {
         this.context = context;
         this.numberOfDivisions = numberOfDivisions;

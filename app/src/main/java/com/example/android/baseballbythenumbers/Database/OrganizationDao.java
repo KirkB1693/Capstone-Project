@@ -31,6 +31,9 @@ public interface OrganizationDao {
     @Query("SELECT * from " + ORGANIZATION_TABLE_NAME + " LIMIT 1")
     Organization[] getAnyOrganization();
 
+    @Query("SELECT * from " + ORGANIZATION_TABLE_NAME + " WHERE id= :id")
+    Organization getOrganizationById(String id);
+
     @Query("DELETE FROM " + ORGANIZATION_TABLE_NAME)
     void deleteAll();
 

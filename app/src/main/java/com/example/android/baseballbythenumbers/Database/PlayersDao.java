@@ -28,5 +28,5 @@ public interface PlayersDao {
     LiveData<List<Player>> getAllPlayers();
 
     @Query("SELECT * FROM players WHERE teamId=:teamId")
-    List<Player> findPlayersForTeam(final long teamId);
+    List<Player> findPlayersForTeam(String teamId);
 }

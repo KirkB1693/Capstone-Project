@@ -923,8 +923,8 @@ public class GameSimulator {
 
         game.setVisitorScore(visitorScore);
         game.setHomeScore(homeScore);
-        game.setVisitorBoxScore(new BoxScore(game.getGameId()));
-        game.setHomeBoxScore(new BoxScore(game.getGameId()));
+        game.setVisitorBoxScore(new BoxScore(game.getGameId(), false));
+        game.setHomeBoxScore(new BoxScore(game.getGameId(), true));
         initializeBoxScore(game.getHomeBoxScore(), homeLineup, homeDefense);
         initializeBoxScore(game.getVisitorBoxScore(), visitingLineup, visitingDefense);
         game.setGameLog("");

@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -147,11 +149,12 @@ public class Team implements Parcelable
         this.players = players;
     }
 
+    @NotNull
     public String getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(String teamId) {
+    public void setTeamId(@NotNull String teamId) {
         this.teamId = teamId;
     }
 

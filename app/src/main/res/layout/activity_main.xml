@@ -11,14 +11,15 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,14 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/simulateGameButton">
-
-            <TextView
-                android:id="@+id/helloWorld"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!" />
-        </android.support.v4.widget.NestedScrollView>
+            app:layout_constraintTop_toBottomOf="@+id/simulateGameButton"/>
 
         <Button
             android:id="@+id/simulateGameButton"
@@ -71,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
 
         <TextView
-            android:id="@+id/cityNameTV"
+            android:id="@+id/userNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -79,14 +73,13 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:contentDescription="@string/city_name_for_preferred_team_content_desc"
-            android:text="City Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/cityIV"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cityIV"
-            tools:text="City Name" />
+            tools:text="User/GM Name" />
 
         <TextView
             android:id="@+id/nextGameLabelTV"
@@ -105,17 +98,13 @@
             android:id="@+id/homeTeamNameTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
-            app:layout_constraintTop_toBottomOf="@+id/nextGameLabelTV"
+            app:layout_constraintEnd_toEndOf="@+id/homeCityTV"
+            app:layout_constraintStart_toStartOf="@+id/homeCityTV"
+            app:layout_constraintTop_toBottomOf="@+id/homeCityTV"
             tools:text="Home Team Name" />
 
         <TextView
@@ -242,22 +231,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:gravity="center"
             android:text="@string/vs_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toBottomOf="@+id/homeStarterStatsTV"
+            app:layout_constraintBottom_toBottomOf="@+id/homeTeamWLTV"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/homeTeamNameTV" />
+            app:layout_constraintTop_toTopOf="@+id/homeTeamWLTV" />
 
         <View
             android:id="@+id/seperatorV"
             style="@style/Divider"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/homeStarterStatsTV" />
@@ -302,6 +289,35 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coachSetsLineupButton" />
+
+        <TextView
+            android:id="@+id/homeCityTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextGameLabelTV"
+            tools:text="Home City Name" />
+
+        <TextView
+            android:id="@+id/visitingCityTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/homeCityTV"
+            tools:text="Visiting City Name" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -23,8 +23,7 @@ public class DivisionGenerator {
 
     public Division generateDivision(String divisionName, boolean doesDivisionUseDH, int divisionSize, int[] teamMakeup,
                                      CityGenerator cityGenerator, TeamNameGenerator teamNameGenerator, String leagueId, String userTeamName, String userTeamCity, ProgressBar progressBar) {
-        Division newDivision = new Division();
-        newDivision.setDivisionName(divisionName);
+        Division newDivision = new Division(divisionName, null, leagueId);
         int[] teamMakeupToUse = DEFAULT_TEAM_MAKEUP;
 
         this.cityGenerator = cityGenerator;

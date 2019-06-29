@@ -6,7 +6,14 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,18 +21,49 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "schedules", foreignKeys = @ForeignKey(entity = Organization.class, parentColumns = "id", childColumns = "organization_id",onDelete = CASCADE), indices = @Index(value = "organization_id"))
-public class Schedule {
+public class Schedule implements Parcelable {
 
-    @ColumnInfo(name = "organization_id")
-    private String organizationId;
-
+    @SerializedName("scheduleId")
+    @Expose
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "schedule_id")
     private String scheduleId;
 
+    @SerializedName("organizationId")
+    @Expose
+    @ColumnInfo(name = "organization_id")
+    private String organizationId;
+
     @Ignore
+    @SerializedName("games")
+    @Expose
     private List<Game> gameList;
+
+    public final static Parcelable.Creator<Schedule> CREATOR = new Creator<Schedule>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Schedule createFromParcel(Parcel in) {
+            return new Schedule(in);
+        }
+
+        public Schedule[] newArray(int size) {
+            return (new Schedule[size]);
+        }
+
+    }
+            ;
+
+    protected Schedule(Parcel in) {
+        this.scheduleId = ((String) in.readValue((String.class.getClassLoader())));
+        this.organizationId = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.gameList, (com.example.android.baseballbythenumbers.Data.Game.class.getClassLoader()));
+    }
+
+
 
     public Schedule(){
     }
@@ -37,11 +75,13 @@ public class Schedule {
         this.scheduleId = UUID.randomUUID().toString();
     }
 
+
+    @NotNull
     public String getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(String scheduleId) {
+    public void setScheduleId(@NotNull String scheduleId) {
         this.scheduleId = scheduleId;
     }
 
@@ -65,5 +105,17 @@ public class Schedule {
     @Override
     public String toString() {
         return "OrgId : " + organizationId + ", SchedId : " + scheduleId + "\n";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(organizationId);
+        parcel.writeString(scheduleId);
+        parcel.writeList(gameList);
     }
 }

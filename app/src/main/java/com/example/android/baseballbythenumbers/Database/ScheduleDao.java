@@ -25,9 +25,10 @@ public interface ScheduleDao {
 
         @Delete
         void delete(Schedule... schedules);
+
         @Query("SELECT * FROM schedules")
         LiveData<List<Schedule>> getAllSchedules();
 
         @Query("SELECT * FROM schedules WHERE organization_id=:orgId")
-        List<Schedule> findSchedulesForOrganization(final int orgId);
+        List<Schedule> getSchedulesForOrganization(String orgId);
 }

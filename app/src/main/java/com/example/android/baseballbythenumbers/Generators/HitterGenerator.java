@@ -5,10 +5,10 @@ import android.widget.ProgressBar;
 
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.HittingPercentages;
+import com.example.android.baseballbythenumbers.Data.Name;
 import com.example.android.baseballbythenumbers.Data.PitchingPercentages;
 import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Name;
 import com.example.android.baseballbythenumbers.R;
 
 import org.joda.time.DateTime;

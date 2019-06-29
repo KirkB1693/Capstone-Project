@@ -117,6 +117,18 @@ public class Repository {
         new deleteAllOrganizationsAsyncTask(mOrganizationDao).execute();
     }
 
+    public Organization getOrganizationById (String id) {
+        return mOrganizationDao.getOrganizationById(id);
+    }
+
+    public List<Schedule> getSchedulesForOrganization (String orgId){
+        return mScheduleDao.getSchedulesForOrganization(orgId);
+    }
+
+    public Team getTeamWithTeamName (String teamName) {
+        return mTeamDao.getTeamWithTeamName(teamName);
+    }
+
     public LiveData<List<BattingLine>> getAllBattingLines () {
         return mBattingLines;
     }
@@ -144,6 +156,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllBattingLines (List<BattingLine> battingLines) {
         new insertAllBattingLinesAsyncTask(mBattingLineDao).execute(battingLines);
     }
@@ -275,6 +288,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllSchedules (List<Schedule> schedules) {
         new insertAllSchedulesAsyncTask(mScheduleDao).execute(schedules);
     }
@@ -301,7 +315,7 @@ public class Repository {
         return mGames;
     }
     
-    public List<Game> getGamesForSchedule(int scheduleId) {
+    public List<Game> getGamesForSchedule(String scheduleId) {
         return mGameDao.findGamesForSchedule(scheduleId); 
     }
     
@@ -348,6 +362,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllGames (List<Game> games) {
         new insertAllGamesAsyncTask(mGameDao).execute(games);
     }
@@ -374,7 +389,7 @@ public class Repository {
         return mBoxScore;
     }
 
-    public List<BoxScore> getBoxScoresForScheduele (int gameId) {
+    public List<BoxScore> getBoxScoresForGame(String gameId) {
         return mBoxScoreDao.findBoxScoresForGame(gameId);
     }
 
@@ -419,7 +434,7 @@ public class Repository {
         return mPitchingLines;
     }
 
-    public List<PitchingLine> getPitchingLinesForBoxScore (int boxScoreId) {
+    public List<PitchingLine> getPitchingLinesForBoxScore (String boxScoreId) {
         return mPitchingLineDao.findPitchingLinesForBoxScore(boxScoreId);
     }
 
@@ -462,6 +477,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllPitchingLines (List<PitchingLine> pitchingLines) {
         new insertAllPitchingLinesAsyncTask(mPitchingLineDao).execute(pitchingLines);
     }
@@ -487,7 +503,7 @@ public class Repository {
         return mLeagues;
     }
 
-    public List<League> getLeaguesForOrganization (int orgId) {
+    public List<League> getLeaguesForOrganization (String orgId) {
         return mLeagueDao.findLeaguesForOrganization(orgId);
     }
 
@@ -530,6 +546,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllLeagues (List<League> leagues) {
         new insertAllLeaguesAsyncTask(mLeagueDao).execute(leagues);
     }
@@ -555,7 +572,7 @@ public class Repository {
         return mDivisions;
     }
 
-    public List<Division> getDivisionsForLeague(int leagueId) {
+    public List<Division> getDivisionsForLeague(String leagueId) {
         return mDivisionDao.findDivisionsForLeague(leagueId);
     }
 
@@ -598,6 +615,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllDivisions (List<Division> divisions) {
         new insertAllDivisionsAsyncTask(mDivisionDao).execute(divisions);
     }
@@ -623,7 +641,7 @@ public class Repository {
         return mTeams;
     }
 
-    public List<Team> getTeamsForDivision(int divisionId) {
+    public List<Team> getTeamsForDivision(String divisionId) {
         return mTeamDao.findTeamsForDivision(divisionId);
     }
 
@@ -666,6 +684,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllTeams (List<Team> teams) {
         new insertAllTeamsAsyncTask(mTeamDao).execute(teams);
     }
@@ -691,7 +710,7 @@ public class Repository {
         return mPlayers;
     }
 
-    public List<Player> getPlayersForTeam(int teamId) {
+    public List<Player> getPlayersForTeam(String teamId) {
         return mPlayersDao.findPlayersForTeam(teamId);
     }
 
@@ -734,6 +753,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllPlayers (List<Player> players) {
         new insertAllPlayersAsyncTask(mPlayersDao).execute(players);
     }
@@ -760,7 +780,7 @@ public class Repository {
         return mBattingStats;
     }
 
-    public List<BattingStats> getBattingStatsForPlayer(int playerId) {
+    public List<BattingStats> getBattingStatsForPlayer(String playerId) {
         return mBattingStatsDao.findBattingStatsForPlayer(playerId);
     }
 
@@ -803,6 +823,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllBattingStats (List<BattingStats> games) {
         new insertAllBattingStatsAsyncTask(mBattingStatsDao).execute(games);
     }
@@ -828,7 +849,7 @@ public class Repository {
         return mPitchingStats;
     }
 
-    public List<PitchingStats> getPitchingStatsForPlayer(int playerId) {
+    public List<PitchingStats> getPitchingStatsForPlayer(String playerId) {
         return mPitchingStatsDao.findPitchingStatsForPlayer(playerId);
     }
 
@@ -871,6 +892,7 @@ public class Repository {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void insertAllPitchingStats (List<PitchingStats> games) {
         new insertAllPitchingStatsAsyncTask(mPitchingStatsDao).execute(games);
     }
@@ -906,4 +928,6 @@ public class Repository {
             return null;
         }
     }
+
+
 }

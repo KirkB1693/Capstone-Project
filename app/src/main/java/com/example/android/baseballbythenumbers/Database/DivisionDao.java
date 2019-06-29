@@ -29,5 +29,5 @@ public interface DivisionDao {
     LiveData<List<Division>> getAllDivisions();
 
     @Query("SELECT * FROM divisions WHERE leagueId=:leagueId")
-    List<Division> findDivisionsForLeague(final long leagueId);
+    List<Division> findDivisionsForLeague(String leagueId);
 }

@@ -73,13 +73,7 @@ public class TeamGenerator {
 
 
     public Team generateTeam(String teamName, String teamCity, boolean useDH, int teamBudget, String divisionId, ProgressBar progressBar) {
-        Team newTeam = new Team();
-
-        newTeam.setTeamName(teamName);
-        newTeam.setTeamCity(teamCity);
-        newTeam.setUseDh(useDH);
-        newTeam.setTeamBudget(teamBudget);
-        newTeam.setDivisionId(divisionId);
+        Team newTeam = new Team(teamName,teamCity,useDH,teamBudget,null,divisionId,0,0);
 
         List<Player> pitchers = generatePitchers(newTeam.getTeamId(), progressBar);
 

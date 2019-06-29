@@ -29,5 +29,5 @@ public interface LeagueDao {
     LiveData<List<League>> getAllLeagues();
 
     @Query("SELECT * FROM leagues WHERE orgId=:orgId")
-    List<League> findLeaguesForOrganization(final long orgId);
+    List<League> findLeaguesForOrganization(String orgId);
 }

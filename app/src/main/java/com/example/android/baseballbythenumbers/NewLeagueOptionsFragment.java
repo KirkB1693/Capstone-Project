@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.baseballbythenumbers.Data.Organization;
+import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.databinding.FragmentNewLeagueOptionsBinding;
@@ -68,11 +69,11 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
      *
      * @param countries
      * @param userCity
-     * @return A new instance of fragment CreateOrganizationFragment.
+     * @return A new instance of fragment SaveOrganizationFragment.
      */
 
-    public static CreateOrganizationFragment newInstance(int countries, String userCity) {
-        CreateOrganizationFragment fragment = new CreateOrganizationFragment();
+    public static NewLeagueOptionsFragment newInstance(int countries, String userCity) {
+        NewLeagueOptionsFragment fragment = new NewLeagueOptionsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COUNTRIES, countries);
         args.putString(ARG_USER_CITY, userCity);
@@ -135,12 +136,14 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
                             }
                         });
                         ScheduleGenerator scheduleGenerator = new ScheduleGenerator(newOrganization);
-                        scheduleGenerator.generateSchedule(mNumOfGamesInSeries, interleaguePlay, newLeagueOptionsBinding.newLeagueProgressbar);
+                        List<Schedule> scheduleList = new ArrayList<>();
+                        scheduleList.add(scheduleGenerator.generateSchedule(mNumOfGamesInSeries, interleaguePlay, newLeagueOptionsBinding.newLeagueProgressbar));
+                        newOrganization.setSchedules(scheduleList);
                         newLeagueOptionsBinding.newLeagueProgressbar.post(new Runnable() {
                             @Override
                             public void run() {
                                 newLeagueOptionsBinding.newLeagueTv.setText("Finished!");
-                                mListener.onStartSeasonFragmentInteraction();
+                                mListener.onStartSeasonFragmentInteraction(newOrganization);
                             }
                         });
                     } catch (Exception e) {
@@ -364,6 +367,6 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        void onStartSeasonFragmentInteraction();
+        void onStartSeasonFragmentInteraction(Organization organization);
     }
 }

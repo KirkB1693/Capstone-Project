@@ -78,7 +78,7 @@ public class ScheduleGenerator {
         }
         List<Game> reverseGameList = new ArrayList<>();
         for (Game game: gameList) {
-            reverseGameList.add(createNewGame(scheduleId, (game.getDay()+teamList.size()), game.getVisitingTeamId(), game.getHomeTeamId()));
+            reverseGameList.add(createNewGame(scheduleId, (game.getDay()+teamList.size()), game.getVisitingTeamName(), game.getHomeTeamName()));
             progress++;
             if (progressBar != null) {
                 progressBar.setProgress(progress);
@@ -96,7 +96,7 @@ public class ScheduleGenerator {
         for (int i = 0; i < gameList.size() ; i++) {
             gameList.get(i).setDay(gameList.get(i).getDay()*seriesLength);  // change all existing game days by multiplying by series length so there are empty days to add games in.
             for (int j = 1; j < seriesLength; j++) {
-                gamesToAdd.add(createNewGame(gameList.get(i).getScheduleId(),gameList.get(i).getDay() + j, gameList.get(i).getHomeTeamId(), gameList.get(i).getVisitingTeamId()));   // copy the game from the list at i position
+                gamesToAdd.add(createNewGame(gameList.get(i).getScheduleId(),gameList.get(i).getDay() + j, gameList.get(i).getHomeTeamName(), gameList.get(i).getVisitingTeamName()));   // copy the game from the list at i position
                 progress++;
                 if (progressBar != null) {
                     progressBar.setProgress(progress);
@@ -118,8 +118,8 @@ public class ScheduleGenerator {
     private Game createNewGame(String scheduleId, int day, String homeTeamId, String visitingTeamId) {
         Game newGame = new Game(scheduleId);
         newGame.setDay(day);
-        newGame.setHomeTeamId(homeTeamId);
-        newGame.setVisitingTeamId(visitingTeamId);
+        newGame.setHomeTeamName(homeTeamId);
+        newGame.setVisitingTeamName(visitingTeamId);
         return newGame;
     }
 

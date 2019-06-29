@@ -11,14 +11,18 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
 import static com.example.android.baseballbythenumbers.Constants.TableNames.ORGANIZATION_TABLE_NAME;
 
 @Entity (tableName = ORGANIZATION_TABLE_NAME)
-public class Organization implements Parcelable
-{
+public class Organization implements Parcelable {
+
+    @SerializedName("id")
+    @Expose
     @PrimaryKey
     @NonNull
     private String id;
@@ -27,6 +31,11 @@ public class Organization implements Parcelable
     @Expose
     @ColumnInfo(name = "organization_name")
     private String organizationName;
+
+    @SerializedName("organizationName")
+    @Expose
+    @ColumnInfo(name = "user_team_name")
+    private String userTeamName;
 
     @SerializedName("currentYear")
     @Expose
@@ -38,11 +47,18 @@ public class Organization implements Parcelable
     @Ignore
     private List<League> leagues = null;
 
+    @SerializedName("schedules")
+    @Expose
     @Ignore
     private List<Schedule> schedules = null;
+
+
     public final static Parcelable.Creator<Organization> CREATOR = new Creator<Organization>() {
 
 
+        @SuppressWarnings({
+                "unchecked"
+        })
         public Organization createFromParcel(Parcel in) {
             return new Organization(in);
         }
@@ -56,10 +72,11 @@ public class Organization implements Parcelable
 
     protected Organization(Parcel in) {
         this.id = ((String) in.readValue((String.class.getClassLoader())));
-        this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
         this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
+        this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
+        this.userTeamName = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
-        in.readList(this.schedules, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
+        in.readList(this.schedules, (com.example.android.baseballbythenumbers.Data.Schedule.class.getClassLoader()));
     }
 
     /**
@@ -72,13 +89,15 @@ public class Organization implements Parcelable
 
     /**
      *
+     * @param schedules
      * @param leagues
      * @param currentYear
-     * @param levelName
+     * @param organizationName
      */
-    public Organization(String levelName, int currentYear, List<League> leagues, List<Schedule> schedules) {
+    public Organization(String organizationName, String userTeamName, int currentYear, List<League> leagues, List<Schedule> schedules) {
         super();
-        this.organizationName = levelName;
+        this.organizationName = organizationName;
+        this.userTeamName = userTeamName;
         this.currentYear = currentYear;
         this.leagues = leagues;
         this.schedules = schedules;
@@ -91,6 +110,14 @@ public class Organization implements Parcelable
 
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public String getUserTeamName() {
+        return userTeamName;
+    }
+
+    public void setUserTeamName(String userTeamName) {
+        this.userTeamName = userTeamName;
     }
 
     public int getCurrentYear() {
@@ -109,11 +136,12 @@ public class Organization implements Parcelable
         this.leagues = leagues;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull String id) {
         this.id = id;
     }
 
@@ -131,6 +159,7 @@ public class Organization implements Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
         dest.writeValue(organizationName);
+        dest.writeValue(userTeamName);
         dest.writeValue(currentYear);
         dest.writeList(leagues);
         dest.writeList(schedules);

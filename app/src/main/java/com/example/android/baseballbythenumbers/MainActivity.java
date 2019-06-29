@@ -1,21 +1,27 @@
 package com.example.android.baseballbythenumbers;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.BattingLine;
+import com.example.android.baseballbythenumbers.Data.BoxScore;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
 import com.example.android.baseballbythenumbers.Data.Organization;
+import com.example.android.baseballbythenumbers.Data.PitchingStats;
+import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
@@ -27,8 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -36,18 +41,20 @@ import static com.example.android.baseballbythenumbers.Simulators.GameSimulator.
 
 public class MainActivity extends AppCompatActivity {
 
-    List<League> leagues;
-    OrganizationGenerator organizationGenerator;
-    List<Division> divisions;
-    static SpannableStringBuilder displayText;
-    Schedule schedule;
-    int gameToPlay;
-    Organization mlbClone;
-    static TextView textView;
-    static Repository repository;
-    static ActivityMainBinding mainBinding;
-    static boolean orgInDatabase;
-
+    public static final String ORG_ID_SHARED_PREF_KEY = "orgId";
+    private List<League> leagues;
+    private OrganizationGenerator organizationGenerator;
+    private List<Division> divisions;
+    private SpannableStringBuilder displayText;
+    private Schedule schedule;
+    private int gameToPlay;
+    private Organization organization;
+    private TextView textView;
+    private Repository repository;
+    private ActivityMainBinding mainBinding;
+    private static boolean orgInDatabase;
+    private int dayOfSchedule;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,98 +69,153 @@ public class MainActivity extends AppCompatActivity {
 
         repository = new Repository(getApplication());
 
-        mainBinding.progressBar.setVisibility(View.VISIBLE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        dayOfSchedule = 0;
+        String orgId = null;
 
-        if (!isOrganizationCreated()) {
-            mainBinding.progressBar.setVisibility(View.INVISIBLE);
-            // Create a new League...
-            mainBinding.helloWorld.setText("Database not created!!!");
-            // Go to NewLeagueSetupActivity
-            Intent intent = new Intent(this, NewLeagueSetupActivity.class);
-            this.startActivity(intent);
-        } else {
-            mainBinding.progressBar.setVisibility(View.INVISIBLE);
-            mainBinding.helloWorld.setText("Database created??");
+        Intent intent = getIntent();                        // Check intent for an orgId
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                orgId = extras.getString(NewLeagueSetupActivity.ORGANIZATION_EXTRA);
+            }
         }
 
-/*        organizationGenerator = new OrganizationGenerator(this);
-        displayText = new SpannableStringBuilder();
-
-        int numberOfTeamsInDivision = 5;
-        int numberOfDivisions = 3;
-        int countriesToInclude = 9;
-        mlbClone = organizationGenerator.generateOrganization("MLB Clone", 0, 2, new String[] {"American", "National"}, new boolean[] {true, false}, numberOfTeamsInDivision
-                , numberOfDivisions, countriesToInclude, null);
-
-        leagues = mlbClone.getLeagues();
-
-        ScheduleGenerator scheduleGenerator = new ScheduleGenerator(mlbClone);
-        schedule = scheduleGenerator.generateSchedule(1, true);
-        gameToPlay = schedule.getGameList().size();*/
-        /*
-        for (League league : leagues) {
-            displayText.append("\n\n").append(league.getLeagueName()).append(" League : \n");
-            divisions = league.getDivisions();
-            for (Division division : divisions) {
-                displayText.append("\n\n");
-                displayText.append("Division Name : ").append(division.getDivisionName()).append("\n");
-                for (Team team : division.getTeams()) {
-                    displayText.append("    ").append(team.getTeamCity()).append(" ").append(team.getTeamName()).append("\n");
-                    displayText.append("        Team has ").append(team.getPlayers().size()).append(" players. Player 1) ").append(team.getPlayers().get(0).getName()).append("\n");
-                }
+        if (orgId == null) {                                // If orgId wasn't found in intent, check shared preferences
+            String sharedPrefOrgId = sharedPreferences.getString(ORG_ID_SHARED_PREF_KEY, null);
+            if (sharedPrefOrgId != null) {
+                orgId = sharedPrefOrgId;
+            } else {
+                repository.deleteAll();
             }
-        }*/
+        }
+
+
+        if (orgId != null) {                                 // If we have an orgId try to get organization from database
+            getOrganizationFromDb(orgId);
+        } else {
+            goToNewLeagueSetupActivity();                   // Otherwise setup a new league
+        }
+
+
         // simGame(null);
     }
 
-    private boolean isOrganizationCreated() {
-        final CountDownLatch taskcomplete = new CountDownLatch(1);
-        CheckDatabaseAsyncTask task = new CheckDatabaseAsyncTask(taskcomplete);
-        task.execute();
-        try {
-            taskcomplete.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return orgInDatabase;
+    private void getOrganizationFromDb(String orgId) {
+        mainBinding.progressBar.setVisibility(View.VISIBLE);
+        new getOrgFromDbAsyncTask(repository).execute(orgId);
     }
 
+    private void goToNewLeagueSetupActivity() {
+        // Go to NewLeagueSetupActivity
+        Intent newLeagueintent = new Intent(this, NewLeagueSetupActivity.class);
+        this.startActivity(newLeagueintent);
+        finish();
+    }
 
-    private static class CheckDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
-        private CountDownLatch latch;
+    private void updateUI(Organization orgToDisplay) {
+        organization = orgToDisplay;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(ORG_ID_SHARED_PREF_KEY, organization.getId());
+        editor.apply();
+        Team usersTeam = findTeam(organization.getUserTeamName());
+        Game nextGame = null;
+        Team homeTeam = null;
+        Team visitingTeam = null;
+        if (usersTeam != null) {
 
-        public CheckDatabaseAsyncTask(CountDownLatch latch){
-            this.latch = latch;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Organization[] anyOrganization = repository.getAnyOrganization();
-            if (anyOrganization.length > 0) {
-                orgInDatabase = true;
-                latch.countDown();
-            } else {
-                orgInDatabase = false;
-                latch.countDown();
+            Schedule schedule = organization.getSchedules().get(organization.getCurrentYear());
+            List<Game> gameList = schedule.getGameList();
+            for (Game game : gameList) {
+                if (!game.isPlayedGame()) {
+                    if (game.getHomeTeamName().equals(usersTeam.getTeamName())) {
+                        nextGame = game;
+                        homeTeam = usersTeam;
+                        break;
+                    }
+                    if (game.getVisitingTeamName().equals(usersTeam.getTeamName())) {
+                        nextGame = game;
+                        visitingTeam = usersTeam;
+                        break;
+                    }
+                }
             }
-            return null;
+            if (nextGame != null) {
+                dayOfSchedule = nextGame.getDay();
+                if (homeTeam != null) {
+                    visitingTeam = findTeam(nextGame.getVisitingTeamName());
+                } else {
+                    homeTeam = findTeam(nextGame.getHomeTeamName());
+                }
+                if (homeTeam != null && visitingTeam != null) {
+                    Player nextHomeStarter = PitchingRotationGenerator.getBestStarterAvailable(homeTeam);
+                    Player nextVisitingStarter = PitchingRotationGenerator.getBestStarterAvailable(visitingTeam);
+                    mainBinding.progressBar.setVisibility(View.GONE);
+                    mainBinding.userNameTV.setText(organization.getOrganizationName());
+                    mainBinding.homeCityTV.setText(homeTeam.getTeamCity());
+                    mainBinding.homeTeamNameTV.setText(homeTeam.getTeamName());
+                    String homeWL = formatWL(homeTeam);
+                    mainBinding.homeTeamWLTV.setText(homeWL);
+                    mainBinding.homeStarterTV.setText(nextHomeStarter.getName());
+                    String homeStarterStats = formatStarterStats(nextHomeStarter.getPitchingStats());
+                    mainBinding.homeStarterStatsTV.setText(homeStarterStats);
+
+                    mainBinding.visitingTeamNameTV.setText(visitingTeam.getTeamName());
+                    mainBinding.visitingCityTV.setText(visitingTeam.getTeamCity());
+                    String visitorWL = formatWL(visitingTeam);
+                    mainBinding.visitingTeamWLTV.setText(visitorWL);
+                    mainBinding.visitingStarterTV.setText(nextVisitingStarter.getName());
+                    String visitingStarterStats = formatStarterStats(nextVisitingStarter.getPitchingStats());
+                    mainBinding.visitingStarterStatsTV.setText(visitingStarterStats);
+                }
+            }
+
         }
 
     }
+
+    @NotNull
+    private String formatWL(Team team) {
+        return team.getWins() + " - " + team.getLosses();
+    }
+
+    @NotNull
+    private String formatStarterStats(List<PitchingStats> pitchingStats) {
+        return "ERA : " + String.format(Locale.US, "%.2f", pitchingStats.get(0).getERA()) + ", WHIP : " +
+                String.format(Locale.US, "%.2f", pitchingStats.get(0).getWHIP());
+    }
+
+
+    private Team findTeam(String teamName) {
+        List<League> leagueList = organization.getLeagues();
+        List<Division> divisionList = new ArrayList<>();
+        for (League league : leagueList) {
+            divisionList.addAll(league.getDivisions());
+        }
+        for (Division division : divisionList) {
+            List<Team> teamList = division.getTeams();
+            for (Team team : teamList) {
+                if (teamName.equals(team.getTeamName())) {
+                    return team;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public void simGame(View view) {
 
-        gameToPlay ++;
-        if (gameToPlay > schedule.getGameList().size()-1) {
+        gameToPlay++;
+        if (gameToPlay > schedule.getGameList().size() - 1) {
             gameToPlay = 0;
         }
         displayText = new SpannableStringBuilder();
 
-        textView = findViewById(R.id.helloWorld);
         Game nextGame = schedule.getGameList().get(gameToPlay);
 
-        Team homeTeam = getTeamFromId(leagues, nextGame.getHomeTeamId());
-        Team visitingTeam = getTeamFromId(leagues, nextGame.getVisitingTeamId());
+        Team homeTeam = getTeamFromId(leagues, nextGame.getHomeTeamName());
+        Team visitingTeam = getTeamFromId(leagues, nextGame.getVisitingTeamName());
 
         GameSimulator gameSimulator = new GameSimulator(this, nextGame, homeTeam, false, visitingTeam, false);
         int[] result = gameSimulator.simulateGame();
@@ -163,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
         displayText.append(getGameRecapString()).append("\n\n\n");
 
-        displayText.delete(0,displayText.length()-500);
+        displayText.delete(0, displayText.length() - 500);
 
         // displayText.append(gameSimulator.getHomePitchersUsed()).append("\n\n").append(gameSimulator.getVisitorPitchersUsed()).append("\n\n\n");
 
@@ -172,18 +234,17 @@ public class MainActivity extends AppCompatActivity {
         displayText.append("BattingLines : \n").append(nextGame.getHomeBoxScore().getBattingLines().toString()).append("\n\n\n");
 
 
-
-        repository.insertOrganization(mlbClone);
+        repository.insertOrganization(organization);
 
         List<Schedule> scheduleList = new ArrayList<>();
 
         scheduleList.add(schedule);
 
-        mlbClone.setSchedules(scheduleList);
+        organization.setSchedules(scheduleList);
 
-        repository.insertAllSchedules(mlbClone.getSchedules());
+        repository.insertAllSchedules(organization.getSchedules());
 
-        repository.insertAllGames(mlbClone.getSchedules().get(0).getGameList());
+        repository.insertAllGames(organization.getSchedules().get(0).getGameList());
 
         repository.insertBoxScore(nextGame.getHomeBoxScore());
 
@@ -199,15 +260,23 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        BattingLinesAsyncTask battingLinesAsyncTask = (BattingLinesAsyncTask) new BattingLinesAsyncTask().execute(nextGame.getHomeBoxScore().getBoxScoreId());
-
-
+        new BattingLinesAsyncTask(repository, textView, displayText).execute(nextGame.getHomeBoxScore().getBoxScoreId());
 
 
     }
 
 
     private static class BattingLinesAsyncTask extends AsyncTask<String, Void, List<BattingLine>> {
+        private Repository repository;
+        private TextView textView;
+        private SpannableStringBuilder displayText;
+
+
+        public BattingLinesAsyncTask(Repository repository, TextView textView, SpannableStringBuilder displayText) {
+            this.repository = repository;
+            this.textView = textView;
+            this.displayText = displayText;
+        }
 
         @Override
         protected List<BattingLine> doInBackground(String... strings) {
@@ -216,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute (List<BattingLine> result) {
+        protected void onPostExecute(List<BattingLine> result) {
             displayText.append("BattingLines from Database : \n").append(result.toString()).append("\n\n\n");
 
             textView.setText(displayText);
@@ -228,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Team getTeamFromId(List<League> leagues, String teamId) {
         for (League league : leagues) {
-            for (Division division: league.getDivisions()) {
-                for (Team team: division.getTeams()) {
+            for (Division division : league.getDivisions()) {
+                for (Team team : division.getTeams()) {
                     if (team.getTeamName().equals(teamId)) {
                         return team;
                     }
@@ -239,11 +308,112 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private Team getRandomTeam(@NotNull List<League> leagues) {
-        Random random = new Random();
-        League randomLeague = leagues.get(random.nextInt(leagues.size()));
-        Division randomDivision = randomLeague.getDivisions().get(random.nextInt(randomLeague.getDivisions().size()));
-        return randomDivision.getTeams().get(random.nextInt(randomDivision.getTeams().size()));
-    }
 
+    private class getOrgFromDbAsyncTask extends AsyncTask<String, Void, Organization> {
+        private Repository repository;
+
+        public getOrgFromDbAsyncTask(Repository repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        protected Organization doInBackground(String... orgIds) {
+            Organization orgById = repository.getOrganizationById(orgIds[0]);
+            fillOutOrgFromDb(orgById, orgIds[0]);
+            return orgById;
+        }
+
+        private void fillOutOrgFromDb(Organization orgById, String orgId) {
+            if (orgById == null) {
+                goToNewLeagueSetupActivity();
+                return;
+            }
+            List<League> leagueList = repository.getLeaguesForOrganization(orgId);
+            if (leagueList == null) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            orgById.setLeagues(leagueList);
+            List<Division> divisionList = new ArrayList<>();
+            for (League league : leagueList) {
+                league.setDivisions(repository.getDivisionsForLeague(league.getLeagueId()));
+                divisionList.addAll(league.getDivisions());
+            }
+            if (divisionList.isEmpty()) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            List<Team> teamList = new ArrayList<>();
+            for (Division division : divisionList) {
+                division.setTeams(repository.getTeamsForDivision(division.getDivisionId()));
+                teamList.addAll(division.getTeams());
+            }
+            if (teamList.isEmpty()) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            List<Player> playerList = new ArrayList<>();
+            for (Team team : teamList) {
+                team.setPlayers(repository.getPlayersForTeam(team.getTeamId()));
+                playerList.addAll(team.getPlayers());
+            }
+            if (playerList.isEmpty()) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            for (Player player : playerList) {
+                player.setBattingStats(repository.getBattingStatsForPlayer(player.getPlayerId()));
+                player.setPitchingStats(repository.getPitchingStatsForPlayer(player.getPlayerId()));
+            }
+
+            List<Schedule> scheduleList = repository.getSchedulesForOrganization(orgId);
+            if (scheduleList == null) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            orgById.setSchedules(scheduleList);
+            List<Game> gameList = new ArrayList<>();
+            for (Schedule schedule : scheduleList) {
+                schedule.setGameList(repository.getGamesForSchedule(schedule.getScheduleId()));
+                gameList.addAll(schedule.getGameList());
+            }
+            if (gameList.isEmpty()) {
+                invalidDatabaseSetupNewLeague(orgById);
+                return;
+            }
+            List<BoxScore> boxScoreList = new ArrayList<>();
+            for (Game game : gameList) {
+                List<BoxScore> tempList = repository.getBoxScoresForGame(game.getGameId());
+                if (tempList != null) {
+                    for (BoxScore boxScore : tempList) {
+                        if (boxScore.isBoxScoreForHomeTeam()) {
+                            game.setHomeBoxScore(boxScore);
+                        } else {
+                            game.setVisitorBoxScore(boxScore);
+                        }
+                    }
+                    boxScoreList.addAll(tempList);
+                }
+            }
+            if (!boxScoreList.isEmpty()) {
+                for (BoxScore boxScore : boxScoreList) {
+                    boxScore.setBattingLines(repository.getBattingLinesForBoxScore(boxScore.getBoxScoreId()));
+                    boxScore.setPitchingLines(repository.getPitchingLinesForBoxScore(boxScore.getBoxScoreId()));
+                }
+            }
+        }
+
+        private void invalidDatabaseSetupNewLeague(Organization orgById) {
+            orgById = null;
+            goToNewLeagueSetupActivity();
+        }
+
+        @Override
+        protected void onPostExecute(Organization organization) {
+            super.onPostExecute(organization);
+            if (organization != null) {
+                updateUI(organization);
+            }
+        }
+    }
 }

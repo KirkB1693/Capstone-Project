@@ -104,11 +104,12 @@ public class Division implements Parcelable
         this.leagueId = leagueId;
     }
 
+    @NotNull
     public String getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(String divisionId) {
+    public void setDivisionId(@NotNull String divisionId) {
         this.divisionId = divisionId;
     }
 

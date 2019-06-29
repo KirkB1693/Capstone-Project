@@ -67,7 +67,7 @@ public class OrganizationGenerator {
 
 
 
-        Organization newOrganization = new Organization(organizationName, currentYear, null, null);
+        Organization newOrganization = new Organization(organizationName, userTeamName, currentYear, null, null);
 
         for (int i = 0; i < numberOfLeagues; i++) {
             if (useDH.get(i)) {

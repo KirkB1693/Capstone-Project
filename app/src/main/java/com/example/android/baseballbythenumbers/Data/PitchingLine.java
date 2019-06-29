@@ -6,59 +6,132 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "pitching_line", foreignKeys = @ForeignKey(entity = BoxScore.class, parentColumns = "box_score_id", childColumns = "box_score_id", onDelete = CASCADE), indices = @Index(value = "box_score_id"))
-public class PitchingLine {
+public class PitchingLine implements Parcelable{
 
+    @SerializedName("boxScoreId")
+    @Expose
     @ColumnInfo(name = "box_score_id")
     private String boxScoreId;
 
+    @SerializedName("pitchingLineId")
+    @Expose
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "pitching_line_id")
     private String pitchingLineId;
 
+    @SerializedName("pitcherNumber")
+    @Expose
     @ColumnInfo(name = "pitcher_number")
     private int pitcherNumber;
 
+    @SerializedName("pitcherName")
+    @Expose
     @ColumnInfo(name = "pitcher_name")
     private String pitcherName;
 
+    @SerializedName("inningsPitched")
+    @Expose
     @ColumnInfo(name = "innings_pitched")
     private float inningsPitched;
 
+    @SerializedName("hitsAllowed")
+    @Expose
     @ColumnInfo(name = "hits_allowed")
     private int hitsAllowed;
 
+    @SerializedName("runsAllowed")
+    @Expose
     @ColumnInfo(name = "runs_allowed")
     private int runsAllowed;
 
+    @SerializedName("earnedRuns")
+    @Expose
     @ColumnInfo(name = "earned_runs")
     private int earnedRuns;
 
+    @SerializedName("walksAllowed")
+    @Expose
     @ColumnInfo(name = "walks_allowed")
     private int walksAllowed;
 
+    @SerializedName("strikeOutsMade")
+    @Expose
     @ColumnInfo(name = "strike_outs_made")
     private int strikeOutsMade;
 
+    @SerializedName("homeRunsAllowed")
+    @Expose
     @ColumnInfo(name = "home_runs_allowed")
     private int homeRunsAllowed;
 
+    @SerializedName("era")
+    @Expose
     private double era;
 
+    @SerializedName("whip")
+    @Expose
     private double whip;
 
+    @SerializedName("pitchesThrown")
+    @Expose
     @ColumnInfo(name = "pitches_thrown")
     private int pitchesThrown;
 
+    @SerializedName("strikesThrown")
+    @Expose
     @ColumnInfo(name = "strikes_thrown")
     private int strikesThrown;
+
+    public final static Parcelable.Creator<PitchingLine> CREATOR = new Creator<PitchingLine>() {
+
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public PitchingLine createFromParcel(Parcel in) {
+            return new PitchingLine(in);
+        }
+
+        public PitchingLine[] newArray(int size) {
+            return (new PitchingLine[size]);
+        }
+
+    }
+            ;
+
+    protected PitchingLine(Parcel in) {
+        this.boxScoreId = ((String) in.readValue((String.class.getClassLoader())));
+        this.pitchingLineId = ((String) in.readValue((String.class.getClassLoader())));
+        this.pitcherNumber = ((int) in.readValue((int.class.getClassLoader())));
+        this.pitcherName = ((String) in.readValue((String.class.getClassLoader())));
+        this.inningsPitched = ((float) in.readValue((float.class.getClassLoader())));
+        this.hitsAllowed = ((int) in.readValue((int.class.getClassLoader())));
+        this.runsAllowed = ((int) in.readValue((int.class.getClassLoader())));
+        this.earnedRuns = ((int) in.readValue((int.class.getClassLoader())));
+        this.walksAllowed = ((int) in.readValue((int.class.getClassLoader())));
+        this.strikeOutsMade = ((int) in.readValue((int.class.getClassLoader())));
+        this.homeRunsAllowed = ((int) in.readValue((int.class.getClassLoader())));
+        this.era = ((double) in.readValue((double.class.getClassLoader())));
+        this.whip = ((double) in.readValue((double.class.getClassLoader())));
+        this.pitchesThrown = ((int) in.readValue((int.class.getClassLoader())));
+        this.strikesThrown = ((int) in.readValue((int.class.getClassLoader())));
+    }
+
+
+
 
     public PitchingLine(){}
 
@@ -223,4 +296,28 @@ public class PitchingLine {
             }
         }
     }
+
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(boxScoreId);
+        dest.writeValue(pitchingLineId);
+        dest.writeValue(pitcherNumber);
+        dest.writeValue(pitcherName);
+        dest.writeValue(inningsPitched);
+        dest.writeValue(hitsAllowed);
+        dest.writeValue(runsAllowed);
+        dest.writeValue(earnedRuns);
+        dest.writeValue(walksAllowed);
+        dest.writeValue(strikeOutsMade);
+        dest.writeValue(homeRunsAllowed);
+        dest.writeValue(era);
+        dest.writeValue(whip);
+        dest.writeValue(pitchesThrown);
+        dest.writeValue(strikesThrown);
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
 }

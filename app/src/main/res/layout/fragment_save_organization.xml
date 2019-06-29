@@ -7,10 +7,10 @@
         android:id="@+id/create_league_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".CreateOrganizationFragment">
+        tools:context=".SaveOrganizationFragment">
 
         <TextView
-            android:id="@+id/org_generator_tv"
+            android:id="@+id/org_save_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -18,7 +18,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center"
-            android:text="Generating Players..."
+            android:text="Saving Organization..."
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +37,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/org_generator_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/org_save_tv" />
     </android.support.constraint.ConstraintLayout>
 </layout>

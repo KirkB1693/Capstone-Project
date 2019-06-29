@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,15 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.android.baseballbythenumbers.Data.Organization;
 import com.example.android.baseballbythenumbers.databinding.ActivityNewLeagueSetupBinding;
 
-import java.util.List;
-
 public class NewLeagueSetupActivity extends AppCompatActivity implements PickCountriesFragment.OnPickCountriesFragmentInteractionListener,
-        PickCityFragment.OnListFragmentInteractionListener, NewLeagueOptionsFragment.OnFragmentInteractionListener, CreateOrganizationFragment.OrgCreationEndSignal {
+        PickCityFragment.OnListFragmentInteractionListener, NewLeagueOptionsFragment.OnFragmentInteractionListener, SaveOrganizationFragment.OrgSaveEndSignal {
 
     public static final String PICK_COUNTRIES_FRAGMENT_TAG = "pickCountriesFragmentTag";
     public static final String PICK_CITIES_FRAGMENT_TAG = "pickCitiesFragmentTag";
     public static final String FINISH_LEAGUE_SETUP_FRAGMENT_TAG = "finishLeagueSetupTag";
-    public static final String CREATE_ORGANIZATION_TAG = "createOrganizationTag";
+    public static final String SAVE_ORGANIZATION_FRAGMENT_TAG = "saveOrganizationTag";
+    public static final String ORGANIZATION_EXTRA = "organization";
     private ActivityNewLeagueSetupBinding newLeagueSetupBinding;
     private int countries;
     private String cityName;
@@ -57,29 +57,32 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
 
     private void changeFragmentsToNewLeagueOptions() {
         newLeagueSetupBinding.newLeagueSetupLabel.setText("Finish League Setup");
-        getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), new NewLeagueOptionsFragment(), FINISH_LEAGUE_SETUP_FRAGMENT_TAG)
+        NewLeagueOptionsFragment fragment = NewLeagueOptionsFragment.newInstance(countries, cityName);
+        getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, FINISH_LEAGUE_SETUP_FRAGMENT_TAG)
                 .addToBackStack(PICK_CITIES_FRAGMENT_TAG).commit();
     }
 
     @Override
-    public void onStartSeasonFragmentInteraction() {
-        newLeagueSetupBinding.newLeagueSetupLabel.setText("Creating New League");
+    public void onStartSeasonFragmentInteraction(Organization newOrganization) {
+        newLeagueSetupBinding.newLeagueSetupLabel.setText("Saving New League");
+        saveNewOrganization(newOrganization);
     }
 
-    private void changeFragmentToOrganizationCreation(String userName, String teamName, int numOfLeagues, List<String> leagueNames, List<Boolean> useDhList,
-                                                      int numOfDivisions, int numOfTeamsPerDivision, int numOfGamesPerSeries, boolean interleaguePlay) {
-
-        CreateOrganizationFragment fragment = CreateOrganizationFragment.newInstance(countries, cityName, userName, teamName, numOfLeagues, leagueNames, useDhList,
-                numOfDivisions, numOfTeamsPerDivision, numOfGamesPerSeries, interleaguePlay);
-        getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, CREATE_ORGANIZATION_TAG)
+    private void saveNewOrganization(Organization newOrganization) {
+        SaveOrganizationFragment fragment = SaveOrganizationFragment.newInstance(newOrganization);
+        getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, SAVE_ORGANIZATION_FRAGMENT_TAG)
                 .addToBackStack(FINISH_LEAGUE_SETUP_FRAGMENT_TAG).commit();
     }
 
     @Override
-    public void onOrgCreationEndSignal(Organization newOrganization) {
-        returnToMainActivity();
+    public void onOrganizationSaveEndSignal(Organization newOrganization) {
+        returnToMainActivity(newOrganization);
     }
 
-    private void returnToMainActivity() {
+    private void returnToMainActivity(Organization newOrganization) {
+        newLeagueSetupBinding.newLeagueSetupLabel.setText("Finished With League Setup!");
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(ORGANIZATION_EXTRA, newOrganization.getId());
+        startActivity(intent);
     }
 }

@@ -29,7 +29,7 @@ public interface GameDao {
         LiveData<List<Game>> getAllGames();
 
         @Query("SELECT * FROM games WHERE schedule_id=:scheduleId")
-        List<Game> findGamesForSchedule(final int scheduleId);
+        List<Game> findGamesForSchedule(String scheduleId);
 
         @Query("SELECT * FROM games WHERE day=:day")
         List<Game> findGamesForDay(final int day);

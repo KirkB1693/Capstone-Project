@@ -28,5 +28,5 @@ public interface PitchingStatsDao {
     LiveData<List<PitchingStats>> getAllPitchingStats();
 
     @Query("SELECT * FROM pitching_stats WHERE playerId=:playerId")
-    List<PitchingStats> findPitchingStatsForPlayer(final long playerId);
+    List<PitchingStats> findPitchingStatsForPlayer(String playerId);
 }

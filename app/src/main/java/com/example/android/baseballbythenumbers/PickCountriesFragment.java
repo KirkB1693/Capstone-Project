@@ -64,7 +64,7 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
         if (!pickCountriesBinding.unitedStatesCB.isChecked()){
             Toast toast = Toast.makeText(getContext(), "Currently the United States must be chosen, all other countries are optional", Toast.LENGTH_SHORT);
             View view = toast.getView();
-            view.getBackground().setColorFilter(getResources().getColor(R.color.secondaryColor), PorterDuff.Mode.SRC_IN);
+            view.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.secondaryColor), PorterDuff.Mode.SRC_IN);
             TextView text = view.findViewById(android.R.id.message);
             text.setTextColor(ContextCompat.getColor(getContext(), R.color.secondaryTextColor));
             text.setGravity(Gravity.CENTER);
