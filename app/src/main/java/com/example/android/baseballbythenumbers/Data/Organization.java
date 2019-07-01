@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,12 +72,22 @@ public class Organization implements Parcelable {
             ;
 
     protected Organization(Parcel in) {
-        this.id = ((String) in.readValue((String.class.getClassLoader())));
-        this.currentYear = ((int) in.readValue((int.class.getClassLoader())));
-        this.organizationName = ((String) in.readValue((String.class.getClassLoader())));
-        this.userTeamName = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.leagues, (com.example.android.baseballbythenumbers.Data.League.class.getClassLoader()));
-        in.readList(this.schedules, (com.example.android.baseballbythenumbers.Data.Schedule.class.getClassLoader()));
+        id = in.readString();
+        organizationName = in.readString();
+        userTeamName = in.readString();
+        currentYear = in.readInt();
+        if (in.readByte() == 0x01) {
+            leagues = new ArrayList<League>();
+            in.readList(leagues, League.class.getClassLoader());
+        } else {
+            leagues = null;
+        }
+        if (in.readByte() == 0x01) {
+            schedules = new ArrayList<Schedule>();
+            in.readList(schedules, Schedule.class.getClassLoader());
+        } else {
+            schedules = null;
+        }
     }
 
     /**
@@ -156,14 +167,26 @@ public class Organization implements Parcelable {
         this.schedules = schedules;
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(id);
-        dest.writeValue(organizationName);
-        dest.writeValue(userTeamName);
-        dest.writeValue(currentYear);
-        dest.writeList(leagues);
-        dest.writeList(schedules);
+        dest.writeString(id);
+        dest.writeString(organizationName);
+        dest.writeString(userTeamName);
+        dest.writeInt(currentYear);
+        if (leagues == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(leagues);
+        }
+        if (schedules == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(schedules);
+        }
     }
+
 
     public int describeContents() {
         return 0;

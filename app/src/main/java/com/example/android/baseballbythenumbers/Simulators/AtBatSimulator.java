@@ -333,10 +333,15 @@ public class AtBatSimulator {
     }
 
     private void formatAtBatResult() {
-        atBatSummary.setSpan(new StyleSpan(Typeface.BOLD), startOfSpan, atBatSummary.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            atBatSummary.setSpan(new ForegroundColorSpan(context.getColor(R.color.black)), startOfSpan, atBatSummary.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (startOfSpan >= atBatSummary.length()){
+            Timber.e("Bad setSpan, Start = " + startOfSpan + ", End =  " + atBatSummary.length() + ", atBatSummary = " + atBatSummary);
+        } else {
+            atBatSummary.setSpan(new StyleSpan(Typeface.BOLD), startOfSpan, atBatSummary.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                atBatSummary.setSpan(new ForegroundColorSpan(context.getColor(R.color.black)), startOfSpan, atBatSummary.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }
+
     }
 
     private void addRunnersToAtBatSummary() {
@@ -1041,8 +1046,12 @@ public class AtBatSimulator {
                                 }
                             } else {
                                 // no error, turn double play
-                                atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
-                                        .append(" and he catches ").append(runnerOnThird.getRunner().getLastName()).append(" off the base, Out! Double Play!");
+                                if (whereBallIsHit == SCOREKEEPING_THIRD_BASE) {
+                                    atBatSummary.append(" and he catches ").append(runnerOnThird.getRunner().getLastName()).append(" off the base and steps on the bag, Out! Double Play!");
+                                } else {
+                                    atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
+                                            .append(" and he catches ").append(runnerOnThird.getRunner().getLastName()).append(" off the base, Out! Double Play!");
+                                }
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnSecond = null;
@@ -1209,7 +1218,7 @@ public class AtBatSimulator {
                                 }
                             } else {
                                 // no error, turn double play
-                                atBatSummary.append("Out!, throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" and he catches the runner off the base, Out! Double Play! ");
+                                atBatSummary.append("Out!, and he catches the runner off the base, Out! Double Play! ");
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;
@@ -1631,8 +1640,12 @@ public class AtBatSimulator {
                                 }
                             } else {
                                 // no error, turn double play
-                                atBatSummary.append(", Out!  He throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
-                                        .append(" and catches the runner off the bag!  Double Play!  ");
+                                if (whereBallIsHit != SCOREKEEPING_FIRST_BASE) {
+                                    atBatSummary.append(", Out!  He throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
+                                            .append(" and catches the runner off the bag!  Double Play!  ");
+                                } else {
+                                    atBatSummary.append(", Out!  He catches the runner off first and steps on the bag!  Double Play!  ");
+                                }
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;

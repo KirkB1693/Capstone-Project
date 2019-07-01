@@ -105,17 +105,17 @@ public class TeamNameGenerator {
 
     public void removeUserTeamNameFromList(String userTeamName) {
         if (checkIfUserTeamNameInList(userTeamName)) {
-            Float key = -5000.0f;                        // key will never be set below -1
             boolean foundKey = false;
+            TreeMap.Entry foundEntry = null;
             for (TreeMap.Entry entry : teamNames.entrySet()) {
-                if (entry.getValue() == userTeamName) {
-                    key = (Float) entry.getKey();
+                if (entry.getValue().equals(userTeamName)) {
+                    foundEntry = entry;
                     foundKey = true;
                     break;
                 }
             }
             if (foundKey) {
-                teamNames.remove(key);
+                teamNames.remove(foundEntry.getKey());
             }
         }
     }

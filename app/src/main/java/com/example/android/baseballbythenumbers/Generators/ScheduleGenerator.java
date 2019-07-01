@@ -78,7 +78,7 @@ public class ScheduleGenerator {
         }
         List<Game> reverseGameList = new ArrayList<>();
         for (Game game: gameList) {
-            reverseGameList.add(createNewGame(scheduleId, (game.getDay()+teamList.size()), game.getVisitingTeamName(), game.getHomeTeamName()));
+            reverseGameList.add(createNewGame(scheduleId, (game.getDay()+teamList.size()-1), game.getVisitingTeamName(), game.getHomeTeamName()));
             progress++;
             if (progressBar != null) {
                 progressBar.setProgress(progress);

@@ -631,6 +631,15 @@ public class GameSimulator {
             closerUsed = homeCloserUsed;
         }
 
+        if(relievers.isEmpty()) {
+            Player worstStarter = PitchingRotationGenerator.getWorstStarterAvailable(pitchingTeam);
+            if (worstStarter != null) {
+                relievers.put(10, worstStarter);
+            } else {
+                return;                                    // Don't switch and the position player stays in....
+            }
+        }
+
         if (inningsPlayed >= 80 && pitchingScore > battingScore && (pitchingScore - battingScore <= 3) && !closerUsed) {     // Save situation = after 8 innings are played and pitching team ahead by less than 3
 
             Player closer = PitchingRotationGenerator.getBestCloserAvailable(pitchingTeam);

@@ -20,7 +20,7 @@ public interface GameDao {
         void insertAll(List<Game> gamesList);
 
         @Update
-        void update(Game... games);
+        int update(Game... games);
 
         @Delete
         void delete(Game... games);
@@ -31,6 +31,9 @@ public interface GameDao {
         @Query("SELECT * FROM games WHERE schedule_id=:scheduleId")
         List<Game> findGamesForSchedule(String scheduleId);
 
-        @Query("SELECT * FROM games WHERE day=:day")
-        List<Game> findGamesForDay(final int day);
+        @Query("SELECT * FROM games WHERE day=:day AND schedule_id=:scheduleId")
+        List<Game> findGamesForDayInSchedule(final int day, String scheduleId);
+
+        @Query("SELECT * FROM games WHERE (home_team_name=:teamName OR visiting_team_name=:teamName) AND schedule_id=:scheduleId")
+        List<Game> findGamesForTeamNameInSchedule(String teamName, String scheduleId);
 }

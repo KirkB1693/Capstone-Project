@@ -12,9 +12,9 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,12 +56,16 @@ public class League implements Parcelable
     }
             ;
 
-    public League(Parcel in) {
-        this.leagueId = ((String) in.readValue((String.class.getClassLoader())));
-        this.orgId = ((String) in.readValue((String.class.getClassLoader())));
-        this.leagueName = ((String) in.readValue((String.class.getClassLoader())));
-        this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
-        in.readList(this.divisions, (com.example.android.baseballbythenumbers.Data.Division.class.getClassLoader()));
+    protected League(Parcel in) {
+        orgId = in.readString();
+        leagueName = in.readString();
+        useDh = in.readByte() != 0x00;
+        if (in.readByte() == 0x01) {
+            divisions = new ArrayList<Division>();
+            in.readList(divisions, Division.class.getClassLoader());
+        } else {
+            divisions = null;
+        }
     }
 
     /**
@@ -134,12 +138,17 @@ public class League implements Parcelable
         return "League Name : " + leagueName + ", Uses DH : " + useDh + "\nDivisions : \n" + divisions;
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(leagueId);
-        dest.writeValue(orgId);
-        dest.writeValue(leagueName);
-        dest.writeValue(useDh);
-        dest.writeList(divisions);
+        dest.writeString(orgId);
+        dest.writeString(leagueName);
+        dest.writeByte((byte) (useDh ? 0x01 : 0x00));
+        if (divisions == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(divisions);
+        }
     }
 
     public int describeContents() {

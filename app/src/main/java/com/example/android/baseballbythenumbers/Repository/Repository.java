@@ -319,8 +319,12 @@ public class Repository {
         return mGameDao.findGamesForSchedule(scheduleId); 
     }
     
-    public List<Game> getGamesForDay (int day) {
-        return mGameDao.findGamesForDay(day);
+    public List<Game> getGamesForDay (int day, String scheduleId) {
+        return mGameDao.findGamesForDayInSchedule(day, scheduleId);
+    }
+
+    public List<Game> getGamesForTeamInSchedule(String teamName, String scheduleId){
+        return mGameDao.findGamesForTeamNameInSchedule(teamName, scheduleId);
     }
 
     public void insertGame (Game game) {
@@ -357,7 +361,7 @@ public class Repository {
 
         @Override
         protected Void doInBackground(Game... games) {
-            mAsyncTaskGameDao.update(games[0]);
+            int updateResult = mAsyncTaskGameDao.update(games[0]);
             return null;
         }
     }

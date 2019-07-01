@@ -17,8 +17,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import timber.log.Timber;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
@@ -360,11 +358,9 @@ public class Player implements Parcelable
             int ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player1.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
             int adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
             int onBasePlayer1 = (player1.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd);
-            Timber.i("OBP Comparator for Player 1 : %s = %s", player1.getName(), onBasePlayer1);
             ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player2.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
             adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
             int onBasePlayer2 = player2.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd;
-            Timber.i("OBP Comparator for Player 2 : %s = %s", player2.getName(), onBasePlayer2);
             //descending order so player2-player1, want highest on base rate (best onbase pct) first
             return onBasePlayer2-onBasePlayer1;
         }
@@ -380,13 +376,11 @@ public class Player implements Parcelable
                     player1.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN +
                     player1.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
                     player1.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
-            Timber.i("Combined Comparator for Player 1 : %s = %s", player1.getName(), combinedPlayer1);
             ballsPctToAdd = ((ONE_HUNDRED_PERCENT - player2.hittingPercentages.getOSwingPct())*(ONE_HUNDRED_PERCENT - BATTING_O_SWING_PCT_MEAN))/(ONE_HUNDRED_PERCENT);
             adjustedBallsPctToAdd = getIntToPower(ballsPctToAdd, 5);
             int combinedPlayer2 = player2.hittingPercentages.getBattingAverageBallsInPlay() + adjustedBallsPctToAdd +
                     player2.hittingPercentages.getHomeRunPct() - BATTING_HOME_RUN_PCT_MEAN + player2.hittingPercentages.getTriplePct() - BATTING_TRIPLE_PCT_MEAN  +
                     player2.hittingPercentages.getDoublePct() - BATTING_DOUBLE_PCT_MEAN;
-            Timber.i("Combined Comparator for Player 2 : %s = %s", player2.getName(), combinedPlayer2);
 
             //descending order so player2-player1, want highest combined rate (best onbase pct + power) first
             return combinedPlayer2-combinedPlayer1;
@@ -403,14 +397,12 @@ public class Player implements Parcelable
                     (PITCHER_ZONE_PCT_MEAN - player1.pitchingPercentages.getZonePct())  +
                     (player1.pitchingPercentages.getOContactPct() - PITCHER_O_CONTACT_PCT_MEAN)) * 4  +
                     (player1.pitchingPercentages.getHomeRunPct() - PITCHER_HOME_RUN_PCT_MEAN) * 13;
-            Timber.i("Pitching Comparator for Player 1 : %s = %s", player1.getName(), pitchingPlayer1);
             int pitchingPlayer2 = (((PITCHER_O_SWING_PCT_MEAN - player2.pitchingPercentages.getOSwingPct())*4) +
                     ( player2.pitchingPercentages.getZSwingPct() - PITCHER_Z_SWING_PCT_MEAN) * 2 +
                     (player2.pitchingPercentages.getZContactPct() - PITCHER_Z_CONTACT_PCT_MEAN) * 2  +
                     (PITCHER_ZONE_PCT_MEAN - player2.pitchingPercentages.getZonePct())  +
                     (player2.pitchingPercentages.getOContactPct() - PITCHER_O_CONTACT_PCT_MEAN)) * 4  +
                     (player2.pitchingPercentages.getHomeRunPct() - PITCHER_HOME_RUN_PCT_MEAN) * 13;
-            Timber.i("Pitching Comparator for Player 2 : %s = %s", player2.getName(), pitchingPlayer2);
 
             //ascending order so player1-player2, want lowest pitching rate (best fip = lowest runs allowed projection) first
             return pitchingPlayer1-pitchingPlayer2;

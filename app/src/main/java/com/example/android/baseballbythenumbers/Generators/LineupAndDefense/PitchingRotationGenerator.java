@@ -30,6 +30,18 @@ public class PitchingRotationGenerator {
     }
 
 
+    public static Player getWorstStarterAvailable(Team team) {
+        List<Player> possibleStarters = new ArrayList<>();
+        for (Player player : team.getPlayers()) {
+            if (player.getPrimaryPosition() == STARTING_PITCHER && pitcherNotTired(player, STARTING_PITCHER)) {
+                possibleStarters.add(player);
+            }
+        }
+
+        Collections.sort(possibleStarters, BestPitcherComparator);
+        return possibleStarters.get(possibleStarters.size()-1);
+    }
+
     public static Player getBestCloserAvailable(Team team) {
         List<Player> possibleClosers = new ArrayList<>();
         for (Player player : team.getPlayers()) {

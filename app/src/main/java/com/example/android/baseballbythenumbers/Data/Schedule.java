@@ -15,6 +15,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,9 +59,14 @@ public class Schedule implements Parcelable {
             ;
 
     protected Schedule(Parcel in) {
-        this.scheduleId = ((String) in.readValue((String.class.getClassLoader())));
-        this.organizationId = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.gameList, (com.example.android.baseballbythenumbers.Data.Game.class.getClassLoader()));
+        scheduleId = in.readString();
+        organizationId = in.readString();
+        if (in.readByte() == 0x01) {
+            gameList = new ArrayList<Game>();
+            in.readList(gameList, Game.class.getClassLoader());
+        } else {
+            gameList = null;
+        }
     }
 
 
@@ -113,9 +119,9 @@ public class Schedule implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(organizationId);
-        parcel.writeString(scheduleId);
-        parcel.writeList(gameList);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(scheduleId);
+        dest.writeString(organizationId);
+        dest.writeByte((byte) (0x00));
     }
 }

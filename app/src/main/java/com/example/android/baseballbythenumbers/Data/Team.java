@@ -14,6 +14,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,15 +70,20 @@ public class Team implements Parcelable
             ;
 
     protected Team(Parcel in) {
-        this.teamId = ((String) in.readValue((String.class.getClassLoader())));
-        this.divisionId = ((String) in.readValue((String.class.getClassLoader())));
-        this.teamName = ((String) in.readValue((String.class.getClassLoader())));
-        this.teamCity = ((String) in.readValue((String.class.getClassLoader())));
-        this.useDh = ((boolean) in.readValue((boolean.class.getClassLoader())));
-        this.teamBudget = ((int) in.readValue((int.class.getClassLoader())));
-        this.wins = ((int) in.readValue((int.class.getClassLoader())));
-        this.losses = ((int) in.readValue((int.class.getClassLoader())));
-        in.readList(this.players, (com.example.android.baseballbythenumbers.Data.Player.class.getClassLoader()));
+        teamId = in.readString();
+        divisionId = in.readString();
+        teamName = in.readString();
+        teamCity = in.readString();
+        useDh = in.readByte() != 0x00;
+        teamBudget = in.readInt();
+        wins = in.readInt();
+        losses = in.readInt();
+        if (in.readByte() == 0x01) {
+            players = new ArrayList<Player>();
+            in.readList(players, Player.class.getClassLoader());
+        } else {
+            players = null;
+        }
     }
 
     /**
@@ -195,16 +201,17 @@ public class Team implements Parcelable
         return "Team Name : " + teamName + "\nTeam City : " + teamCity + "\nTeam Budget : " + teamBudget +"\nPlayers :\n" + players.toString();
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(teamId);
-        dest.writeValue(divisionId);
-        dest.writeValue(teamName);
-        dest.writeValue(teamCity);
-        dest.writeValue(useDh);
-        dest.writeValue(teamBudget);
-        dest.writeValue(wins);
-        dest.writeValue(losses);
-        dest.writeList(players);
+        dest.writeString(teamId);
+        dest.writeString(divisionId);
+        dest.writeString(teamName);
+        dest.writeString(teamCity);
+        dest.writeByte((byte) (useDh ? 0x01 : 0x00));
+        dest.writeInt(teamBudget);
+        dest.writeInt(wins);
+        dest.writeInt(losses);
+        dest.writeByte((byte) (0x00));
     }
 
     public int describeContents() {

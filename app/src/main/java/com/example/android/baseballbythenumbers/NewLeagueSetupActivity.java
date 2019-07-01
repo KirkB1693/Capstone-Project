@@ -82,7 +82,7 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
     private void returnToMainActivity(Organization newOrganization) {
         newLeagueSetupBinding.newLeagueSetupLabel.setText("Finished With League Setup!");
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(ORGANIZATION_EXTRA, newOrganization.getId());
+        intent.putExtra(ORGANIZATION_EXTRA, newOrganization);
         startActivity(intent);
     }
 }
