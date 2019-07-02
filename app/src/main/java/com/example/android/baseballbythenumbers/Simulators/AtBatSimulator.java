@@ -985,11 +985,16 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
                             } else {
-                                // Get a single out
+                                // Get a single out at first
                                 if (whereBallIsHit == SCOREKEEPING_THIRD_BASE || whereBallIsHit == SCOREKEEPING_FIRST_BASE || whereBallIsHit == SCOREKEEPING_PITCHER || whereBallIsHit == SCOREKEEPING_CATCHER) {
                                     // runner stays, out at first
-                                    atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" ")
-                                            .append(batter.getLastName()).append(" out at first.  ").append(runnerOnThird.getRunner().getLastName()).append(" stays at third.  ");
+                                    if (whereBallIsHit != SCOREKEEPING_CATCHER) {
+                                        atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" ")
+                                                .append(batter.getLastName()).append(" out at first.  ").append(runnerOnThird.getRunner().getLastName()).append(" stays at third.  ");
+                                    } else {
+                                        atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(SCOREKEEPING_FIRST_BASE)).append(" ")
+                                                .append(batter.getLastName()).append(" out at first.  ").append(runnerOnThird.getRunner().getLastName()).append(" stays at third.  ");
+                                    }
                                     formatAtBatResult();
                                     outs++;
                                 } else {
@@ -1358,8 +1363,12 @@ public class AtBatSimulator {
                                 }
                             } else {
                                 // no error, turn double play
-                                atBatSummary.append(", Out!  He throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
-                                        .append(" and catches the runner off the bag!  Double Play!  ");
+                                if (whereBallIsHit != SCOREKEEPING_FIRST_BASE) {
+                                    atBatSummary.append(", Out!  He throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
+                                            .append(" and catches the runner off the bag!  Double Play!  ");
+                                } else {
+                                    atBatSummary.append(", Out!  He catches the runner off the bag!  Double Play!  ");
+                                }
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;

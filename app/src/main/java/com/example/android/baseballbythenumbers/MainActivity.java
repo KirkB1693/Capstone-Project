@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.baseballbythenumbers.Data.DataForMainScreen;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean teamsAreLoaded;
     private TreeMap<Integer, List<Game>> listOfAllGamesByDay;
     private boolean gamesAreLoaded;
+    private boolean orgLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.startGameButton.setOnClickListener(this);
         mainBinding.simulateGameButton.setOnClickListener(this);
 
+        orgLoaded = false;
+        teamsAreLoaded = false;
+        gamesAreLoaded = false;
+
         if (orgId != null) {                                 // If we have an orgId move forward
             updateUIFromDb(orgId);
             new loadAllTeamsInBackgroundTask(repository).execute(orgId);
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateUIFromDb(String orgId) {
-        new getDataFromDbAndUpdateUIAsyncTask(repository).execute(orgId);
+        new getOrgFromDbAndCreateUserGameListAsyncTask(repository, organization).execute(orgId);
     }
 
     private void goToNewLeagueSetupActivity() {
@@ -125,13 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    private void updateUI(Organization orgToDisplay, Team usersTeam, Team homeTeam, Team visitingTeam, Game nextGame, List<Game> gamesForTeamList) {
-        organization = orgToDisplay;
-        this.usersTeam = usersTeam;
-        this.homeTeam = homeTeam;
-        this.visitingTeam = visitingTeam;
-        this.nextGame = nextGame;
-        this.gamesForUserToPlay = gamesForTeamList;
+    private void updateUI() {
 
         if (sharedPreferences.getString(ORG_ID_SHARED_PREF_KEY, null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -139,26 +137,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.apply();
         }
 
-        Player nextHomeStarter = PitchingRotationGenerator.getBestStarterAvailable(homeTeam);
-        Player nextVisitingStarter = PitchingRotationGenerator.getBestStarterAvailable(visitingTeam);
-        mainBinding.mainProgressBar.setVisibility(View.GONE);
-        mainBinding.userNameTV.setText(organization.getOrganizationName());
-        mainBinding.homeCityTV.setText(homeTeam.getTeamCity());
-        mainBinding.homeTeamNameTV.setText(homeTeam.getTeamName());
-        String homeWL = formatWL(homeTeam);
-        mainBinding.homeTeamWLTV.setText(homeWL);
-        mainBinding.homeStarterTV.setText(nextHomeStarter.getName());
-        String homeStarterStats = formatStarterStats(nextHomeStarter.getPitchingStats());
-        mainBinding.homeStarterStatsTV.setText(homeStarterStats);
+        if (homeTeam != null && visitingTeam != null) {
+            Player nextHomeStarter = PitchingRotationGenerator.getBestStarterAvailableForNextGame(homeTeam);
+            Player nextVisitingStarter = PitchingRotationGenerator.getBestStarterAvailableForNextGame(visitingTeam);
+            mainBinding.mainProgressBar.setVisibility(View.GONE);
+            mainBinding.userNameTV.setText(organization.getOrganizationName());
+            mainBinding.homeCityTV.setText(homeTeam.getTeamCity());
+            mainBinding.homeTeamNameTV.setText(homeTeam.getTeamName());
+            String homeWL = formatWL(homeTeam);
+            mainBinding.homeTeamWLTV.setText(homeWL);
+            mainBinding.homeStarterTV.setText(nextHomeStarter.getName());
+            String homeStarterStats = formatStarterStats(nextHomeStarter.getPitchingStats());
+            mainBinding.homeStarterStatsTV.setText(homeStarterStats);
 
-        mainBinding.visitingTeamNameTV.setText(visitingTeam.getTeamName());
-        mainBinding.visitingCityTV.setText(visitingTeam.getTeamCity());
-        String visitorWL = formatWL(visitingTeam);
-        mainBinding.visitingTeamWLTV.setText(visitorWL);
-        mainBinding.visitingStarterTV.setText(nextVisitingStarter.getName());
-        String visitingStarterStats = formatStarterStats(nextVisitingStarter.getPitchingStats());
-        mainBinding.visitingStarterStatsTV.setText(visitingStarterStats);
-
+            mainBinding.visitingTeamNameTV.setText(visitingTeam.getTeamName());
+            mainBinding.visitingCityTV.setText(visitingTeam.getTeamCity());
+            String visitorWL = formatWL(visitingTeam);
+            mainBinding.visitingTeamWLTV.setText(visitorWL);
+            mainBinding.visitingStarterTV.setText(nextVisitingStarter.getName());
+            String visitingStarterStats = formatStarterStats(nextVisitingStarter.getPitchingStats());
+            mainBinding.visitingStarterStatsTV.setText(visitingStarterStats);
+        }
     }
 
     @NotNull
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void simGame(final Game game, final Team homeTeam, Team visitingTeam) {
+    public void simGame(Game game, Team homeTeam, Team visitingTeam) {
 
         GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false);
         int[] result = gameSimulator.simulateGame();
@@ -183,12 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         game.setVisitorScore(result[1]);
         game.setPlayedGame(true);
 
-        mainBinding.gameScoresTV.post(new Runnable() {
-            @Override
-            public void run() {
-                mainBinding.gameScoresTV.setText(String.format(Locale.US, "%s - %s\n%d    -    %d", game.getHomeTeamName(), game.getVisitingTeamName(), game.getHomeScore(), game.getVisitorScore()));
-            }
-        });
+        mainBinding.gameScoresTV.setText(String.format(Locale.US, "%s - %s\n%d    -    %d", game.getHomeTeamName(), game.getVisitingTeamName(), game.getHomeScore(), game.getVisitorScore()));
 
         repository.updateGame(game);
         repository.insertBoxScore(game.getHomeBoxScore());
@@ -239,11 +233,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onSimulateGameButtonPressed() {
+        disableGameButtons();
         mainBinding.mainProgressBar.setVisibility(View.VISIBLE);
         mainBinding.gameScoresTV.setVisibility(View.VISIBLE);
         mainBinding.simulateGameButton.setEnabled(false);
         dayOfSchedule = nextGame.getDay();
-        simRestOfGamesForDay();
+        simAllGamesForDay();
         nextGame = findNextUnplayedGame(gamesForUserToPlay);
         dayOfSchedule++;
         if (nextGame != null) {
@@ -251,21 +246,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (dayOfSchedule > nextGame.getDay()) {
                     break;
                 }
-                simRestOfGamesForDay();
+                simAllGamesForDay();
                 dayOfSchedule++;
             }
             if (homeTeam == null || visitingTeam == null) {
-                new getTeamFromDbAndUpdateUIAsyncTask(repository, organization, nextGame, usersTeam, gamesForUserToPlay).execute();
+                Timber.e("Games didn't load properly, either homeTeamName or visitingTeamName was null!!!");
             }
+        } else {
+            Timber.e("Error!!! nextGame was null when Simulate Game Button Was Pressed");
         }
     }
 
-    private void simRestOfGamesForDay() {
-        simRestOfGamesOnMainThread();
-        //new simRestOfGamesAsyncTask(repository, dayOfSchedule, listOfAllTeams).execute(organization);
-    }
 
-    private void simRestOfGamesOnMainThread() {
+    private void simAllGamesForDay() {
         if (teamsAreLoaded && gamesAreLoaded) {
             List<Game> gameList;
             Team homeTeam;
@@ -283,54 +276,93 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mainBinding.gameScoresTV.setText("");
             mainBinding.gameScoresTV.setVisibility(View.INVISIBLE);
             mainBinding.mainProgressBar.setVisibility(View.GONE);
-            mainBinding.simulateGameButton.setEnabled(true);
-            updateUI(organization, usersTeam, this.homeTeam, this.visitingTeam, nextGame, gamesForUserToPlay);
+            enableGamePlayButtons();
+            updateUI();
         } else {
-            new simRestOfGamesAsyncTask(repository, dayOfSchedule, listOfAllTeams).execute(organization);
+            Timber.e("Error teams and games should be loaded but aren't!!!");
         }
     }
 
 
-    private class getDataFromDbAndUpdateUIAsyncTask extends AsyncTask<String, Void, DataForMainScreen> {
-        private Repository repository;
+    private class getOrgFromDbAndCreateUserGameListAsyncTask extends AsyncTask<String, Void, Organization> {
+        private Repository asyncRepository;
+        private Organization asyncOrganization;
 
-        public getDataFromDbAndUpdateUIAsyncTask(Repository repository) {
-            this.repository = repository;
+        getOrgFromDbAndCreateUserGameListAsyncTask(Repository repository, Organization organization) {
+            this.asyncRepository = repository;
+            this.asyncOrganization = organization;
+
         }
 
         @Override
-        protected DataForMainScreen doInBackground(String... orgIds) {
-            Organization orgById = repository.getOrganizationById(orgIds[0]);
-            List<Schedule> schedules = repository.getSchedulesForOrganization(orgById.getId());
-            Team usersTeam = getTeamWithPlayersAndStatsFromName(orgById.getUserTeamName());
-            List<Game> gameListForUserTeam = repository.getGamesForTeamInSchedule(orgById.getUserTeamName(), schedules.get(orgById.getCurrentYear()).getScheduleId());
-            Game nextGame = findNextUnplayedGame(gameListForUserTeam);
-            Team homeTeam = null;
-            Team visitingTeam = null;
-            if (nextGame != null) {
-                if (nextGame.getHomeTeamName().equals(orgById.getUserTeamName())) {
-                    homeTeam = usersTeam;
-                    visitingTeam = getTeamWithPlayersAndStatsFromName(nextGame.getVisitingTeamName());
-                } else {
-                    homeTeam = getTeamWithPlayersAndStatsFromName(nextGame.getHomeTeamName());
-                    visitingTeam = usersTeam;
+        protected Organization doInBackground(String... orgIds) {
+            if (asyncOrganization == null) {
+                asyncOrganization = asyncRepository.getOrganizationById(orgIds[0]);
+                List<League> leagues = asyncRepository.getLeaguesForOrganization(asyncOrganization.getId());
+                asyncOrganization.setLeagues(leagues);
+                for (League league : leagues) {
+                    league.setDivisions(asyncRepository.getDivisionsForLeague(league.getLeagueId()));
+                }
+                List<Schedule> schedules = asyncRepository.getSchedulesForOrganization(asyncOrganization.getId());
+                asyncOrganization.setSchedules(schedules);
+            }
+            return asyncOrganization;
+        }
+
+        @Override
+        protected void onPostExecute(Organization dataReturned) {
+            super.onPostExecute(dataReturned);
+            if (dataReturned != null) {
+                orgLoaded = true;
+                organization = dataReturned;
+                if (teamsAreLoaded) {
+                    combineTeamsWithOrganization();
+                    if (gamesAreLoaded) {
+                        generateListOfGamesForUser();
+                        nextGame = findNextUnplayedGame(gamesForUserToPlay);
+                        enableGamePlayButtons();
+                        updateUI();
+                    }
+                }
+            } else {
+                Timber.e("Error Loading Organization!!!  -  Organization is null!");
+            }
+        }
+
+    }
+
+    private void generateListOfGamesForUser() {
+        usersTeam = listOfAllTeams.get(organization.getUserTeamName());
+        List<Game> gameListForUser = new ArrayList<>();
+        for (TreeMap.Entry entry : listOfAllGamesByDay.entrySet())  {
+            List<Game> gameListforDay = (List<Game>) entry.getValue();
+            if (gameListforDay != null) {
+                for (Game game : gameListforDay){
+                    if (game.getHomeTeamName().equals(usersTeam.getTeamName()) || game.getVisitingTeamName().equals(usersTeam.getTeamName())) {
+                        gameListForUser.add(game);
+                    }
                 }
             }
 
-            if (usersTeam == null || nextGame == null || homeTeam == null || visitingTeam == null) {
-                goToNewLeagueSetupActivity();
-                return null;
-            }
-            return new DataForMainScreen(orgById, usersTeam, homeTeam, visitingTeam, nextGame, gameListForUserTeam);
         }
+        gamesForUserToPlay = gameListForUser;
+    }
 
-        @Override
-        protected void onPostExecute(DataForMainScreen dataForMainScreen) {
-            super.onPostExecute(dataForMainScreen);
-            if (dataForMainScreen != null) {
-                updateUI(dataForMainScreen.getOrganization(), dataForMainScreen.getUserTeam(), dataForMainScreen.getHomeTeam(), dataForMainScreen.getVisitingTeam(),
-                        dataForMainScreen.getNextGame(), dataForMainScreen.getGamesForTeamList());
+    private void combineTeamsWithOrganization() {
+        List<League> leagueList = organization.getLeagues();
+        List<Division> divisionList = new ArrayList<>();
+        for (League league : leagueList) {
+            divisionList.addAll(league.getDivisions());
+        }
+        for (Division division : divisionList) {
+            List<Team> teamListForDiv = new ArrayList<>();
+            for (TreeMap.Entry entry : listOfAllTeams.entrySet()) {
+                Team team = (Team) entry.getValue();
+                if (division.getDivisionId().equals(team.getDivisionId())) {
+                    teamListForDiv.add(team);
+                }
             }
+            division.setTeams(teamListForDiv);
         }
     }
 
@@ -341,8 +373,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (teamsAreLoaded) {
                     homeTeam = listOfAllTeams.get(game.getHomeTeamName());
                     visitingTeam = listOfAllTeams.get(game.getVisitingTeamName());
-                } else {
-                    homeTeam = null;
                 }
                 return game;
             }
@@ -364,95 +394,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return team;
     }
 
-    private class simRestOfGamesAsyncTask extends AsyncTask<Organization, Void, Void> {
-        private Repository mRepository;
-        private int mDayToSim;
-        private TreeMap<String, Team> teamTreeMap;
-
-        public simRestOfGamesAsyncTask(Repository repository, int dayToSim, TreeMap<String, Team> teamTreeMap) {
-            mRepository = repository;
-            mDayToSim = dayToSim;
-            this.teamTreeMap = teamTreeMap;
-        }
-
-        @Override
-        protected Void doInBackground(Organization... organizations) {
-            Organization myOrg = organizations[0];
-            List<Schedule> scheduleList = mRepository.getSchedulesForOrganization(myOrg.getId());
-            Schedule schedule = scheduleList.get(myOrg.getCurrentYear());
-            schedule.setGameList(mRepository.getGamesForSchedule(schedule.getScheduleId()));
-            List<Game> gameList;
-            Team homeTeam;
-            Team visitingTeam;
-            gameList = repository.getGamesForDay(mDayToSim, schedule.getScheduleId());
-            if (gameList != null) {
-                for (Game game : gameList) {
-                    if (!game.isPlayedGame()) {
-                        homeTeam = teamTreeMap.get(game.getHomeTeamName());
-                        visitingTeam = teamTreeMap.get((game.getVisitingTeamName()));
-                        if (homeTeam == null) {
-                            homeTeam = getTeamWithPlayersAndStatsFromName(game.getHomeTeamName());
-                        }
-                        if (visitingTeam == null) {
-                            visitingTeam = getTeamWithPlayersAndStatsFromName(game.getVisitingTeamName());
-                        }
-                        simGame(game, homeTeam, visitingTeam);
-                    }
-                }
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mainBinding.gameScoresTV.setText("");
-            mainBinding.gameScoresTV.setVisibility(View.INVISIBLE);
-            mainBinding.mainProgressBar.setVisibility(View.GONE);
-            mainBinding.simulateGameButton.setEnabled(true);
-            updateUI(organization, usersTeam, homeTeam, visitingTeam, nextGame, gamesForUserToPlay);
-        }
+    private void disableGameButtons() {
+        mainBinding.simulateGameButton.setEnabled(false);
+        mainBinding.coachSetsLineupButton.setEnabled(false);
     }
 
-    private class getTeamFromDbAndUpdateUIAsyncTask extends AsyncTask<Void, Void, DataForMainScreen> {
-        private Repository mRepository;
-        private Organization mOrg;
-        private Game mGame;
-        private Team mUsersTeam;
-        private List<Game> mGameList;
-
-        public getTeamFromDbAndUpdateUIAsyncTask(Repository repository, Organization organization, Game nextGame, Team usersTeam, List<Game> gamesToPlay) {
-            mRepository = repository;
-            mOrg = organization;
-            mGame = nextGame;
-            mUsersTeam = usersTeam;
-            mGameList = gamesToPlay;
-        }
-
-        @Override
-        protected DataForMainScreen doInBackground(Void... voids) {
-            Team homeTeam = null;
-            Team visitingTeam = null;
-            if (mGame.getHomeTeamName().equals(mUsersTeam.getTeamName())) {
-                homeTeam = mUsersTeam;
-                visitingTeam = getTeamWithPlayersAndStatsFromName(mGame.getVisitingTeamName());
-                return new DataForMainScreen(mOrg, mUsersTeam, homeTeam, visitingTeam, mGame, mGameList);
-            } else if (mGame.getVisitingTeamName().equals(mUsersTeam.getTeamName())) {
-                homeTeam = getTeamWithPlayersAndStatsFromName(mGame.getHomeTeamName());
-                visitingTeam = mUsersTeam;
-                return new DataForMainScreen(mOrg, mUsersTeam, homeTeam, visitingTeam, mGame, mGameList);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(DataForMainScreen dataForMainScreen) {
-            super.onPostExecute(dataForMainScreen);
-            mainBinding.simulateGameButton.setEnabled(true);
-            updateUI(dataForMainScreen.getOrganization(), dataForMainScreen.getUserTeam(), dataForMainScreen.getHomeTeam(), dataForMainScreen.getVisitingTeam(), dataForMainScreen.getNextGame(), dataForMainScreen.getGamesForTeamList());
-        }
-    }
 
     private class loadAllTeamsInBackgroundTask extends AsyncTask<String, Void, TreeMap<String, Team>> {
         private Repository repository;
@@ -498,9 +444,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(teams);
             if (teams != null) {
                 listOfAllTeams = teams;
-                listOfAllTeams.put(homeTeam.getTeamName(), homeTeam);
-                listOfAllTeams.put(visitingTeam.getTeamName(), visitingTeam);
                 teamsAreLoaded = true;
+                if (orgLoaded) {
+                    combineTeamsWithOrganization();
+                    if (gamesAreLoaded) {
+                        generateListOfGamesForUser();
+                        nextGame = findNextUnplayedGame(gamesForUserToPlay);
+                        enableGamePlayButtons();
+                        updateUI();
+                    }
+                }
+            } else {
+                Timber.e("Error!!! Error loading teams... Teams TreeMap returned null.");
             }
         }
     }
@@ -521,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return null;
             }
             Collections.sort(gameList);
-            int numOfDaysInSchedule = gameList.get(gameList.size()-1).getDay() + 1;
+            int numOfDaysInSchedule = gameList.get(gameList.size() - 1).getDay() + 1;
             TreeMap<Integer, List<Game>> gamesTreeMap = new TreeMap<>();
             for (int i = 0; i < numOfDaysInSchedule; i++) {
                 List<Game> gamesForDay = new ArrayList<>();
@@ -542,7 +497,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (gamesTreeMap != null) {
                 listOfAllGamesByDay = gamesTreeMap;
                 gamesAreLoaded = true;
+                if (teamsAreLoaded && orgLoaded) {
+                    generateListOfGamesForUser();
+                    nextGame = findNextUnplayedGame(gamesForUserToPlay);
+                    enableGamePlayButtons();
+                    updateUI();
+                }
             }
         }
+    }
+
+    private void enableGamePlayButtons() {
+        mainBinding.simulateGameButton.setEnabled(true);
+        mainBinding.coachSetsLineupButton.setEnabled(true);
     }
 }

@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.TreeMap;
 
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.SHORT_RELIEVER_STAMINA_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.STARTER_STAMINA_MIN;
-import static com.example.android.baseballbythenumbers.Data.Player.BestPitcherComparator;
 import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
 import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
 import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.Data.Player.BestPitcherComparator;
 
 public class PitchingRotationGenerator {
+
+    private static int STARTER_DAYS_TO_RECOVER_FULLY = 5;
 
     public static Player getBestStarterAvailable(Team team) {
         List<Player> possibleStarters = new ArrayList<>();
@@ -25,6 +26,38 @@ public class PitchingRotationGenerator {
             }
         }
 
+        if (possibleStarters.isEmpty()) {
+            possibleStarters.add(getStarterWithMostStaminaLeft(team));
+        }
+        Collections.sort(possibleStarters, BestPitcherComparator);
+        return possibleStarters.get(0);
+    }
+
+    private static Player getStarterWithMostStaminaLeft(Team team) {
+        Player mostRestedStarter = null;
+        int mostStaminaLeft = 0;
+        for (Player player : team.getPlayers()) {
+            if (player.getPrimaryPosition() == STARTING_PITCHER || player.getPrimaryPosition() == LONG_RELIEVER) {
+                int currentPitcherStaminaLeft = player.getPitchingPercentages().getPitchingStamina() - player.getPitchingPercentages().getPitchingStaminaUsed();
+                if ( currentPitcherStaminaLeft > mostStaminaLeft) {
+                    mostRestedStarter = player;
+                    mostStaminaLeft = currentPitcherStaminaLeft;
+                }
+            }
+        }
+        return mostRestedStarter;
+    }
+
+    public static Player getBestStarterAvailableForNextGame(Team team) {
+        List<Player> possibleStarters = new ArrayList<>();
+        for (Player player : team.getPlayers()) {
+            if (player.getPrimaryPosition() == STARTING_PITCHER && pitcherNotTiredForNextGame(player, STARTING_PITCHER)) {
+                possibleStarters.add(player);
+            }
+        }
+        if (possibleStarters.isEmpty()) {
+            possibleStarters.add(getStarterWithMostStaminaLeft(team));
+        }
         Collections.sort(possibleStarters, BestPitcherComparator);
         return possibleStarters.get(0);
     }
@@ -37,7 +70,9 @@ public class PitchingRotationGenerator {
                 possibleStarters.add(player);
             }
         }
-
+        if (possibleStarters.isEmpty()) {
+            possibleStarters.add(getStarterWithMostStaminaLeft(team));
+        }
         Collections.sort(possibleStarters, BestPitcherComparator);
         return possibleStarters.get(possibleStarters.size()-1);
     }
@@ -77,7 +112,19 @@ public class PitchingRotationGenerator {
         int pitcherStaminaLeft = pitcher.getPitchingPercentages().getPitchingStamina() - pitcher.getPitchingPercentages().getPitchingStaminaUsed();
         switch (primaryPosition) {
             case STARTING_PITCHER:
-                return (pitcherStaminaLeft >= STARTER_STAMINA_MIN && pitcher.getPitchingPercentages().getPitchingStaminaUsed() < 25);
+                return (pitcher.getPitchingPercentages().getPitchingStaminaUsed() < ((pitcher.getPitchingPercentages().getPitchingStamina() / STARTER_DAYS_TO_RECOVER_FULLY)));
+            case LONG_RELIEVER:
+            case SHORT_RELEIVER:
+                return (pitcherStaminaLeft >= SHORT_RELIEVER_STAMINA_MIN);
+        }
+        return false;
+    }
+
+    private static boolean pitcherNotTiredForNextGame(Player pitcher, int primaryPosition) {
+        int pitcherStaminaLeft = pitcher.getPitchingPercentages().getPitchingStamina() - pitcher.getPitchingPercentages().getPitchingStaminaUsed();
+        switch (primaryPosition) {
+            case STARTING_PITCHER:
+                return (pitcher.getPitchingPercentages().getPitchingStaminaUsed() < 2*((pitcher.getPitchingPercentages().getPitchingStamina() / STARTER_DAYS_TO_RECOVER_FULLY)));
             case LONG_RELIEVER:
             case SHORT_RELEIVER:
                 return (pitcherStaminaLeft >= SHORT_RELIEVER_STAMINA_MIN);

@@ -993,7 +993,7 @@ public class GameSimulator {
             }
             int pitcherRecovery = DEFAULT_RECOVERY;
             if (player.getPrimaryPosition() == STARTING_PITCHER) {
-                pitcherRecovery = 25;
+                pitcherRecovery = player.getPitchingPercentages().getPitchingStamina() / 5;
             }
             int newPitchingStaminaUsed = player.getPitchingPercentages().getPitchingStaminaUsed() - pitcherRecovery;
             if (newPitchingStaminaUsed < 0) {
