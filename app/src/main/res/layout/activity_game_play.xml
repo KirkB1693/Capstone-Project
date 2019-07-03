@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_background"
+    tools:context=".GamePlayActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/score_background_image">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="60dp"
+            app:tabSelectedTextColor="@color/primaryTextColor"
+            app:tabTextColor="@color/divider"
+            tools:context=".GamePlayActivity"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:layout_editor_absoluteY="48dp" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/scoreboard_table_layout"
+        style="@style/ScoreboardLabels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        android:stretchColumns="*"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:id="@+id/scoreboard_label_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/scoreboard_blank_label"
+                style="@style/ScoreboardLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/inning_1_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/inning_2_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="2" />
+
+            <TextView
+                android:id="@+id/inning_3_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="3" />
+
+            <TextView
+                android:id="@+id/inning_4_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="4" />
+
+            <TextView
+                android:id="@+id/inning_5_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="5" />
+
+            <TextView
+                android:id="@+id/inning_6_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="6" />
+
+            <TextView
+                android:id="@+id/inning_7_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="7" />
+
+            <TextView
+                android:id="@+id/inning_8_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="8" />
+
+            <TextView
+                android:id="@+id/inning_9_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="9" />
+
+            <TextView
+                android:id="@+id/inning_10_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="10"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_11_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="11"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_12_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="12"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/scoreboard_runs_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="R" />
+
+            <TextView
+                android:id="@+id/scoreboard_hits_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="H" />
+
+            <TextView
+                android:id="@+id/scoreboard_errors_label_tv"
+                style="@style/ScoreboardLabels"
+                android:text="E" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/scoreboard_visitor_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/scoreboard_visitor_name_tv"
+                style="@style/ScoreboardLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                tools:text="Visitor" />
+
+
+            <TextView
+                android:id="@+id/inning_1_visitor_score_tv"
+                style="@style/Scoreboard"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/inning_2_visitor_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_3_visitor_score_tv"
+                style="@style/Scoreboard"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/inning_4_visitor_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_5_visitor_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/inning_6_visitor_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_7_visitor_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_8_visitor_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_9_visitor_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_10_visitor_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_11_visitor_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_12_visitor_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/scoreboard_runs_visitor_tv"
+                style="@style/Scoreboard"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                tools:text="3" />
+
+            <TextView
+                android:id="@+id/scoreboard_hits_visitor_tv"
+                style="@style/Scoreboard"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/scoreboard_errors_visitor_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/scoreboard_home_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/scoreboard_home_name_tv"
+                style="@style/ScoreboardLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                tools:text="Home" />
+
+
+            <TextView
+                android:id="@+id/inning_1_home_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_2_home_score_tv"
+                style="@style/Scoreboard"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/inning_3_home_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_4_home_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_5_home_score_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/inning_6_home_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_7_home_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_8_home_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_9_home_score_tv"
+                style="@style/Scoreboard" />
+
+            <TextView
+                android:id="@+id/inning_10_home_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_11_home_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/inning_12_home_score_tv"
+                style="@style/Scoreboard"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/scoreboard_runs_home_tv"
+                style="@style/Scoreboard"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                tools:text="4" />
+
+            <TextView
+                android:id="@+id/scoreboard_hits_home_tv"
+                style="@style/Scoreboard"
+                tools:text="7" />
+
+            <TextView
+                android:id="@+id/scoreboard_errors_home_tv"
+                style="@style/Scoreboard"
+                tools:text="1" />
+
+        </TableRow>
+    </TableLayout>
+
+    <ImageView
+        android:id="@+id/score_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ballpark_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scoreboard_table_layout" />
+
+    <TextView
+        android:id="@+id/game_play_at_bat_result_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/primaryTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/score_background_image"
+        app:layout_constraintTop_toTopOf="@+id/score_background_image"
+        tools:text="At Bat Result" />
+
+
+</android.support.constraint.ConstraintLayout>

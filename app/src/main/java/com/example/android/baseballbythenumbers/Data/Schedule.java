@@ -22,7 +22,7 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "schedules", foreignKeys = @ForeignKey(entity = Organization.class, parentColumns = "id", childColumns = "organization_id",onDelete = CASCADE), indices = @Index(value = "organization_id"))
-public class Schedule implements Parcelable {
+public class Schedule implements Parcelable, Comparable<Schedule> {
 
     @SerializedName("scheduleId")
     @Expose
@@ -35,6 +35,11 @@ public class Schedule implements Parcelable {
     @Expose
     @ColumnInfo(name = "organization_id")
     private String organizationId;
+
+    @SerializedName("scheduleYear")
+    @Expose
+    @ColumnInfo(name = "schedule_year")
+    private int scheduleYear;
 
     @Ignore
     @SerializedName("games")
@@ -61,6 +66,7 @@ public class Schedule implements Parcelable {
     protected Schedule(Parcel in) {
         scheduleId = in.readString();
         organizationId = in.readString();
+        scheduleYear = in.readInt();
         if (in.readByte() == 0x01) {
             gameList = new ArrayList<Game>();
             in.readList(gameList, Game.class.getClassLoader());
@@ -107,6 +113,14 @@ public class Schedule implements Parcelable {
         this.gameList = gameList;
     }
 
+    public int getScheduleYear() {
+        return scheduleYear;
+    }
+
+    public void setScheduleYear(int scheduleYear) {
+        this.scheduleYear = scheduleYear;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -122,6 +136,18 @@ public class Schedule implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(scheduleId);
         dest.writeString(organizationId);
+        dest.writeInt(scheduleYear);
         dest.writeByte((byte) (0x00));
+    }
+
+    @Override
+    public int compareTo(Schedule schedule) {
+        if (scheduleYear > schedule.scheduleYear) {
+            return 1;
+        } else if (scheduleYear < schedule.scheduleYear) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.League;
@@ -25,6 +25,7 @@ import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
+import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
@@ -44,7 +45,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String ORG_ID_SHARED_PREF_KEY = "orgId";
-    private SpannableStringBuilder displayText;
     private List<Game> gamesForUserToPlay;
     private Organization organization;
     private Repository repository;
@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 organization = extras.getParcelable(NewLeagueSetupActivity.ORGANIZATION_EXTRA);
-                orgId = organization.getId();
+                if (organization != null) {
+                    orgId = organization.getId();
+                }
             }
         }
 
@@ -136,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.putString(ORG_ID_SHARED_PREF_KEY, organization.getId());
             editor.apply();
         }
+        if (nextGame == null) {
+            endofSeason();
+        }
 
         if (homeTeam != null && visitingTeam != null) {
             Player nextHomeStarter = PitchingRotationGenerator.getBestStarterAvailableForNextGame(homeTeam);
@@ -157,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mainBinding.visitingStarterTV.setText(nextVisitingStarter.getName());
             String visitingStarterStats = formatStarterStats(nextVisitingStarter.getPitchingStats());
             mainBinding.visitingStarterStatsTV.setText(visitingStarterStats);
+        } else {
+            Timber.e("Error!!! Either home or visiting team was null!");
         }
     }
 
@@ -167,15 +174,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @NotNull
     private String formatStarterStats(List<PitchingStats> pitchingStats) {
-        String ps = "ERA : " + String.format(Locale.US, "%.2f", pitchingStats.get(organization.getCurrentYear()).getERA()) + ", WHIP : " +
-                String.format(Locale.US, "%.2f", pitchingStats.get(0).getWHIP());
-        return ps;
+        return "ERA : " + String.format(Locale.US, "%.2f", pitchingStats.get(organization.getCurrentYear()).getERA()) + ", WHIP : " +
+                String.format(Locale.US, "%.2f", pitchingStats.get(organization.getCurrentYear()).getWHIP());
     }
 
 
     public void simGame(Game game, Team homeTeam, Team visitingTeam) {
 
-        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false);
+        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear());
         int[] result = gameSimulator.simulateGame();
 
         game.setHomeScore(result[0]);
@@ -210,11 +216,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onCoachSetsLineupButtonPressed();
                 break;
             case R.id.startGameButton:
+                startGamePlayActivity();
                 break;
             case R.id.simulateGameButton:
                 onSimulateGameButtonPressed();
                 break;
         }
+    }
+
+    private void startGamePlayActivity() {
+        Intent gamePlayIntent = new Intent(this, GamePlayActivity.class);
+        this.startActivity(gamePlayIntent);
+        finish();
     }
 
     private void onCoachSetsLineupButtonPressed() {
@@ -253,8 +266,83 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Timber.e("Games didn't load properly, either homeTeamName or visitingTeamName was null!!!");
             }
         } else {
-            Timber.e("Error!!! nextGame was null when Simulate Game Button Was Pressed");
+            endofSeason();
         }
+
+
+    }
+
+    private void endofSeason() {
+        ScheduleGenerator scheduleGenerator = new ScheduleGenerator(organization);
+        organization.setCurrentYear(organization.getCurrentYear() + 1);
+        Schedule newSeasonSchedule = scheduleGenerator.generateSchedule(mainBinding.mainProgressBar);
+        List<Schedule> newSchedList = organization.getSchedules();
+        newSchedList.add(newSeasonSchedule);
+        organization.setSchedules(newSchedList);
+
+        repository.updateOrganization(organization);
+        repository.insertSchedule(newSeasonSchedule);
+        repository.insertAllGames(newSeasonSchedule.getGameList());
+        addNewStatsForPlayers();
+        setNewListOfAllGamesByDay(newSeasonSchedule.getGameList());
+        generateListOfGamesForUser();
+        nextGame = findNextUnplayedGame(gamesForUserToPlay);
+        resetTeamRecords();
+        updateUI();
+    }
+
+    private void resetTeamRecords() {
+        for (TreeMap.Entry entry : listOfAllTeams.entrySet()) {
+            Team team = (Team) entry.getValue();
+            team.setWins(0);
+            team.setLosses(0);
+            repository.updateTeam(team);
+        }
+    }
+
+    private void setNewListOfAllGamesByDay(List<Game> gameList) {
+        if (gameList == null) {
+            Timber.e("Error!!!, Tried to setNewListOfAllGamesByDay with a null list of games!!!");
+            return;
+        }
+        Collections.sort(gameList);
+        int numOfDaysInSchedule = gameList.get(gameList.size() - 1).getDay() + 1;
+        TreeMap<Integer, List<Game>> gamesTreeMap = new TreeMap<>();
+        for (int i = 0; i < numOfDaysInSchedule; i++) {
+            List<Game> gamesForDay = new ArrayList<>();
+            for (Game game : gameList) {
+                if (game.getDay() == i) {
+                    gamesForDay.add(game);
+                }
+            }
+            gamesTreeMap.put(i, gamesForDay);
+        }
+        listOfAllGamesByDay = gamesTreeMap;
+    }
+
+    private void addNewStatsForPlayers() {
+        List<Player> playerList = getAllPlayers();
+        for (Player player : playerList) {
+            List<BattingStats> battingStatsList = player.getBattingStats();
+            BattingStats newBattingStats = new BattingStats(organization.getCurrentYear(), 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, player.getPlayerId());
+            battingStatsList.add(organization.getCurrentYear(), newBattingStats);
+            repository.insertBattingStats(newBattingStats);
+            List<PitchingStats> pitchingStatsList = player.getPitchingStats();
+            PitchingStats newPitchingStats = new PitchingStats(organization.getCurrentYear(),0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, player.getPlayerId());
+            pitchingStatsList.add(organization.getCurrentYear(), newPitchingStats);
+            repository.insertPitchingStats(newPitchingStats);
+            player.setBattingStats(battingStatsList);
+            player.setPitchingStats(pitchingStatsList);
+        }
+    }
+
+    private List<Player> getAllPlayers() {
+        List<Player> playerList = new ArrayList<>();
+        for (TreeMap.Entry entry : listOfAllTeams.entrySet()) {
+            Team team = (Team) entry.getValue();
+            playerList.addAll(team.getPlayers());
+        }
+        return playerList;
     }
 
 
@@ -335,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         usersTeam = listOfAllTeams.get(organization.getUserTeamName());
         List<Game> gameListForUser = new ArrayList<>();
         for (TreeMap.Entry entry : listOfAllGamesByDay.entrySet())  {
+            @SuppressWarnings("unchecked")
             List<Game> gameListforDay = (List<Game>) entry.getValue();
             if (gameListforDay != null) {
                 for (Game game : gameListforDay){
@@ -380,23 +469,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return null;
     }
 
-    private Team getTeamWithPlayersAndStatsFromName(String userTeamName) {
-        Team team = repository.getTeamWithTeamName(userTeamName);
-        if (team != null) {
-            team.setPlayers(repository.getPlayersForTeam(team.getTeamId()));
-            if (team.getPlayers() != null) {
-                for (Player player : team.getPlayers()) {
-                    player.setBattingStats(repository.getBattingStatsForPlayer(player.getPlayerId()));
-                    player.setPitchingStats(repository.getPitchingStatsForPlayer(player.getPlayerId()));
-                }
-            }
-        }
-        return team;
-    }
 
     private void disableGameButtons() {
         mainBinding.simulateGameButton.setEnabled(false);
         mainBinding.coachSetsLineupButton.setEnabled(false);
+        mainBinding.startGameButton.setEnabled(false);
     }
 
 
@@ -424,8 +501,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 playerList.addAll(team.getPlayers());
             }
             for (Player player : playerList) {
-                player.setBattingStats(repository.getBattingStatsForPlayer(player.getPlayerId()));
-                player.setPitchingStats(repository.getPitchingStatsForPlayer(player.getPlayerId()));
+                List<BattingStats> battingStatsList = repository.getBattingStatsForPlayer(player.getPlayerId());
+                Collections.sort(battingStatsList);
+                player.setBattingStats(battingStatsList);
+                List<PitchingStats> pitchingStatsList = repository.getPitchingStatsForPlayer(player.getPlayerId());
+                Collections.sort(pitchingStatsList);
+                player.setPitchingStats(pitchingStatsList);
             }
             TreeMap<String, Team> teamTreeMap = new TreeMap<>();
             if (!teamList.isEmpty()) {
@@ -471,7 +552,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected TreeMap<Integer, List<Game>> doInBackground(String... orgIds) {
             Organization organization = repository.getOrganizationById(orgIds[0]);
             List<Schedule> scheduleList = repository.getSchedulesForOrganization(orgIds[0]);
-            List<Game> gameList = repository.getGamesForSchedule(scheduleList.get(organization.getCurrentYear()).getScheduleId());
+            organization.setSchedules(scheduleList);
+            List<Game> gameList = repository.getGamesForSchedule(organization.getScheduleForCurrentYear().getScheduleId());
             if (gameList == null) {
                 return null;
             }
@@ -510,5 +592,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void enableGamePlayButtons() {
         mainBinding.simulateGameButton.setEnabled(true);
         mainBinding.coachSetsLineupButton.setEnabled(true);
+        mainBinding.startGameButton.setEnabled(true);
     }
 }

@@ -23,11 +23,12 @@ public class ScheduleGenerator {
         this.organization = organization;
     }
 
-    public Schedule generateSchedule(int seriesLength, boolean interLeaguePlay, ProgressBar generateOrgProgressbar){
+    public Schedule generateSchedule(ProgressBar generateOrgProgressbar){
         progressBar = generateOrgProgressbar;
         progress = progressBar.getProgress();
         Schedule newSchedule = new Schedule(organization.getId(), null);
-        newSchedule.setGameList(generateListOfGames(seriesLength, interLeaguePlay, newSchedule.getScheduleId()));
+        newSchedule.setScheduleYear(organization.getCurrentYear());
+        newSchedule.setGameList(generateListOfGames(organization.getSeriesLength(), organization.isInterleaguePlay(), newSchedule.getScheduleId()));
         return newSchedule;
     }
 
@@ -36,6 +37,7 @@ public class ScheduleGenerator {
         List<Game> gameList = new ArrayList<>();
         if (interLeaguePlay) {
             teamList = getListOfAllTeams();
+            Collections.shuffle(teamList);
             if (teamList.size() % 2 == 0) {
                 gameList = gameListWithEvenNumberOfTeams(seriesLength, teamList, scheduleId);
             } else {
@@ -44,6 +46,7 @@ public class ScheduleGenerator {
         } else {
             for (League league: organization.getLeagues()) {
                 teamList = getListOfTeams(league);
+                Collections.shuffle(teamList);
                 if (teamList.size() % 2 == 0) {
                     gameList.addAll(gameListWithEvenNumberOfTeams(seriesLength, teamList, scheduleId));
                 } else {

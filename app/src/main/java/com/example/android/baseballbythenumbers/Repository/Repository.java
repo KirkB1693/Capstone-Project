@@ -788,29 +788,29 @@ public class Repository {
         return mBattingStatsDao.findBattingStatsForPlayer(playerId);
     }
 
-    public void insertBattingStats (BattingStats game) {
-        new insertBattingStatsAsyncTask(mBattingStatsDao).execute(game);
+    public void insertBattingStats (BattingStats battingStats) {
+        new insertBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
     }
 
     private static class insertBattingStatsAsyncTask extends AsyncTask<BattingStats, Void, Void> {
 
         private BattingStatsDao mAsyncTaskBattingStatsDao;
 
-        insertBattingStatsAsyncTask(BattingStatsDao BattingStatsDao) {
-            mAsyncTaskBattingStatsDao = BattingStatsDao;
+        insertBattingStatsAsyncTask(BattingStatsDao battingStatsDao) {
+            mAsyncTaskBattingStatsDao = battingStatsDao;
         }
 
         @Override
-        protected Void doInBackground(final BattingStats... BattingStats) {
-            mAsyncTaskBattingStatsDao.insert(BattingStats[0]);
+        protected Void doInBackground(final BattingStats... battingStats) {
+            mAsyncTaskBattingStatsDao.insert(battingStats[0]);
             return null;
         }
     }
 
 
 
-    public void updateBattingStats (BattingStats game) {
-        new updateBattingStatsAsyncTask(mBattingStatsDao).execute(game);
+    public void updateBattingStats (BattingStats battingStats) {
+        new updateBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
     }
 
     private static class updateBattingStatsAsyncTask extends AsyncTask<BattingStats, Void, Void>{
@@ -821,29 +821,29 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(BattingStats... games) {
-            mAsyncTaskBattingStatsDao.update(games[0]);
+        protected Void doInBackground(BattingStats... battingStats) {
+            mAsyncTaskBattingStatsDao.update(battingStats[0]);
             return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void insertAllBattingStats (List<BattingStats> games) {
-        new insertAllBattingStatsAsyncTask(mBattingStatsDao).execute(games);
+    public void insertAllBattingStats (List<BattingStats> battingStats) {
+        new insertAllBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
     }
 
     private static class insertAllBattingStatsAsyncTask extends AsyncTask<List<BattingStats>, Void, Void> {
 
         private BattingStatsDao mAsyncTaskBattingStatsDao;
 
-        insertAllBattingStatsAsyncTask(BattingStatsDao gameDao) {
-            mAsyncTaskBattingStatsDao = gameDao;
+        insertAllBattingStatsAsyncTask(BattingStatsDao battingStatsDao) {
+            mAsyncTaskBattingStatsDao = battingStatsDao;
         }
 
         @SafeVarargs
         @Override
-        protected final Void doInBackground(final List<BattingStats>... gamesLists) {
-            mAsyncTaskBattingStatsDao.insertAll(gamesLists[0]);
+        protected final Void doInBackground(final List<BattingStats>... battingStatsList) {
+            mAsyncTaskBattingStatsDao.insertAll(battingStatsList[0]);
             return null;
         }
 
@@ -890,29 +890,29 @@ public class Repository {
         }
 
         @Override
-        protected Void doInBackground(PitchingStats... games) {
-            mAsyncTaskPitchingStatsDao.update(games[0]);
+        protected Void doInBackground(PitchingStats... pitchingStats) {
+            mAsyncTaskPitchingStatsDao.update(pitchingStats[0]);
             return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void insertAllPitchingStats (List<PitchingStats> games) {
-        new insertAllPitchingStatsAsyncTask(mPitchingStatsDao).execute(games);
+    public void insertAllPitchingStats (List<PitchingStats> pitchingStatsList) {
+        new insertAllPitchingStatsAsyncTask(mPitchingStatsDao).execute(pitchingStatsList);
     }
 
     private static class insertAllPitchingStatsAsyncTask extends AsyncTask<List<PitchingStats>, Void, Void> {
 
         private PitchingStatsDao mAsyncTaskPitchingStatsDao;
 
-        insertAllPitchingStatsAsyncTask(PitchingStatsDao gameDao) {
-            mAsyncTaskPitchingStatsDao = gameDao;
+        insertAllPitchingStatsAsyncTask(PitchingStatsDao pitchingStatsDao) {
+            mAsyncTaskPitchingStatsDao = pitchingStatsDao;
         }
 
         @SafeVarargs
         @Override
-        protected final Void doInBackground(final List<PitchingStats>... gamesLists) {
-            mAsyncTaskPitchingStatsDao.insertAll(gamesLists[0]);
+        protected final Void doInBackground(final List<PitchingStats>... pitchingStatList) {
+            mAsyncTaskPitchingStatsDao.insertAll(pitchingStatList[0]);
             return null;
         }
 

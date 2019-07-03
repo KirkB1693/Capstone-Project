@@ -16,8 +16,8 @@ import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "batting_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId", unique = true))
-public class BattingStats implements Parcelable {
+@Entity(tableName = "batting_stats", foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "playerId", childColumns = "playerId", onDelete = CASCADE), indices = @Index(value = "playerId"))
+public class BattingStats implements Parcelable, Comparable<BattingStats> {
 
     @PrimaryKey
     @NonNull
@@ -480,5 +480,16 @@ public class BattingStats implements Parcelable {
 
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public int compareTo(BattingStats battingStats) {
+        if (year > battingStats.year) {
+            return 1;
+        } else if (year < battingStats.year) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

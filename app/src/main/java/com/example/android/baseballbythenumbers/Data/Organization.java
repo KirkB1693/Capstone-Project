@@ -43,6 +43,16 @@ public class Organization implements Parcelable {
     @ColumnInfo(name = "current_year")
     private int currentYear;
 
+    @SerializedName("interleaguePlay")
+    @Expose
+    @ColumnInfo(name = "interleague_play")
+    private boolean interleaguePlay;
+
+    @SerializedName("seriesLength")
+    @Expose
+    @ColumnInfo(name = "series_length")
+    private int seriesLength;
+
     @SerializedName("leagues")
     @Expose
     @Ignore
@@ -76,6 +86,8 @@ public class Organization implements Parcelable {
         organizationName = in.readString();
         userTeamName = in.readString();
         currentYear = in.readInt();
+        interleaguePlay = in.readByte() != 0x00;
+        seriesLength = in.readInt();
         if (in.readByte() == 0x01) {
             leagues = new ArrayList<League>();
             in.readList(leagues, League.class.getClassLoader());
@@ -103,13 +115,17 @@ public class Organization implements Parcelable {
      * @param schedules
      * @param leagues
      * @param currentYear
+     * @param interleaguePlay
+     * @param userTeamName
      * @param organizationName
      */
-    public Organization(String organizationName, String userTeamName, int currentYear, List<League> leagues, List<Schedule> schedules) {
+    public Organization(String organizationName, String userTeamName, int currentYear, boolean interleaguePlay, int seriesLength,List<League> leagues, List<Schedule> schedules) {
         super();
         this.organizationName = organizationName;
         this.userTeamName = userTeamName;
         this.currentYear = currentYear;
+        this.interleaguePlay = interleaguePlay;
+        this.seriesLength = seriesLength;
         this.leagues = leagues;
         this.schedules = schedules;
         this.id = UUID.randomUUID().toString();
@@ -137,6 +153,22 @@ public class Organization implements Parcelable {
 
     public void setCurrentYear(int currentYear) {
         this.currentYear = currentYear;
+    }
+
+    public boolean isInterleaguePlay() {
+        return interleaguePlay;
+    }
+
+    public void setInterleaguePlay(boolean interleaguePlay) {
+        this.interleaguePlay = interleaguePlay;
+    }
+
+    public int getSeriesLength() {
+        return seriesLength;
+    }
+
+    public void setSeriesLength(int seriesLength) {
+        this.seriesLength = seriesLength;
     }
 
     public List<League> getLeagues() {
@@ -167,12 +199,25 @@ public class Organization implements Parcelable {
         this.schedules = schedules;
     }
 
+    public Schedule getScheduleForCurrentYear() {
+        if (schedules != null) {
+            for (Schedule schedule : schedules) {
+                if (schedule.getScheduleYear() == currentYear) {
+                    return schedule;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(organizationName);
         dest.writeString(userTeamName);
         dest.writeInt(currentYear);
+        dest.writeByte((byte) (interleaguePlay ? 0x01 : 0x00));
+        dest.writeInt(seriesLength);
         if (leagues == null) {
             dest.writeByte((byte) (0x00));
         } else {

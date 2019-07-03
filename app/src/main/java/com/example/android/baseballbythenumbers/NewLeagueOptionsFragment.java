@@ -137,7 +137,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
                         });
                         ScheduleGenerator scheduleGenerator = new ScheduleGenerator(newOrganization);
                         List<Schedule> scheduleList = new ArrayList<>();
-                        scheduleList.add(scheduleGenerator.generateSchedule(mNumOfGamesInSeries, interleaguePlay, newLeagueOptionsBinding.newLeagueProgressbar));
+                        scheduleList.add(scheduleGenerator.generateSchedule(newLeagueOptionsBinding.newLeagueProgressbar));
                         newOrganization.setSchedules(scheduleList);
                         newLeagueOptionsBinding.newLeagueProgressbar.post(new Runnable() {
                             @Override
@@ -156,7 +156,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
 
     private Organization createTheNewOrganization() {
         OrganizationGenerator organizationGenerator = new OrganizationGenerator(getContext());
-        return organizationGenerator.generateOrganization(mUserName, 0, mNumOfLeagues, leagueNames, leagueUsesDh, mNumOfTeamsInDivision,
+        return organizationGenerator.generateOrganization(mUserName, 0, interleaguePlay, mNumOfGamesInSeries, mNumOfLeagues, leagueNames, leagueUsesDh, mNumOfTeamsInDivision,
                 mNumOfDivisions, countries, null, mTeamName, userCity, newLeagueOptionsBinding.newLeagueProgressbar);
     }
 
@@ -185,7 +185,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
     }
 
     private boolean isGamesInSeriesSelectionValid() {
-        if (gamesInSeriesSpinner.getSelectedItemPosition() > 1) {
+        if (gamesInSeriesSpinner.getSelectedItemPosition() > 0) {
             mNumOfGamesInSeries = Integer.parseInt((String) gamesInSeriesSpinner.getSelectedItem());
             return true;
         }
@@ -194,7 +194,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
     }
 
     private boolean isTeamSelectionValid() {
-        if (teamsSpinner.getSelectedItemPosition() > 1) {
+        if (teamsSpinner.getSelectedItemPosition() > 0) {
             mNumOfTeamsInDivision = Integer.parseInt((String) teamsSpinner.getSelectedItem());
             return true;
         }
@@ -203,7 +203,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
     }
 
     private boolean isDivisionSelectioValid() {
-        if (divisionSpinner.getSelectedItemPosition() > 1) {
+        if (divisionSpinner.getSelectedItemPosition() > 0) {
             mNumOfDivisions = Integer.parseInt((String) divisionSpinner.getSelectedItem());
             return true;
         }

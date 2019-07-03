@@ -119,8 +119,9 @@ public class AtBatSimulator {
     private PitchingLine pitchingLineForCurrentPitcher;
 
     private BattingLine battingLineForCurrentBatter;
+    private int year;
 
-    public AtBatSimulator(Context context, int[] count, int outs, int currentBatter, @NonNull TreeMap<Integer, Player> lineup, @NonNull Runner[] runners, @NonNull TreeMap<Integer, Player> defense, BattingLine battingLineForCurrentBatter, PitchingLine pitchingLineForCurrentPitcher) {
+    public AtBatSimulator(Context context, int[] count, int outs, int currentBatter, @NonNull TreeMap<Integer, Player> lineup, @NonNull Runner[] runners, @NonNull TreeMap<Integer, Player> defense, BattingLine battingLineForCurrentBatter, PitchingLine pitchingLineForCurrentPitcher, int year) {
         this.count = count;
         this.outs = outs;
         this.outsAtStartOfAtBat = outs;
@@ -132,6 +133,7 @@ public class AtBatSimulator {
         this.context = context;
         this.battingLineForCurrentBatter = battingLineForCurrentBatter;
         this.pitchingLineForCurrentPitcher = pitchingLineForCurrentPitcher;
+        this.year = year;
 
         checkForValidCount(count);
         checkForValidOuts(outs);
@@ -277,9 +279,9 @@ public class AtBatSimulator {
             formatAtBatResult();
 
             // Update batter and pitcher stats to reflect walk
-            batter.getBattingStats().get(0).incrementWalks();
+            batter.getBattingStatsForYear(year).incrementWalks();
             battingLineForCurrentBatter.incrementWalks();
-            pitcher.getPitchingStats().get(0).incrementWalks();
+            pitcher.getPitchingStatsForYear(year).incrementWalks();
             pitchingLineForCurrentPitcher.incrementWalksAllowed();
             advanceRunnersOnWalkOrHBP(batter, pitcher);
         } else {
@@ -311,16 +313,16 @@ public class AtBatSimulator {
                 } else {
                     // bases loaded
                     runsScored++;
-                    batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
+                    batter.getBattingStatsForYear(year).setRunsBattedIn(batter.getBattingStatsForYear(year).getRunsBattedIn() + 1);
                     battingLineForCurrentBatter.setRbis(battingLineForCurrentBatter.getRbis() + 1);
-                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                     runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                     pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
                     if (runnerOnThird.isEarnedRun()) {
-                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                        runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                         runnerOnThird.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnThird.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                     }
-                    runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                    runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                     runnerOnThird.getBattingLineForRunner().incrementRuns();
                     runnerOnThird = runnerOnSecond;
                     runnerOnSecond = runnerOnFirst;
@@ -357,8 +359,8 @@ public class AtBatSimulator {
     }
 
     private void moveToNextBatterInLineup() {
-        lineup.get(currentBatter).getBattingStats().get(0).incrementPlateAppearances();
-        defense.get(SCOREKEEPING_PITCHER).getPitchingStats().get(0).incrementTotalBattersFaced();
+        lineup.get(currentBatter).getBattingStatsForYear(year).incrementPlateAppearances();
+        defense.get(SCOREKEEPING_PITCHER).getPitchingStatsForYear(year).incrementTotalBattersFaced();
         if (currentBatter == 9) {
             currentBatter = 1;
         } else {
@@ -368,7 +370,7 @@ public class AtBatSimulator {
 
     private void atBatOver(Player pitcher) {
         if (outs > outsAtStartOfAtBat) {
-            pitcher.getPitchingStats().get(0).addToInningsPitched(outs - outsAtStartOfAtBat);
+            pitcher.getPitchingStatsForYear(year).addToInningsPitched(outs - outsAtStartOfAtBat);
             pitchingLineForCurrentPitcher.addToInningsPitched(outs-outsAtStartOfAtBat);
         }
         gameStateAfterAtBat = getGameState();
@@ -384,10 +386,10 @@ public class AtBatSimulator {
                 runsScored++;
                 runnersThatScored.add(runnerOnThird.getRunner().getLastName());
                 if (runnerOnThird.isEarnedRun() && areRunsEarned) {
-                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                     runnerOnThird.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnThird.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                 }
-                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                 runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                 pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
                 runnerOnThird = null;
@@ -396,13 +398,13 @@ public class AtBatSimulator {
                 numberOfRunners++;
                 runsScored++;
                 runnersThatScored.add(runnerOnSecond.getRunner().getLastName());
-                runnerOnSecond.getRunner().getBattingStats().get(0).incrementRuns();
+                runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementRuns();
                 runnerOnSecond.getBattingLineForRunner().incrementRuns();
                 if (runnerOnSecond.isEarnedRun() && areRunsEarned) {
-                    runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                    runnerOnSecond.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnSecond.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                     runnerOnSecond.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnSecond.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                 }
-                runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnSecond.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                runnerOnSecond.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnSecond.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                 runnerOnSecond.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnSecond.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                 pitchersResponsible.add(runnerOnSecond.getPitcherResponsible());
                 runnerOnSecond = null;
@@ -411,13 +413,13 @@ public class AtBatSimulator {
                 numberOfRunners++;
                 runsScored++;
                 runnersThatScored.add(runnerOnFirst.getRunner().getLastName());
-                runnerOnFirst.getRunner().getBattingStats().get(0).incrementRuns();
+                runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementRuns();
                 runnerOnFirst.getBattingLineForRunner().incrementRuns();
                 if (runnerOnFirst.isEarnedRun() && areRunsEarned) {
-                    runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                    runnerOnFirst.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnFirst.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                     runnerOnFirst.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnFirst.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                 }
-                runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnFirst.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                runnerOnFirst.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnFirst.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                 runnerOnFirst.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnFirst.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                 pitchersResponsible.add(runnerOnFirst.getPitcherResponsible());
                 runnerOnFirst = null;
@@ -442,24 +444,24 @@ public class AtBatSimulator {
                 formatScoringResult();
             }
             battingLineForCurrentBatter.incrementAtBats();
-            batter.getBattingStats().get(0).incrementRuns();
+            batter.getBattingStatsForYear(year).incrementRuns();
             battingLineForCurrentBatter.incrementRuns();
-            batter.getBattingStats().get(0).incrementHomeRuns();
+            batter.getBattingStatsForYear(year).incrementHomeRuns();
             battingLineForCurrentBatter.incrementHomeRuns();
-            batter.getBattingStats().get(0).incrementHits();
+            batter.getBattingStatsForYear(year).incrementHits();
             battingLineForCurrentBatter.incrementHits();
-            batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + (1 + numberOfRunners));
+            batter.getBattingStatsForYear(year).setRunsBattedIn(batter.getBattingStatsForYear(year).getRunsBattedIn() + (1 + numberOfRunners));
             battingLineForCurrentBatter.setRbis(battingLineForCurrentBatter.getRbis() + (1 + numberOfRunners));
 
-            pitcher.getPitchingStats().get(0).setRuns(pitcher.getPitchingStats().get(0).getRuns() + 1);
+            pitcher.getPitchingStatsForYear(year).setRuns(pitcher.getPitchingStatsForYear(year).getRuns() + 1);
             pitchingLineForCurrentPitcher.setRunsAllowed(pitchingLineForCurrentPitcher.getRunsAllowed() + 1);
             pitchersResponsible.add(pitcher);
-            pitcher.getPitchingStats().get(0).incrementHomeRuns();
+            pitcher.getPitchingStatsForYear(year).incrementHomeRuns();
             pitchingLineForCurrentPitcher.incrementHomeRunsAllowed();
-            pitcher.getPitchingStats().get(0).incrementHits();
+            pitcher.getPitchingStatsForYear(year).incrementHits();
             pitchingLineForCurrentPitcher.incrementHitsAllowed();
             if (areRunsEarned) {
-                pitcher.getPitchingStats().get(0).setEarnedRuns(pitcher.getPitchingStats().get(0).getEarnedRuns() + 1);
+                pitcher.getPitchingStatsForYear(year).setEarnedRuns(pitcher.getPitchingStatsForYear(year).getEarnedRuns() + 1);
                 pitchingLineForCurrentPitcher.setEarnedRuns(pitchingLineForCurrentPitcher.getEarnedRuns() + 1);
             }
             moveToNextBatterInLineup();
@@ -612,7 +614,7 @@ public class AtBatSimulator {
                                     // everyone is safe
                                     atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" was stealing, only play is to first base, SAFE at first on Error! ");
                                     formatAtBatResult();
-                                    defense.get(fielderWhoMadeError).getBattingStats().get(0).incrementErrors();
+                                    defense.get(fielderWhoMadeError).getBattingStatsForYear(year).incrementErrors();
                                     runnerOnSecond = runnerOnFirst;
                                 } else {
                                     atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" was stealing, only play is to first base, OUT at first! ");
@@ -756,14 +758,16 @@ public class AtBatSimulator {
                                 }
                             }
                             if (errorMade) {
-                                if (fielderWhoMadeError == FIRST_BASE) {
-                                    // Still got out at third, but no double play
-                                    atBatSummary.append(batter.getLastName()).append(" is Out, but he throws it away trying to get ").append(runnerOnFirst.getRunner().getLastName()).append(" at first, ")
-                                            .append(runnerOnFirst.getRunner().getLastName()).append(" advances to Second on the error!");
+                                if (fielderWhoMadeError == SCOREKEEPING_THIRD_BASE && fieldersWhoTouchedBall.size() == 3) {
+                                    // Still got out at first, but no double play
+                                    atBatSummary.append(batter.getLastName()).append(" is Out at first, but ball is thrown away trying to get ")
+                                            .append(runnerOnSecond.getRunner().getLastName()).append(" at third, ")
+                                            .append(runnerOnSecond.getRunner().getLastName()).append(" scores on the error!");
                                     formatAtBatResult();
                                     outs++;
+                                    runnerOnThird = runnerOnSecond;
                                     runnerOnSecond = null;
-                                    runnerOnFirst = new Runner(batter, battingLineForCurrentBatter, pitcher, pitchingLineForCurrentPitcher, false);
+                                    advanceAllRunnersOneBaseOnBattedBall(null, pitcher, false, false);
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(", Error everyone is Safe! ");
@@ -1787,15 +1791,15 @@ public class AtBatSimulator {
                     atBatSummary.append(runnerOnThird.getRunner().getLastName()).append(" tags up...SAFE!!! ").append(runnerOnThird.getRunner().getLastName()).append(" Scores! ");
                     formatScoringResult();
                     runsScored++;
-                    batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
+                    batter.getBattingStatsForYear(year).setRunsBattedIn(batter.getBattingStatsForYear(year).getRunsBattedIn() + 1);
                     battingLineForCurrentBatter.setRbis(battingLineForCurrentBatter.getRbis() + 1);
-                    runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                    runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                     runnerOnThird.getBattingLineForRunner().incrementRuns();
                     pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                     runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                     if (runnerOnThird.isEarnedRun()) {
-                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                        runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                         runnerOnThird.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnThird.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                     }
                     runnerOnThird = null;
@@ -1882,17 +1886,17 @@ public class AtBatSimulator {
             atBatSummary.append(runnerOnThird.getRunner().getLastName()).append(" Scored ");
             formatScoringResult();
             runsScored++;
-            runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+            runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
             runnerOnThird.getBattingLineForRunner().incrementRuns();
             pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+            runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
             if (earnedRun && runnerOnThird.isEarnedRun()) {
-                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                 runnerOnThird.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnThird.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
             }
             if (batter != null && rbi) {
-                batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
+                batter.getBattingStatsForYear(year).setRunsBattedIn(batter.getBattingStatsForYear(year).getRunsBattedIn() + 1);
                 battingLineForCurrentBatter.setRbis(battingLineForCurrentBatter.getRbis() + 1);
             }
         }
@@ -1961,10 +1965,10 @@ public class AtBatSimulator {
             for (int i = 0; i < 3; i++) {
                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
             }
-            batter.getBattingStats().get(0).incrementTriples();
-            batter.getBattingStats().get(0).incrementHits();
+            batter.getBattingStatsForYear(year).incrementTriples();
+            batter.getBattingStatsForYear(year).incrementHits();
             battingLineForCurrentBatter.incrementHits();
-            pitcher.getPitchingStats().get(0).incrementHits();
+            pitcher.getPitchingStatsForYear(year).incrementHits();
             pitchingLineForCurrentPitcher.incrementHitsAllowed();
         } else if (hitIsDouble) {
             // Advance all runners 2 bases, adjust stats
@@ -1973,10 +1977,10 @@ public class AtBatSimulator {
             for (int i = 0; i < 2; i++) {
                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
             }
-            batter.getBattingStats().get(0).incrementDoubles();
-            batter.getBattingStats().get(0).incrementHits();
+            batter.getBattingStatsForYear(year).incrementDoubles();
+            batter.getBattingStatsForYear(year).incrementHits();
             battingLineForCurrentBatter.incrementHits();
-            pitcher.getPitchingStats().get(0).incrementHits();
+            pitcher.getPitchingStatsForYear(year).incrementHits();
             pitchingLineForCurrentPitcher.incrementHitsAllowed();
             if (runnersOnBase) {
                 checkIfRunnerTakesExtraBase(whereBallIsHit, batter, pitcher);
@@ -1986,10 +1990,10 @@ public class AtBatSimulator {
             atBatSummary.append("Single to ").append(getPositionNameFromScorekeeperPosition(whereBallIsHit)).append(" ");
             formatAtBatResult();
             advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
-            batter.getBattingStats().get(0).incrementHits();
+            batter.getBattingStatsForYear(year).incrementHits();
             battingLineForCurrentBatter.incrementHits();
-            batter.getBattingStats().get(0).incrementSingles();
-            pitcher.getPitchingStats().get(0).incrementHits();
+            batter.getBattingStatsForYear(year).incrementSingles();
+            pitcher.getPitchingStatsForYear(year).incrementHits();
             pitchingLineForCurrentPitcher.incrementHitsAllowed();
             if (runnersOnBase) {
                 checkIfRunnerTakesExtraBase(whereBallIsHit, batter, pitcher);
@@ -2034,15 +2038,15 @@ public class AtBatSimulator {
                     atBatSummary.append(" and ").append(runnerOnThird.getRunner().getLastName()).append(" Scored!!! ");
                     formatScoringResult();
                     runsScored++;
-                    batter.getBattingStats().get(0).setRunsBattedIn(batter.getBattingStats().get(0).getRunsBattedIn() + 1);
+                    batter.getBattingStatsForYear(year).setRunsBattedIn(batter.getBattingStatsForYear(year).getRunsBattedIn() + 1);
                     battingLineForCurrentBatter.setRbis(battingLineForCurrentBatter.getRbis() + 1);
-                    runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                    runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                     runnerOnThird.getBattingLineForRunner().incrementRuns();
                     pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                    runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                    runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                     runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                     if (runnerOnThird.isEarnedRun()) {
-                        runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getEarnedRuns() + 1);
+                        runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setEarnedRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getEarnedRuns() + 1);
                         runnerOnThird.getPitchingLineForPitcherResponsible().setEarnedRuns(runnerOnThird.getPitchingLineForPitcherResponsible().getEarnedRuns() + 1);
                     }
                     runnerOnThird = null;
@@ -2482,16 +2486,16 @@ public class AtBatSimulator {
     private int getTypeOfHit(Player batter, Player pitcher, int batterAdjustment) {
         int checkForHitType = random.nextInt(ONE_HUNDERED_PERCENT);
         if (checkForHitType < batter.getHittingPercentages().getGroundBallPct() + batterAdjustment) {
-            batter.getBattingStats().get(0).incrementGroundBalls();
-            pitcher.getPitchingStats().get(0).incrementGroundBalls();
+            batter.getBattingStatsForYear(year).incrementGroundBalls();
+            pitcher.getPitchingStatsForYear(year).incrementGroundBalls();
             return GROUNDBALL;
         } else if (checkForHitType < (batter.getHittingPercentages().getGroundBallPct() + batter.getHittingPercentages().getLineDrivePct())) {
-            batter.getBattingStats().get(0).incrementLineDrives();
-            pitcher.getPitchingStats().get(0).incrementLineDrives();
+            batter.getBattingStatsForYear(year).incrementLineDrives();
+            pitcher.getPitchingStatsForYear(year).incrementLineDrives();
             return LINE_DRIVE;
         } else {
-            batter.getBattingStats().get(0).incrementFlyBalls();
-            pitcher.getPitchingStats().get(0).incrementFlyBalls();
+            batter.getBattingStatsForYear(year).incrementFlyBalls();
+            pitcher.getPitchingStatsForYear(year).incrementFlyBalls();
             return FLYBALL;
         }
     }
@@ -2502,16 +2506,16 @@ public class AtBatSimulator {
         }
         if (random.nextInt(ONE_HUNDERED_PERCENT) < pitcher.getPitchingPercentages().getWildPitchPct()) {
             atBatSummary.append(" Wild Pitch! ");
-            pitcher.getPitchingStats().get(0).incrementWildPitches();
+            pitcher.getPitchingStatsForYear(year).incrementWildPitches();
             if (runnerOnThird != null) {
                 runsScored++;
                 setStartOfSpan();
                 atBatSummary.append(runnerOnThird.getRunner().getLastName()).append(" Scores from Third!!! ");
                 formatScoringResult();
-                runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                 runnerOnThird.getBattingLineForRunner().incrementRuns();
                 pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                 runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                 runnerOnThird = null;
             }
@@ -2523,8 +2527,8 @@ public class AtBatSimulator {
 
     private boolean isHitByPitch(Player batter, Player pitcher) {
         if (random.nextInt(ONE_HUNDERED_PERCENT) < pitcher.getPitchingPercentages().getHitByPitchPct()) {
-            batter.getBattingStats().get(0).incrementHitByPitch();
-            pitcher.getPitchingStats().get(0).incrementHitByPitch();
+            batter.getBattingStatsForYear(year).incrementHitByPitch();
+            pitcher.getPitchingStatsForYear(year).incrementHitByPitch();
 
             advanceRunnersOnWalkOrHBP(batter, pitcher);
 
@@ -2543,9 +2547,9 @@ public class AtBatSimulator {
             formatAtBatResult();
             outs++;
             battingLineForCurrentBatter.incrementAtBats();
-            batter.getBattingStats().get(0).incrementStrikeOuts();
+            batter.getBattingStatsForYear(year).incrementStrikeOuts();
             battingLineForCurrentBatter.incrementStrikeOuts();
-            pitcher.getPitchingStats().get(0).incrementStrikeOuts();
+            pitcher.getPitchingStatsForYear(year).incrementStrikeOuts();
             pitchingLineForCurrentPitcher.incrementStirkeOutsMade();
             if (outs < 3) {
                 if (!basesAreEmpty()) {
@@ -2597,7 +2601,7 @@ public class AtBatSimulator {
                         formatAtBatResult();
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
-                        runnerOnSecond.getRunner().getBattingStats().get(0).incrementStolenBases();
+                        runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementStolenBases();
 
                         if (error) {
                             atBatSummary.append(runnerOnSecond.getRunner().getLastName()).append(", advances to Third on Error! ");
@@ -2618,7 +2622,7 @@ public class AtBatSimulator {
                             atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" OUT! Caught Stealing Second Base! ");
                             formatAtBatResult();
                             outs++;
-                            runnerOnFirst.getRunner().getBattingStats().get(0).incrementCaughtStealing();
+                            runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnFirst = null;
                             if (outs == 3) {
                                 atBatOver(pitcher);
@@ -2645,17 +2649,17 @@ public class AtBatSimulator {
                         formatAtBatResult();
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
-                        runnerOnThird.getRunner().getBattingStats().get(0).incrementStolenBases();
+                        runnerOnThird.getRunner().getBattingStatsForYear(year).incrementStolenBases();
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runner
                             setStartOfSpan();
                             atBatSummary.append(runnerOnThird.getRunner().getLastName()).append(" Scores on the Error! ");
                             formatScoringResult();
                             runsScored++;
-                            runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                            runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                             runnerOnThird.getBattingLineForRunner().incrementRuns();
                             pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                             runnerOnThird = null;
                         }
@@ -2673,7 +2677,7 @@ public class AtBatSimulator {
                             atBatSummary.append(runnerOnSecond.getRunner().getLastName()).append(" OUT! Caught Stealing Third Base! ");
                             formatAtBatResult();
                             outs++;
-                            runnerOnSecond.getRunner().getBattingStats().get(0).incrementCaughtStealing();
+                            runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnSecond = null;
                             if (outs == 3) {
                                 atBatOver(pitcher);
@@ -2702,8 +2706,8 @@ public class AtBatSimulator {
                         atBatSummary.append("Double Steal!!! ").append(runnerOnSecond.getRunner().getLastName()).append(" Stole Third! and ").append(runnerOnFirst.getRunner().getLastName())
                                 .append(" Stole Second! ");
                         formatAtBatResult();
-                        runnerOnSecond.getRunner().getBattingStats().get(0).incrementStolenBases();
-                        runnerOnFirst.getRunner().getBattingStats().get(0).incrementStolenBases();
+                        runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementStolenBases();
+                        runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementStolenBases();
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
@@ -2714,10 +2718,10 @@ public class AtBatSimulator {
                                     .append(" advances to Third.  ");
                             formatAtBatResult();
                             runsScored++;
-                            runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                            runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                             runnerOnThird.getBattingLineForRunner().incrementRuns();
                             pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
@@ -2739,7 +2743,7 @@ public class AtBatSimulator {
                                     .append(" advances to Second Base! ");
                             formatAtBatResult();
                             outs++;
-                            runnerOnSecond.getRunner().getBattingStats().get(0).incrementCaughtStealing();
+                            runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnSecond = null;
                             if (outs == 3) {
                                 atBatOver(pitcher);
@@ -2770,7 +2774,7 @@ public class AtBatSimulator {
                         //Runner stole the base
                         atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" Stole Second Base! ");
                         formatAtBatResult();
-                        runnerOnFirst.getRunner().getBattingStats().get(0).incrementStolenBases();
+                        runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementStolenBases();
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
 
@@ -2779,10 +2783,10 @@ public class AtBatSimulator {
                             atBatSummary.append(runnerOnSecond.getRunner().getLastName()).append(" advances to Third on Error, ").append(runnerOnThird.getRunner().getLastName()).append(" Scores on Error!!! ");
                             formatScoringResult();
                             runsScored++;
-                            runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                            runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                             runnerOnThird.getBattingLineForRunner().incrementRuns();
                             pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
@@ -2794,10 +2798,10 @@ public class AtBatSimulator {
                             atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" Safe at Second on Error, ").append(runnerOnThird.getRunner().getLastName()).append(" Scores on Error!!! ");
                             formatScoringResult();
                             runsScored++;
-                            runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                            runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                             runnerOnThird.getBattingLineForRunner().incrementRuns();
                             pitchersResponsible.add(runnerOnThird.getPitcherResponsible());
-                            runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                            runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                             runnerOnThird = null;
                             runnerOnSecond = runnerOnFirst;
@@ -2807,7 +2811,7 @@ public class AtBatSimulator {
                             //Runner is caught stealing
                             atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" Caught Stealing, OUT at Second!!! ");
                             formatAtBatResult();
-                            runnerOnFirst.getRunner().getBattingStats().get(0).incrementCaughtStealing();
+                            runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             outs++;
                             runnerOnFirst = null;
 
@@ -2848,7 +2852,7 @@ public class AtBatSimulator {
         if (random.nextInt(ONE_HUNDERED_PERCENT) < playerErrorRate) {
             // Error committed add to stats and return true
             // atBatSummary.append(", Error : ").append(getPositionNameFromScorekeeperPosition(playerPositionNumber)).append(" , ");
-            defense.get(playerPositionNumber).getBattingStats().get(0).incrementErrors();
+            defense.get(playerPositionNumber).getBattingStatsForYear(year).incrementErrors();
             return true;
         }
         // no error, return false
@@ -2951,7 +2955,7 @@ public class AtBatSimulator {
     private boolean isPitchThrown(Player pitcher) {
         if (random.nextInt(ONE_HUNDERED_PERCENT) < pitcher.getPitchingPercentages().getBalkPct()) {
             //Balk - add it to the pitchers stats, then check runners
-            PitchingStats currentPitchingStats = pitcher.getPitchingStats().get(0);
+            PitchingStats currentPitchingStats = pitcher.getPitchingStatsForYear(year);
             currentPitchingStats.incrementBalks();
             startOfSpan = atBatSummary.length();
             atBatSummary.append(" Balk, ");
@@ -2969,9 +2973,9 @@ public class AtBatSimulator {
                 startOfSpan = atBatSummary.length();
                 atBatSummary.append(runnerOnThird.getRunner().getLastName()).append(" Scores ");
                 formatScoringResult();
-                runnerOnThird.getRunner().getBattingStats().get(0).incrementRuns();
+                runnerOnThird.getRunner().getBattingStatsForYear(year).incrementRuns();
                 runnerOnThird.getBattingLineForRunner().incrementRuns();
-                runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStats().get(0).getRuns() + 1);
+                runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).setRuns(runnerOnThird.getPitcherResponsible().getPitchingStatsForYear(year).getRuns() + 1);
                 runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                 //We've advanced the runner and adjusted stats, now empty third base
                 runnerOnThird = null;

@@ -284,6 +284,28 @@ public class Player implements Parcelable
         this.playerId = playerId;
     }
 
+    public BattingStats getBattingStatsForYear(int year) {
+        if (battingStats != null) {
+            for (BattingStats battingStats : battingStats) {
+                if (battingStats.getYear() == year) {
+                    return battingStats;
+                }
+            }
+        }
+        return null;
+    }
+
+    public PitchingStats getPitchingStatsForYear(int year) {
+        if (pitchingStats != null) {
+            for (PitchingStats pitchingStats : pitchingStats) {
+                if (pitchingStats.getYear() == year) {
+                    return pitchingStats;
+                }
+            }
+        }
+        return null;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(playerId);
         dest.writeValue(teamId);

@@ -29,7 +29,7 @@ public class OrganizationGenerator {
         this.context = context;
     }
 
-    public Organization generateOrganization(String organizationName, int currentYear, int numberOfLeagues, List<String> leagueNames, List<Boolean> useDH, int numOfTeamsPerDivision,
+    public Organization generateOrganization(String organizationName, int currentYear, boolean interleaguePlay, int seriesLength,int numberOfLeagues, List<String> leagueNames, List<Boolean> useDH, int numOfTeamsPerDivision,
                                              int numberOfDivisions, int countriesToInclude, int[] teamMakeup, String userTeamName, String userTeamCity, ProgressBar progressBar) {
         List<League> leagues = new ArrayList<>();
         LeagueGenerator leagueGenerator = new LeagueGenerator(context);
@@ -67,7 +67,7 @@ public class OrganizationGenerator {
 
 
 
-        Organization newOrganization = new Organization(organizationName, userTeamName, currentYear, null, null);
+        Organization newOrganization = new Organization(organizationName, userTeamName, currentYear, interleaguePlay, seriesLength,null, null);
 
         for (int i = 0; i < numberOfLeagues; i++) {
             if (useDH.get(i)) {
