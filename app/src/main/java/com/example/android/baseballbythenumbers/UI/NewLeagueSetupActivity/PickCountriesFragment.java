@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentPickCountriesBinding;
 
 import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.ALL_COUNTRIES;

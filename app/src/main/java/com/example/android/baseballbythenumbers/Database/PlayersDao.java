@@ -29,4 +29,7 @@ public interface PlayersDao {
 
     @Query("SELECT * FROM players WHERE teamId=:teamId")
     List<Player> findPlayersForTeam(String teamId);
+
+    @Query("SELECT * FROM players WHERE teamId=:teamId")
+    LiveData<List<Player>> findLiveDataPlayersForTeam(String teamId);
 }

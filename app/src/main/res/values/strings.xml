@@ -58,5 +58,25 @@
     <string name="tab_text_1">Box Score</string>
     <string name="tab_text_2">Play By Play</string>
     <string name="tab_text_3">Manage Game</string>
+    <string name="home_tab_label">Home</string>
+    <string name="visitor_tab_label">Visitor</string>
+    <string name="ab_box_score_label">AB</string>
+    <string name="r_box_score_label">R</string>
+    <string name="h_box_score_label">H</string>
+    <string name="rbi_box_score_label">RBI</string>
+    <string name="bb_box_score_label">BB</string>
+    <string name="k_box_score_label">K</string>
+    <string name="avg_box_score_label">AVG</string>
+    <string name="obp_box_score_label">OBP</string>
+    <string name="lob_box_score_label">LOB</string>
+    <string name="hr_box_score_label">HR</string>
+    <string name="batter_box_score_label">Hitters</string>
+    <string name="whip_box_score_label">WHIP</string>
+    <string name="era_box_score_label">ERA</string>
+    <string name="so_box_score_label">SO</string>
+    <string name="er_box_score_label">ER</string>
+    <string name="ip_box_score_label">IP</string>
+    <string name="pitchers_box_score_label">Pitchers</string>
+    <string name="starting_era_or_whip_value">0.00</string>
 
 </resources>

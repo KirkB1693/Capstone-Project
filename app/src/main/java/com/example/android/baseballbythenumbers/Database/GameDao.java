@@ -36,4 +36,7 @@ public interface GameDao {
 
         @Query("SELECT * FROM games WHERE (home_team_name=:teamName OR visiting_team_name=:teamName) AND schedule_id=:scheduleId")
         List<Game> findGamesForTeamNameInSchedule(String teamName, String scheduleId);
+
+        @Query("SELECT * FROM games WHERE game_id=:gameId")
+        LiveData<Game> findGameWithGameId(String gameId);
 }

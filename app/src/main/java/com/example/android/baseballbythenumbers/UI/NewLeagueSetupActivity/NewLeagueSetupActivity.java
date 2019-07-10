@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.baseballbythenumbers.Data.Organization;
+import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.UI.MainActivity.MainActivity;
 import com.example.android.baseballbythenumbers.databinding.ActivityNewLeagueSetupBinding;
 
 public class NewLeagueSetupActivity extends AppCompatActivity implements PickCountriesFragment.OnPickCountriesFragmentInteractionListener,

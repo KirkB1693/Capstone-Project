@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:id="@+id/box_score_detail_empty_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_tv"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:gravity="start"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_IP_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_H_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_R_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_ER_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_BB_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_SO_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_HR_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_ERA_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_pitcher_WHIP_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+    </TableRow>
+</TableLayout>

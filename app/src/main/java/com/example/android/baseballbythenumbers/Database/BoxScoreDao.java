@@ -27,4 +27,10 @@ public interface BoxScoreDao {
 
         @Query("SELECT * FROM box_scores WHERE game_id=:gameId")
         List<BoxScore> findBoxScoresForGame(String gameId);
+
+        @Query("SELECT * FROM box_scores WHERE game_id=:gameId")
+        LiveData<List<BoxScore>> findLiveDataBoxScoresForGame(String gameId);
+
+        @Query("SELECT * FROM box_scores WHERE box_score_id=:boxScoreId")
+        LiveData<BoxScore> findLiveDataBoxScoreWithBoxScoreId(String boxScoreId);
 }

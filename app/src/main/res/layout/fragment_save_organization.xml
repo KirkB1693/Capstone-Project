@@ -7,7 +7,7 @@
         android:id="@+id/create_league_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".SaveOrganizationFragment">
+        tools:context=".UI.NewLeagueSetupActivity.SaveOrganizationFragment">
 
         <TextView
             android:id="@+id/org_save_tv"

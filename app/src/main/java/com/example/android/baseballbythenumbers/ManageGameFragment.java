@@ -20,7 +20,7 @@ public class ManageGameFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.manage_game_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_manage_game, container, false);
     }
 
     @Override

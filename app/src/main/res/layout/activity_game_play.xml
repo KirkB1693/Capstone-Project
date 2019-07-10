@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+<android.support.constraint.ConstraintLayout
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,11 +14,12 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score_background_image">
+        app:layout_constraintTop_toBottomOf="@id/game_screen_batter_info_tv">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -26,7 +29,7 @@
             android:minHeight="60dp"
             app:tabSelectedTextColor="@color/primaryTextColor"
             app:tabTextColor="@color/divider"
-            tools:context=".GamePlayActivity"/>
+            tools:context=".GamePlayActivity" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
@@ -331,6 +334,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="Background Image For At Bat Results"
         android:scaleType="centerCrop"
         android:src="@drawable/ballpark_photo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -355,5 +359,46 @@
         app:layout_constraintTop_toTopOf="@+id/score_background_image"
         tools:text="At Bat Result" />
 
+    <TextView
+        android:id="@+id/game_screen_pitcher_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/game_screen_batter_info_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/score_background_image"
+        tools:text="Pitcher Info" />
+
+    <TextView
+        android:id="@+id/game_screen_batter_info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/game_screen_pitcher_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/game_screen_pitcher_tv"
+        app:layout_constraintTop_toTopOf="@+id/game_screen_pitcher_tv"
+        tools:text="Batter Info" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scoreboard_table_layout"
+        app:srcCompat="@drawable/no_image_available" />
+
 
 </android.support.constraint.ConstraintLayout>
+</layout>

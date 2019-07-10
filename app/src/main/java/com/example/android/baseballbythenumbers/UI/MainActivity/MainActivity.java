@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.MainActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.baseballbythenumbers.BuildConfig;
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
@@ -23,9 +24,12 @@ import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.GamePlayActivity;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
+import com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity.NewLeagueSetupActivity;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
@@ -45,6 +49,7 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String ORG_ID_SHARED_PREF_KEY = "orgId";
+    public static final String NEXT_GAME_EXTRA = "Next_Game";
     private List<Game> gamesForUserToPlay;
     private Organization organization;
     private Repository repository;
@@ -174,8 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @NotNull
     private String formatStarterStats(List<PitchingStats> pitchingStats) {
-        return "ERA : " + String.format(Locale.US, "%.2f", pitchingStats.get(organization.getCurrentYear()).getERA()) + ", WHIP : " +
-                String.format(Locale.US, "%.2f", pitchingStats.get(organization.getCurrentYear()).getWHIP());
+        return "ERA : " + pitchingStats.get(organization.getCurrentYear()).getERA() + ", WHIP : " + pitchingStats.get(organization.getCurrentYear()).getWHIP();
     }
 
 
@@ -193,8 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         repository.updateGame(game);
         repository.insertBoxScore(game.getHomeBoxScore());
         repository.insertAllBattingLines(game.getHomeBoxScore().getBattingLines());
+        repository.insertAllPitchingLines(game.getHomeBoxScore().getPitchingLines());
         repository.insertBoxScore(game.getVisitorBoxScore());
         repository.insertAllBattingLines(game.getVisitorBoxScore().getBattingLines());
+        repository.insertAllPitchingLines(game.getVisitorBoxScore().getPitchingLines());
         repository.updateTeam(homeTeam);
         repository.updateTeam(visitingTeam);
         List<Player> playerList = new ArrayList<>();
@@ -226,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startGamePlayActivity() {
         Intent gamePlayIntent = new Intent(this, GamePlayActivity.class);
+        gamePlayIntent.putExtra(NEXT_GAME_EXTRA, nextGame);
         this.startActivity(gamePlayIntent);
         finish();
     }
@@ -252,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.simulateGameButton.setEnabled(false);
         dayOfSchedule = nextGame.getDay();
         simAllGamesForDay();
+        startGamePlayActivity();      //TODO : REMOVE THIS LINE!!! Only for testing
         nextGame = findNextUnplayedGame(gamesForUserToPlay);
         dayOfSchedule++;
         if (nextGame != null) {

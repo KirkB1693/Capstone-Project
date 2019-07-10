@@ -20,7 +20,7 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "batting_line", foreignKeys = @ForeignKey(entity = BoxScore.class, parentColumns = "box_score_id", childColumns = "box_score_id", onDelete = CASCADE), indices = @Index(value = "box_score_id"))
-public class BattingLine implements Parcelable{
+public class BattingLine implements Parcelable, Comparable<BattingLine> {
 
     @ColumnInfo(name = "box_score_id")
     @SerializedName("boxScoreId")
@@ -111,34 +111,33 @@ public class BattingLine implements Parcelable{
             return (new BattingLine[size]);
         }
 
-    }
-            ;
+    };
 
     protected BattingLine(Parcel in) {
-        this.boxScoreId = ((String) in.readValue((String.class.getClassLoader())));
-        this.battingLineId = ((String) in.readValue((String.class.getClassLoader())));
-        this.positionInBattingOrder = ((int) in.readValue((int.class.getClassLoader())));
-        this.substitute = ((boolean) in.readValue((boolean.class.getClassLoader())));
-        this.substituteNumber = ((int) in.readValue((int.class.getClassLoader())));
-        this.batterName = ((String) in.readValue((String.class.getClassLoader())));
-        this.atBats = ((int) in.readValue((int.class.getClassLoader())));
-        this.runs = ((int) in.readValue((int.class.getClassLoader())));
-        this.hits = ((int) in.readValue((int.class.getClassLoader())));
-        this.rbis = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeRuns = ((int) in.readValue((int.class.getClassLoader())));
-        this.walks = ((int) in.readValue((int.class.getClassLoader())));
-        this.strikeOuts = ((int) in.readValue((int.class.getClassLoader())));
-        this.leftOnBase = ((int) in.readValue((int.class.getClassLoader())));
-        this.average = ((double) in.readValue((double.class.getClassLoader())));
-        this.onBasePct = ((double) in.readValue((double.class.getClassLoader())));
+        boxScoreId = in.readString();
+        battingLineId = in.readString();
+        positionInBattingOrder = in.readInt();
+        substitute = in.readByte() != 0x00;
+        substituteNumber = in.readInt();
+        batterName = in.readString();
+        atBats = in.readInt();
+        runs = in.readInt();
+        hits = in.readInt();
+        rbis = in.readInt();
+        homeRuns = in.readInt();
+        walks = in.readInt();
+        strikeOuts = in.readInt();
+        leftOnBase = in.readInt();
+        average = in.readDouble();
+        onBasePct = in.readDouble();
     }
 
 
-    public BattingLine(){
+    public BattingLine() {
     }
 
     @Ignore
-    public BattingLine(String boxScoreId, int positionInBattingOrder, boolean substitute, int substituteNumber, String batterName){
+    public BattingLine(String boxScoreId, int positionInBattingOrder, boolean substitute, int substituteNumber, String batterName) {
         this.boxScoreId = boxScoreId;
         this.positionInBattingOrder = positionInBattingOrder;
         this.substitute = substitute;
@@ -188,7 +187,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementAtBats() {
-        atBats ++;
+        atBats++;
     }
 
     @NotNull
@@ -209,7 +208,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementHits() {
-        hits ++;
+        hits++;
     }
 
     public double getAverage() {
@@ -237,7 +236,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementHomeRuns() {
-        homeRuns ++;
+        homeRuns++;
     }
 
     public int getLeftOnBase() {
@@ -265,7 +264,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementRuns() {
-        runs ++;
+        runs++;
     }
 
     public int getStrikeOuts() {
@@ -277,7 +276,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementStrikeOuts() {
-        strikeOuts ++;
+        strikeOuts++;
     }
 
     public int getWalks() {
@@ -289,7 +288,7 @@ public class BattingLine implements Parcelable{
     }
 
     public void incrementWalks() {
-        walks ++;
+        walks++;
     }
 
     public int getSubstituteNumber() {
@@ -306,26 +305,47 @@ public class BattingLine implements Parcelable{
         return "Box Score Id : " + boxScoreId + ", \nPosition In Order : " + positionInBattingOrder + ", Name : " + batterName + "\n";
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(boxScoreId);
-        dest.writeValue(battingLineId);
-        dest.writeValue(positionInBattingOrder);
-        dest.writeValue(substitute);
-        dest.writeValue(substituteNumber);
-        dest.writeValue(batterName);
-        dest.writeValue(atBats);
-        dest.writeValue(runs);
-        dest.writeValue(hits);
-        dest.writeValue(rbis);
-        dest.writeValue(homeRuns);
-        dest.writeValue(walks);
-        dest.writeValue(strikeOuts);
-        dest.writeValue(leftOnBase);
-        dest.writeValue(average);
-        dest.writeValue(onBasePct);
+        dest.writeString(boxScoreId);
+        dest.writeString(battingLineId);
+        dest.writeInt(positionInBattingOrder);
+        dest.writeByte((byte) (substitute ? 0x01 : 0x00));
+        dest.writeInt(substituteNumber);
+        dest.writeString(batterName);
+        dest.writeInt(atBats);
+        dest.writeInt(runs);
+        dest.writeInt(hits);
+        dest.writeInt(rbis);
+        dest.writeInt(homeRuns);
+        dest.writeInt(walks);
+        dest.writeInt(strikeOuts);
+        dest.writeInt(leftOnBase);
+        dest.writeDouble(average);
+        dest.writeDouble(onBasePct);
     }
 
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public int compareTo(BattingLine battingLine) {
+        if (positionInBattingOrder > battingLine.positionInBattingOrder) {
+            return 1;
+        } else if (positionInBattingOrder < battingLine.positionInBattingOrder) {
+            return -1;
+        } else if (!substitute) {
+            return -1;
+        } else if (!battingLine.substitute) {
+            return 1;
+        } else if (substituteNumber > battingLine.substituteNumber) {
+            return 1;
+        } else if (substituteNumber < battingLine.substituteNumber) {
+            return -1;
+        } else {
+            return 0;
+        }
+
     }
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:id="@+id/box_score_detail_empty_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/box_score_details_empty_batter_tv"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:gravity="start"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_AB_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_R_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_H_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_RBI_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_HR_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_BB_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_K_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_LOB_tv"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_AVG_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+        <TextView
+            android:id="@+id/box_score_details_empty_OBP_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"/>
+
+
+    </TableRow>
+</TableLayout>

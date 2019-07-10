@@ -1,8 +1,10 @@
 package com.example.android.baseballbythenumbers.Repository;
 
 import android.app.Application;
+import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.os.AsyncTask;
 
 import com.example.android.baseballbythenumbers.Data.BattingLine;
@@ -112,6 +114,41 @@ public class Repository {
         mPitchingStatsDao = db.getPitchingStatsDao();
         mPitchingStats = mPitchingStatsDao.getAllPitchingStats();
     }
+
+    public LiveData<List<PitchingLine>> getLiveDataPitchingLinesForBoxScore(String boxScoreId){
+        return mPitchingLineDao.findLiveDataPitchingLinesForBoxScore(boxScoreId);
+    }
+
+    public LiveData<List<BattingLine>> getLiveDataBattingLinesForBoxScore(String boxScoreId){
+        return mBattingLineDao.findLiveDataBattingLinesForBoxScore(boxScoreId);
+    }
+
+    public LiveData<Game> getLiveDataForGame(final String gameId) {
+        LiveData<Game> gameLiveData = mGameDao.findGameWithGameId(gameId);
+        gameLiveData = Transformations.switchMap(gameLiveData, new Function<Game, LiveData<Game>>() {
+            @Override
+            public LiveData<Game> apply(final Game inputGame) {
+                LiveData<List<BoxScore>> boxScoreListLiveData = mBoxScoreDao.findLiveDataBoxScoresForGame(inputGame.getGameId());
+                LiveData<Game> outputGameLiveData = Transformations.map(boxScoreListLiveData, new Function<List<BoxScore>, Game>() {
+                    @Override
+                    public Game apply(List<BoxScore> inputBoxScoreList) {
+                        for (BoxScore boxScore : inputBoxScoreList) {
+                            if (boxScore.isBoxScoreForHomeTeam()) {
+                                inputGame.setHomeBoxScore(boxScore);
+                            } else {
+                                inputGame.setVisitorBoxScore(boxScore);
+                            }
+                        }
+                        return inputGame;
+                    }
+                });
+                return outputGameLiveData;
+            }
+
+        });
+        return gameLiveData;
+    }
+
 
     public void deleteAll()  {
         new deleteAllOrganizationsAsyncTask(mOrganizationDao).execute();

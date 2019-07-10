@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -17,6 +17,7 @@ import com.example.android.baseballbythenumbers.Data.Organization;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentNewLeagueOptionsBinding;
 
 import java.util.ArrayList;

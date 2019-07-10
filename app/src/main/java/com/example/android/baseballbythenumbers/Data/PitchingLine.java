@@ -18,7 +18,7 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "pitching_line", foreignKeys = @ForeignKey(entity = BoxScore.class, parentColumns = "box_score_id", childColumns = "box_score_id", onDelete = CASCADE), indices = @Index(value = "box_score_id"))
-public class PitchingLine implements Parcelable{
+public class PitchingLine implements Parcelable, Comparable<PitchingLine>{
 
     @SerializedName("boxScoreId")
     @Expose
@@ -79,11 +79,11 @@ public class PitchingLine implements Parcelable{
 
     @SerializedName("era")
     @Expose
-    private double era;
+    private String era;
 
     @SerializedName("whip")
     @Expose
-    private double whip;
+    private String whip;
 
     @SerializedName("pitchesThrown")
     @Expose
@@ -113,24 +113,22 @@ public class PitchingLine implements Parcelable{
             ;
 
     protected PitchingLine(Parcel in) {
-        this.boxScoreId = ((String) in.readValue((String.class.getClassLoader())));
-        this.pitchingLineId = ((String) in.readValue((String.class.getClassLoader())));
-        this.pitcherNumber = ((int) in.readValue((int.class.getClassLoader())));
-        this.pitcherName = ((String) in.readValue((String.class.getClassLoader())));
-        this.inningsPitched = ((float) in.readValue((float.class.getClassLoader())));
-        this.hitsAllowed = ((int) in.readValue((int.class.getClassLoader())));
-        this.runsAllowed = ((int) in.readValue((int.class.getClassLoader())));
-        this.earnedRuns = ((int) in.readValue((int.class.getClassLoader())));
-        this.walksAllowed = ((int) in.readValue((int.class.getClassLoader())));
-        this.strikeOutsMade = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeRunsAllowed = ((int) in.readValue((int.class.getClassLoader())));
-        this.era = ((double) in.readValue((double.class.getClassLoader())));
-        this.whip = ((double) in.readValue((double.class.getClassLoader())));
-        this.pitchesThrown = ((int) in.readValue((int.class.getClassLoader())));
-        this.strikesThrown = ((int) in.readValue((int.class.getClassLoader())));
+        boxScoreId = in.readString();
+        pitchingLineId = in.readString();
+        pitcherNumber = in.readInt();
+        pitcherName = in.readString();
+        inningsPitched = in.readFloat();
+        hitsAllowed = in.readInt();
+        runsAllowed = in.readInt();
+        earnedRuns = in.readInt();
+        walksAllowed = in.readInt();
+        strikeOutsMade = in.readInt();
+        homeRunsAllowed = in.readInt();
+        era = in.readString();
+        whip = in.readString();
+        pitchesThrown = in.readInt();
+        strikesThrown = in.readInt();
     }
-
-
 
 
     public PitchingLine(){}
@@ -151,19 +149,19 @@ public class PitchingLine implements Parcelable{
         this.boxScoreId = boxScoreId;
     }
 
-    public double getEra() {
+    public String getEra() {
         return era;
     }
 
-    public void setEra(double era) {
+    public void setEra(String era) {
         this.era = era;
     }
 
-    public double getWhip() {
+    public String getWhip() {
         return whip;
     }
 
-    public void setWhip(double whip) {
+    public void setWhip(String whip) {
         this.whip = whip;
     }
 
@@ -298,26 +296,38 @@ public class PitchingLine implements Parcelable{
     }
 
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(boxScoreId);
-        dest.writeValue(pitchingLineId);
-        dest.writeValue(pitcherNumber);
-        dest.writeValue(pitcherName);
-        dest.writeValue(inningsPitched);
-        dest.writeValue(hitsAllowed);
-        dest.writeValue(runsAllowed);
-        dest.writeValue(earnedRuns);
-        dest.writeValue(walksAllowed);
-        dest.writeValue(strikeOutsMade);
-        dest.writeValue(homeRunsAllowed);
-        dest.writeValue(era);
-        dest.writeValue(whip);
-        dest.writeValue(pitchesThrown);
-        dest.writeValue(strikesThrown);
+        dest.writeString(boxScoreId);
+        dest.writeString(pitchingLineId);
+        dest.writeInt(pitcherNumber);
+        dest.writeString(pitcherName);
+        dest.writeFloat(inningsPitched);
+        dest.writeInt(hitsAllowed);
+        dest.writeInt(runsAllowed);
+        dest.writeInt(earnedRuns);
+        dest.writeInt(walksAllowed);
+        dest.writeInt(strikeOutsMade);
+        dest.writeInt(homeRunsAllowed);
+        dest.writeString(era);
+        dest.writeString(whip);
+        dest.writeInt(pitchesThrown);
+        dest.writeInt(strikesThrown);
     }
 
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public int compareTo(PitchingLine pitchingLine) {
+        if (pitcherNumber > pitchingLine.pitcherNumber) {
+            return 1;
+        } else if (pitcherNumber < pitchingLine.pitcherNumber) {
+            return -1;
+        }  else {
+            return 0;
+        }
+
+    }
 }

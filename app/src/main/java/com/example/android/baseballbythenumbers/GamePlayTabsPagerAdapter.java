@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.android.baseballbythenumbers.Data.Game;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -13,20 +15,22 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
+    private Game mGame;
 
-    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm) {
+    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game) {
         super(fm);
         mContext = context;
+        mGame = game;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                BoxScoreFragment boxscore = BoxScoreFragment.newInstance();
+                BoxScoreFragment boxscore = BoxScoreFragment.newInstance(mGame);
                 return boxscore;
             case 1:
-                PlayByPlayFragment playByPlay = PlayByPlayFragment.newInstance();
+                PlayByPlayFragment playByPlay = PlayByPlayFragment.newInstance(mGame);
                 return playByPlay;
             case 2:
                 ManageGameFragment manageGame = ManageGameFragment.newInstance();

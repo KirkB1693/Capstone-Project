@@ -13,14 +13,14 @@
         <activity
             android:name=".GamePlayActivity"
             android:label="@string/title_activity_game_play"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".UI.MainActivity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.baseballbythenumbers.MainActivity" />
+                android:value="com.example.android.baseballbythenumbers.UI.MainActivity.MainActivity" />
         </activity>
-        <activity android:name=".NewLeagueSetupActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".UI.NewLeagueSetupActivity.NewLeagueSetupActivity" />
+        <activity android:name=".UI.MainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

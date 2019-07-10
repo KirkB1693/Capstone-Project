@@ -139,7 +139,7 @@ public class GameSimulator {
         while (gameNotOver) {
             gameLog.append("\n\n");
 
-
+            Player playerWePinchHitFor = shouldWePinchHit(lineup.get(currentBatter));
             AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher(), year);
 
             gameLog.append(lineup.get(currentBatter).getName()).append(" : ");
@@ -151,7 +151,7 @@ public class GameSimulator {
             } else {
                 pitcherOfRecordForHittingTeam = homeDefense.get(SCOREKEEPING_PITCHER);
             }
-            Player playerWePinchHitFor = shouldWePinchHit(lineup.get(currentBatter));
+
             int atBatResult = currentAtBat.simulateAtBat(pitcherStaminaAdjustment, batterStaminaAdjustment, areRunsEarned);
             gameLog.append(getAtBatSummary());
 

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -507,27 +508,30 @@ public class PitchingStats implements Parcelable, Comparable<PitchingStats> {
         this.pitchingStatsId = pitchingStatsId;
     }
 
-    public double getERA() {
+    public String getERA() {
         if (inningsPitched > 0) {
             double ip = ((inningsPitched % 1) * 3.333333333) + Math.round(inningsPitched);
-            return Math.round(earnedRuns / (ip / 9) * 100.0) / 100.0;
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            return decimalFormat.format(Math.round(earnedRuns / (ip / 9) * 100.0) / 100.0);
         } else {
             if (earnedRuns > 0) {
-                return 1000000;
+                return "infinite";
             }
-            return 0;
+            return "0.00";
         }
     }
 
-    public double getWHIP() {
+    public String getWHIP() {
         if (inningsPitched > 0) {
             double ip = ((inningsPitched % 1) * 3.333333333) + Math.round(inningsPitched);
-            return Math.round(((walks + hits) / (ip)) * 100.0) / 100.0;
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            return decimalFormat.format(Math.round(((walks + hits) / (ip)) * 100.0) / 100.0);
+
         } else {
             if ((walks + hits) > 0) {
-                return 1000000;
+                return "infinite";
             }
-            return 0;
+            return "0.00";
         }
     }
 

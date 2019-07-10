@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.Adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.baseballbythenumbers.PickCityFragment.OnListFragmentInteractionListener;
+import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity.PickCityFragment.OnListFragmentInteractionListener;
 
 import org.jetbrains.annotations.NotNull;
 

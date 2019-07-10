@@ -37,4 +37,7 @@ public interface TeamDao {
 
     @Query("SELECT * FROM teams WHERE teamName=:teamName")
     Team getTeamWithTeamName(String teamName);
+
+    @Query("SELECT * FROM teams WHERE teamName=:teamName")
+    LiveData<Team> getLiveDataTeamWithTeamName(String teamName);
 }

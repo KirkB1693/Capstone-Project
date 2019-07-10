@@ -69,16 +69,22 @@ public class BoxScore implements Parcelable {
             ;
 
     protected BoxScore(Parcel in) {
-        this.boxScoreId = ((String) in.readValue((String.class.getClassLoader())));
-        this.gameId = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.battingLines, (com.example.android.baseballbythenumbers.Data.BattingLine.class.getClassLoader()));
-        in.readList(this.pitchingLines, (com.example.android.baseballbythenumbers.Data.PitchingLine.class.getClassLoader()));
+        boxScoreId = in.readString();
+        gameId = in.readString();
+        if (in.readByte() == 0x01) {
+            battingLines = new ArrayList<>();
+            in.readList(battingLines, (BattingLine.class.getClassLoader()));
+        } else {
+            battingLines = null;
+        }
+        if (in.readByte() == 0x01) {
+            pitchingLines = new ArrayList<>();
+            in.readList(pitchingLines, PitchingLine.class.getClassLoader());
+        } else {
+            pitchingLines = null;
+        }
+        isBoxScoreForHomeTeam = in.readByte() != 0x00;
     }
-
-
-
-
-
 
     public BoxScore (String gameId, boolean isBoxScoreForHomeTeam) {
         this.gameId = gameId;
@@ -137,11 +143,23 @@ public class BoxScore implements Parcelable {
         pitchingLines.add(pitchingLine);
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(boxScoreId);
-        dest.writeValue(gameId);
-        dest.writeList(battingLines);
-        dest.writeList(pitchingLines);
+        dest.writeString(boxScoreId);
+        dest.writeString(gameId);
+        if (battingLines == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(battingLines);
+        }
+        if (pitchingLines == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(pitchingLines);
+        }
+        dest.writeByte((byte) (isBoxScoreForHomeTeam ? 0x01 : 0x00));
     }
 
     public int describeContents() {

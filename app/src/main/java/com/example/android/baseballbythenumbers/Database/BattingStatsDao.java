@@ -29,4 +29,7 @@ public interface BattingStatsDao {
 
     @Query("SELECT * FROM batting_stats WHERE playerId=:playerId")
     List<BattingStats> findBattingStatsForPlayer(String playerId);
+
+    @Query("SELECT * FROM batting_stats WHERE playerId=:playerId")
+    LiveData<List<BattingStats>> findLiveDataBattingStatsForPlayer(String playerId);
 }

@@ -94,21 +94,20 @@ public class Game implements Parcelable, Comparable<Game> {
             return (new Game[size]);
         }
 
-    }
-            ;
+    };
 
     protected Game(Parcel in) {
-        this.gameId = ((String) in.readValue((String.class.getClassLoader())));
-        this.scheduleId = ((String) in.readValue((String.class.getClassLoader())));
-        this.day = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeTeamName = ((String) in.readValue((String.class.getClassLoader())));
-        this.visitingTeamName = ((String) in.readValue((String.class.getClassLoader())));
-        this.homeScore = ((int) in.readValue((int.class.getClassLoader())));
-        this.visitorScore = ((int) in.readValue((int.class.getClassLoader())));
-        this.playedGame = ((boolean) in.readValue((boolean.class.getClassLoader())));
-        this.gameLog = ((String) in.readValue((String.class.getClassLoader())));
-        this.homeBoxScore = ((BoxScore) in.readValue((BoxScore.class.getClassLoader())));
-        this.visitorBoxScore = ((BoxScore) in.readValue((BoxScore.class.getClassLoader())));
+        gameId = in.readString();
+        scheduleId = in.readString();
+        day = in.readInt();
+        homeTeamName = in.readString();
+        visitingTeamName = in.readString();
+        homeScore = in.readInt();
+        visitorScore = in.readInt();
+        playedGame = in.readByte() != 0x00;
+        gameLog = in.readString();
+        homeBoxScore = (BoxScore) in.readValue(BoxScore.class.getClassLoader());
+        visitorBoxScore = (BoxScore) in.readValue(BoxScore.class.getClassLoader());
     }
 
 
@@ -208,16 +207,17 @@ public class Game implements Parcelable, Comparable<Game> {
     }
 
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(gameId);
-        dest.writeValue(scheduleId);
-        dest.writeValue(day);
-        dest.writeValue(homeTeamName);
-        dest.writeValue(visitingTeamName);
-        dest.writeValue(homeScore);
-        dest.writeValue(visitorScore);
-        dest.writeValue(playedGame);
-        dest.writeValue(gameLog);
+        dest.writeString(gameId);
+        dest.writeString(scheduleId);
+        dest.writeInt(day);
+        dest.writeString(homeTeamName);
+        dest.writeString(visitingTeamName);
+        dest.writeInt(homeScore);
+        dest.writeInt(visitorScore);
+        dest.writeByte((byte) (playedGame ? 0x01 : 0x00));
+        dest.writeString(gameLog);
         dest.writeValue(homeBoxScore);
         dest.writeValue(visitorBoxScore);
     }
