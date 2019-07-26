@@ -19,4 +19,8 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="light_background">#E8EAF6</color>
+    <color name="light_background_for_at_bat_result">#80E8EAF6</color>
+    <color name="runner_name_background">#9A0E0E0E</color>
+    <color name="out">#d32f2f</color>
+    <color name="safe">#388E3C</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.GamePlayActivity;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.android.baseballbythenumbers.Data.Game;
+import com.example.android.baseballbythenumbers.R;
 
 public class BoxScoreTabsPagerAdapter extends FragmentPagerAdapter {
 

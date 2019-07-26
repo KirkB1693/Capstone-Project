@@ -9,9 +9,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -25,102 +22,43 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
 
     private String playerId;
 
-    @SerializedName("Year")
-    @Expose
     private int year;
-    @SerializedName("Games")
-    @Expose
+
     private int games;
-    @SerializedName("PlateAppearances")
-    @Expose
+
     private int plateAppearances;
-    @SerializedName("Hits")
-    @Expose
+
     private int hits;
-    @SerializedName("Singles")
-    @Expose
+
     private int singles;
-    @SerializedName("Doubles")
-    @Expose
+
     private int doubles;
-    @SerializedName("Triples")
-    @Expose
+
     private int triples;
-    @SerializedName("HomeRuns")
-    @Expose
+
     private int homeRuns;
-    @SerializedName("Runs")
-    @Expose
+
     private int runs;
-    @SerializedName("RunsBattedIn")
-    @Expose
+
     private int runsBattedIn;
-    @SerializedName("Walks")
-    @Expose
+
     private int walks;
-    @SerializedName("StrikeOuts")
-    @Expose
+
     private int strikeOuts;
-    @SerializedName("HitByPitch")
-    @Expose
+
     private int hitByPitch;
-    @SerializedName("StolenBases")
-    @Expose
+
     private int stolenBases;
-    @SerializedName("CaughtStealing")
-    @Expose
+
     private int caughtStealing;
-    @SerializedName("GroundBalls")
-    @Expose
+
     private int groundBalls;
-    @SerializedName("LineDrives")
-    @Expose
+
     private int lineDrives;
-    @SerializedName("FlyBalls")
-    @Expose
+
     private int flyBalls;
-    @SerializedName("Errors")
-    @Expose
+
     private int errors;
-    public final static Parcelable.Creator<BattingStats> CREATOR = new Creator<BattingStats>() {
-
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public BattingStats createFromParcel(Parcel in) {
-            return new BattingStats(in);
-        }
-
-        public BattingStats[] newArray(int size) {
-            return (new BattingStats[size]);
-        }
-
-    };
-
-    protected BattingStats(Parcel in) {
-        this.battingStatsId = ((String) in.readValue((String.class.getClassLoader())));
-        this.playerId = ((String) in.readValue((String.class.getClassLoader())));
-        this.year = ((int) in.readValue((int.class.getClassLoader())));
-        this.games = ((int) in.readValue((int.class.getClassLoader())));
-        this.plateAppearances = ((int) in.readValue((int.class.getClassLoader())));
-        this.hits = ((int) in.readValue((int.class.getClassLoader())));
-        this.singles = ((int) in.readValue((int.class.getClassLoader())));
-        this.doubles = ((int) in.readValue((int.class.getClassLoader())));
-        this.triples = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeRuns = ((int) in.readValue((int.class.getClassLoader())));
-        this.runs = ((int) in.readValue((int.class.getClassLoader())));
-        this.runsBattedIn = ((int) in.readValue((int.class.getClassLoader())));
-        this.walks = ((int) in.readValue((int.class.getClassLoader())));
-        this.strikeOuts = ((int) in.readValue((int.class.getClassLoader())));
-        this.hitByPitch = ((int) in.readValue((int.class.getClassLoader())));
-        this.stolenBases = ((int) in.readValue((int.class.getClassLoader())));
-        this.caughtStealing = ((int) in.readValue((int.class.getClassLoader())));
-        this.groundBalls = ((int) in.readValue((int.class.getClassLoader())));
-        this.lineDrives = ((int) in.readValue((int.class.getClassLoader())));
-        this.flyBalls = ((int) in.readValue((int.class.getClassLoader())));
-        this.errors = ((int) in.readValue((int.class.getClassLoader())));
-    }
 
     /**
      * No args constructor for use in serialization
@@ -428,30 +366,6 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
         }
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(battingStatsId);
-        dest.writeValue(playerId);
-        dest.writeValue(year);
-        dest.writeValue(games);
-        dest.writeValue(plateAppearances);
-        dest.writeValue(hits);
-        dest.writeValue(singles);
-        dest.writeValue(doubles);
-        dest.writeValue(triples);
-        dest.writeValue(homeRuns);
-        dest.writeValue(runs);
-        dest.writeValue(runsBattedIn);
-        dest.writeValue(walks);
-        dest.writeValue(strikeOuts);
-        dest.writeValue(hitByPitch);
-        dest.writeValue(stolenBases);
-        dest.writeValue(caughtStealing);
-        dest.writeValue(groundBalls);
-        dest.writeValue(lineDrives);
-        dest.writeValue(flyBalls);
-        dest.writeValue(errors);
-    }
-
     @Override
     public String toString() {
         return new StringBuilder().append("\nYear : ").append(year).append(", Games : ").append(games).append(", Plate Appearances : ").append(plateAppearances)
@@ -478,10 +392,6 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
 
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
     @Override
     public int compareTo(BattingStats battingStats) {
         if (year > battingStats.year) {
@@ -492,4 +402,70 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
             return 0;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.battingStatsId);
+        dest.writeString(this.playerId);
+        dest.writeInt(this.year);
+        dest.writeInt(this.games);
+        dest.writeInt(this.plateAppearances);
+        dest.writeInt(this.hits);
+        dest.writeInt(this.singles);
+        dest.writeInt(this.doubles);
+        dest.writeInt(this.triples);
+        dest.writeInt(this.homeRuns);
+        dest.writeInt(this.runs);
+        dest.writeInt(this.runsBattedIn);
+        dest.writeInt(this.walks);
+        dest.writeInt(this.strikeOuts);
+        dest.writeInt(this.hitByPitch);
+        dest.writeInt(this.stolenBases);
+        dest.writeInt(this.caughtStealing);
+        dest.writeInt(this.groundBalls);
+        dest.writeInt(this.lineDrives);
+        dest.writeInt(this.flyBalls);
+        dest.writeInt(this.errors);
+    }
+
+    protected BattingStats(Parcel in) {
+        this.battingStatsId = in.readString();
+        this.playerId = in.readString();
+        this.year = in.readInt();
+        this.games = in.readInt();
+        this.plateAppearances = in.readInt();
+        this.hits = in.readInt();
+        this.singles = in.readInt();
+        this.doubles = in.readInt();
+        this.triples = in.readInt();
+        this.homeRuns = in.readInt();
+        this.runs = in.readInt();
+        this.runsBattedIn = in.readInt();
+        this.walks = in.readInt();
+        this.strikeOuts = in.readInt();
+        this.hitByPitch = in.readInt();
+        this.stolenBases = in.readInt();
+        this.caughtStealing = in.readInt();
+        this.groundBalls = in.readInt();
+        this.lineDrives = in.readInt();
+        this.flyBalls = in.readInt();
+        this.errors = in.readInt();
+    }
+
+    public static final Creator<BattingStats> CREATOR = new Creator<BattingStats>() {
+        @Override
+        public BattingStats createFromParcel(Parcel source) {
+            return new BattingStats(source);
+        }
+
+        @Override
+        public BattingStats[] newArray(int size) {
+            return new BattingStats[size];
+        }
+    };
 }

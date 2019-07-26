@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.GamePlayActivity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.PitchingLine;
+import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.ViewModels.BoxScoreDetailViewModel;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreDetailBinding;
 
 import java.text.DecimalFormat;

@@ -4,119 +4,52 @@ import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class PitchingPercentages implements Parcelable
 {
 
-    @SerializedName("OSwingPct")
-    @Expose
     private int oSwingPct;
-    @SerializedName("ZSwingPct")
-    @Expose
+
     private int zSwingPct;
-    @SerializedName("OContactPct")
-    @Expose
+
     private int oContactPct;
-    @SerializedName("ZContactPct")
-    @Expose
+
     private int zContactPct;
-    @SerializedName("GroundBallPct")
-    @Expose
+
     private int groundBallPct;
-    @SerializedName("LineDrivePct")
-    @Expose
+
     private int lineDrivePct;
-    @SerializedName("HomeRunPct")
-    @Expose
+
     private int homeRunPct;
-    @SerializedName("InfieldFlyBallPct")
-    @Expose
+
     private int infieldFlyBallPct;
-    @SerializedName("HitByPitchPct")
-    @Expose
+
     private int hitByPitchPct;
-    @SerializedName("WildPitchPct")
-    @Expose
+
     private int wildPitchPct;
-    @SerializedName("BalkPct")
-    @Expose
+
     private int balkPct;
-    @SerializedName("ZonePct")
-    @Expose
+
     private int zonePct;
-    @SerializedName("FirstPitchStrikePct")
-    @Expose
+
     private int firstPitchStrikePct;
-    @SerializedName("FastballPct")
-    @Expose
+
     private int fastballPct;
-    @SerializedName("SliderPct")
-    @Expose
+
     private int sliderPct;
-    @SerializedName("CutterPct")
-    @Expose
+
     private int cutterPct;
-    @SerializedName("CurveballPct")
-    @Expose
+
     private int curveballPct;
-    @SerializedName("ChangeUpPct")
-    @Expose
+
     private int changeUpPct;
-    @SerializedName("SplitFingerPct")
-    @Expose
+
     private int splitFingerPct;
-    @SerializedName("KnuckleballPct")
-    @Expose
+
     private int knuckleballPct;
-    @SerializedName("pitchingStamina")
-    @Expose
+
     private int pitchingStamina;
-    @SerializedName("pitchingStaminaUsed")
-    @Expose
+
     private int pitchingStaminaUsed;
-    public final static Parcelable.Creator<PitchingPercentages> CREATOR = new Creator<PitchingPercentages>() {
-
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public PitchingPercentages createFromParcel(Parcel in) {
-            return new PitchingPercentages(in);
-        }
-
-        public PitchingPercentages[] newArray(int size) {
-            return (new PitchingPercentages[size]);
-        }
-
-    }
-            ;
-
-    protected PitchingPercentages(Parcel in) {
-        this.oSwingPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.zSwingPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.oContactPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.zContactPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.groundBallPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.lineDrivePct = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeRunPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.infieldFlyBallPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.hitByPitchPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.wildPitchPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.balkPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.zonePct = ((int) in.readValue((int.class.getClassLoader())));
-        this.firstPitchStrikePct = ((int) in.readValue((int.class.getClassLoader())));
-        this.fastballPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.sliderPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.cutterPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.curveballPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.changeUpPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.splitFingerPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.knuckleballPct = ((int) in.readValue((int.class.getClassLoader())));
-        this.pitchingStamina = ((int) in.readValue((int.class.getClassLoader())));
-        this.pitchingStaminaUsed = ((int) in.readValue((int.class.getClassLoader())));
-    }
 
     /**
      * No args constructor for use in serialization
@@ -353,36 +286,6 @@ public class PitchingPercentages implements Parcelable
         this.pitchingStaminaUsed = pitchingStaminaUsed;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(oSwingPct);
-        dest.writeValue(zSwingPct);
-        dest.writeValue(oContactPct);
-        dest.writeValue(zContactPct);
-        dest.writeValue(groundBallPct);
-        dest.writeValue(lineDrivePct);
-        dest.writeValue(homeRunPct);
-        dest.writeValue(infieldFlyBallPct);
-        dest.writeValue(hitByPitchPct);
-        dest.writeValue(wildPitchPct);
-        dest.writeValue(balkPct);
-        dest.writeValue(zonePct);
-        dest.writeValue(firstPitchStrikePct);
-        dest.writeValue(fastballPct);
-        dest.writeValue(sliderPct);
-        dest.writeValue(cutterPct);
-        dest.writeValue(curveballPct);
-        dest.writeValue(changeUpPct);
-        dest.writeValue(splitFingerPct);
-        dest.writeValue(knuckleballPct);
-        dest.writeValue(pitchingStamina);
-        dest.writeValue(pitchingStaminaUsed);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-
 
     @Override
     public String toString() {
@@ -398,4 +301,72 @@ public class PitchingPercentages implements Parcelable
         double percent = ((double) percentAsInteger)/100.0;
         return percent + "%";
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.oSwingPct);
+        dest.writeInt(this.zSwingPct);
+        dest.writeInt(this.oContactPct);
+        dest.writeInt(this.zContactPct);
+        dest.writeInt(this.groundBallPct);
+        dest.writeInt(this.lineDrivePct);
+        dest.writeInt(this.homeRunPct);
+        dest.writeInt(this.infieldFlyBallPct);
+        dest.writeInt(this.hitByPitchPct);
+        dest.writeInt(this.wildPitchPct);
+        dest.writeInt(this.balkPct);
+        dest.writeInt(this.zonePct);
+        dest.writeInt(this.firstPitchStrikePct);
+        dest.writeInt(this.fastballPct);
+        dest.writeInt(this.sliderPct);
+        dest.writeInt(this.cutterPct);
+        dest.writeInt(this.curveballPct);
+        dest.writeInt(this.changeUpPct);
+        dest.writeInt(this.splitFingerPct);
+        dest.writeInt(this.knuckleballPct);
+        dest.writeInt(this.pitchingStamina);
+        dest.writeInt(this.pitchingStaminaUsed);
+    }
+
+    protected PitchingPercentages(Parcel in) {
+        this.oSwingPct = in.readInt();
+        this.zSwingPct = in.readInt();
+        this.oContactPct = in.readInt();
+        this.zContactPct = in.readInt();
+        this.groundBallPct = in.readInt();
+        this.lineDrivePct = in.readInt();
+        this.homeRunPct = in.readInt();
+        this.infieldFlyBallPct = in.readInt();
+        this.hitByPitchPct = in.readInt();
+        this.wildPitchPct = in.readInt();
+        this.balkPct = in.readInt();
+        this.zonePct = in.readInt();
+        this.firstPitchStrikePct = in.readInt();
+        this.fastballPct = in.readInt();
+        this.sliderPct = in.readInt();
+        this.cutterPct = in.readInt();
+        this.curveballPct = in.readInt();
+        this.changeUpPct = in.readInt();
+        this.splitFingerPct = in.readInt();
+        this.knuckleballPct = in.readInt();
+        this.pitchingStamina = in.readInt();
+        this.pitchingStaminaUsed = in.readInt();
+    }
+
+    public static final Creator<PitchingPercentages> CREATOR = new Creator<PitchingPercentages>() {
+        @Override
+        public PitchingPercentages createFromParcel(Parcel source) {
+            return new PitchingPercentages(source);
+        }
+
+        @Override
+        public PitchingPercentages[] newArray(int size) {
+            return new PitchingPercentages[size];
+        }
+    };
 }

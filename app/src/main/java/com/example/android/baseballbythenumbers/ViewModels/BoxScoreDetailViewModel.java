@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.ViewModels;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

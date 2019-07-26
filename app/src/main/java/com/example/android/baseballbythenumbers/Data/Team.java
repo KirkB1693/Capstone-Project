@@ -211,7 +211,12 @@ public class Team implements Parcelable
         dest.writeInt(teamBudget);
         dest.writeInt(wins);
         dest.writeInt(losses);
-        dest.writeByte((byte) (0x00));
+        if (players == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(players);
+        }
     }
 
     public int describeContents() {

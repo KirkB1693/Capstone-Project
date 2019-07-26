@@ -10,9 +10,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -40,83 +37,36 @@ public class Player implements Parcelable
 
     private String teamId;
 
-    @SerializedName("firstName")
-    @Expose
     private String firstName;
-    @SerializedName("middleName")
-    @Expose
+
     private String middleName;
-    @SerializedName("lastName")
-    @Expose
+
     private String lastName;
-    @SerializedName("primaryPosition")
-    @Expose
+
     private int primaryPosition;
-    @SerializedName("alternatePositions")
-    @Expose
+
     private int alternatePositions;
-    @SerializedName("age")
-    @Expose
+
     private int age;
-    @SerializedName("dateOfBirth")
-    @Expose
+
     private String dateOfBirth;
-    @SerializedName("hits")
-    @Expose
+
     private String hits;
-    @SerializedName("throwingHand")
-    @Expose
+
     private String throwingHand;
-    @SerializedName("battingStats")
-    @Expose
+
     @Ignore
     private List<BattingStats> battingStats = null;
-    @SerializedName("pitchingStats")
-    @Expose
+
     @Ignore
     private List<PitchingStats> pitchingStats = null;
-    @SerializedName("hittingPercentages")
-    @Expose
+
     @Embedded
     private HittingPercentages hittingPercentages;
-    @SerializedName("pitchingPercentages")
-    @Expose
+
     @Embedded
     private PitchingPercentages pitchingPercentages;
-    public final static Parcelable.Creator<Player> CREATOR = new Creator<Player>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public Player createFromParcel(Parcel in) {
-            return new Player(in);
-        }
-
-        public Player[] newArray(int size) {
-            return (new Player[size]);
-        }
-
-    }
-            ;
-
-    protected Player(Parcel in) {
-        this.playerId = ((String) in.readValue((String.class.getClassLoader())));
-        this.teamId = ((String) in.readValue((String.class.getClassLoader())));
-        this.firstName = ((String) in.readValue((String.class.getClassLoader())));
-        this.middleName = ((String) in.readValue((String.class.getClassLoader())));
-        this.lastName = ((String) in.readValue((String.class.getClassLoader())));
-        this.primaryPosition = ((int) in.readValue((int.class.getClassLoader())));
-        this.alternatePositions = ((int) in.readValue((int.class.getClassLoader())));
-        this.age = ((int) in.readValue((int.class.getClassLoader())));
-        this.dateOfBirth = ((String) in.readValue((String.class.getClassLoader())));
-        this.hits = ((String) in.readValue((String.class.getClassLoader())));
-        this.throwingHand = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.battingStats, (BattingStats.class.getClassLoader()));
-        in.readList(this.pitchingStats, (PitchingStats.class.getClassLoader()));
-        this.hittingPercentages = ((HittingPercentages) in.readValue((HittingPercentages.class.getClassLoader())));
-        this.pitchingPercentages = ((PitchingPercentages) in.readValue((PitchingPercentages.class.getClassLoader())));
-    }
 
     /**
      * No args constructor for use in serialization
@@ -306,28 +256,6 @@ public class Player implements Parcelable
         return null;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(playerId);
-        dest.writeValue(teamId);
-        dest.writeValue(firstName);
-        dest.writeValue(middleName);
-        dest.writeValue(lastName);
-        dest.writeValue(primaryPosition);
-        dest.writeValue(alternatePositions);
-        dest.writeValue(age);
-        dest.writeValue(dateOfBirth);
-        dest.writeValue(hits);
-        dest.writeValue(throwingHand);
-        dest.writeList(battingStats);
-        dest.writeList(pitchingStats);
-        dest.writeValue(hittingPercentages);
-        dest.writeValue(pitchingPercentages);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
     public String getName() {return firstName + " " + lastName;}
 
     @Override
@@ -439,4 +367,58 @@ public class Player implements Parcelable
         }
         return product;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.playerId);
+        dest.writeString(this.teamId);
+        dest.writeString(this.firstName);
+        dest.writeString(this.middleName);
+        dest.writeString(this.lastName);
+        dest.writeInt(this.primaryPosition);
+        dest.writeInt(this.alternatePositions);
+        dest.writeInt(this.age);
+        dest.writeString(this.dateOfBirth);
+        dest.writeString(this.hits);
+        dest.writeString(this.throwingHand);
+        dest.writeTypedList(this.battingStats);
+        dest.writeTypedList(this.pitchingStats);
+        dest.writeParcelable(this.hittingPercentages, flags);
+        dest.writeParcelable(this.pitchingPercentages, flags);
+    }
+
+    protected Player(Parcel in) {
+        this.playerId = in.readString();
+        this.teamId = in.readString();
+        this.firstName = in.readString();
+        this.middleName = in.readString();
+        this.lastName = in.readString();
+        this.primaryPosition = in.readInt();
+        this.alternatePositions = in.readInt();
+        this.age = in.readInt();
+        this.dateOfBirth = in.readString();
+        this.hits = in.readString();
+        this.throwingHand = in.readString();
+        this.battingStats = in.createTypedArrayList(BattingStats.CREATOR);
+        this.pitchingStats = in.createTypedArrayList(PitchingStats.CREATOR);
+        this.hittingPercentages = in.readParcelable(HittingPercentages.class.getClassLoader());
+        this.pitchingPercentages = in.readParcelable(PitchingPercentages.class.getClassLoader());
+    }
+
+    public static final Creator<Player> CREATOR = new Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel source) {
+            return new Player(source);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 }

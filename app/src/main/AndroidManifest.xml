@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         android:appCategory="game">
         <activity
-            android:name=".GamePlayActivity"
+            android:name=".UI.GamePlayActivity.GamePlayActivity"
             android:label="@string/title_activity_game_play"
             android:parentActivityName=".UI.MainActivity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

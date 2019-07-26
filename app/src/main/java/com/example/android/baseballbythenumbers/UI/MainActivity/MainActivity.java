@@ -24,7 +24,7 @@ import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
-import com.example.android.baseballbythenumbers.GamePlayActivity;
+import com.example.android.baseballbythenumbers.UI.GamePlayActivity.GamePlayActivity;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String ORG_ID_SHARED_PREF_KEY = "orgId";
     public static final String NEXT_GAME_EXTRA = "Next_Game";
+    public static final String HOME_TEAM_EXTRA = "home_team_extra";
+    public static final String ORGANIZATION_EXTRA = "organization_extra";
+    public static final String VISITING_TEAM_EXTRA = "visiting_team_extra";
+    public static final String USER_TEAM_NAME = "user_team_name";
     private List<Game> gamesForUserToPlay;
     private Organization organization;
     private Repository repository;
@@ -121,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             goToNewLeagueSetupActivity();                   // Otherwise setup a new league
         }
 
-
-        // simGame(null);
     }
 
     private void updateUIFromDb(String orgId) {
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Go to NewLeagueSetupActivity
         Intent newLeagueintent = new Intent(this, NewLeagueSetupActivity.class);
         this.startActivity(newLeagueintent);
-        finish();
+        this.finish();
     }
 
     private void updateUI() {
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void simGame(Game game, Team homeTeam, Team visitingTeam) {
 
-        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear());
+        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear(), repository);
         int[] result = gameSimulator.simulateGame();
 
         game.setHomeScore(result[0]);
@@ -195,10 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.gameScoresTV.setText(String.format(Locale.US, "%s - %s\n%d    -    %d", game.getHomeTeamName(), game.getVisitingTeamName(), game.getHomeScore(), game.getVisitorScore()));
 
         repository.updateGame(game);
-        repository.insertBoxScore(game.getHomeBoxScore());
+        repository.updateBoxScore(game.getHomeBoxScore());
         repository.insertAllBattingLines(game.getHomeBoxScore().getBattingLines());
         repository.insertAllPitchingLines(game.getHomeBoxScore().getPitchingLines());
-        repository.insertBoxScore(game.getVisitorBoxScore());
+        repository.updateBoxScore(game.getVisitorBoxScore());
         repository.insertAllBattingLines(game.getVisitorBoxScore().getBattingLines());
         repository.insertAllPitchingLines(game.getVisitorBoxScore().getPitchingLines());
         repository.updateTeam(homeTeam);
@@ -233,8 +235,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void startGamePlayActivity() {
         Intent gamePlayIntent = new Intent(this, GamePlayActivity.class);
         gamePlayIntent.putExtra(NEXT_GAME_EXTRA, nextGame);
+        Team homeTeamFromGame = listOfAllTeams.get(nextGame.getHomeTeamName());
+        gamePlayIntent.putExtra(HOME_TEAM_EXTRA, homeTeamFromGame);
+        Team visitingTeamFromGame = listOfAllTeams.get(nextGame.getVisitingTeamName());
+        gamePlayIntent.putExtra(VISITING_TEAM_EXTRA, visitingTeamFromGame);
+        gamePlayIntent.putExtra(ORGANIZATION_EXTRA, organization);
+        gamePlayIntent.putExtra(USER_TEAM_NAME, usersTeam.getTeamName());
         this.startActivity(gamePlayIntent);
-        finish();
+        this.finish();
     }
 
     private void onCoachSetsLineupButtonPressed() {
@@ -259,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.simulateGameButton.setEnabled(false);
         dayOfSchedule = nextGame.getDay();
         simAllGamesForDay();
-        startGamePlayActivity();      //TODO : REMOVE THIS LINE!!! Only for testing
         nextGame = findNextUnplayedGame(gamesForUserToPlay);
         dayOfSchedule++;
         if (nextGame != null) {
@@ -486,33 +493,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private class loadAllTeamsInBackgroundTask extends AsyncTask<String, Void, TreeMap<String, Team>> {
-        private Repository repository;
+        private Repository asyncRepository;
 
         public loadAllTeamsInBackgroundTask(Repository repository) {
-            this.repository = repository;
+            asyncRepository = repository;
         }
 
         @Override
         protected TreeMap<String, Team> doInBackground(String... orgIds) {
-            List<League> leagueList = repository.getLeaguesForOrganization(orgIds[0]);
+            List<League> leagueList = asyncRepository.getLeaguesForOrganization(orgIds[0]);
             List<Division> divisionList = new ArrayList<>();
             for (League league : leagueList) {
-                divisionList.addAll(repository.getDivisionsForLeague(league.getLeagueId()));
+                divisionList.addAll(asyncRepository.getDivisionsForLeague(league.getLeagueId()));
             }
             List<Team> teamList = new ArrayList<>();
             for (Division division : divisionList) {
-                teamList.addAll(repository.getTeamsForDivision(division.getDivisionId()));
+                teamList.addAll(asyncRepository.getTeamsForDivision(division.getDivisionId()));
             }
             List<Player> playerList = new ArrayList<>();
             for (Team team : teamList) {
-                team.setPlayers(repository.getPlayersForTeam(team.getTeamId()));
+                team.setPlayers(asyncRepository.getPlayersForTeam(team.getTeamId()));
                 playerList.addAll(team.getPlayers());
             }
             for (Player player : playerList) {
-                List<BattingStats> battingStatsList = repository.getBattingStatsForPlayer(player.getPlayerId());
+                List<BattingStats> battingStatsList = asyncRepository.getBattingStatsForPlayer(player.getPlayerId());
                 Collections.sort(battingStatsList);
                 player.setBattingStats(battingStatsList);
-                List<PitchingStats> pitchingStatsList = repository.getPitchingStatsForPlayer(player.getPlayerId());
+                List<PitchingStats> pitchingStatsList = asyncRepository.getPitchingStatsForPlayer(player.getPlayerId());
                 Collections.sort(pitchingStatsList);
                 player.setPitchingStats(pitchingStatsList);
             }

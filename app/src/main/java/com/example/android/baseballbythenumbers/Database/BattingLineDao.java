@@ -17,7 +17,7 @@ public interface BattingLineDao {
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         void insertAll(List<BattingLine> battingLines);
 
-        @Insert
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
         void insert(BattingLine battingLine);
 
         @Update

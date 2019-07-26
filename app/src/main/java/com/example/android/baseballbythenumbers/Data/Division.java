@@ -130,12 +130,7 @@ public class Division implements Parcelable
         dest.writeString(divisionId);
         dest.writeString(leagueId);
         dest.writeString(divisionName);
-        if (teams == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(teams);
-        }
+        dest.writeByte((byte) (0x00));
     }
 
     public int describeContents() {

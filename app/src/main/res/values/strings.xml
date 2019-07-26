@@ -78,5 +78,22 @@
     <string name="ip_box_score_label">IP</string>
     <string name="pitchers_box_score_label">Pitchers</string>
     <string name="starting_era_or_whip_value">0.00</string>
+    <string name="inning_1_label">1</string>
+    <string name="inning_2_label">2</string>
+    <string name="inning_3_label">3</string>
+    <string name="inning_4_label">4</string>
+    <string name="inning_5_label">5</string>
+    <string name="inning_6_label">6</string>
+    <string name="inning_7_label">7</string>
+    <string name="inning_8_label">8</string>
+    <string name="inning_9_label">9</string>
+    <string name="inning_10_label">10</string>
+    <string name="inning_11_label">11</string>
+    <string name="inning_12_label">12</string>
+    <string name="runs_label">R</string>
+    <string name="hits_label">H</string>
+    <string name="errors_label">E</string>
+    <string name="background_image_for_at_bat_results_content_description">Background Image For At Bat Results</string>
+    <string name="first_inning_label">First</string>
 
 </resources>

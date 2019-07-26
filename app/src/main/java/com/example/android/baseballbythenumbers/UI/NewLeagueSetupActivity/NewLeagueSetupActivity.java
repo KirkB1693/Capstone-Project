@@ -85,6 +85,7 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
         newLeagueSetupBinding.newLeagueSetupLabel.setText("Finished With League Setup!");
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ORGANIZATION_EXTRA, newOrganization);
-        startActivity(intent);
+        this.startActivity(intent);
+        this.finish();
     }
 }

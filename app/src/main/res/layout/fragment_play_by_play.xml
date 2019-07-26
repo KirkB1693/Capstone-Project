@@ -10,7 +10,7 @@
     android:id="@+id/play_by_play_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".PlayByPlayFragment">
+    tools:context=".UI.GamePlayActivity.PlayByPlayFragment">
 
     <TextView
         android:id="@+id/game_play_by_play_tv"

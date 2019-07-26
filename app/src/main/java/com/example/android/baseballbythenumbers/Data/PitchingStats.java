@@ -9,9 +9,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.text.DecimalFormat;
 import java.util.UUID;
 
@@ -26,123 +23,53 @@ public class PitchingStats implements Parcelable, Comparable<PitchingStats> {
 
     private String playerId;
 
-    @SerializedName("Year")
-    @Expose
     private int year;
-    @SerializedName("Wins")
-    @Expose
+
     private int wins;
-    @SerializedName("Losses")
-    @Expose
+
     private int losses;
-    @SerializedName("Games")
-    @Expose
+
     private int games;
-    @SerializedName("GamesStarted")
-    @Expose
+
     private int gamesStarted;
-    @SerializedName("CompleteGames")
-    @Expose
+
     private int completeGames;
-    @SerializedName("ShutOuts")
-    @Expose
+
     private int shutOuts;
-    @SerializedName("Saves")
-    @Expose
+
     private int saves;
-    @SerializedName("Holds")
-    @Expose
+
     private int holds;
-    @SerializedName("BlownSaves")
-    @Expose
+
     private int blownSaves;
-    @SerializedName("InningsPitched")
-    @Expose
+
     private float inningsPitched;
-    @SerializedName("TotalBattersFaced")
-    @Expose
+
     private int totalBattersFaced;
-    @SerializedName("Hits")
-    @Expose
+
     private int hits;
-    @SerializedName("Runs")
-    @Expose
+
     private int runs;
-    @SerializedName("EarnedRuns")
-    @Expose
+
     private int earnedRuns;
-    @SerializedName("HomeRuns")
-    @Expose
+
     private int homeRuns;
-    @SerializedName("Walks")
-    @Expose
+
     private int walks;
-    @SerializedName("StrikeOuts")
-    @Expose
+
     private int strikeOuts;
-    @SerializedName("HitByPitch")
-    @Expose
+
     private int hitByPitch;
-    @SerializedName("WildPitches")
-    @Expose
+
     private int wildPitches;
-    @SerializedName("Balks")
-    @Expose
+
     private int balks;
-    @SerializedName("GroundBalls")
-    @Expose
+
     private int groundBalls;
-    @SerializedName("LineDrives")
-    @Expose
+
     private int lineDrives;
-    @SerializedName("FlyBalls")
-    @Expose
+
     private int flyBalls;
-
-    public final static Parcelable.Creator<PitchingStats> CREATOR = new Creator<PitchingStats>() {
-
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        public PitchingStats createFromParcel(Parcel in) {
-            return new PitchingStats(in);
-        }
-
-        public PitchingStats[] newArray(int size) {
-            return (new PitchingStats[size]);
-        }
-
-    };
-
-    protected PitchingStats(Parcel in) {
-        this.pitchingStatsId = ((String) in.readValue((String.class.getClassLoader())));
-        this.playerId = ((String) in.readValue((String.class.getClassLoader())));
-        this.year = ((int) in.readValue((int.class.getClassLoader())));
-        this.wins = ((int) in.readValue((int.class.getClassLoader())));
-        this.losses = ((int) in.readValue((int.class.getClassLoader())));
-        this.games = ((int) in.readValue((int.class.getClassLoader())));
-        this.gamesStarted = ((int) in.readValue((int.class.getClassLoader())));
-        this.completeGames = ((int) in.readValue((int.class.getClassLoader())));
-        this.shutOuts = ((int) in.readValue((int.class.getClassLoader())));
-        this.saves = ((int) in.readValue((int.class.getClassLoader())));
-        this.holds = ((int) in.readValue((int.class.getClassLoader())));
-        this.blownSaves = ((int) in.readValue((int.class.getClassLoader())));
-        this.inningsPitched = ((float) in.readValue((float.class.getClassLoader())));
-        this.totalBattersFaced = ((int) in.readValue((int.class.getClassLoader())));
-        this.hits = ((int) in.readValue((int.class.getClassLoader())));
-        this.runs = ((int) in.readValue((int.class.getClassLoader())));
-        this.earnedRuns = ((int) in.readValue((int.class.getClassLoader())));
-        this.homeRuns = ((int) in.readValue((int.class.getClassLoader())));
-        this.walks = ((int) in.readValue((int.class.getClassLoader())));
-        this.strikeOuts = ((int) in.readValue((int.class.getClassLoader())));
-        this.hitByPitch = ((int) in.readValue((int.class.getClassLoader())));
-        this.wildPitches = ((int) in.readValue((int.class.getClassLoader())));
-        this.balks = ((int) in.readValue((int.class.getClassLoader())));
-        this.groundBalls = ((int) in.readValue((int.class.getClassLoader())));
-        this.lineDrives = ((int) in.readValue((int.class.getClassLoader())));
-        this.flyBalls = ((int) in.readValue((int.class.getClassLoader())));
-    }
 
     /**
      * No args constructor for use in serialization
@@ -535,39 +462,6 @@ public class PitchingStats implements Parcelable, Comparable<PitchingStats> {
         }
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(pitchingStatsId);
-        dest.writeValue(playerId);
-        dest.writeValue(year);
-        dest.writeValue(wins);
-        dest.writeValue(losses);
-        dest.writeValue(games);
-        dest.writeValue(gamesStarted);
-        dest.writeValue(completeGames);
-        dest.writeValue(shutOuts);
-        dest.writeValue(saves);
-        dest.writeValue(holds);
-        dest.writeValue(blownSaves);
-        dest.writeValue(inningsPitched);
-        dest.writeValue(totalBattersFaced);
-        dest.writeValue(hits);
-        dest.writeValue(runs);
-        dest.writeValue(earnedRuns);
-        dest.writeValue(homeRuns);
-        dest.writeValue(walks);
-        dest.writeValue(strikeOuts);
-        dest.writeValue(hitByPitch);
-        dest.writeValue(wildPitches);
-        dest.writeValue(balks);
-        dest.writeValue(groundBalls);
-        dest.writeValue(lineDrives);
-        dest.writeValue(flyBalls);
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
     @Override
     public int compareTo(PitchingStats pitchingStats) {
         if (year > pitchingStats.year) {
@@ -578,4 +472,80 @@ public class PitchingStats implements Parcelable, Comparable<PitchingStats> {
             return 0;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.pitchingStatsId);
+        dest.writeString(this.playerId);
+        dest.writeInt(this.year);
+        dest.writeInt(this.wins);
+        dest.writeInt(this.losses);
+        dest.writeInt(this.games);
+        dest.writeInt(this.gamesStarted);
+        dest.writeInt(this.completeGames);
+        dest.writeInt(this.shutOuts);
+        dest.writeInt(this.saves);
+        dest.writeInt(this.holds);
+        dest.writeInt(this.blownSaves);
+        dest.writeFloat(this.inningsPitched);
+        dest.writeInt(this.totalBattersFaced);
+        dest.writeInt(this.hits);
+        dest.writeInt(this.runs);
+        dest.writeInt(this.earnedRuns);
+        dest.writeInt(this.homeRuns);
+        dest.writeInt(this.walks);
+        dest.writeInt(this.strikeOuts);
+        dest.writeInt(this.hitByPitch);
+        dest.writeInt(this.wildPitches);
+        dest.writeInt(this.balks);
+        dest.writeInt(this.groundBalls);
+        dest.writeInt(this.lineDrives);
+        dest.writeInt(this.flyBalls);
+    }
+
+    protected PitchingStats(Parcel in) {
+        this.pitchingStatsId = in.readString();
+        this.playerId = in.readString();
+        this.year = in.readInt();
+        this.wins = in.readInt();
+        this.losses = in.readInt();
+        this.games = in.readInt();
+        this.gamesStarted = in.readInt();
+        this.completeGames = in.readInt();
+        this.shutOuts = in.readInt();
+        this.saves = in.readInt();
+        this.holds = in.readInt();
+        this.blownSaves = in.readInt();
+        this.inningsPitched = in.readFloat();
+        this.totalBattersFaced = in.readInt();
+        this.hits = in.readInt();
+        this.runs = in.readInt();
+        this.earnedRuns = in.readInt();
+        this.homeRuns = in.readInt();
+        this.walks = in.readInt();
+        this.strikeOuts = in.readInt();
+        this.hitByPitch = in.readInt();
+        this.wildPitches = in.readInt();
+        this.balks = in.readInt();
+        this.groundBalls = in.readInt();
+        this.lineDrives = in.readInt();
+        this.flyBalls = in.readInt();
+    }
+
+    public static final Creator<PitchingStats> CREATOR = new Creator<PitchingStats>() {
+        @Override
+        public PitchingStats createFromParcel(Parcel source) {
+            return new PitchingStats(source);
+        }
+
+        @Override
+        public PitchingStats[] newArray(int size) {
+            return new PitchingStats[size];
+        }
+    };
 }

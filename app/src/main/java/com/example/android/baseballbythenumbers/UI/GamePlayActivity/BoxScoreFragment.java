@@ -1,4 +1,4 @@
-package com.example.android.baseballbythenumbers;
+package com.example.android.baseballbythenumbers.UI.GamePlayActivity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.baseballbythenumbers.Data.Game;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreBinding;
 
 public class BoxScoreFragment extends Fragment {
