@@ -25,9 +25,13 @@ import com.example.android.baseballbythenumbers.UI.MainActivity.MainActivity;
 import com.example.android.baseballbythenumbers.databinding.ActivityGamePlayBinding;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.android.baseballbythenumbers.Constants.Positions.SCOREKEEPING_PITCHER;
 
@@ -46,6 +50,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private GameSimulator gameSimulator;
     private int homeErrorsAtGameStart;
     private int vistorErrorsAtGameStart;
+    private boolean paused;
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     private ActivityGamePlayBinding activityGamePlayBinding;
 
@@ -132,139 +138,219 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             case R.id.pinch_hit_button:
                 break;
             case R.id.sim_this_at_bat_button:
-                SimCurrentAtBat();
+                if (!isGameOver()) {
+                    simCurrentAtBat();
+                }
                 break;
             case R.id.pause_button:
+                paused = true;
+                scheduledExecutorService.shutdownNow();
                 break;
             case R.id.sub_pitcher_button:
                 break;
             case R.id.sim_rest_of_game_button:
+                if (!isGameOver()) {
+                    simRestOfGame();
+                }
                 break;
         }
     }
 
-    private void SimCurrentAtBat() {
+    private void simRestOfGame() {
+
+        scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() { GamePlayActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    gameSimulator.simAtBatWithHumanControl();
+                    updateUI();
+                }
+            });
+
+            }
+        }, 0L, 2500L, TimeUnit.MILLISECONDS);
+
+
+    }
+
+    private void simCurrentAtBat() {
         gameSimulator.simAtBatWithHumanControl();
         updateUI();
     }
 
     private void updateUI() {
-        Player currentPitcher = gameSimulator.getDefense().get(SCOREKEEPING_PITCHER);
-        displayCurrentPitcher(currentPitcher);
-        Player currentBatter = gameSimulator.getLineup().get(gameSimulator.getCurrentBatter());
-        displayCurrentBatter(currentBatter);
-        int runs = gameSimulator.getRunsScoredInHalfInning();
-        int inning = gameSimulator.getInningsPlayed();
-        if (gameSimulator.isVisitorHitting()) {
-            activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.VISIBLE);
-            activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.INVISIBLE);
-            if (gameSimulator.getHitsInInning() > 0) {
-                updateVisitorHits();
+            Player currentPitcher = gameSimulator.getDefense().get(SCOREKEEPING_PITCHER);
+            if (currentPitcher != null) {
+                displayCurrentPitcher(currentPitcher);
             }
-            if (gameSimulator.getErrorsMade() > 0) {
-                activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - vistorErrorsAtGameStart)));
+            Player currentBatter = gameSimulator.getLineup().get(gameSimulator.getCurrentBatter());
+            if (currentBatter != null) {
+                displayCurrentBatter(currentBatter);
             }
-            switch (inning) {
-                case 0:
-                    activityGamePlayBinding.inning1VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 1:
-                    activityGamePlayBinding.inning2VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 2:
-                    activityGamePlayBinding.inning3VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 3:
-                    activityGamePlayBinding.inning4VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 4:
-                    activityGamePlayBinding.inning5VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 5:
-                    activityGamePlayBinding.inning6VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 6:
-                    activityGamePlayBinding.inning7VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 7:
-                    activityGamePlayBinding.inning8VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 8:
-                    activityGamePlayBinding.inning9VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 9:
-                    activityGamePlayBinding.inning10LabelTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning10VisitorScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning10HomeScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning10VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 10:
-                    activityGamePlayBinding.inning11LabelTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning11VisitorScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning11HomeScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning11VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 11:
-                    activityGamePlayBinding.inning12LabelTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning12VisitorScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning12HomeScoreTv.setVisibility(View.VISIBLE);
-                    activityGamePlayBinding.inning12VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-            }
-        } else {
-            activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.INVISIBLE);
-            activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.VISIBLE);
-            if (gameSimulator.getHitsInInning() > 0) {
-                updateHomeHits();
-            }
-            if (gameSimulator.getErrorsMade() > 0) {
-                activityGamePlayBinding.scoreboardErrorsHomeTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(homeTeam) - homeErrorsAtGameStart)));
-            }
-            switch (inning) {
-                case 0:
-                    activityGamePlayBinding.inning1HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 1:
-                    activityGamePlayBinding.inning2HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 2:
-                    activityGamePlayBinding.inning3HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 3:
-                    activityGamePlayBinding.inning4HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 4:
-                    activityGamePlayBinding.inning5HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 5:
-                    activityGamePlayBinding.inning6HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 6:
-                    activityGamePlayBinding.inning7HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 7:
-                    activityGamePlayBinding.inning8HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 8:
-                    activityGamePlayBinding.inning9HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 9:
-                    activityGamePlayBinding.inning10HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 10:
-                    activityGamePlayBinding.inning11HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 11:
-                    activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-            }
+            int runs = gameSimulator.getRunsScoredInHalfInning();
+            int inning = gameSimulator.getInningsPlayed();
+            if (gameSimulator.isVisitorHitting()) {
+                activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.VISIBLE);
+                activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.INVISIBLE);
+                if (gameSimulator.getHitsInInning() > 0) {
+                    updateVisitorHits();
+                }
+                if (gameSimulator.getErrorsMade() > 0) {
+                    activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - vistorErrorsAtGameStart)));
+                }
+                switch (inning) {
+                    case 0:
+                        activityGamePlayBinding.inning1VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 1:
+                        activityGamePlayBinding.inning2VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 2:
+                        activityGamePlayBinding.inning3VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 3:
+                        activityGamePlayBinding.inning4VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 4:
+                        activityGamePlayBinding.inning5VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 5:
+                        activityGamePlayBinding.inning6VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 6:
+                        activityGamePlayBinding.inning7VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 7:
+                        activityGamePlayBinding.inning8VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 8:
+                        activityGamePlayBinding.inning9VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 9:
+                        if (!isGameOver()) {
+                            activityGamePlayBinding.inning10LabelTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning10VisitorScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning10HomeScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning10VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        }
+                        break;
+                    case 10:
+                        if (!isGameOver()) {
+                            activityGamePlayBinding.inning11LabelTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning11VisitorScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning11HomeScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning11VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        }
+                        break;
+                    case 11:
+                        if(!isGameOver()) {
+                            activityGamePlayBinding.inning12LabelTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12VisitorScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12HomeScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        }
+                        break;
+                }
+            } else {
+                activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.INVISIBLE);
+                activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.VISIBLE);
+                if (gameSimulator.getHitsInInning() > 0) {
+                    updateHomeHits();
+                }
+                if (gameSimulator.getErrorsMade() > 0) {
+                    activityGamePlayBinding.scoreboardErrorsHomeTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(homeTeam) - homeErrorsAtGameStart)));
+                }
+                switch (inning) {
+                    case 0:
+                        activityGamePlayBinding.inning1HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 1:
+                        activityGamePlayBinding.inning2HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 2:
+                        activityGamePlayBinding.inning3HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 3:
+                        activityGamePlayBinding.inning4HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 4:
+                        activityGamePlayBinding.inning5HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 5:
+                        activityGamePlayBinding.inning6HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 6:
+                        activityGamePlayBinding.inning7HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 7:
+                        activityGamePlayBinding.inning8HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 8:
+                        if (homeTeamBattedInNinth()) {
+                            activityGamePlayBinding.inning9HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        }
+                        break;
+                    case 9:
+                        activityGamePlayBinding.inning10HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 10:
+                        activityGamePlayBinding.inning11HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                    case 11:
+                        activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
+                }
 
+            }
+            activityGamePlayBinding.gamePlayAtBatResultTv.setText(gameSimulator.getCurrentAtBatSummary());
+            activityGamePlayBinding.scoreboardRunsVisitorTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getVisitorScore()));
+            activityGamePlayBinding.scoreboardRunsHomeTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getHomeScore()));
+            animateRunners();
+            if (isGameOver()) {
+                activityGamePlayBinding.gamePlayAtBatResultTv.setText("Game Over!");
+                processEndOfGame();
+                scheduledExecutorService.shutdownNow();
+                try {
+                    scheduledExecutorService.awaitTermination(10, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
+
+    private void processEndOfGame() {
+
+        game.setHomeScore(gameSimulator.getHomeScore());
+        game.setVisitorScore(gameSimulator.getVisitorScore());
+        game.setPlayedGame(true);
+
+        repository.updateGame(game);
+        repository.updateBoxScore(game.getHomeBoxScore());
+        repository.insertAllBattingLines(game.getHomeBoxScore().getBattingLines());
+        repository.insertAllPitchingLines(game.getHomeBoxScore().getPitchingLines());
+        repository.updateBoxScore(game.getVisitorBoxScore());
+        repository.insertAllBattingLines(game.getVisitorBoxScore().getBattingLines());
+        repository.insertAllPitchingLines(game.getVisitorBoxScore().getPitchingLines());
+        repository.updateTeam(homeTeam);
+        repository.updateTeam(visitingTeam);
+        List<Player> playerList = new ArrayList<>();
+        playerList.addAll(homeTeam.getPlayers());
+        playerList.addAll(visitingTeam.getPlayers());
+        for (Player player : playerList) {
+            repository.updatePlayer(player);
+            repository.updateBattingStats(player.getBattingStats().get(organization.getCurrentYear()));
+            repository.updatePitchingStats(player.getPitchingStats().get(organization.getCurrentYear()));
         }
-        activityGamePlayBinding.gamePlayAtBatResultTv.setText(gameSimulator.getCurrentAtBatSummary());
-        activityGamePlayBinding.scoreboardRunsVisitorTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getVisitorScore()));
-        activityGamePlayBinding.scoreboardRunsHomeTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getHomeScore()));
-        animateRunners();
+    }
 
+    private boolean homeTeamBattedInNinth() {
+        return gameSimulator.didHomeTeamBatInNinth();
+    }
+
+    private boolean isGameOver() {
+        return !gameSimulator.isGameNotOver();
     }
 
     private void animateRunners() {
@@ -562,6 +648,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         if (runnerOnFirstAnimationData.first != null && runnerOnFirstAnimationData.second != null) {
             switch (runnerOnFirstAnimationData.first) {
                 case 0:
+                    setRunnersOnUI(gameSimulator.getRunners());
                     break;
                 case 1:
                     AnimatedVectorDrawableCompat firstToSecond = AnimatedVectorDrawableCompat.create(this, R.drawable.animate_first_to_second);
@@ -712,6 +799,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
                     });
                 }
+            } else {
+                setRunnersOnUI(gameSimulator.getRunners());
             }
         }
     }
@@ -720,6 +809,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         if (runnerOnSecondAnimationData.first != null && runnerOnSecondAnimationData.second != null) {
             switch (runnerOnSecondAnimationData.first) {
                 case 0:
+                    setRunnersOnUI(gameSimulator.getRunners());
                     break;
                 case 1:
                     AnimatedVectorDrawableCompat secondToThird = AnimatedVectorDrawableCompat.create(this, R.drawable.animate_second_to_third);
@@ -802,6 +892,9 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         switch (gameState) {
             case 1:
                 activityGamePlayBinding.baserunnersIv.setVisibility(View.INVISIBLE);
+                activityGamePlayBinding.runnerOnFirstTv.setVisibility(View.GONE);
+                activityGamePlayBinding.runnerOnSecondTv.setVisibility(View.GONE);
+                activityGamePlayBinding.runnerOnThirdTv.setVisibility(View.GONE);
                 break;
             case 2:
                 activityGamePlayBinding.baserunnersIv.setImageDrawable(getResources().getDrawable(R.drawable.baseball_game_state_2));
@@ -833,8 +926,11 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 break;
             default:
                 activityGamePlayBinding.baserunnersIv.setVisibility(View.INVISIBLE);
+                activityGamePlayBinding.runnerOnFirstTv.setVisibility(View.GONE);
+                activityGamePlayBinding.runnerOnSecondTv.setVisibility(View.GONE);
+                activityGamePlayBinding.runnerOnThirdTv.setVisibility(View.GONE);
         }
-        if (runners != null && gameState != 1) {
+        if (runners != null && gameState != 1 && gameState != 9) {
             if (runners.length == 3) {
                 if (runners[0] != null) {
                     activityGamePlayBinding.runnerOnFirstTv.setVisibility(View.VISIBLE);
@@ -881,10 +977,21 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         DecimalFormat decimalFormat = new DecimalFormat(".000");
         String batterInfo = currentBatter.getName() + "\n(AVG " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getAverage())
                 + ", OBP " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getOnBasePct()) + ")";
+        boolean batterIsTired = gameSimulator.getBatterStaminaAdjustment()>0;
         if (gameSimulator.isVisitorHitting()) {
             activityGamePlayBinding.gameScreenVisitorPlayerTv.setText(batterInfo);
+            if (batterIsTired) {
+                activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.red));
+            } else {
+                activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.white));
+            }
         } else {
             activityGamePlayBinding.gameScreenHomePlayerTv.setText(batterInfo);
+            if (batterIsTired) {
+                activityGamePlayBinding.gameScreenHomePlayerTv.setBackgroundColor(getResources().getColor(R.color.red));
+            } else {
+                activityGamePlayBinding.gameScreenHomePlayerTv.setBackgroundColor(getResources().getColor(R.color.white));
+            }
         }
 
     }
@@ -892,10 +999,21 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private void displayCurrentPitcher(Player currentPitcher) {
         String pitcherInfo = currentPitcher.getName() + "\n(ERA " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getERA())
                 + ", WHIP " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getWHIP()) + ")";
+        boolean pitcherIsTired = gameSimulator.getPitcherStaminaAdjustment()>0;
         if (gameSimulator.isVisitorHitting()) {
             activityGamePlayBinding.gameScreenHomePlayerTv.setText(pitcherInfo);
+            if (pitcherIsTired) {
+                activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.red));
+            } else {
+                activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.white));
+            }
         } else {
             activityGamePlayBinding.gameScreenVisitorPlayerTv.setText(pitcherInfo);
+            if (pitcherIsTired) {
+                activityGamePlayBinding.gameScreenHomePlayerTv.setBackgroundColor(getResources().getColor(R.color.red));
+            } else {
+                activityGamePlayBinding.gameScreenHomePlayerTv.setBackgroundColor(getResources().getColor(R.color.white));
+            }
         }
     }
 

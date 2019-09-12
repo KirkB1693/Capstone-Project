@@ -55,9 +55,9 @@
     </string-array>
 
     <string name="title_activity_game_play">Play Game</string>
-    <string name="tab_text_1">Box Score</string>
+    <string name="tab_text_1">Manage Game</string>
     <string name="tab_text_2">Play By Play</string>
-    <string name="tab_text_3">Manage Game</string>
+    <string name="tab_text_3">Box Score</string>
     <string name="home_tab_label">Home</string>
     <string name="visitor_tab_label">Visitor</string>
     <string name="ab_box_score_label">AB</string>

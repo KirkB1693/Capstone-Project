@@ -702,6 +702,7 @@ public class AtBatSimulator {
                                     formatAtBatResult();
                                     outs++;
                                     runnerOnSecond = runnerOnFirst;
+                                    runnerOnFirst = null;
                                     animationData.put(1, new Pair<Integer, Boolean>(1, true));
                                     animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                 }
@@ -1016,7 +1017,8 @@ public class AtBatSimulator {
                                         .append(runnerOnSecond.getRunner().getLastName()).append(" stays at Second.  ");
                                 formatAtBatResult();
                                 outs++;
-
+                                animationData.put(2, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         }
                     }
@@ -1065,12 +1067,16 @@ public class AtBatSimulator {
                                     outs++;
                                     runnerOnThird = null;
                                     runnerOnFirst = new Runner(batter, battingLineForCurrentBatter, pitcher, pitchingLineForCurrentPitcher, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, false));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(", and it kicks off his glove, everyone is safe, ")
                                             .append(batter.getLastName()).append(" safe at first.  ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 }
                             } else {
                                 // no error made, turn double play
@@ -1079,6 +1085,8 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnThird = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             if (whereBallIsHit != SCOREKEEPING_CATCHER) {
@@ -1104,6 +1112,8 @@ public class AtBatSimulator {
                                 atBatSummary.append(", and it kicks off his glove, everyone is Safe! ");
                                 formatAtBatResult();
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             } else {
                                 // Get a single out at first
                                 if (whereBallIsHit == SCOREKEEPING_THIRD_BASE || whereBallIsHit == SCOREKEEPING_FIRST_BASE || whereBallIsHit == SCOREKEEPING_PITCHER || whereBallIsHit == SCOREKEEPING_CATCHER) {
@@ -1117,6 +1127,8 @@ public class AtBatSimulator {
                                     }
                                     formatAtBatResult();
                                     outs++;
+                                    animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                 } else {
                                     // runner advances if less than 3 outs, batter out at first
                                     atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1))).append(" ")
@@ -1126,6 +1138,8 @@ public class AtBatSimulator {
                                     if (outs < 3) {
                                         advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
                                         runnerOnFirst = null;
+                                        animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                        animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                     }
                                 }
                             }
@@ -1161,6 +1175,8 @@ public class AtBatSimulator {
                                     atBatSummary.append(", dropped everyone is Safe! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // catch made batter is out, error made trying to double off runner, runner advances
                                     outs++;
@@ -1168,6 +1184,8 @@ public class AtBatSimulator {
                                             .append(batter.getLastName()).append(" Out! ").append(runnerOnThird.getRunner().getLastName()).append(" advances on Error.  ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(null, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                 }
                             } else {
                                 // no error, turn double play
@@ -1180,6 +1198,8 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnSecond = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             // no double play
@@ -1193,11 +1213,15 @@ public class AtBatSimulator {
                                 atBatSummary.append(", off his glove into the outfield, everyone is Safe! ").append(runnerOnThird.getRunner().getLastName()).append(" advances on error.  ");
                                 formatAtBatResult();
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             } else {
                                 // batter is out on caught line drive, runner holds
                                 atBatSummary.append(", Out! ").append(runnerOnThird.getRunner().getLastName()).append(" stays at third.  ");
                                 formatAtBatResult();
                                 outs++;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         }
                     }
@@ -1260,12 +1284,18 @@ public class AtBatSimulator {
                                     runnerOnThird = runnerOnSecond;
                                     runnerOnSecond = null;
                                     runnerOnFirst = new Runner(batter, battingLineForCurrentBatter,runnerOnFirst.getPitcherResponsible(), runnerOnFirst.getPitchingLineForPitcherResponsible(),runnerOnFirst.isEarnedRun());
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(" throws to ").append(getPositionNameFromScorekeeperPosition(fieldersWhoTouchedBall.get(1)))
                                             .append(" everyone is Safe on Error! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 }
                             } else {
                                 // no error made, turn double play
@@ -1280,6 +1310,9 @@ public class AtBatSimulator {
                                 runnerOnThird = runnerOnSecond;
                                 runnerOnSecond = null;
                                 runnerOnFirst = null;
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             // No Double play, Get a single out
@@ -1291,6 +1324,9 @@ public class AtBatSimulator {
                                 runnerOnThird = runnerOnSecond;
                                 runnerOnSecond = runnerOnFirst;
                                 runnerOnFirst = null;
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             } else {
                                 // batter beats throw to first
                                 atBatSummary.append("throws to ").append(getPositionNameFromScorekeeperPosition(SCOREKEEPING_FIRST_BASE)).append(" Out!, and over to ")
@@ -1299,6 +1335,9 @@ public class AtBatSimulator {
                                 outs++;
                                 runnerOnFirst = null;
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             }
                         }
 
@@ -1340,6 +1379,9 @@ public class AtBatSimulator {
                                     runnerOnThird = runnerOnSecond;
                                     runnerOnSecond = runnerOnFirst;
                                     runnerOnFirst = null;
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(0, false));
                                 }
                             } else {
                                 // no error, turn double play
@@ -1347,6 +1389,9 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;
+                                animationData.put(2, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(0, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         }
                     }
@@ -1408,11 +1453,17 @@ public class AtBatSimulator {
                                     outs++;
                                     runnerOnFirst = null;
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(" everyone safe on the Error! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 }
                             } else {
                                 // no error made, turn double play
@@ -1423,7 +1474,10 @@ public class AtBatSimulator {
                                 runnerOnFirst = null;
                                 if (outs < 3) {
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, false);  // score runner from third if less than 3 outs, but no rbi on double play
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
                                 }
+                                animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             // Get a single out
@@ -1435,6 +1489,9 @@ public class AtBatSimulator {
                                 outs++;
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
                                 runnerOnFirst = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             } else {
                                 // batter beats throw to first
                                 atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" out at second.  ").append(batter.getLastName()).append(" beats the throw to first, Safe!  ");
@@ -1442,6 +1499,9 @@ public class AtBatSimulator {
                                 outs++;
                                 runnerOnFirst = null;
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             }
                         }
 
@@ -1474,12 +1534,18 @@ public class AtBatSimulator {
                                     atBatSummary.append(" everyone safe on the Error! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // catch made batter is out, error made trying to double off runner, runner advances
                                     atBatSummary.append(", Out! but he threw it away trying for the double play!  Runners advance on Error!  ");
                                     formatAtBatResult();
                                     outs++;
                                     advanceAllRunnersOneBaseOnBattedBall(null, pitcher, areAllRunsEarned, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(0, false));
                                 }
                             } else {
                                 // no error, turn double play
@@ -1492,6 +1558,9 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(0, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         }
                     }
@@ -1540,11 +1609,17 @@ public class AtBatSimulator {
                                     outs++;
                                     runnerOnThird = null;
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, false));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(" everyone is safe on the Error!  ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 }
                             } else {
                                 // no error made, turn double play
@@ -1554,6 +1629,9 @@ public class AtBatSimulator {
                                 outs = outs + 2;
                                 runnerOnThird = runnerOnSecond;
                                 runnerOnSecond = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             if (whereBallIsHit != SCOREKEEPING_CATCHER) {
@@ -1579,6 +1657,9 @@ public class AtBatSimulator {
                                 atBatSummary.append(" everyone is safe on the Error!  ");
                                 formatAtBatResult();
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             } else {
                                 // Get a single out
                                 if (whereBallIsHit == SCOREKEEPING_THIRD_BASE || whereBallIsHit == SCOREKEEPING_FIRST_BASE || whereBallIsHit == SCOREKEEPING_PITCHER || whereBallIsHit == SCOREKEEPING_CATCHER) {
@@ -1586,6 +1667,9 @@ public class AtBatSimulator {
                                     atBatSummary.append(batter.getLastName()).append(" Out at first!  Runners hold.  ");
                                     formatAtBatResult();
                                     outs++;
+                                    animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(0, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                 } else {
                                     // runner advances, out at first
                                     atBatSummary.append(batter.getLastName()).append(" Out at first!  ");
@@ -1593,7 +1677,10 @@ public class AtBatSimulator {
                                     outs++;
                                     if (outs < 3) {
                                         advanceAllRunnersOneBaseOnBattedBall(null, pitcher, areAllRunsEarned, true);
+                                        animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                        animationData.put(2, new Pair<Integer, Boolean>(1, true));
                                     }
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, false));
                                 }
                             }
 
@@ -1626,15 +1713,24 @@ public class AtBatSimulator {
                                 if (fielderWhoMadeError == whereBallIsHit) {
                                     // muffed line drive, everone safe
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // catch made batter is out, error made trying to double off runner, runner advances
                                     outs++;
                                     advanceAllRunnersOneBaseOnBattedBall(null, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(0, false));
                                 }
                             } else {
                                 // no error, turn double play
                                 outs = outs + 2;
                                 runnerOnSecond = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(2, new Pair<Integer, Boolean>(0, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         } else {
                             // no double play
@@ -1645,9 +1741,15 @@ public class AtBatSimulator {
                                     areAllRunsEarned = false;
                                 }
                                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, true));
                             } else {
                                 // batter is out on caught line drive, runner holds
                                 outs++;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(2, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         }
                     }
@@ -1702,11 +1804,19 @@ public class AtBatSimulator {
                                     outs++;
                                     runnerOnFirst = null;
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // Error was made trying to get lead runner, all runners safe
                                     atBatSummary.append(" everyone safe on the Error! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 }
                             } else {
                                 // no error made, turn double play
@@ -1717,7 +1827,11 @@ public class AtBatSimulator {
                                 runnerOnFirst = null;
                                 if (outs < 3) {
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, false);  // score runner from third if less than 3 outs, but no rbi on double play
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
                                 }
+                                animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                             }
                         } else {
                             // Get a single out
@@ -1728,6 +1842,10 @@ public class AtBatSimulator {
                             outs++;
                             runnerOnFirst = null;
                             advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areAllRunsEarned, true);
+                            animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                            animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                            animationData.put(1, new Pair<Integer, Boolean>(1, false));
+                            animationData.put(0, new Pair<Integer, Boolean>(1, true));
 
                         }
 
@@ -1760,12 +1878,20 @@ public class AtBatSimulator {
                                     atBatSummary.append(" everyone safe on the Error! ");
                                     formatAtBatResult();
                                     advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(1, true));
                                 } else {
                                     // catch made batter is out, error made trying to double off runner, runner advances
                                     atBatSummary.append(", Out! but he threw it away trying for the double play!  Runners advance on Error!  ");
                                     formatAtBatResult();
                                     outs++;
                                     advanceAllRunnersOneBaseOnBattedBall(null, pitcher, areAllRunsEarned, false);
+                                    animationData.put(3, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(1, new Pair<Integer, Boolean>(1, true));
+                                    animationData.put(0, new Pair<Integer, Boolean>(0, false));
                                 }
                             } else {
                                 // no error, turn double play
@@ -1778,6 +1904,10 @@ public class AtBatSimulator {
                                 formatAtBatResult();
                                 outs = outs + 2;
                                 runnerOnFirst = null;
+                                animationData.put(3, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(2, new Pair<Integer, Boolean>(0, true));
+                                animationData.put(1, new Pair<Integer, Boolean>(0, false));
+                                animationData.put(0, new Pair<Integer, Boolean>(0, false));
                             }
                         }
                     }
@@ -1817,6 +1947,7 @@ public class AtBatSimulator {
                     formatAtBatResult();
                 }
                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                animationData.put(0, new Pair<Integer, Boolean>(1, true));
             } else {
                 // record out, (advance runners if < 3 outs, this shouldn't happen)
                 if (whereBallIsHit != SCOREKEEPING_FIRST_BASE) {
@@ -1828,6 +1959,7 @@ public class AtBatSimulator {
                 }
 
                 outs++;
+                animationData.put(0, new Pair<Integer, Boolean>(1, false));
                 if (outs < 3) {
                     advanceAllRunnersOneBaseOnBattedBall(null, pitcher, areAllRunsEarned, true);
                 }
@@ -1852,6 +1984,7 @@ public class AtBatSimulator {
                     formatAtBatResult();
                 }
                 advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false);
+                animationData.put(0, new Pair<Integer, Boolean>(1, true));
             } else {
                 if (typeOfHit == FLYBALL) {
                     atBatSummary.append("Flyball to ").append(getPositionNameFromScorekeeperPosition(whereBallIsHit)).append(", OUT! ");
@@ -1867,6 +2000,7 @@ public class AtBatSimulator {
                 if (outs < 3 && !basesAreEmpty() && typeOfHit == FLYBALL && contactQuality != SOFT) {
                     advanceIfRunnersTagUp(whereBallIsHit, batter, pitcher);
                 }
+                animationData.put(0, new Pair<Integer, Boolean>(0, false));
             }
         }
         if (outsAtStartOfAtBat != outs) {
@@ -2750,6 +2884,7 @@ public class AtBatSimulator {
             atBatSummary.append(batter.getLastName()).append(" Strikes Out! ");
             formatAtBatResult();
             outs++;
+            animationData.put(0, new Pair<Integer, Boolean>(0, false));
             battingLineForCurrentBatter.incrementAtBats();
             batter.getBattingStatsForYear(year).incrementStrikeOuts();
             battingLineForCurrentBatter.incrementStrikeOuts();
@@ -2808,12 +2943,14 @@ public class AtBatSimulator {
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
                         runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementStolenBases();
+                        animationData.put(1, new Pair<Integer, Boolean>(1, true));
 
                         if (error) {
                             atBatSummary.append(runnerOnSecond.getRunner().getLastName()).append(", advances to Third on Error! ");
                             formatAtBatResult();
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
+                            animationData.put(1, new Pair<Integer, Boolean>(2, true));
                         }
                         return;
                     } else {
@@ -2822,12 +2959,14 @@ public class AtBatSimulator {
                             formatAtBatResult();
                             runnerOnSecond = runnerOnFirst;
                             runnerOnFirst = null;
+                            animationData.put(1, new Pair<Integer, Boolean>(1, true));
                             return;
                         } else {
                             //Runner is caught stealing
                             atBatSummary.append(runnerOnFirst.getRunner().getLastName()).append(" OUT! Caught Stealing Second Base! ");
                             formatAtBatResult();
                             outs++;
+                            animationData.put(1, new Pair<Integer, Boolean>(1, false));
                             runnerOnFirst.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnFirst = null;
                             if (outs == 3) {
@@ -2856,6 +2995,7 @@ public class AtBatSimulator {
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = null;
                         runnerOnThird.getRunner().getBattingStatsForYear(year).incrementStolenBases();
+                        animationData.put(2, new Pair<Integer, Boolean>(1, true));
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runner
                             setStartOfSpan();
@@ -2870,6 +3010,7 @@ public class AtBatSimulator {
                             runnerOnThird.getPitchingLineForPitcherResponsible().setRunsAllowed(runnerOnThird.getPitchingLineForPitcherResponsible().getRunsAllowed() + 1);
                             repository.updatePitchingLine(runnerOnThird.getPitchingLineForPitcherResponsible());
                             runnerOnThird = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(2, true));
                         }
                         return;
                     } else {
@@ -2879,6 +3020,7 @@ public class AtBatSimulator {
                             formatAtBatResult();
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(1, true));
                             return;
                         } else {
                             //Runner is caught stealing
@@ -2887,6 +3029,7 @@ public class AtBatSimulator {
                             outs++;
                             runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnSecond = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(1, false));
                             if (outs == 3) {
                                 atBatOver(pitcher);
                             }
@@ -2919,7 +3062,8 @@ public class AtBatSimulator {
                         runnerOnThird = runnerOnSecond;
                         runnerOnSecond = runnerOnFirst;
                         runnerOnFirst = null;
-
+                        animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                        animationData.put(1, new Pair<Integer, Boolean>(1, true));
                         if (error) {
                             // Runner scores on error, add run scored to pitcher and runner stats, advance the runners
                             atBatSummary.append("Runners advance on Error ").append(runnerOnThird.getRunner().getLastName()).append(" Scores!!! ").append(runnerOnSecond.getRunner().getLastName())
@@ -2935,6 +3079,8 @@ public class AtBatSimulator {
                             repository.updatePitchingLine(runnerOnThird.getPitchingLineForPitcherResponsible());
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(2, true));
+                            animationData.put(1, new Pair<Integer, Boolean>(2, true));
                         }
                         return;
                     } else {
@@ -2946,6 +3092,8 @@ public class AtBatSimulator {
                             runnerOnThird = runnerOnSecond;
                             runnerOnSecond = runnerOnFirst;
                             runnerOnFirst = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(1, true));
+                            animationData.put(1, new Pair<Integer, Boolean>(1, true));
                             return;
                         } else {
                             //Runner is caught stealing
@@ -2955,11 +3103,14 @@ public class AtBatSimulator {
                             outs++;
                             runnerOnSecond.getRunner().getBattingStatsForYear(year).incrementCaughtStealing();
                             runnerOnSecond = null;
+                            animationData.put(2, new Pair<Integer, Boolean>(1, false));
+
                             if (outs == 3) {
                                 atBatOver(pitcher);
                             } else {
                                 runnerOnSecond = runnerOnFirst;
                                 runnerOnFirst = null;
+                                animationData.put(1, new Pair<Integer, Boolean>(1, true));
                             }
                             return;
                         }

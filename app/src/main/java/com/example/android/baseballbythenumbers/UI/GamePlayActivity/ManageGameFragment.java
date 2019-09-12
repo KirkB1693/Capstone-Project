@@ -76,4 +76,5 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
     public interface ManageGameClickListener{
         void manageGameOnClickResponse(int buttonId);
     }
+
 }

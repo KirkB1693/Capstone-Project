@@ -28,14 +28,14 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                BoxScoreFragment boxscore = BoxScoreFragment.newInstance(mGame);
-                return boxscore;
+                ManageGameFragment manageGame = ManageGameFragment.newInstance();
+                return manageGame;
             case 1:
                 PlayByPlayFragment playByPlay = PlayByPlayFragment.newInstance(mGame);
                 return playByPlay;
             case 2:
-                ManageGameFragment manageGame = ManageGameFragment.newInstance();
-                return manageGame;
+                BoxScoreFragment boxscore = BoxScoreFragment.newInstance(mGame);
+                return boxscore;
         }
         return null;
     }

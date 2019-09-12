@@ -92,6 +92,7 @@ public class GameSimulator {
     private boolean gameNotOver;
     private boolean gameNotStarted;
     private boolean homeTeamFinishedAtBat;
+    private boolean homeTeamBattedInNinth;
     private boolean switchSides;
     private boolean areRunsEarned;
     private boolean isHit;
@@ -176,8 +177,14 @@ public class GameSimulator {
 
             checkIfGameIsOver();
 
-            checkOnSwitchingPitchers();
-            homeTeamFinishedAtBat = false;
+            if (gameNotOver) {
+                if (inningsPlayed >= 85) {
+                    homeTeamBattedInNinth = true;
+                }
+                checkOnSwitchingPitchers();
+                homeTeamFinishedAtBat = false;
+            }
+
             game.setGameLog(String.valueOf(gameLog));
             mRepository.updateGame(game);
         }
@@ -1072,6 +1079,8 @@ public class GameSimulator {
         pitcherOfRecordForHittingTeam = visitingDefense.get(SCOREKEEPING_PITCHER);
 
         initializeGameLog();
+
+        homeTeamBattedInNinth = false;
     }
 
     private void initializeBoxScore(BoxScore boxScore, TreeMap<Integer, Player> lineup, TreeMap<Integer, Player> defense) {
@@ -1335,5 +1344,21 @@ public class GameSimulator {
 
     public TreeMap<Integer, Pair<Integer, Boolean>> getAnimationData() {
         return animationData;
+    }
+
+    public boolean isGameNotOver() {
+        return gameNotOver;
+    }
+
+    public int getBatterStaminaAdjustment() {
+        return batterStaminaAdjustment;
+    }
+
+    public int getPitcherStaminaAdjustment() {
+        return pitcherStaminaAdjustment;
+    }
+
+    public boolean didHomeTeamBatInNinth() {
+        return homeTeamBattedInNinth;
     }
 }

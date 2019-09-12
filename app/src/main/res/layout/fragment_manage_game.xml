@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <android.support.constraint.ConstraintLayout
     android:id="@+id/manage_game_constraint_layout"
     android:layout_width="match_parent"
@@ -64,5 +67,5 @@
         app:layout_constraintTop_toBottomOf="@+id/sim_rest_of_game_button" />
 
 </android.support.constraint.ConstraintLayout>
-
+</ScrollView>
 </layout>
