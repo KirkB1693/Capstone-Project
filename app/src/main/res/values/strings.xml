@@ -21,43 +21,15 @@
     <string name="canada_cb_label">Canada</string>
     <string name="choose_number_of_leagues_prompt">Choose Number Of Leagues</string>
 
-    <string-array name="numberOfLeagues">
-        <item>Choose Number Of Leagues</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="numberOfDivisions">
-        <item>Choose Number Of Divisions Per League</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
-
-    <string-array name="numberOfTeamsInDivision">
-        <item>Choose Number Of Teams Per Division</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </string-array>
-
-    <string-array name="numberOfGamesInSeries">
-        <item>Choose Number Of Games Per Series</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
-
     <string name="title_activity_game_play">Play Game</string>
-    <string name="tab_text_1">Manage Game</string>
-    <string name="tab_text_2">Play By Play</string>
-    <string name="tab_text_3">Box Score</string>
+
+    <string name="gameplay_tab_manage_game">Manage Game</string>
+    <string name="gameplay_tab_play_by_play">Play By Play</string>
+    <string name="gameplay_tab_box_score">Box Score</string>
+
+    <string name="roster_tab_lineup">Lineup</string>
+    <string name="roster_tab_pitching_rotation">Rotation</string>
+
     <string name="home_tab_label">Home</string>
     <string name="visitor_tab_label">Visitor</string>
     <string name="ab_box_score_label">AB</string>
@@ -95,5 +67,35 @@
     <string name="errors_label">E</string>
     <string name="background_image_for_at_bat_results_content_description">Background Image For At Bat Results</string>
     <string name="first_inning_label">First</string>
+    <string name="title_activity_roster">RosterActivity</string>
+    <string-array name="numberOfLeagues">
+        <item>Choose Number Of Leagues</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="numberOfDivisions">
+        <item>Choose Number Of Divisions Per League</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="numberOfTeamsInDivision">
+        <item>Choose Number Of Teams Per Division</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="numberOfGamesInSeries">
+        <item>Choose Number Of Games Per Series</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
 </resources>

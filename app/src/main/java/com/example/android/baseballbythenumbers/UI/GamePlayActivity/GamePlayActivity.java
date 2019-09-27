@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.Animatable2Compat;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.Game;
@@ -50,6 +52,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private GameSimulator gameSimulator;
     private int homeErrorsAtGameStart;
     private int vistorErrorsAtGameStart;
+    private boolean simRestOfGameInProgress;
     private boolean paused;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -134,6 +137,11 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     @Override
     public void manageGameOnClickResponse(int buttonId) {
+        Button pauseButton = findViewById(R.id.pause_button);
+        Button pinchHitButton = findViewById(R.id.pinch_hit_button);
+        Button simAtBatButton = findViewById(R.id.sim_this_at_bat_button);
+        Button simRestOfGameButton = findViewById(R.id.sim_rest_of_game_button);
+        Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
         switch (buttonId) {
             case R.id.pinch_hit_button:
                 break;
@@ -144,16 +152,59 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 break;
             case R.id.pause_button:
                 paused = true;
+                simRestOfGameInProgress = false;
                 scheduledExecutorService.shutdownNow();
+                pauseButton.setVisibility(View.GONE);
+                simRestOfGameButton.setVisibility(View.VISIBLE);
+                simAtBatButton.setVisibility(View.VISIBLE);
+                setButtonsBasedOnHittingTeam();
                 break;
             case R.id.sub_pitcher_button:
                 break;
             case R.id.sim_rest_of_game_button:
                 if (!isGameOver()) {
+                    pauseButton.setVisibility(View.VISIBLE);
+                    simRestOfGameButton.setVisibility(View.GONE);
+                    pinchHitButton.setVisibility(View.GONE);
+                    subPitcherButton.setVisibility(View.GONE);
+                    simAtBatButton.setVisibility(View.GONE);
+                    simRestOfGameInProgress = true;
                     simRestOfGame();
                 }
                 break;
         }
+    }
+
+    private void setButtonsBasedOnHittingTeam() {
+        if (!simRestOfGameInProgress) {
+            String fragmentTag = makeFragmentName(R.id.view_pager, 0);
+            Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+            if (manageGameFragment != null && manageGameFragment.isVisible()) {
+                Button pinchHitButton = findViewById(R.id.pinch_hit_button);
+                Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
+                if (gameSimulator.isVisitorHitting()) {
+                    if (visitingTeam.getTeamName().equals(usersTeamName)) {
+                        pinchHitButton.setVisibility(View.VISIBLE);
+                        subPitcherButton.setVisibility(View.GONE);
+                    } else {
+                        pinchHitButton.setVisibility(View.GONE);
+                        subPitcherButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (visitingTeam.getTeamName().equals(usersTeamName)) {
+                        pinchHitButton.setVisibility(View.GONE);
+                        subPitcherButton.setVisibility(View.VISIBLE);
+                    } else {
+                        pinchHitButton.setVisibility(View.VISIBLE);
+                        subPitcherButton.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+    }
+
+    private String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
     }
 
     private void simRestOfGame() {
@@ -317,7 +368,28 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                setEndGameButtonsOnManageGameFragment();
+            } else {
+                setButtonsBasedOnHittingTeam();
             }
+    }
+
+    private void setEndGameButtonsOnManageGameFragment() {
+        String fragmentTag = makeFragmentName(R.id.view_pager, 0);
+        Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        if (manageGameFragment != null && manageGameFragment.isVisible()) {
+            Button pauseButton = findViewById(R.id.pause_button);
+            Button pinchHitButton = findViewById(R.id.pinch_hit_button);
+            Button simRestOfGameButton = findViewById(R.id.sim_rest_of_game_button);
+            Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
+            Button simAtBatButton = findViewById(R.id.sim_this_at_bat_button);
+
+            pauseButton.setVisibility(View.GONE);
+            pinchHitButton.setVisibility(View.GONE);
+            simRestOfGameButton.setVisibility(View.GONE);
+            subPitcherButton.setVisibility(View.GONE);
+            simAtBatButton.setVisibility(View.GONE);
+        }
     }
 
     private void processEndOfGame() {

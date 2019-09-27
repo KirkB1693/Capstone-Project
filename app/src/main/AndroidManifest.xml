@@ -4,12 +4,21 @@
 
     <application
         android:allowBackup="true"
+        android:appCategory="game"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:appCategory="game">
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".UI.RosterActivity.RosterActivity"
+            android:label="@string/title_activity_roster"
+            android:parentActivityName=".UI.MainActivity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.baseballbythenumbers.UI.MainActivity.MainActivity" />
+        </activity>
         <activity
             android:name=".UI.GamePlayActivity.GamePlayActivity"
             android:label="@string/title_activity_game_play"

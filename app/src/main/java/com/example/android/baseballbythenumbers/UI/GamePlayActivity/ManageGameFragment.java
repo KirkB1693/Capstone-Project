@@ -45,8 +45,11 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         manageGameBinding.pinchHitButton.setOnClickListener(this);
+        manageGameBinding.pinchHitButton.setVisibility(View.GONE);
         manageGameBinding.subPitcherButton.setOnClickListener(this);
+        manageGameBinding.subPitcherButton.setVisibility(View.GONE);
         manageGameBinding.pauseButton.setOnClickListener(this);
+        manageGameBinding.pauseButton.setVisibility(View.GONE);
         manageGameBinding.simThisAtBatButton.setOnClickListener(this);
         manageGameBinding.simRestOfGameButton.setOnClickListener(this);
     }

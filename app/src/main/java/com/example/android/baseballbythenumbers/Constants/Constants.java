@@ -11,21 +11,25 @@ public class Constants {
         public static final int PITCHER_O_SWING_PCT_STD_DEV = 281;
         public static final int PITCHER_O_SWING_PCT_MIN = 2010;
         public static final int PITCHER_O_SWING_PCT_MAX = 3890;
+        public static final int PITCHER_O_SWING_RANGE = PITCHER_O_SWING_PCT_MAX - PITCHER_O_SWING_PCT_MIN;
 
         public static final int PITCHER_Z_SWING_PCT_MEAN = 6609;
         public static final int PITCHER_Z_SWING_PCT_STD_DEV = 295;
         public static final int PITCHER_Z_SWING_PCT_MIN = 5460;
         public static final int PITCHER_Z_SWING_PCT_MAX = 7680;
+        public static final int PITCHER_Z_SWING_RANGE = PITCHER_Z_SWING_PCT_MAX - PITCHER_Z_SWING_PCT_MIN;
 
         public static final int PITCHER_O_CONTACT_PCT_MEAN = 6475;
         public static final int PITCHER_O_CONTACT_PCT_STD_DEV = 665;
         public static final int PITCHER_O_CONTACT_PCT_MIN = 3680;
         public static final int PITCHER_O_CONTACT_PCT_MAX = 8220;
+        public static final int PITCHER_O_CONTACT_RANGE = PITCHER_O_CONTACT_PCT_MAX - PITCHER_O_CONTACT_PCT_MIN;
 
         public static final int PITCHER_Z_CONTACT_PCT_MEAN = 8676;
         public static final int PITCHER_Z_CONTACT_PCT_STD_DEV = 346;
         public static final int PITCHER_Z_CONTACT_PCT_MIN = 6920;
         public static final int PITCHER_Z_CONTACT_PCT_MAX = 9450;
+        public static final int PITCHER_Z_CONTACT_RANGE = PITCHER_Z_CONTACT_PCT_MAX - PITCHER_Z_CONTACT_PCT_MIN;
 
         public static final int PITCHER_GROUND_BALL_PCT_MEAN = 4402;
         public static final int PITCHER_GROUND_BALL_PCT_STD_DEV = 709;
@@ -66,6 +70,7 @@ public class Constants {
         public static final int PITCHER_ZONE_STD_DEV = 265;
         public static final int PITCHER_ZONE_PCT_MIN = 3330;
         public static final int PITCHER_ZONE_PCT_MAX = 5440;
+        public static final int PITCHER_ZONE_RANGE = PITCHER_ZONE_PCT_MAX - PITCHER_ZONE_PCT_MIN;
 
         public static final int PITCHER_FIRST_STRIKE_PCT_MEAN = 5958;
         public static final int PITCHER_FIRST_STRIKE_STD_DEV = 324;
@@ -260,21 +265,25 @@ public class Constants {
         public static final int BATTING_O_SWING_PCT_STD_DEV = 521;
         public static final int BATTING_O_SWING_PCT_MIN = 1600;
         public static final int BATTING_O_SWING_PCT_MAX = 4470;
+        public static final int BATTING_O_SWING_RANGE = BATTING_O_SWING_PCT_MAX - BATTING_O_SWING_PCT_MIN;
 
         public static final int BATTING_Z_SWING_PCT_MEAN = 6638;
         public static final int BATTING_Z_SWING_PCT_STD_DEV = 513;
         public static final int BATTING_Z_SWING_PCT_MIN = 5150;
         public static final int BATTING_Z_SWING_PCT_MAX = 8120;
+        public static final int BATTING_Z_SWING_RANGE = BATTING_Z_SWING_PCT_MAX - BATTING_Z_SWING_PCT_MIN;
 
         public static final int BATTING_O_CONTACT_PCT_MEAN = 6542;
         public static final int BATTING_O_CONTACT_PCT_STD_DEV = 851;
         public static final int BATTING_O_CONTACT_PCT_MIN = 4050;
         public static final int BATTING_O_CONTACT_PCT_MAX = 8800;
+        public static final int BATTING_O_CONTACT_RANGE = BATTING_O_CONTACT_PCT_MAX - BATTING_O_CONTACT_PCT_MIN;
 
         public static final int BATTING_Z_CONTACT_PCT_MEAN = 8725;
         public static final int BATTING_Z_CONTACT_PCT_STD_DEV = 450;
         public static final int BATTING_Z_CONTACT_PCT_MIN = 7030;
         public static final int BATTING_Z_CONTACT_PCT_MAX = 9710;
+        public static final int BATTING_Z_CONTACT_RANGE = BATTING_Z_CONTACT_PCT_MAX - BATTING_Z_CONTACT_PCT_MIN;
 
         public static final int BATTING_GROUND_BALL_PCT_MEAN = 4383;
         public static final int BATTING_GROUND_BALL_PCT_STD_DEV = 578;
@@ -296,20 +305,23 @@ public class Constants {
         public static final int BATTING_MED_HIT_PCT_MIN = 3900;
         public static final int BATTING_MED_HIT_PCT_MAX = 6660;
 
-        public static final int BATTING_HOME_RUN_PCT_MEAN = 1109;
-        public static final int BATTING_HOME_RUN_PCT_STD_DEV = 510;
-        public static final int BATTING_HOME_RUN_PCT_MIN = 71;
-        public static final int BATTING_HOME_RUN_PCT_MAX = 3180;
+        public static final int BATTING_HOME_RUN_PCT_MEAN = 713;
+        public static final int BATTING_HOME_RUN_PCT_STD_DEV = 347;
+        public static final int BATTING_HOME_RUN_PCT_MIN = 41;
+        public static final int BATTING_HOME_RUN_PCT_MAX = 2075;
+        public static final int BATTING_HOME_RUN_RANGE = BATTING_HOME_RUN_PCT_MAX - BATTING_HOME_RUN_PCT_MIN - 200;
 
         public static final int BATTING_TRIPLE_PCT_MEAN = 214;
         public static final int BATTING_TRIPLE_STD_RATE = 149;
         public static final int BATTING_TRIPLE_PCT_MIN = 177;
         public static final int BATTING_TRIPLE_PCT_MAX = 743;
+        public static final int BATTING_TRIPLE_RANGE = BATTING_TRIPLE_PCT_MAX - BATTING_TRIPLE_PCT_MIN;
 
         public static final int BATTING_DOUBLE_PCT_MEAN = 1997;
         public static final int BATTING_DOUBLE_STD_DEV = 293;
         public static final int BATTING_DOUBLE_PCT_MIN = 987;
         public static final int BATTING_DOUBLE_PCT_MAX = 2744;
+        public static final int BATTING_DOUBLE_RANGE = BATTING_DOUBLE_PCT_MAX - BATTING_DOUBLE_PCT_MIN;
 
         public static final int BATTING_STOLEN_BASE_PCT_MEAN = 6551;
         public static final int BATTING_STOLEN_BASE_STD_DEV = 1667;
@@ -360,6 +372,8 @@ public class Constants {
         public static final int BATTING_SPEED_STD_DEV = 161;
         public static final int BATTING_SPEED_MIN = 90;
         public static final int BATTING_SPEED_MAX = 880;
+        public static final int BATTING_SPEED_RANGE = BATTING_SPEED_MAX - BATTING_SPEED_MIN;
+
 
         public static final int BATTING_ERROR_PCT_MEAN = 205;
         public static final int BATTING_ERROR_PCT_STD_DEV = 168;

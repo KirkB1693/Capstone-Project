@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.R;
@@ -69,10 +70,18 @@ public class PlayByPlayFragment extends Fragment {
         };
 
         mViewModel.getGame().observe(this, gameObserver);
+
+
     }
 
     private void updatePlayByPlayUI(Game game) {
         fragmentPlayByPlayBinding.gamePlayByPlayTv.setText(game.getGameLog());
+        fragmentPlayByPlayBinding.playByPlayScrollview.post(new Runnable() {
+            @Override
+            public void run() {
+                fragmentPlayByPlayBinding.playByPlayScrollview.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
 }

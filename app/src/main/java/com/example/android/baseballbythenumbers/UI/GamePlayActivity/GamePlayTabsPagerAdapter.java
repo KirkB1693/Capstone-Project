@@ -45,11 +45,11 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return mContext.getResources().getString(R.string.tab_text_1);
+                return mContext.getResources().getString(R.string.gameplay_tab_manage_game);
             case 1:
-                return mContext.getResources().getString(R.string.tab_text_2);
+                return mContext.getResources().getString(R.string.gameplay_tab_play_by_play);
             case 2:
-                return mContext.getResources().getString(R.string.tab_text_3);
+                return mContext.getResources().getString(R.string.gameplay_tab_box_score);
         }
         return null;
     }

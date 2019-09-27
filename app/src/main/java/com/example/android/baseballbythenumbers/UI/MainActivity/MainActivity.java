@@ -32,6 +32,7 @@ import com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity.NewLea
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
+import com.example.android.baseballbythenumbers.UI.RosterActivity.RosterActivity;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String ORGANIZATION_EXTRA = "organization_extra";
     public static final String VISITING_TEAM_EXTRA = "visiting_team_extra";
     public static final String USER_TEAM_NAME = "user_team_name";
+    public static final String USER_TEAM_EXTRA = "user_team_extra";
     private List<Game> gamesForUserToPlay;
     private Organization organization;
     private Repository repository;
@@ -219,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.editLineupButton:
+                startRosterActivity();
                 break;
             case R.id.coachSetsLineupButton:
                 onCoachSetsLineupButtonPressed();
@@ -230,6 +233,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onSimulateGameButtonPressed();
                 break;
         }
+    }
+
+    private void startRosterActivity() {
+        Intent rosterIntent = new Intent(this, RosterActivity.class);
+        rosterIntent.putExtra(USER_TEAM_EXTRA, usersTeam);
+        this.startActivity(rosterIntent);
+        this.finish();
     }
 
     private void startGamePlayActivity() {
@@ -486,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void disableGameButtons() {
+        mainBinding.editLineupButton.setEnabled(false);
         mainBinding.simulateGameButton.setEnabled(false);
         mainBinding.coachSetsLineupButton.setEnabled(false);
         mainBinding.startGameButton.setEnabled(false);
@@ -605,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void enableGamePlayButtons() {
+        mainBinding.editLineupButton.setEnabled(true);
         mainBinding.simulateGameButton.setEnabled(true);
         mainBinding.coachSetsLineupButton.setEnabled(true);
         mainBinding.startGameButton.setEnabled(true);

@@ -704,7 +704,7 @@ public class HitterGenerator {
         }
         int medPct = getRandomNormalizedPercentage(BATTING_MED_HIT_PCT_STD_DEV, BATTING_MED_HIT_PCT_MEAN, BATTING_MED_HIT_PCT_MIN, medPctMax);
 
-        int homeRunPct = (((((flyBallPct) * hardPct) / ONE_HUNDRED_PERCENT) * 3) + (lineDrivePct * hardPct)/ONE_HUNDRED_PERCENT)/4 - 250;
+        int homeRunPct = ((((flyBallPct * hardPct) / ONE_HUNDRED_PERCENT) * 7) + ((lineDrivePct * hardPct)/ONE_HUNDRED_PERCENT) * 2) / 9 - 270;
         homeRunPct = checkBounds(homeRunPct, BATTING_HOME_RUN_PCT_MIN, BATTING_HOME_RUN_PCT_MAX);
 
         int speed = getRandomNormalizedPercentage(BATTING_SPEED_STD_DEV, BATTING_SPEED_MEAN, BATTING_SPEED_MIN, BATTING_SPEED_MAX);
@@ -732,7 +732,7 @@ public class HitterGenerator {
         int centerPct = (int) (random.nextGaussian() * BATTING_CENTER_STD_DEV) + BATTING_CENTER_PCT_MEAN;
         centerPct = checkBounds(centerPct, BATTING_CENTER_PCT_MIN, BATTING_CENTER_PCT_MAX);
 
-        int battingAverageBallsInPlay = 150 + ((hardPct*lineDrivePct)* BATTING_HARD_LINE_DRIVE_HIT_PCT) / ONE_HUNDRED_PERCENT +
+        int battingAverageBallsInPlay = 150 + (((hardPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_LINE_DRIVE_HIT_PCT) / ONE_HUNDRED_PERCENT +
                 ((medPct*lineDrivePct)/ONE_HUNDRED_PERCENT)* BATTING_MED_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((ONE_HUNDRED_PERCENT-hardPct-medPct)*lineDrivePct)/ONE_HUNDRED_PERCENT * BATTING_SOFT_LINE_DRIVE_HIT_PCT / ONE_HUNDRED_PERCENT +
                 ((hardPct*groundBallPct)/ONE_HUNDRED_PERCENT)* BATTING_HARD_GROUNDBALL_HIT_PCT / ONE_HUNDRED_PERCENT +

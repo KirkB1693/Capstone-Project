@@ -28,7 +28,7 @@ public class MyPickCityRecyclerViewAdapter extends RecyclerView.Adapter<MyPickCi
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_pick_city_list_item, parent, false);
+                .inflate(R.layout.pick_city_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -55,12 +55,12 @@ public class MyPickCityRecyclerViewAdapter extends RecyclerView.Adapter<MyPickCi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final CardView mCardView;
-        public final TextView mContentView;
-        public String mItem;
+        private final View mView;
+        private final CardView mCardView;
+        private final TextView mContentView;
+        private String mItem;
 
-        public ViewHolder(View view) {
+        private ViewHolder(View view) {
             super(view);
             mView = view;
             mCardView = (CardView) view.findViewById(R.id.city_list_item_cv);

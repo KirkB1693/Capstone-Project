@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -38,7 +38,8 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
+        </item>
         <item name="android:background">@color/primaryColor</item>
     </style>
 
@@ -60,7 +61,8 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
+        </item>
         <item name="android:background">@color/primaryColor</item>
     </style>
 
@@ -68,6 +70,24 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/primary_dark_text</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
+        </item>
     </style>
+
+    <style name="LineupPlayerRatingsLabels">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/primary_dark_text</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
+        </item>
+    </style>
+
+    <style name="LineupPlayerInfo">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/primary_dark_text</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-light
+        </item>
+    </style>
+
 </resources>
