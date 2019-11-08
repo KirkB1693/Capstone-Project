@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationFragment;
 import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationItemMoveCallback;
 import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationStartDragListener;
 
@@ -23,16 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
 import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
 import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
@@ -43,11 +34,13 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
     private final List<Player> mPlayers;
     private final PitchingRotationStartDragListener.StartDragListener mStartDragListener;
     private final Context mContext;
+    private final PitchingRotationFragment.OnPitchingRotationFragmentInteractionListener mListener;
 
-    public PitchingRotationRecyclerViewAdapter(Context context, List<Player> players, PitchingRotationStartDragListener.StartDragListener startDragListener) {
+    public PitchingRotationRecyclerViewAdapter(Context context, List<Player> players, PitchingRotationStartDragListener.StartDragListener startDragListener, PitchingRotationFragment.OnPitchingRotationFragmentInteractionListener clickListener) {
         mPlayers = players;
         mStartDragListener = startDragListener;
         mContext = context;
+        mListener = clickListener;
     }
 
     @NotNull
@@ -61,7 +54,8 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
-        holder.mRotationPlayerName.setText(holder.mPlayer.getName());
+        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0,1) + ". " + holder.mPlayer.getLastName();
+        holder.mRotationPlayerName.setText(firstInitialAndLastName);
         if (position < 5) {
             int rotationPosition = position + 1;
             String rotationPositionText = "SP"+rotationPosition + ")";
@@ -89,23 +83,27 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
                 ", W " + holder.mPlayer.getPitchingStats().get(0).getWins() + ", L " + holder.mPlayer.getPitchingStats().get(0).getLosses() + ", S " + holder.mPlayer.getPitchingStats().get(0).getSaves();
         holder.mRotationPlayerStats.setText(currentStats);
 
-        int movementRating = (int) (50.0 - ((double) (holder.mPlayer.getHittingPercentages().getOContactPct() - PITCHER_O_CONTACT_PCT_MIN) / PITCHER_O_CONTACT_RANGE) * 50) +
-                (int) (50.00 - ((double) (holder.mPlayer.getHittingPercentages().getZContactPct()- PITCHER_Z_CONTACT_PCT_MIN) / PITCHER_Z_CONTACT_RANGE) * 50);
-        setProgressBarDrawable(movementRating, holder.mRotationPlayerMovement);
-        holder.mRotationPlayerMovement.setProgress(movementRating);
-
-        int deceptionRating = (int) ((((double) (holder.mPlayer.getPitchingPercentages().getOSwingPct()- PITCHER_O_SWING_PCT_MIN) / PITCHER_O_SWING_RANGE) * 50)) +
-                (int) (50.0 - ((double) (holder.mPlayer.getPitchingPercentages().getZSwingPct()- PITCHER_Z_SWING_PCT_MIN) / PITCHER_Z_SWING_RANGE) * 50);
-        setProgressBarDrawable(deceptionRating, holder.mRotationPlayerDeception);
-        holder.mRotationPlayerDeception.setProgress(deceptionRating);
-
-        int accuracyRating = (int) (((double) (holder.mPlayer.getPitchingPercentages().getZonePct()- PITCHER_ZONE_PCT_MIN) / PITCHER_ZONE_RANGE) * 100);
-        setProgressBarDrawable(accuracyRating, holder.mRotationPlayerAccuracy);
-        holder.mRotationPlayerAccuracy.setProgress(accuracyRating);
-
-        int stamina = holder.mPlayer.getPitchingPercentages().getPitchingStamina();
+        int movementRating = holder.mPlayer.getMovementRating(holder.mPlayer);
+        int deceptionRating = holder.mPlayer.getDeceptionRating(holder.mPlayer);
+        int accuracyRating = holder.mPlayer.getAccuracyRating(holder.mPlayer);
+        int stamina = holder.mPlayer.getPitchingStaminaRating(holder.mPlayer);
         setProgressBarDrawable(stamina, holder.mRotationPlayerStamina);
         holder.mRotationPlayerStamina.setProgress(stamina);
+
+        int overallPitchingRating = ((movementRating + deceptionRating) + (accuracyRating)) / 3;
+        setProgressBarDrawable(overallPitchingRating, holder.mRotationPlayerOverall);
+        holder.mRotationPlayerOverall.setProgress(overallPitchingRating);
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onPitchingRotationFragmentInteraction(holder.mPlayer);
+                }
+            }
+        });
 
         holder.mReorder.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -168,9 +166,7 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
         private final TextView mRotationPlayerPosition;
         private final TextView mRotationPlayerStats;
         private final ProgressBar mRotationPlayerStamina;
-        private final ProgressBar mRotationPlayerAccuracy;
-        private final ProgressBar mRotationPlayerDeception;
-        private final ProgressBar mRotationPlayerMovement;
+        private final ProgressBar mRotationPlayerOverall;
         private final ImageView mReorder;
         private Player mPlayer;
 
@@ -182,10 +178,8 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
             mRotationPlayerName = (TextView) view.findViewById(R.id.pitching_rotation_name_of_player);
             mRotationPlayerPosition = (TextView) view.findViewById(R.id.pitching_rotation_position);
             mRotationPlayerStats = (TextView) view.findViewById(R.id.pitching_rotation_player_stats);
-            mRotationPlayerStamina = (ProgressBar) view.findViewById(R.id.pitching_rotation_stamina_pb);
-            mRotationPlayerAccuracy = (ProgressBar) view.findViewById(R.id.pitching_rotation_accuracy_pb);
-            mRotationPlayerDeception = (ProgressBar) view.findViewById(R.id.pitching_rotation_deception_pb);
-            mRotationPlayerMovement = (ProgressBar) view.findViewById(R.id.pitching_rotation_movement_pb);
+            mRotationPlayerStamina = (ProgressBar) view.findViewById(R.id.pitching_rotation_stamina_rating_pb);
+            mRotationPlayerOverall = (ProgressBar) view.findViewById(R.id.pitching_rotation_overall_rating_pb);
             mReorder = (ImageView) view.findViewById(R.id.rotation_reorder_icon_iv);
         }
 

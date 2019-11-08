@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="15">
+
+                <ProgressBar
+                    android:id="@+id/lineup_overall_rating_pb"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:max="100"
+                    android:padding="7dp"
+                    android:progress="100"
+                    android:progressDrawable="@drawable/player_rating_bar_green"/>
+
+                <TextView
+                    android:id="@+id/lineup_name_of_player"
+                    style="@style/LineupPlayerInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:layout_margin="5dp"
+                    android:gravity="left"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Joe Player"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeStepGranularity="2sp"/>
+
+                <TextView
+                    android:id="@+id/lineup_player_stats"
+                    style="@style/LineupPlayerInfo"
+                    android:textColor="@color/black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textStyle="bold"
+                    android:layout_weight="7"
+                    tools:text="Avg .360 , OBP .400, HR 5, SB 2"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="8sp"
+                    app:autoSizeMaxTextSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/lineup_player_position"
+                    style="@style/LineupPlayerInfo"
+                    android:layout_width="0dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center"
+                    tools:text="1B"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
+
+
+</layout>

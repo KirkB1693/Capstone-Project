@@ -17,14 +17,37 @@ import java.util.UUID;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_RANGE;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_CONTACT_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_RANGE;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_SPEED_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_SPEED_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_TRIPLE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_CONTACT_RANGE;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_SWING_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_HOME_RUN_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_CONTACT_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_O_SWING_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_ZONE_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_CONTACT_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MEAN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_PCT_MIN;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.PITCHER_Z_SWING_RANGE;
+import static com.example.android.baseballbythenumbers.Constants.Constants.PitcherBaseStats.STARTER_STAMINA_MAX;
 import static com.example.android.baseballbythenumbers.Constants.Positions.getPositionNameFromPrimaryPosition;
 import static com.example.android.baseballbythenumbers.Generators.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
@@ -257,6 +280,76 @@ public class Player implements Parcelable
     }
 
     public String getName() {return firstName + " " + lastName;}
+
+    public int getBattingContactRating(Player player) {
+        if (player.getHittingPercentages() != null) {
+            return ((int) (((double) (player.getHittingPercentages().getOContactPct() - BATTING_O_CONTACT_PCT_MIN) / BATTING_O_CONTACT_RANGE) * 50) +
+                    (int) (((double) (player.getHittingPercentages().getZContactPct() - BATTING_Z_CONTACT_PCT_MIN) / BATTING_Z_CONTACT_RANGE) * 50));
+        } else {
+            return -1;
+        }
+    }
+
+    public int getBattingEyeRating(Player player) {
+        if (player.getHittingPercentages() != null) {
+            return (int) ((50.0 - ((double) (player.getHittingPercentages().getOSwingPct()- BATTING_O_SWING_PCT_MIN) / BATTING_O_SWING_RANGE) * 50)) +
+                    (int) (((double) (player.getHittingPercentages().getZSwingPct()- BATTING_Z_SWING_PCT_MIN) / BATTING_Z_SWING_RANGE) * 50);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getBattingPowerRating(Player player) {
+        if (player.getHittingPercentages() != null) {
+            return (int) (((double) (player.getHittingPercentages().getHomeRunPct()- BATTING_HOME_RUN_PCT_MIN) / BATTING_HOME_RUN_RANGE) * 100);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getBattingSpeedRating(Player player) {
+        if (player.getHittingPercentages() != null) {
+            return (int) (((double) (player.getHittingPercentages().getSpeed()- BATTING_SPEED_MIN) / BATTING_SPEED_RANGE) * 100);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getMovementRating(Player player) {
+        if (player.getPitchingPercentages() != null) {
+            return (int) (50.0 - ((double) (player.getPitchingPercentages().getOContactPct() - PITCHER_O_CONTACT_PCT_MIN) / PITCHER_O_CONTACT_RANGE) * 50) +
+                    (int) (50.00 - ((double) (player.getPitchingPercentages().getZContactPct()- PITCHER_Z_CONTACT_PCT_MIN) / PITCHER_Z_CONTACT_RANGE) * 50);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getDeceptionRating(Player player) {
+        if (player.getPitchingPercentages() != null) {
+            return (int) ((((double) (player.getPitchingPercentages().getOSwingPct()- PITCHER_O_SWING_PCT_MIN) / PITCHER_O_SWING_RANGE) * 50)) +
+                    (int) (50.0 - ((double) (player.getPitchingPercentages().getZSwingPct()- PITCHER_Z_SWING_PCT_MIN) / PITCHER_Z_SWING_RANGE) * 50);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getAccuracyRating(Player player) {
+        if (player.getPitchingPercentages() != null) {
+            return (int) (((double) (player.getPitchingPercentages().getZonePct()- PITCHER_ZONE_PCT_MIN) / PITCHER_ZONE_RANGE) * 100);
+        } else {
+            return -1;
+        }
+    }
+
+    public int getPitchingStaminaRating(Player player) {
+        if (player.getPitchingPercentages() != null) {
+            return (int)  (((double) player.getPitchingPercentages().getPitchingStamina() / STARTER_STAMINA_MAX) * 100);
+        } else {
+            return -1;
+        }
+    }
+
+
 
     @Override
     public String toString() {

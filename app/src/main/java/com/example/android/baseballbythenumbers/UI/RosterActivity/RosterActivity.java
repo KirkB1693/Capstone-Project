@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
@@ -57,12 +58,12 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
 
     @Override
     public void onLineupFragmentInteraction(Player player) {
-
+        Toast.makeText(getApplicationContext(),"Player : " + player.getName() + ", was clicked, this will take you to the player detail screen in the future.", Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void onPitchingRotationFragmentInteraction(Player player) {
-
+        Toast.makeText(getApplicationContext(),"Player : " + player.getName() + ", was clicked, this will take you to the player detail screen in the future.", Toast.LENGTH_SHORT).show();
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupFragment;
 import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupItemMoveCallback;
 import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupStartDragListener;
 
@@ -24,18 +25,6 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_HOME_RUN_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_CONTACT_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_O_SWING_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_SPEED_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_SPEED_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_CONTACT_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_CONTACT_RANGE;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_SWING_PCT_MIN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.BatterBaseStats.BATTING_Z_SWING_RANGE;
 import static com.example.android.baseballbythenumbers.Constants.Positions.getPositionNameFromPrimaryPosition;
 
 public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecyclerViewAdapter.ViewHolder> implements LineupItemMoveCallback.ItemTouchHelperContract {
@@ -43,11 +32,13 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
     private final List<Player> mPlayers;
     private final LineupStartDragListener.StartDragListener mStartDragListener;
     private final Context mContext;
+    private final LineupFragment.OnLineupFragmentInteractionListener mListener;
 
-    public LineupRecyclerViewAdapter(Context context, List<Player> players, LineupStartDragListener.StartDragListener startDragListener) {
+    public LineupRecyclerViewAdapter(Context context, List<Player> players, LineupStartDragListener.StartDragListener startDragListener, LineupFragment.OnLineupFragmentInteractionListener clickListener) {
         mPlayers = players;
         mStartDragListener = startDragListener;
         mContext = context;
+        mListener = clickListener;
 
         Collections.sort(mPlayers, Player.BestOnBaseComparator);
     }
@@ -63,7 +54,8 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
-        holder.mLineupPlayerName.setText(holder.mPlayer.getName());
+        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0,1) + ". " + holder.mPlayer.getLastName();
+        holder.mLineupPlayerName.setText(firstInitialAndLastName);
         if (position < 9) {
             int lineupPosition = position + 1;
             String lineupPositionText = lineupPosition + ")";
@@ -79,23 +71,24 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
 
         holder.mLineupPlayerPosition.setText(getPositionNameFromPrimaryPosition(holder.mPlayer.getPrimaryPosition()));
 
-        int contactRating = (int) (((double) (holder.mPlayer.getHittingPercentages().getOContactPct()- BATTING_O_CONTACT_PCT_MIN) / BATTING_O_CONTACT_RANGE) * 50) +
-                (int) (((double) (holder.mPlayer.getHittingPercentages().getZContactPct()- BATTING_Z_CONTACT_PCT_MIN) / BATTING_Z_CONTACT_RANGE) * 50);
-        setProgressBarDrawable(contactRating, holder.mLineupPlayerContact);
-        holder.mLineupPlayerContact.setProgress(contactRating);
+        int contactRating = holder.mPlayer.getBattingContactRating(holder.mPlayer);
+        int eyeRating = holder.mPlayer.getBattingEyeRating(holder.mPlayer);
+        int powerRating = holder.mPlayer.getBattingPowerRating(holder.mPlayer);
+        int speedRating = holder.mPlayer.getBattingSpeedRating(holder.mPlayer);
+        int overallRating = (2 * (contactRating + eyeRating) + (powerRating + speedRating)) / 6;
+        setProgressBarDrawable(overallRating, holder.mLineupPlayerOverallBattingRating);
+        holder.mLineupPlayerOverallBattingRating.setProgress(overallRating);
 
-        int eyeRating = (int) ((50.0 - ((double) (holder.mPlayer.getHittingPercentages().getOSwingPct()- BATTING_O_SWING_PCT_MIN) / BATTING_O_SWING_RANGE) * 50)) +
-                (int) (((double) (holder.mPlayer.getHittingPercentages().getZSwingPct()- BATTING_Z_SWING_PCT_MIN) / BATTING_Z_SWING_RANGE) * 50);
-        setProgressBarDrawable(eyeRating, holder.mLineupPlayerEye);
-        holder.mLineupPlayerEye.setProgress(eyeRating);
-
-        int powerRating = (int) (((double) (holder.mPlayer.getHittingPercentages().getHomeRunPct()- BATTING_HOME_RUN_PCT_MIN) / BATTING_HOME_RUN_RANGE) * 100);
-        setProgressBarDrawable(powerRating, holder.mLineupPlayerPower);
-        holder.mLineupPlayerPower.setProgress(powerRating);
-
-        int speedRating = (int) (((double) (holder.mPlayer.getHittingPercentages().getSpeed()- BATTING_SPEED_MIN) / BATTING_SPEED_RANGE) * 100);
-        setProgressBarDrawable(speedRating, holder.mLineupSpeed);
-        holder.mLineupSpeed.setProgress(speedRating);
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onLineupFragmentInteraction(holder.mPlayer);
+                }
+            }
+        });
 
         holder.mReorder.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -157,10 +150,7 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
         private final TextView mLineupPlayerName;
         private final TextView mLineupPlayerPosition;
         private final TextView mLineupPlayerStats;
-        private final ProgressBar mLineupPlayerContact;
-        private final ProgressBar mLineupPlayerEye;
-        private final ProgressBar mLineupPlayerPower;
-        private final ProgressBar mLineupSpeed;
+        private final ProgressBar mLineupPlayerOverallBattingRating;
         private final ImageView mReorder;
         private Player mPlayer;
 
@@ -172,10 +162,7 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
             mLineupPlayerName = (TextView) view.findViewById(R.id.lineup_name_of_player);
             mLineupPlayerPosition = (TextView) view.findViewById(R.id.lineup_player_position);
             mLineupPlayerStats = (TextView) view.findViewById(R.id.lineup_player_stats);
-            mLineupPlayerContact = (ProgressBar) view.findViewById(R.id.lineup_contact_pb);
-            mLineupPlayerEye = (ProgressBar) view.findViewById(R.id.lineup_eye_pb);
-            mLineupPlayerPower = (ProgressBar) view.findViewById(R.id.lineup_power_pb);
-            mLineupSpeed = (ProgressBar) view.findViewById(R.id.lineup_speed_pb);
+            mLineupPlayerOverallBattingRating = (ProgressBar) view.findViewById(R.id.lineup_overall_rating_pb);
             mReorder = (ImageView) view.findViewById(R.id.lineup_reorder);
         }
 

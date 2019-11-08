@@ -74,7 +74,7 @@ public class PitchingRotationFragment extends Fragment implements PitchingRotati
         Collections.sort(pitchers, Player.BestPitcherComparator);
 
         mRecyclerView = pitchingRotationBinding.rotationRecyclerView;
-        PitchingRotationRecyclerViewAdapter mAdapter = new PitchingRotationRecyclerViewAdapter(getContext(), pitchers, this);
+        PitchingRotationRecyclerViewAdapter mAdapter = new PitchingRotationRecyclerViewAdapter(getContext(), pitchers, this, mListener);
         ItemTouchHelper.Callback callback = new PitchingRotationItemMoveCallback(mAdapter);
         touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);

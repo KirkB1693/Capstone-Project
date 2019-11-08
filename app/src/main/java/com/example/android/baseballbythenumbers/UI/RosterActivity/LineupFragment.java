@@ -57,7 +57,7 @@ public class LineupFragment extends Fragment implements LineupStartDragListener.
         lineupBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_lineup, container, false);
 
         mRecyclerView = lineupBinding.lineupRecyclerView;
-        LineupRecyclerViewAdapter mAdapter = new LineupRecyclerViewAdapter(getContext(), mTeam.getPlayers(), this);
+        LineupRecyclerViewAdapter mAdapter = new LineupRecyclerViewAdapter(getContext(), mTeam.getPlayers(), this, mListener);
         ItemTouchHelper.Callback callback = new LineupItemMoveCallback(mAdapter);
         touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
