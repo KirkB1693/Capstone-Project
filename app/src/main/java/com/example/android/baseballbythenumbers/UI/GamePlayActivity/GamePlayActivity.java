@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.Organization;
@@ -81,7 +82,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     TabLayout tabs = findViewById(R.id.tabs);
                     tabs.setupWithViewPager(viewPager);
                     activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
-                    repository = new Repository(getApplication());
+                    repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();;
 
                     setupGame();
                 }

@@ -71,7 +71,7 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
     }
 
     private void saveNewOrganization(Organization newOrganization) {
-        SaveOrganizationFragment fragment = SaveOrganizationFragment.newInstance(newOrganization);
+        SaveOrganizationFragment fragment = SaveOrganizationFragment.newInstance(getApplication(), newOrganization);
         getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, SAVE_ORGANIZATION_FRAGMENT_TAG)
                 .addToBackStack(FINISH_LEAGUE_SETUP_FRAGMENT_TAG).commit();
     }

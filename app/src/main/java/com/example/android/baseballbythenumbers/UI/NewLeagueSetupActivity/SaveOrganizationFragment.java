@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity;
 
+import android.app.Application;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.Division;
 import com.example.android.baseballbythenumbers.Data.Game;
@@ -35,7 +37,9 @@ import java.util.List;
  */
 public class SaveOrganizationFragment extends Fragment {
 
-    private static Organization organization;
+    private static Organization mOrganization;
+
+    private static Application mApplication;
 
     private Repository repository;
 
@@ -55,9 +59,10 @@ public class SaveOrganizationFragment extends Fragment {
      * @return A new instance of fragment SaveOrganizationFragment.
      */
     
-    public static SaveOrganizationFragment newInstance(Organization newOrganization) {
+    public static SaveOrganizationFragment newInstance(Application application, Organization newOrganization) {
         SaveOrganizationFragment fragment = new SaveOrganizationFragment();
-        organization = newOrganization;
+        mOrganization = newOrganization;
+        mApplication = application;
         return fragment;
     }
 
@@ -82,8 +87,8 @@ public class SaveOrganizationFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                repository = new Repository(getActivity().getApplication());
-                repository.insertOrganization(organization);
+                repository = ((BaseballByTheNumbersApp) mApplication).getRepository();
+                repository.insertOrganization(mOrganization);
                 saveOrganizationBinding.generateOrgProgressbar.incrementProgressBy(10);
 
                 saveOrganizationBinding.generateOrgProgressbar.post(new Runnable() {
@@ -92,8 +97,8 @@ public class SaveOrganizationFragment extends Fragment {
                         saveOrganizationBinding.orgSaveTv.setText("Saving Leagues...");
                     }
                 });
-                List<League> leagueList = organization.getLeagues();
-                repository.insertAllLeagues(organization.getLeagues());
+                List<League> leagueList = mOrganization.getLeagues();
+                repository.insertAllLeagues(mOrganization.getLeagues());
                 saveOrganizationBinding.generateOrgProgressbar.incrementProgressBy(10);
 
                 saveOrganizationBinding.generateOrgProgressbar.post(new Runnable() {
@@ -159,7 +164,7 @@ public class SaveOrganizationFragment extends Fragment {
                         saveOrganizationBinding.orgSaveTv.setText("Saving Schedule...");
                     }
                 });
-                List<Schedule> scheduleList = organization.getSchedules();
+                List<Schedule> scheduleList = mOrganization.getSchedules();
                 repository.insertAllSchedules(scheduleList);
                 saveOrganizationBinding.generateOrgProgressbar.incrementProgressBy(10);
 
@@ -173,7 +178,7 @@ public class SaveOrganizationFragment extends Fragment {
                     @Override
                     public void run() {
                         saveOrganizationBinding.orgSaveTv.setText("Finished Saving!");
-                        onOrganizationCreationEnd(organization);
+                        onOrganizationCreationEnd(mOrganization);
                     }
                 });
             }

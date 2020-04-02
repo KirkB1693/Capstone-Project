@@ -3,6 +3,7 @@
     package="com.example.android.baseballbythenumbers">
 
     <application
+        android:name=".BaseballByTheNumbersApp"
         android:allowBackup="true"
         android:appCategory="game"
         android:icon="@mipmap/ic_launcher"

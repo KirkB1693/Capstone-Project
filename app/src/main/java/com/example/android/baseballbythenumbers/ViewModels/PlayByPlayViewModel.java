@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 
@@ -16,7 +17,7 @@ public class PlayByPlayViewModel extends AndroidViewModel {
 
     public PlayByPlayViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new Repository(application);
+        mRepository = ((BaseballByTheNumbersApp) application).getRepository();
     }
 
     public LiveData<Game> getGame() {

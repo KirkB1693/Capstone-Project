@@ -190,4 +190,3 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
     }
 }
 
-

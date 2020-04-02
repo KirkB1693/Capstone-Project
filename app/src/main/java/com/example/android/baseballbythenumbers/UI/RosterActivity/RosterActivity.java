@@ -58,12 +58,15 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
 
     @Override
     public void onLineupFragmentInteraction(Player player) {
+
+        activityRosterBinding.rosterViewPager.setCurrentItem(3);
         Toast.makeText(getApplicationContext(),"Player : " + player.getName() + ", was clicked, this will take you to the player detail screen in the future.", Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void onPitchingRotationFragmentInteraction(Player player) {
+        activityRosterBinding.rosterViewPager.setCurrentItem(3);
         Toast.makeText(getApplicationContext(),"Player : " + player.getName() + ", was clicked, this will take you to the player detail screen in the future.", Toast.LENGTH_SHORT).show();
     }
 }

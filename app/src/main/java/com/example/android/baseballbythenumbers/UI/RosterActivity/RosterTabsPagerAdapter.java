@@ -37,6 +37,9 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 PitchingRotationFragment pitchingRotationFragment = PitchingRotationFragment.newInstance(mTeam);
                 return pitchingRotationFragment;
+            case 2:
+                PlayerDetailFragment playerDetailFragment = PlayerDetailFragment.newInstance(mTeam);
+                return playerDetailFragment;
         }
         return null;
     }
@@ -49,6 +52,8 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getResources().getString(R.string.roster_tab_lineup);
             case 1:
                 return mContext.getResources().getString(R.string.roster_tab_pitching_rotation);
+            case 2:
+                return mContext.getResources().getString(R.string.roster_tab_player_detail);
 
         }
         return null;
@@ -56,8 +61,8 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
-        return 2;
+        // Show 3 total pages.
+        return 3;
     }
 
 

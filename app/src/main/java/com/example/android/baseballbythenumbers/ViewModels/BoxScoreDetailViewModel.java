@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.Game;
 import com.example.android.baseballbythenumbers.Data.PitchingLine;
@@ -22,7 +23,7 @@ public class BoxScoreDetailViewModel extends AndroidViewModel {
 
     public BoxScoreDetailViewModel(Application application){
         super(application);
-        mRepository = new Repository(application);
+        mRepository = ((BaseballByTheNumbersApp) application).getRepository();
     }
 
     public LiveData<Game> getGame() {

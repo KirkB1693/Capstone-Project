@@ -73,3 +73,4 @@ public class MyPickCityRecyclerViewAdapter extends RecyclerView.Adapter<MyPickCi
         }
     }
 }
+

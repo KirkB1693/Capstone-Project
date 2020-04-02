@@ -1,6 +1,5 @@
 package com.example.android.baseballbythenumbers.Repository;
 
-import android.app.Application;
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -19,10 +18,10 @@ import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.Database.AppDatabase;
 import com.example.android.baseballbythenumbers.Database.BattingLineDao;
 import com.example.android.baseballbythenumbers.Database.BattingStatsDao;
 import com.example.android.baseballbythenumbers.Database.BoxScoreDao;
-import com.example.android.baseballbythenumbers.Database.Database;
 import com.example.android.baseballbythenumbers.Database.DivisionDao;
 import com.example.android.baseballbythenumbers.Database.GameDao;
 import com.example.android.baseballbythenumbers.Database.LeagueDao;
@@ -36,6 +35,9 @@ import com.example.android.baseballbythenumbers.Database.TeamDao;
 import java.util.List;
 
 public class Repository {
+
+    private static Repository sInstance;
+    private final AppDatabase mDatabase;
 
     private BattingLineDao mBattingLineDao;
     private LiveData<List<BattingLine>> mBattingLines;
@@ -74,45 +76,55 @@ public class Repository {
     private TeamDao mTeamDao;
     private LiveData<List<Team>> mTeams;
 
+    private Repository(final AppDatabase database) {
+        mDatabase = database;
 
-    public Repository(Application application) {
-        Database db = Database.getInstance(application);
-
-        mBattingLineDao = db.getBattingLineDao();
+        mBattingLineDao = database.getBattingLineDao();
         mBattingLines = mBattingLineDao.getAllBattingLines();
 
-        mOrganizationDao = db.getOrganizationDao();
+        mOrganizationDao = database.getOrganizationDao();
         mOrganizations = mOrganizationDao.getAllOrganizations();
 
-        mScheduleDao = db.getScheduleDao();
+        mScheduleDao = database.getScheduleDao();
         mSchedules = mScheduleDao.getAllSchedules();
-        
-        mGameDao = db.getGameDao();
+
+        mGameDao = database.getGameDao();
         mGames = mGameDao.getAllGames();
-        
-        mBoxScoreDao = db.getBoxScoreDao();
+
+        mBoxScoreDao = database.getBoxScoreDao();
         mBoxScore = mBoxScoreDao.getAllBoxScores();
-        
-        mPitchingLineDao = db.getPitchingLineDao();
+
+        mPitchingLineDao = database.getPitchingLineDao();
         mPitchingLines = mPitchingLineDao.getAllPitchingLines();
-        
-        mLeagueDao = db.getLeagueDao();
+
+        mLeagueDao = database.getLeagueDao();
         mLeagues = mLeagueDao.getAllLeagues();
-        
-        mDivisionDao = db.getDivisionDao();
+
+        mDivisionDao = database.getDivisionDao();
         mDivisions = mDivisionDao.getAllDivisions();
-        
-        mTeamDao = db.getTeamDao();
+
+        mTeamDao = database.getTeamDao();
         mTeams = mTeamDao.getAllTeams();
-        
-        mPlayersDao = db.getPlayersDao();
+
+        mPlayersDao = database.getPlayersDao();
         mPlayers = mPlayersDao.getAllPlayers();
-        
-        mBattingStatsDao = db.getBattingStatsDao();
+
+        mBattingStatsDao = database.getBattingStatsDao();
         mBattingStats = mBattingStatsDao.getAllBattingStats();
-        
-        mPitchingStatsDao = db.getPitchingStatsDao();
+
+        mPitchingStatsDao = database.getPitchingStatsDao();
         mPitchingStats = mPitchingStatsDao.getAllPitchingStats();
+    }
+
+    public static Repository getInstance(final AppDatabase database) {
+        if (sInstance == null) {
+            synchronized (Repository.class) {
+                if (sInstance == null) {
+                    sInstance = new Repository(database);
+                }
+            }
+        }
+        return sInstance;
     }
 
     public LiveData<List<PitchingLine>> getLiveDataPitchingLinesForBoxScore(String boxScoreId){

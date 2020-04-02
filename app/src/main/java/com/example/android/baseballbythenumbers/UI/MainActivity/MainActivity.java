@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.BuildConfig;
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.Division;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String USER_TEAM_EXTRA = "user_team_extra";
     private List<Game> gamesForUserToPlay;
     private Organization organization;
-    private Repository repository;
+    private Repository mRepository;
     private ActivityMainBinding mainBinding;
     private int dayOfSchedule;
     private SharedPreferences sharedPreferences;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         JodaTimeAndroid.init(this);
 
-        repository = new Repository(getApplication());
+        mRepository = ((BaseballByTheNumbersApp) getApplicationContext()).getRepository();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         dayOfSchedule = 0;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (sharedPrefOrgId != null) {
                 orgId = sharedPrefOrgId;
             } else {
-                repository.deleteAll();
+                mRepository.deleteAll();
             }
         }
 
@@ -121,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (orgId != null) {                                 // If we have an orgId move forward
             updateUIFromDb(orgId);
-            new loadAllTeamsInBackgroundTask(repository).execute(orgId);
-            new loadAllGamesInBackgroundTask(repository).execute(orgId);
+            new loadAllTeamsInBackgroundTask(mRepository).execute(orgId);
+            new loadAllGamesInBackgroundTask(mRepository).execute(orgId);
         } else {
             goToNewLeagueSetupActivity();                   // Otherwise setup a new league
         }
@@ -130,13 +131,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateUIFromDb(String orgId) {
-        new getOrgFromDbAndCreateUserGameListAsyncTask(repository, organization).execute(orgId);
+        new getOrgFromDbAndCreateUserGameListAsyncTask(mRepository, organization).execute(orgId);
     }
 
     private void goToNewLeagueSetupActivity() {
         // Go to NewLeagueSetupActivity
-        Intent newLeagueintent = new Intent(this, NewLeagueSetupActivity.class);
-        this.startActivity(newLeagueintent);
+        Intent newLeagueIntent = new Intent(this, NewLeagueSetupActivity.class);
+        this.startActivity(newLeagueIntent);
         this.finish();
     }
 
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void simGame(Game game, Team homeTeam, Team visitingTeam) {
 
-        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear(), repository);
+        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear(), mRepository);
         int[] result = gameSimulator.simulateGame();
 
         game.setHomeScore(result[0]);
@@ -198,22 +199,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainBinding.gameScoresTV.setText(String.format(Locale.US, "%s - %s\n%d    -    %d", game.getHomeTeamName(), game.getVisitingTeamName(), game.getHomeScore(), game.getVisitorScore()));
 
-        repository.updateGame(game);
-        repository.updateBoxScore(game.getHomeBoxScore());
-        repository.insertAllBattingLines(game.getHomeBoxScore().getBattingLines());
-        repository.insertAllPitchingLines(game.getHomeBoxScore().getPitchingLines());
-        repository.updateBoxScore(game.getVisitorBoxScore());
-        repository.insertAllBattingLines(game.getVisitorBoxScore().getBattingLines());
-        repository.insertAllPitchingLines(game.getVisitorBoxScore().getPitchingLines());
-        repository.updateTeam(homeTeam);
-        repository.updateTeam(visitingTeam);
+        mRepository.updateGame(game);
+        mRepository.updateBoxScore(game.getHomeBoxScore());
+        mRepository.insertAllBattingLines(game.getHomeBoxScore().getBattingLines());
+        mRepository.insertAllPitchingLines(game.getHomeBoxScore().getPitchingLines());
+        mRepository.updateBoxScore(game.getVisitorBoxScore());
+        mRepository.insertAllBattingLines(game.getVisitorBoxScore().getBattingLines());
+        mRepository.insertAllPitchingLines(game.getVisitorBoxScore().getPitchingLines());
+        mRepository.updateTeam(homeTeam);
+        mRepository.updateTeam(visitingTeam);
         List<Player> playerList = new ArrayList<>();
         playerList.addAll(homeTeam.getPlayers());
         playerList.addAll(visitingTeam.getPlayers());
         for (Player player : playerList) {
-            repository.updatePlayer(player);
-            repository.updateBattingStats(player.getBattingStats().get(organization.getCurrentYear()));
-            repository.updatePitchingStats(player.getPitchingStats().get(organization.getCurrentYear()));
+            mRepository.updatePlayer(player);
+            mRepository.updateBattingStats(player.getBattingStats().get(organization.getCurrentYear()));
+            mRepository.updatePitchingStats(player.getPitchingStats().get(organization.getCurrentYear()));
         }
     }
 
@@ -305,9 +306,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newSchedList.add(newSeasonSchedule);
         organization.setSchedules(newSchedList);
 
-        repository.updateOrganization(organization);
-        repository.insertSchedule(newSeasonSchedule);
-        repository.insertAllGames(newSeasonSchedule.getGameList());
+        mRepository.updateOrganization(organization);
+        mRepository.insertSchedule(newSeasonSchedule);
+        mRepository.insertAllGames(newSeasonSchedule.getGameList());
         addNewStatsForPlayers();
         setNewListOfAllGamesByDay(newSeasonSchedule.getGameList());
         generateListOfGamesForUser();
@@ -321,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Team team = (Team) entry.getValue();
             team.setWins(0);
             team.setLosses(0);
-            repository.updateTeam(team);
+            mRepository.updateTeam(team);
         }
     }
 
@@ -351,11 +352,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             List<BattingStats> battingStatsList = player.getBattingStats();
             BattingStats newBattingStats = new BattingStats(organization.getCurrentYear(), 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, player.getPlayerId());
             battingStatsList.add(organization.getCurrentYear(), newBattingStats);
-            repository.insertBattingStats(newBattingStats);
+            mRepository.insertBattingStats(newBattingStats);
             List<PitchingStats> pitchingStatsList = player.getPitchingStats();
             PitchingStats newPitchingStats = new PitchingStats(organization.getCurrentYear(),0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, player.getPlayerId());
             pitchingStatsList.add(organization.getCurrentYear(), newPitchingStats);
-            repository.insertPitchingStats(newPitchingStats);
+            mRepository.insertPitchingStats(newPitchingStats);
             player.setBattingStats(battingStatsList);
             player.setPitchingStats(pitchingStatsList);
         }

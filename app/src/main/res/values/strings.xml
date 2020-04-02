@@ -68,6 +68,7 @@
     <string name="background_image_for_at_bat_results_content_description">Background Image For At Bat Results</string>
     <string name="first_inning_label">First</string>
     <string name="title_activity_roster">RosterActivity</string>
+    <string name="roster_tab_player_detail">Player Detail</string>
     <string-array name="numberOfLeagues">
         <item>Choose Number Of Leagues</item>
         <item>1</item>

@@ -172,5 +172,3 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
         }
     }
 }
-
-
