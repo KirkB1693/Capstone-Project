@@ -1,1 +1,1 @@
-include ':app', ':nameGenerator', ':namegenerator'
+include ':app'
