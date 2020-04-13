@@ -1,0 +1,1438 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "66a57c934f0502992d6ff100fe87f5a5",
+    "entities": [
+      {
+        "tableName": "organizations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `organization_name` TEXT, `user_team_name` TEXT, `current_year` INTEGER NOT NULL, `interleague_play` INTEGER NOT NULL, `series_length` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "organizationName",
+            "columnName": "organization_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userTeamName",
+            "columnName": "user_team_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "currentYear",
+            "columnName": "current_year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "interleaguePlay",
+            "columnName": "interleague_play",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seriesLength",
+            "columnName": "series_length",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "leagues",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`leagueId` TEXT NOT NULL, `orgId` TEXT, `leagueName` TEXT, `useDh` INTEGER NOT NULL, PRIMARY KEY(`leagueId`), FOREIGN KEY(`orgId`) REFERENCES `organizations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "leagueId",
+            "columnName": "leagueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orgId",
+            "columnName": "orgId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "leagueName",
+            "columnName": "leagueName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "useDh",
+            "columnName": "useDh",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "leagueId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_leagues_orgId",
+            "unique": false,
+            "columnNames": [
+              "orgId"
+            ],
+            "createSql": "CREATE  INDEX `index_leagues_orgId` ON `${TABLE_NAME}` (`orgId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "organizations",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orgId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "divisions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`divisionId` TEXT NOT NULL, `leagueId` TEXT, `divisionName` TEXT, PRIMARY KEY(`divisionId`), FOREIGN KEY(`leagueId`) REFERENCES `leagues`(`leagueId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "divisionId",
+            "columnName": "divisionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leagueId",
+            "columnName": "leagueId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "divisionName",
+            "columnName": "divisionName",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "divisionId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_divisions_leagueId",
+            "unique": false,
+            "columnNames": [
+              "leagueId"
+            ],
+            "createSql": "CREATE  INDEX `index_divisions_leagueId` ON `${TABLE_NAME}` (`leagueId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "leagues",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "leagueId"
+            ],
+            "referencedColumns": [
+              "leagueId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "teams",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`teamId` TEXT NOT NULL, `divisionId` TEXT, `teamName` TEXT, `teamCity` TEXT, `useDh` INTEGER NOT NULL, `teamBudget` INTEGER NOT NULL, `wins` INTEGER NOT NULL, `losses` INTEGER NOT NULL, PRIMARY KEY(`teamId`), FOREIGN KEY(`divisionId`) REFERENCES `divisions`(`divisionId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "teamId",
+            "columnName": "teamId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "divisionId",
+            "columnName": "divisionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "teamName",
+            "columnName": "teamName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "teamCity",
+            "columnName": "teamCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "useDh",
+            "columnName": "useDh",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "teamBudget",
+            "columnName": "teamBudget",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wins",
+            "columnName": "wins",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "losses",
+            "columnName": "losses",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "teamId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_teams_divisionId",
+            "unique": false,
+            "columnNames": [
+              "divisionId"
+            ],
+            "createSql": "CREATE  INDEX `index_teams_divisionId` ON `${TABLE_NAME}` (`divisionId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "divisions",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "divisionId"
+            ],
+            "referencedColumns": [
+              "divisionId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "players",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playerId` TEXT NOT NULL, `teamId` TEXT, `firstName` TEXT, `middleName` TEXT, `lastName` TEXT, `primaryPosition` INTEGER NOT NULL, `alternatePositions` INTEGER NOT NULL, `age` INTEGER NOT NULL, `dateOfBirth` TEXT, `hits` TEXT, `throwingHand` TEXT, `batting_o_swing_pct` INTEGER, `batting_z_swing_pct` INTEGER, `batting_o_contact_pct` INTEGER, `batting_z_contact_pct` INTEGER, `speed` INTEGER, `batting_line_drive_pct` INTEGER, `batting_ground_ball_pct` INTEGER, `batting_hard_pct` INTEGER, `batting_med_pct` INTEGER, `batting_pull_pct` INTEGER, `batting_center_pct` INTEGER, `batting_home_run_pct` INTEGER, `batting_triple_pct` INTEGER, `batting_double_pct` INTEGER, `batting_stolen_base_pct` INTEGER, `batting_infield_fly_pct` INTEGER, `batting_hit_by_pitch_pct` INTEGER, `batting_BABIP` INTEGER, `batting_foul_ball_pct` INTEGER, `batting_stolen_base_rate` INTEGER, `batting_baserunning` INTEGER, `fielding_error_pct` INTEGER, `batting_stamina` INTEGER, `batting_stamina_used` INTEGER, `oSwingPct` INTEGER, `zSwingPct` INTEGER, `oContactPct` INTEGER, `zContactPct` INTEGER, `groundBallPct` INTEGER, `lineDrivePct` INTEGER, `homeRunPct` INTEGER, `infieldFlyBallPct` INTEGER, `hitByPitchPct` INTEGER, `wildPitchPct` INTEGER, `balkPct` INTEGER, `zonePct` INTEGER, `firstPitchStrikePct` INTEGER, `fastballPct` INTEGER, `sliderPct` INTEGER, `cutterPct` INTEGER, `curveballPct` INTEGER, `changeUpPct` INTEGER, `splitFingerPct` INTEGER, `knuckleballPct` INTEGER, `pitchingStamina` INTEGER, `pitchingStaminaUsed` INTEGER, PRIMARY KEY(`playerId`), FOREIGN KEY(`teamId`) REFERENCES `teams`(`teamId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "playerId",
+            "columnName": "playerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "teamId",
+            "columnName": "teamId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "middleName",
+            "columnName": "middleName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "primaryPosition",
+            "columnName": "primaryPosition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alternatePositions",
+            "columnName": "alternatePositions",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateOfBirth",
+            "columnName": "dateOfBirth",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hits",
+            "columnName": "hits",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "throwingHand",
+            "columnName": "throwingHand",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.oSwingPct",
+            "columnName": "batting_o_swing_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.zSwingPct",
+            "columnName": "batting_z_swing_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.oContactPct",
+            "columnName": "batting_o_contact_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.zContactPct",
+            "columnName": "batting_z_contact_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.speed",
+            "columnName": "speed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.lineDrivePct",
+            "columnName": "batting_line_drive_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.groundBallPct",
+            "columnName": "batting_ground_ball_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.hardPct",
+            "columnName": "batting_hard_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.medPct",
+            "columnName": "batting_med_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.pullPct",
+            "columnName": "batting_pull_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.centerPct",
+            "columnName": "batting_center_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.homeRunPct",
+            "columnName": "batting_home_run_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.triplePct",
+            "columnName": "batting_triple_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.doublePct",
+            "columnName": "batting_double_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.stolenBasePct",
+            "columnName": "batting_stolen_base_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.infieldFlyBallPct",
+            "columnName": "batting_infield_fly_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.hitByPitchPct",
+            "columnName": "batting_hit_by_pitch_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.battingAverageBallsInPlay",
+            "columnName": "batting_BABIP",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.foulBallPct",
+            "columnName": "batting_foul_ball_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.stolenBaseRate",
+            "columnName": "batting_stolen_base_rate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.baseRunning",
+            "columnName": "batting_baserunning",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.errorPct",
+            "columnName": "fielding_error_pct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.stamina",
+            "columnName": "batting_stamina",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hittingPercentages.staminaUsed",
+            "columnName": "batting_stamina_used",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.oSwingPct",
+            "columnName": "oSwingPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.zSwingPct",
+            "columnName": "zSwingPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.oContactPct",
+            "columnName": "oContactPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.zContactPct",
+            "columnName": "zContactPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.groundBallPct",
+            "columnName": "groundBallPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.lineDrivePct",
+            "columnName": "lineDrivePct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.homeRunPct",
+            "columnName": "homeRunPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.infieldFlyBallPct",
+            "columnName": "infieldFlyBallPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.hitByPitchPct",
+            "columnName": "hitByPitchPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.wildPitchPct",
+            "columnName": "wildPitchPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.balkPct",
+            "columnName": "balkPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.zonePct",
+            "columnName": "zonePct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.firstPitchStrikePct",
+            "columnName": "firstPitchStrikePct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.fastballPct",
+            "columnName": "fastballPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.sliderPct",
+            "columnName": "sliderPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.cutterPct",
+            "columnName": "cutterPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.curveballPct",
+            "columnName": "curveballPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.changeUpPct",
+            "columnName": "changeUpPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.splitFingerPct",
+            "columnName": "splitFingerPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.knuckleballPct",
+            "columnName": "knuckleballPct",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.pitchingStamina",
+            "columnName": "pitchingStamina",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingPercentages.pitchingStaminaUsed",
+            "columnName": "pitchingStaminaUsed",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "playerId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_players_teamId",
+            "unique": false,
+            "columnNames": [
+              "teamId"
+            ],
+            "createSql": "CREATE  INDEX `index_players_teamId` ON `${TABLE_NAME}` (`teamId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "teams",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "teamId"
+            ],
+            "referencedColumns": [
+              "teamId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "batting_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`battingStatsId` TEXT NOT NULL, `playerId` TEXT, `year` INTEGER NOT NULL, `games` INTEGER NOT NULL, `plateAppearances` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `singles` INTEGER NOT NULL, `doubles` INTEGER NOT NULL, `triples` INTEGER NOT NULL, `homeRuns` INTEGER NOT NULL, `runs` INTEGER NOT NULL, `runsBattedIn` INTEGER NOT NULL, `walks` INTEGER NOT NULL, `strikeOuts` INTEGER NOT NULL, `hitByPitch` INTEGER NOT NULL, `stolenBases` INTEGER NOT NULL, `caughtStealing` INTEGER NOT NULL, `groundBalls` INTEGER NOT NULL, `lineDrives` INTEGER NOT NULL, `flyBalls` INTEGER NOT NULL, `errors` INTEGER NOT NULL, PRIMARY KEY(`battingStatsId`), FOREIGN KEY(`playerId`) REFERENCES `players`(`playerId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "battingStatsId",
+            "columnName": "battingStatsId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playerId",
+            "columnName": "playerId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "games",
+            "columnName": "games",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plateAppearances",
+            "columnName": "plateAppearances",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hits",
+            "columnName": "hits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "singles",
+            "columnName": "singles",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "doubles",
+            "columnName": "doubles",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "triples",
+            "columnName": "triples",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeRuns",
+            "columnName": "homeRuns",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runs",
+            "columnName": "runs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runsBattedIn",
+            "columnName": "runsBattedIn",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "walks",
+            "columnName": "walks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strikeOuts",
+            "columnName": "strikeOuts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hitByPitch",
+            "columnName": "hitByPitch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stolenBases",
+            "columnName": "stolenBases",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "caughtStealing",
+            "columnName": "caughtStealing",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groundBalls",
+            "columnName": "groundBalls",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineDrives",
+            "columnName": "lineDrives",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "flyBalls",
+            "columnName": "flyBalls",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "errors",
+            "columnName": "errors",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "battingStatsId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_batting_stats_playerId",
+            "unique": false,
+            "columnNames": [
+              "playerId"
+            ],
+            "createSql": "CREATE  INDEX `index_batting_stats_playerId` ON `${TABLE_NAME}` (`playerId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "players",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "playerId"
+            ],
+            "referencedColumns": [
+              "playerId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "pitching_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pitchingStatsId` TEXT NOT NULL, `playerId` TEXT, `year` INTEGER NOT NULL, `wins` INTEGER NOT NULL, `losses` INTEGER NOT NULL, `games` INTEGER NOT NULL, `gamesStarted` INTEGER NOT NULL, `completeGames` INTEGER NOT NULL, `shutOuts` INTEGER NOT NULL, `saves` INTEGER NOT NULL, `holds` INTEGER NOT NULL, `blownSaves` INTEGER NOT NULL, `inningsPitched` REAL NOT NULL, `totalBattersFaced` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `runs` INTEGER NOT NULL, `earnedRuns` INTEGER NOT NULL, `homeRuns` INTEGER NOT NULL, `walks` INTEGER NOT NULL, `strikeOuts` INTEGER NOT NULL, `hitByPitch` INTEGER NOT NULL, `wildPitches` INTEGER NOT NULL, `balks` INTEGER NOT NULL, `groundBalls` INTEGER NOT NULL, `lineDrives` INTEGER NOT NULL, `flyBalls` INTEGER NOT NULL, PRIMARY KEY(`pitchingStatsId`), FOREIGN KEY(`playerId`) REFERENCES `players`(`playerId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "pitchingStatsId",
+            "columnName": "pitchingStatsId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playerId",
+            "columnName": "playerId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wins",
+            "columnName": "wins",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "losses",
+            "columnName": "losses",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "games",
+            "columnName": "games",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gamesStarted",
+            "columnName": "gamesStarted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completeGames",
+            "columnName": "completeGames",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shutOuts",
+            "columnName": "shutOuts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "saves",
+            "columnName": "saves",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "holds",
+            "columnName": "holds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blownSaves",
+            "columnName": "blownSaves",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inningsPitched",
+            "columnName": "inningsPitched",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalBattersFaced",
+            "columnName": "totalBattersFaced",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hits",
+            "columnName": "hits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runs",
+            "columnName": "runs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "earnedRuns",
+            "columnName": "earnedRuns",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeRuns",
+            "columnName": "homeRuns",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "walks",
+            "columnName": "walks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strikeOuts",
+            "columnName": "strikeOuts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hitByPitch",
+            "columnName": "hitByPitch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wildPitches",
+            "columnName": "wildPitches",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balks",
+            "columnName": "balks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groundBalls",
+            "columnName": "groundBalls",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineDrives",
+            "columnName": "lineDrives",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "flyBalls",
+            "columnName": "flyBalls",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "pitchingStatsId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_pitching_stats_playerId",
+            "unique": false,
+            "columnNames": [
+              "playerId"
+            ],
+            "createSql": "CREATE  INDEX `index_pitching_stats_playerId` ON `${TABLE_NAME}` (`playerId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "players",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "playerId"
+            ],
+            "referencedColumns": [
+              "playerId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "schedules",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`schedule_id` TEXT NOT NULL, `organization_id` TEXT, `schedule_year` INTEGER NOT NULL, PRIMARY KEY(`schedule_id`), FOREIGN KEY(`organization_id`) REFERENCES `organizations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "scheduleId",
+            "columnName": "schedule_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "organizationId",
+            "columnName": "organization_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "scheduleYear",
+            "columnName": "schedule_year",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "schedule_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_schedules_organization_id",
+            "unique": false,
+            "columnNames": [
+              "organization_id"
+            ],
+            "createSql": "CREATE  INDEX `index_schedules_organization_id` ON `${TABLE_NAME}` (`organization_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "organizations",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "organization_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "games",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`game_id` TEXT NOT NULL, `schedule_id` TEXT, `day` INTEGER NOT NULL, `home_team_name` TEXT, `visiting_team_name` TEXT, `home_score` INTEGER NOT NULL, `visitor_score` INTEGER NOT NULL, `played_game` INTEGER NOT NULL, `game_log` TEXT, PRIMARY KEY(`game_id`), FOREIGN KEY(`schedule_id`) REFERENCES `schedules`(`schedule_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "gameId",
+            "columnName": "game_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scheduleId",
+            "columnName": "schedule_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeTeamName",
+            "columnName": "home_team_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "visitingTeamName",
+            "columnName": "visiting_team_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "homeScore",
+            "columnName": "home_score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "visitorScore",
+            "columnName": "visitor_score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playedGame",
+            "columnName": "played_game",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gameLog",
+            "columnName": "game_log",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "game_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_games_schedule_id",
+            "unique": false,
+            "columnNames": [
+              "schedule_id"
+            ],
+            "createSql": "CREATE  INDEX `index_games_schedule_id` ON `${TABLE_NAME}` (`schedule_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "schedules",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "schedule_id"
+            ],
+            "referencedColumns": [
+              "schedule_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "box_scores",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`box_score_id` TEXT NOT NULL, `game_id` TEXT, `is_box_score_for_home_team` INTEGER NOT NULL, PRIMARY KEY(`box_score_id`), FOREIGN KEY(`game_id`) REFERENCES `games`(`game_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "boxScoreId",
+            "columnName": "box_score_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gameId",
+            "columnName": "game_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isBoxScoreForHomeTeam",
+            "columnName": "is_box_score_for_home_team",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "box_score_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_box_scores_game_id",
+            "unique": false,
+            "columnNames": [
+              "game_id"
+            ],
+            "createSql": "CREATE  INDEX `index_box_scores_game_id` ON `${TABLE_NAME}` (`game_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "games",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "game_id"
+            ],
+            "referencedColumns": [
+              "game_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "batting_line",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`box_score_id` TEXT, `batting_line_id` TEXT NOT NULL, `position_in_batting_order` INTEGER NOT NULL, `substitute` INTEGER NOT NULL, `sub_number` INTEGER NOT NULL, `batter_name` TEXT, `atBats` INTEGER NOT NULL, `runs` INTEGER NOT NULL, `hits` INTEGER NOT NULL, `rbis` INTEGER NOT NULL, `home_runs` INTEGER NOT NULL, `walks` INTEGER NOT NULL, `strike_outs` INTEGER NOT NULL, `left_on_base` INTEGER NOT NULL, `average` REAL NOT NULL, `on_base_pct` REAL NOT NULL, PRIMARY KEY(`batting_line_id`), FOREIGN KEY(`box_score_id`) REFERENCES `box_scores`(`box_score_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "boxScoreId",
+            "columnName": "box_score_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "battingLineId",
+            "columnName": "batting_line_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "positionInBattingOrder",
+            "columnName": "position_in_batting_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "substitute",
+            "columnName": "substitute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "substituteNumber",
+            "columnName": "sub_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "batterName",
+            "columnName": "batter_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "atBats",
+            "columnName": "atBats",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runs",
+            "columnName": "runs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hits",
+            "columnName": "hits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rbis",
+            "columnName": "rbis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeRuns",
+            "columnName": "home_runs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "walks",
+            "columnName": "walks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strikeOuts",
+            "columnName": "strike_outs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leftOnBase",
+            "columnName": "left_on_base",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "average",
+            "columnName": "average",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onBasePct",
+            "columnName": "on_base_pct",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "batting_line_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_batting_line_box_score_id",
+            "unique": false,
+            "columnNames": [
+              "box_score_id"
+            ],
+            "createSql": "CREATE  INDEX `index_batting_line_box_score_id` ON `${TABLE_NAME}` (`box_score_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "box_scores",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "box_score_id"
+            ],
+            "referencedColumns": [
+              "box_score_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "pitching_line",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`box_score_id` TEXT, `pitching_line_id` TEXT NOT NULL, `pitcher_number` INTEGER NOT NULL, `pitcher_name` TEXT, `innings_pitched` REAL NOT NULL, `hits_allowed` INTEGER NOT NULL, `runs_allowed` INTEGER NOT NULL, `earned_runs` INTEGER NOT NULL, `walks_allowed` INTEGER NOT NULL, `strike_outs_made` INTEGER NOT NULL, `home_runs_allowed` INTEGER NOT NULL, `era` TEXT, `whip` TEXT, `pitches_thrown` INTEGER NOT NULL, `strikes_thrown` INTEGER NOT NULL, PRIMARY KEY(`pitching_line_id`), FOREIGN KEY(`box_score_id`) REFERENCES `box_scores`(`box_score_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "boxScoreId",
+            "columnName": "box_score_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchingLineId",
+            "columnName": "pitching_line_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pitcherNumber",
+            "columnName": "pitcher_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pitcherName",
+            "columnName": "pitcher_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "inningsPitched",
+            "columnName": "innings_pitched",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hitsAllowed",
+            "columnName": "hits_allowed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runsAllowed",
+            "columnName": "runs_allowed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "earnedRuns",
+            "columnName": "earned_runs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "walksAllowed",
+            "columnName": "walks_allowed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strikeOutsMade",
+            "columnName": "strike_outs_made",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeRunsAllowed",
+            "columnName": "home_runs_allowed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "era",
+            "columnName": "era",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "whip",
+            "columnName": "whip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitchesThrown",
+            "columnName": "pitches_thrown",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strikesThrown",
+            "columnName": "strikes_thrown",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "pitching_line_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_pitching_line_box_score_id",
+            "unique": false,
+            "columnNames": [
+              "box_score_id"
+            ],
+            "createSql": "CREATE  INDEX `index_pitching_line_box_score_id` ON `${TABLE_NAME}` (`box_score_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "box_scores",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "box_score_id"
+            ],
+            "referencedColumns": [
+              "box_score_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"66a57c934f0502992d6ff100fe87f5a5\")"
+    ]
+  }
+}

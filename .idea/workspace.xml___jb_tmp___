@@ -1,0 +1,1550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config>
+        <device id="pixel" />
+        <device id="Nexus 7 2013" />
+      </config>
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+  </component>
+  <component name="AvailableLibraryUpdateStorage">
+    <library-updates>
+      <library-update>
+        <group-id>com.android.support</group-id>
+        <name>appcompat-v7</name>
+        <version>28.0.0</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support</group-id>
+        <name>cardview-v7</name>
+        <version>28.0.0</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.constraint</group-id>
+        <name>constraint-layout</name>
+        <version>2.0.0-beta1</version>
+        <repository>Google</repository>
+      </library-update>
+      <library-update>
+        <group-id>junit</group-id>
+        <name>junit</name>
+        <version>4.13-beta-2</version>
+        <repository>JCenter</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.test</group-id>
+        <name>runner</name>
+        <version>1.0.2</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.test.espresso</group-id>
+        <name>espresso-core</name>
+        <version>3.0.2</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+    </library-updates>
+    <last-search-timestamp>1557520029123</last-search-timestamp>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f474be9a-2b31-4d02-9f1b-94216938f54d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingStats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Organization.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Organization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/PitchingStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/PitchingStats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Schedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/ScheduleGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/ScheduleGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Repository/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Repository/Repository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/AtBatSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/AtBatSimulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/nameGenerator">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+                <item name="BaseballByTheNumbers" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+                <item name="BaseballByTheNumbers" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+                <item name=":app" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+                <item name=":app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="BaseballByTheNumbers" type="f1a62948:ProjectNode" />
+                <item name=":app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="android" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/ScheduleGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
+              <folding>
+                <element signature="e#745#746#0" expanded="true" />
+                <element signature="e#793#794#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1020">
+              <caret line="69" column="130" selection-start-line="69" selection-start-column="130" selection-end-line="69" selection-end-column="130" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LeagueGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="41" column="65" selection-start-line="41" selection-start-column="65" selection-end-line="41" selection-end-column="65" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="387">
+              <caret line="183" column="61" selection-start-line="183" selection-start-column="61" selection-end-line="183" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/SaveOrganizationFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1190">
+              <caret line="93" selection-start-line="93" selection-end-line="93" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/PickCityFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="867">
+              <caret line="63" selection-start-line="63" selection-end-line="63" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueSetupActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1105">
+              <caret line="71" column="45" selection-start-line="71" selection-start-column="45" selection-end-line="71" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/DivisionGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="646">
+              <caret line="47" selection-start-line="47" selection-end-line="47" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/TeamNameGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1683">
+              <caret line="112" selection-start-line="112" selection-end-line="112" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/CityGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4998">
+              <caret line="320" column="19" selection-start-line="320" selection-start-column="19" selection-end-line="320" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="valueResourceFile" />
+        <option value="Interface" />
+        <option value="layoutResourceFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>BattingLines</find>
+      <find>Schedule</find>
+      <find>schedule</find>
+      <find>game</find>
+      <find>mPlayerDao</find>
+      <find>Game</find>
+      <find>Org</find>
+      <find>int teamId</find>
+      <find>playerId</find>
+      <find>UUID</find>
+      <find>GONE</find>
+      <find>createOrganizationBinding</find>
+      <find>mList</find>
+      <find>boxscore</find>
+      <find>getL</find>
+      <find>countries</find>
+      <find>invalidDatabaseSetupNewLeague()</find>
+      <find>tm</find>
+      <find>oncli</find>
+      <find>onstar</find>
+      <find>toast</find>
+      <find>outs</find>
+      <find>fieldersWhoTouchedBall.get(1))</find>
+      <find>mainP</find>
+      <find>incrementWins();</find>
+      <find>Wins</find>
+      <find>usersTeam</find>
+      <find>get(year)</find>
+      <find>getPitchingStatsForYear</find>
+      <find>Stats().get(0)</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>. &quot;</replace>
+      <replace>.  &quot;</replace>
+      <replace>Double Play</replace>
+      <replace>pitcher, false, false</replace>
+      <replace>advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, true, true)</replace>
+      <replace>advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, false, false)</replace>
+      <replace>advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areRunsEarned, false)</replace>
+      <replace>advanceAllRunnersOneBaseOnBattedBall(batter, pitcher, areRunsEarned, true)</replace>
+      <replace>getLastName()</replace>
+      <replace>Scored</replace>
+      <replace>int</replace>
+      <replace>Runner(batter, battingLineForCurrentBatter, pitcher, pitchingLineForCurrentPitcher,</replace>
+      <replace>Organization</replace>
+      <replace>Schedule</replace>
+      <replace>Schedules</replace>
+      <replace>Game</replace>
+      <replace>game</replace>
+      <replace>boxScore</replace>
+      <replace>BoxScore</replace>
+      <replace>O</replace>
+      <replace>league</replace>
+      <replace>team</replace>
+      <replace>mPlayersDao</replace>
+      <replace>BattingStats</replace>
+      <replace>PitchingStats</replace>
+      <replace>VISIBLE</replace>
+      <replace>saveOrganizationBinding</replace>
+      <replace>invalidDatabaseSetupNewLeague(orgById)</replace>
+      <replace>t</replace>
+      <replace>StatsForYear(year)</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_create_organization.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_new_league_options.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_save_organization.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/SaveOrganizationFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/PickCountriesFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LeagueGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/DivisionGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/TeamGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/PitcherGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingLine.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/PitchingLine.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Game.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/OrganizationDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/LeagueDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/DivisionDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/PlayersDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/BattingStatsDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/PitchingStatsDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/PitchingLineDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/BattingLineDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/BoxScoreDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/ScheduleDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BoxScore.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/CityGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/TeamDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/GameDao.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_display_next_game.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/simRestOfGamesAsyncTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/TeamNameGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/loadAllTeamsInBackgroundTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueSetupActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Team.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Division.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/League.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/DataForMainScreen.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LineupAndDefense/PitchingRotationGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/HitterGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Repository/Repository.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/PitchingStats.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingStats.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/AtBatSimulator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Player.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Schedule.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Organization.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/ScheduleGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="991" />
+    <option name="y" value="3" />
+    <option name="width" value="930" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="baseballbythenumbers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="baseballbythenumbers" type="462c0819:PsiDirectoryNode" />
+              <item name="Generators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BaseballByTheNumbers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BaseballByTheNumbers" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="baseballbythenumbers" type="462c0819:PsiDirectoryNode" />
+              <item name="Simulators" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="device.picker.selection" value="Nexus_5X_API_27" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="project.structure.last.edited" value="Dependencies" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.example.android.baseballbythenumbers" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kirk\AndroidStudioProjects\BaseballByTheNumbers\app\src\main\res" />
+      <recent name="C:\Users\Kirk\AndroidStudioProjects\BaseballByTheNumbers\bnamegenerator\src\main\res" />
+      <recent name="C:\Users\Kirk\AndroidStudioProjects\BaseballByTheNumbers\nameGenerator\src\main\res\raw" />
+      <recent name="C:\Users\Kirk\AndroidStudioProjects\BaseballByTheNumbers\nameGenerator\src\main" />
+    </key>
+    <key name="android.template.packageName">
+      <recent name="com.example.android.baseballbythenumbers" />
+      <recent name="com.example.android.bnamegenerator" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.android.bnamegenerator" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.android.baseballbythenumbers.Repository" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.android.baseballbythenumbers" />
+      <recent name="com.example.android.baseballbythenumbers.Repository" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Android App.app">
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="C:/Users/Kirk/AndroidStudioProjects/BaseballByTheNumbers/app [androidDependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/app" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="androidDependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.C:/Users/Kirk/AndroidStudioProjects/BaseballByTheNumbers/app [androidDependencies]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f474be9a-2b31-4d02-9f1b-94216938f54d" name="Default Changelist" comment="" />
+      <created>1557508597648</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1557508597648</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Created TeamGenerator to create random teams">
+      <created>1559075495530</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1559075495530</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Created DefenseGenerator and LineupGenerator to generate defenses and lineups for teams.">
+      <created>1559152322604</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1559152322604</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added handedness to players and reworked the stat generation to better reflect stats that correlate other stats. (Speed effects basestealing, players that hit the ball hard have a better batting average, etc...)  Fixed some flaws in the lineup generator.">
+      <created>1559296779232</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1559296779233</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Implemented most of AtBatSimulator, added additional constants, added classes for holding batting and pitching stats.">
+      <created>1559680019742</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1559680019742</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fixed some errors with AtBatSimulator, adjusted some stat generation.">
+      <created>1559815257469</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1559815257469</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added Division Generator, fixed a few errors, implemented a defense from lineup option.  Also added a city generator and a team name generator.  Output isn't clean, but now able to simulate a whole game with two different teams.">
+      <created>1559893743162</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1559893743162</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added League and Level Generators, rearranged structure so that all Generators are under one package.  Added fatigue (Stamina Used) to the AtBatSimulator.">
+      <created>1560215267429</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1560215267429</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added GameGenerator.">
+      <created>1560223721652</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1560223721652</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added a Pitching Rotation Generator.  Added subbing pitchers when tired to the GameSimulation.">
+      <created>1560310937524</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1560310937524</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added logic to pinch hit for pitchers in appropriate situations.  DH is now set by home team, so both teams either use DH or don't.  At this point games simulate well, with both pinch hitting and pitcher substitution.  Also added a Runner class in order to correctly assign responsibility for the runner to the correct pitcher.">
+      <created>1560452999068</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1560452999068</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added room entities notation and some basic dao in order to get room database started and persist our organization/league/division/team/player data.">
+      <created>1560494959545</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1560494959545</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added Schedule and related classes.  Added ScheduleGenerator.  Added Schedule and all related classes to database in order to persist schedule.  Updated the Team class to include wins and losses.">
+      <created>1560846975141</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1560846975141</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Cleaned up gameLog output for display. Added gameLog output to various out and error scenarios.">
+      <created>1560935683964</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1560935683964</updated>
+    </task>
+    <task id="LOCAL-00014" summary="GameLog now correct, fixed a few errors and added missing portions.  Changed how pitchers were subbed when pinch hitting for a pitcher so that the new pitcher was not inserted into the defense until the end of the half inning.">
+      <created>1560977965378</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1560977965378</updated>
+    </task>
+    <task id="LOCAL-00015" summary="All stats should now populate as the game is played, including batting lines and pitching lines for the game.">
+      <created>1561077643683</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1561077643683</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Changed all ids and PrimaryKeys so that they are assigned instead of AutoGenerated.  This allows creation of the keys prior to saving in the database.  Also implemented Repository for database and a view model for Organization.">
+      <created>1561420641415</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1561420641415</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Started to implement screens.  Checks database for an Organization, if not found then it proceeds to the NewLeagueSetupActivity.  Custom setup is not complete yet.">
+      <created>1561536234247</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1561536234247</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Completed custom league setup.  Will now generate a new league and a schedule based on user inputs.  Fixed several errors I found with schedule generation.">
+      <created>1561707750593</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1561707750593</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Next game now displays on the main screen.  Database is saved after creation.">
+      <created>1561831517372</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1561831517372</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Games are simulated when using the simulate game button, still tracking down an error that is preventing stats from updating correctly...">
+      <created>1561977631513</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1561977631513</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Games now sim properly, still need to handle end of season (no more games on schedule) and playoffs.">
+      <created>1562026212603</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1562026212603</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4991708" visible="true" weight="0.23294243" />
+      <window_info id="Structure" order="2" sideWeight="0.50082916" side_tool="true" weight="0.23294243" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Build Variants" order="4" side_tool="true" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Designer" order="6" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Capture Tool" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.49840087" />
+      <window_info anchor="bottom" id="TODO" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.50159913" side_tool="true" />
+      <window_info anchor="bottom" id="Build" order="5" visible="true" weight="0.32666665" />
+      <window_info anchor="bottom" id="Android Profiler" order="6" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="7" />
+      <window_info anchor="bottom" id="Debug" order="8" sideWeight="0.49840087" />
+      <window_info anchor="bottom" id="Find" order="9" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="right" id="Gradle" order="1" weight="0.32995737" />
+      <window_info anchor="right" id="Theme Preview" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Assistant" order="4" weight="0.32995737" />
+      <window_info anchor="right" id="Preview" order="5" weight="0.32995737" />
+      <window_info anchor="right" id="Device File Explorer" order="6" side_tool="true" weight="0.32995737" />
+    </layout>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Created TeamGenerator to create random teams" />
+    <MESSAGE value="Created DefenseGenerator and LineupGenerator to generate defenses and lineups for teams." />
+    <MESSAGE value="Added handedness to players and reworked the stat generation to better reflect stats that correlate other stats. (Speed effects basestealing, players that hit the ball hard have a better batting average, etc...)  Fixed some flaws in the lineup generator." />
+    <MESSAGE value="Implemented most of AtBatSimulator, added additional constants, added classes for holding batting and pitching stats." />
+    <MESSAGE value="Fixed some errors with AtBatSimulator, adjusted some stat generation." />
+    <MESSAGE value="Added Division Generator, fixed a few errors, implemented a defense from lineup option.  Also added a city generator and a team name generator.  Output isn't clean, but now able to simulate a whole game with two different teams." />
+    <MESSAGE value="Added League and Level Generators, rearranged structure so that all Generators are under one package.  Added fatigue (Stamina Used) to the AtBatSimulator." />
+    <MESSAGE value="Added GameGenerator." />
+    <MESSAGE value="Added a Pitching Rotation Generator.  Added subbing pitchers when tired to the GameSimulation." />
+    <MESSAGE value="Added logic to pinch hit for pitchers in appropriate situations.  DH is now set by home team, so both teams either use DH or don't.  At this point games simulate well, with both pinch hitting and pitcher substitution.  Also added a Runner class in order to correctly assign responsibility for the runner to the correct pitcher." />
+    <MESSAGE value="Added room entities notation and some basic dao in order to get room database started and persist our organization/league/division/team/player data." />
+    <MESSAGE value="Added Schedule and related classes.  Added ScheduleGenerator.  Added Schedule and all related classes to database in order to persist schedule.  Updated the Team class to include wins and losses." />
+    <MESSAGE value="Cleaned up gameLog output for display. Added gameLog output to various out and error scenarios." />
+    <MESSAGE value="GameLog now correct, fixed a few errors and added missing portions.  Changed how pitchers were subbed when pinch hitting for a pitcher so that the new pitcher was not inserted into the defense until the end of the half inning." />
+    <MESSAGE value="All stats should now populate as the game is played, including batting lines and pitching lines for the game." />
+    <MESSAGE value="Changed all ids and PrimaryKeys so that they are assigned instead of AutoGenerated.  This allows creation of the keys prior to saving in the database.  Also implemented Repository for database and a view model for Organization." />
+    <MESSAGE value="Started to implement screens.  Checks database for an Organization, if not found then it proceeds to the NewLeagueSetupActivity.  Custom setup is not complete yet." />
+    <MESSAGE value="Completed custom league setup.  Will now generate a new league and a schedule based on user inputs.  Fixed several errors I found with schedule generation." />
+    <MESSAGE value="Next game now displays on the main screen.  Database is saved after creation." />
+    <MESSAGE value="Games are simulated when using the simulate game button, still tracking down an error that is preventing stats from updating correctly..." />
+    <MESSAGE value="Games now sim properly, still need to handle end of season (no more games on schedule) and playoffs." />
+    <option name="LAST_COMMIT_MESSAGE" value="Games now sim properly, still need to handle end of season (no more games on schedule) and playoffs." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java</url>
+          <line>319</line>
+          <properties />
+          <option name="timeStamp" value="445" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java</url>
+          <line>303</line>
+          <properties />
+          <option name="timeStamp" value="446" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>158</line>
+          <properties />
+          <option name="timeStamp" value="718" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java</url>
+          <line>263</line>
+          <properties />
+          <option name="timeStamp" value="720" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java</url>
+          <line>277</line>
+          <properties />
+          <option name="timeStamp" value="721" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java</url>
+          <line>273</line>
+          <properties />
+          <option name="timeStamp" value="725" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java</url>
+          <line>267</line>
+          <properties />
+          <option name="timeStamp" value="727" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java</url>
+          <line>270</line>
+          <properties />
+          <option name="timeStamp" value="728" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java</url>
+          <line>78</line>
+          <properties />
+          <option name="timeStamp" value="730" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java</url>
+          <line>81</line>
+          <properties />
+          <option name="timeStamp" value="731" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LeagueGenerator.java</url>
+          <line>44</line>
+          <properties />
+          <option name="timeStamp" value="732" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>191</line>
+          <properties />
+          <option name="timeStamp" value="733" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>200</line>
+          <properties />
+          <option name="timeStamp" value="734" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>209</line>
+          <properties />
+          <option name="timeStamp" value="735" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>228</line>
+          <properties />
+          <option name="timeStamp" value="736" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>217</line>
+          <properties />
+          <option name="timeStamp" value="737" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>268</line>
+          <properties />
+          <option name="timeStamp" value="738" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>277</line>
+          <properties />
+          <option name="timeStamp" value="739" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>120</line>
+          <properties />
+          <option name="timeStamp" value="740" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>126</line>
+          <properties />
+          <option name="timeStamp" value="741" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>123</line>
+          <properties />
+          <option name="timeStamp" value="742" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>130</line>
+          <properties />
+          <option name="timeStamp" value="743" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java</url>
+          <line>69</line>
+          <properties />
+          <option name="timeStamp" value="744" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java</url>
+          <line>39</line>
+          <properties />
+          <option name="timeStamp" value="745" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java</url>
+          <line>36</line>
+          <properties />
+          <option name="timeStamp" value="746" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>183</line>
+          <properties />
+          <option name="timeStamp" value="747" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueSetupActivity.java</url>
+          <line>66</line>
+          <properties />
+          <option name="timeStamp" value="748" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueSetupActivity.java</url>
+          <line>67</line>
+          <properties />
+          <option name="timeStamp" value="749" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java</url>
+          <line>116</line>
+          <properties />
+          <option name="timeStamp" value="750" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="app">
+        <watch expression="((MainActivity)this).nextGame" language="JAVA" custom="com.example.android.baseballbythenumbers.MainActivity" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>((MainActivity)this).nextGame</expression-string>
+        <language-id>JAVA</language-id>
+        <custom-info>com.example.android.baseballbythenumbers.MainActivity</custom-info>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>runDifferential</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>runnerOnThird</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>runnerOnSecond</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>runnerOnFirst</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>homePitchersUsed</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>visitorPitchersUsed</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/TeamDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_display_next_game.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MyPickCityRecyclerViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/simRestOfGamesAsyncTask.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/PickCountriesFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/TeamGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="75" column="88" selection-start-line="75" selection-start-column="88" selection-end-line="75" selection-end-column="88" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/GameDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/example/android/baseballbythenumbers/Database/PitchingStatsDao_Impl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="179" selection-start-line="179" selection-end-line="179" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/android.arch.persistence.room/runtime/1.1.1/ba5dd1320b8a0e9a5beb32eaa163a49abbe83e02/runtime-1.1.1-sources.jar!/android/arch/persistence/room/RoomDatabase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="199" selection-start-line="199" selection-end-line="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-28/android.jar!/java/lang/reflect/Method.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-28/android.jar!/android/os/Looper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="28" column="23" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
+          <folding>
+            <element signature="e#669#670#0" expanded="true" />
+            <element signature="e#720#721#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/PitchingStatsDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="30" column="57" selection-start-line="30" selection-start-column="57" selection-end-line="30" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/PitchingLineDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="31" column="62" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/raw/cities_metroarea.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="969">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/loadAllTeamsInBackgroundTask.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LineupAndDefense/LineupGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="135" selection-start-line="135" selection-end-line="135" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-28/android.jar!/java/lang/Class.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-28/android.jar!/java/lang/Object.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Division.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="138" column="5" selection-start-line="138" selection-start-column="5" selection-end-line="138" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Team.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="183" selection-start-line="183" selection-end-line="183" />
+          <folding>
+            <element signature="e#4377#4378#0" expanded="true" />
+            <element signature="e#4550#4551#0" expanded="true" />
+            <element signature="e#4575#4576#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/DataForMainScreen.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer2" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="5372">
+          <caret line="320" selection-start-line="320" selection-end-line="320" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/PitcherGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="131" column="13" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Constants/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="86" column="32" selection-start-line="86" selection-start-column="32" selection-end-line="86" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LineupAndDefense/PitchingRotationGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="75" column="36" selection-start-line="75" selection-start-column="36" selection-end-line="75" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/League.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="144" column="53" selection-start-line="144" selection-start-column="8" selection-end-line="144" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/HitterGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="648" column="131" lean-forward="true" selection-start-line="648" selection-start-column="31" selection-end-line="648" selection-end-column="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Database/BattingStatsDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2958">
+          <caret line="239" column="5" lean-forward="true" selection-start-line="230" selection-start-column="3" selection-end-line="239" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingLine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/PitchingStats.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="570" column="39" selection-start-line="570" selection-start-column="39" selection-end-line="570" selection-end-column="39" />
+          <folding>
+            <element signature="e#2769#2827#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="299" column="41" selection-start-line="299" selection-start-column="41" selection-end-line="299" selection-end-column="41" />
+          <folding>
+            <element signature="e#3628#3686#0" expanded="true" />
+            <element signature="e#10759#10760#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/AtBatSimulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="547">
+          <caret line="290" selection-start-line="290" selection-end-line="290" />
+          <folding>
+            <element signature="e#139308#139347#0" expanded="true" />
+            <element signature="e#139681#139720#0" expanded="true" />
+            <element signature="e#163024#163063#0" expanded="true" />
+            <element signature="e#163232#163272#0" expanded="true" />
+            <element signature="e#163457#163496#0" expanded="true" />
+            <element signature="e#170261#170262#0" expanded="true" />
+            <element signature="e#170294#170295#0" expanded="true" />
+            <element signature="e#170610#170611#0" expanded="true" />
+            <element signature="e#170637#170638#0" expanded="true" />
+            <element signature="e#170692#170693#0" expanded="true" />
+            <element signature="e#170742#170743#0" expanded="true" />
+            <element signature="e#170806#170807#0" expanded="true" />
+            <element signature="e#170844#170845#0" expanded="true" />
+            <element signature="e#170906#170907#0" expanded="true" />
+            <element signature="e#170942#170943#0" expanded="true" />
+            <element signature="e#170994#170995#0" expanded="true" />
+            <element signature="e#171024#171025#0" expanded="true" />
+            <element signature="e#171061#171062#0" expanded="true" />
+            <element signature="e#171097#171098#0" expanded="true" />
+            <element signature="e#171404#171405#0" expanded="true" />
+            <element signature="e#171438#171439#0" expanded="true" />
+            <element signature="e#171475#171476#0" expanded="true" />
+            <element signature="e#171507#171508#0" expanded="true" />
+            <element signature="e#171558#171559#0" expanded="true" />
+            <element signature="e#171587#171588#0" expanded="true" />
+            <element signature="e#171624#171625#0" expanded="true" />
+            <element signature="e#171658#171659#0" expanded="true" />
+            <element signature="e#171720#171721#0" expanded="true" />
+            <element signature="e#171755#171756#0" expanded="true" />
+            <element signature="e#171807#171808#0" expanded="true" />
+            <element signature="e#171849#171850#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Simulators/GameSimulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="883" selection-start-line="883" selection-end-line="883" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Organization.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="518">
+          <caret line="209" column="20" selection-start-line="209" selection-start-column="20" selection-end-line="209" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/example/android/baseballbythenumbers/Database/OrganizationDao_Impl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="292" selection-start-line="292" selection-end-line="292" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Repository/Repository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="120" selection-start-line="120" selection-end-line="120" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11780#11781#0" expanded="true" />
+            <element signature="e#11843#11844#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/BattingStats.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4736">
+          <caret line="493" column="5" selection-start-line="493" selection-start-column="5" selection-end-line="493" selection-end-column="5" />
+          <folding>
+            <element signature="e#2384#2442#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Data/Schedule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="120" column="8" selection-start-line="120" selection-start-column="8" selection-end-line="120" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1578#1636#0" expanded="true" />
+            <element signature="e#3039#3040#0" expanded="true" />
+            <element signature="e#3074#3075#0" expanded="true" />
+            <element signature="e#3127#3128#0" expanded="true" />
+            <element signature="e#3175#3176#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="274" column="50" selection-start-line="274" selection-start-column="50" selection-end-line="274" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="e#16914#16944#1" expanded="true" />
+            <element signature="e#20329#20330#0" expanded="true" />
+            <element signature="e#20381#20382#0" expanded="true" />
+            <element signature="e#22324#22325#0" expanded="true" />
+            <element signature="e#22376#22377#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-28/android.jar!/android/os/MessageQueue.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/ScheduleGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
+          <folding>
+            <element signature="e#745#746#0" expanded="true" />
+            <element signature="e#793#794#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/OrganizationGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="69" column="130" selection-start-line="69" selection-start-column="130" selection-end-line="69" selection-end-column="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/LeagueGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="41" column="65" selection-start-line="41" selection-start-column="65" selection-end-line="41" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/SaveOrganizationFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="93" selection-start-line="93" selection-end-line="93" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/PickCityFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="867">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueSetupActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="71" column="45" selection-start-line="71" selection-start-column="45" selection-end-line="71" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/DivisionGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/TeamNameGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1683">
+          <caret line="112" selection-start-line="112" selection-end-line="112" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/Generators/CityGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4998">
+          <caret line="320" column="19" selection-start-line="320" selection-start-column="19" selection-end-line="320" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/baseballbythenumbers/NewLeagueOptionsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="183" column="61" selection-start-line="183" selection-start-column="61" selection-end-line="183" selection-end-column="61" />
+          <folding>
+            <element signature="e#4309#6785#0" expanded="true" />
+            <element signature="e#6299#6640#0" expanded="true" />
+            <element signature="e#6639#6640#0" expanded="true" />
+            <element signature="e#6784#6785#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
