@@ -50,12 +50,12 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
-    public static AppDatabase getInstance(final Context context, final AppExecutors executors) {
+    public static AppDatabase getInstance(final Context context) {
         if (sInstance == null) {
             synchronized (AppDatabase.class) {
                 if (sInstance == null) {
                     Timber.d("Creating new database instance");
-                    sInstance = buildDatabase(context.getApplicationContext(), executors);
+                    sInstance = buildDatabase(context.getApplicationContext());
                     sInstance.updateDatabaseCreated(context.getApplicationContext());
                 }
             }
@@ -69,18 +69,17 @@ public abstract class AppDatabase extends RoomDatabase {
      * creates a new instance of the database.
      * The SQLite database is only created when it's accessed for the first time.
      */
-    private static AppDatabase buildDatabase(final Context appContext,
-                                             final AppExecutors executors) {
+    private static AppDatabase buildDatabase(final Context appContext) {
         return Room.databaseBuilder(appContext, AppDatabase.class, DATABASE_NAME)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        executors.diskIO().execute(new Runnable() {
+                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
                             @Override
                             public void run() {
                                 // Generate the database
-                                AppDatabase database = AppDatabase.getInstance(appContext, executors);
+                                AppDatabase database = AppDatabase.getInstance(appContext);
                                 // notify that the database was created and it's ready to be used
                                 database.setDatabaseCreated();
                             }

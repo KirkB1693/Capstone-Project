@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.BuildConfig;
 import com.example.android.baseballbythenumbers.Data.BattingStats;
@@ -122,13 +123,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (orgId != null) {                                 // If we have an orgId move forward
             updateUIFromDb(orgId);
-            new loadAllTeamsInBackgroundTask(mRepository).execute(orgId);
-            new loadAllGamesInBackgroundTask(mRepository).execute(orgId);
+            loadAllTeams(orgId);
+            loadAllGames(orgId);
         } else {
             goToNewLeagueSetupActivity();                   // Otherwise setup a new league
         }
 
     }
+
 
     private void updateUIFromDb(String orgId) {
         new getOrgFromDbAndCreateUserGameListAsyncTask(mRepository, organization).execute(orgId);
@@ -504,117 +506,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private class loadAllTeamsInBackgroundTask extends AsyncTask<String, Void, TreeMap<String, Team>> {
-        private Repository asyncRepository;
-
-        public loadAllTeamsInBackgroundTask(Repository repository) {
-            asyncRepository = repository;
-        }
-
-        @Override
-        protected TreeMap<String, Team> doInBackground(String... orgIds) {
-            List<League> leagueList = asyncRepository.getLeaguesForOrganization(orgIds[0]);
-            List<Division> divisionList = new ArrayList<>();
-            for (League league : leagueList) {
-                divisionList.addAll(asyncRepository.getDivisionsForLeague(league.getLeagueId()));
-            }
-            List<Team> teamList = new ArrayList<>();
-            for (Division division : divisionList) {
-                teamList.addAll(asyncRepository.getTeamsForDivision(division.getDivisionId()));
-            }
-            List<Player> playerList = new ArrayList<>();
-            for (Team team : teamList) {
-                team.setPlayers(asyncRepository.getPlayersForTeam(team.getTeamId()));
-                playerList.addAll(team.getPlayers());
-            }
-            for (Player player : playerList) {
-                List<BattingStats> battingStatsList = asyncRepository.getBattingStatsForPlayer(player.getPlayerId());
-                Collections.sort(battingStatsList);
-                player.setBattingStats(battingStatsList);
-                List<PitchingStats> pitchingStatsList = asyncRepository.getPitchingStatsForPlayer(player.getPlayerId());
-                Collections.sort(pitchingStatsList);
-                player.setPitchingStats(pitchingStatsList);
-            }
-            TreeMap<String, Team> teamTreeMap = new TreeMap<>();
-            if (!teamList.isEmpty()) {
-                for (Team team : teamList) {
-                    teamTreeMap.put(team.getTeamName(), team);
-                }
-                return teamTreeMap;
-            } else {
-                return null;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(TreeMap<String, Team> teams) {
-            super.onPostExecute(teams);
-            if (teams != null) {
-                listOfAllTeams = teams;
-                teamsAreLoaded = true;
-                if (orgLoaded) {
-                    combineTeamsWithOrganization();
-                    if (gamesAreLoaded) {
-                        generateListOfGamesForUser();
-                        nextGame = findNextUnplayedGame(gamesForUserToPlay);
-                        enableGamePlayButtons();
-                        updateUI();
-                    }
-                }
-            } else {
-                Timber.e("Error!!! Error loading teams... Teams TreeMap returned null.");
-            }
-        }
-    }
-
-    private class loadAllGamesInBackgroundTask extends AsyncTask<String, Void, TreeMap<Integer, List<Game>>> {
-        private Repository repository;
-
-        public loadAllGamesInBackgroundTask(Repository repository) {
-            this.repository = repository;
-        }
-
-        @Override
-        protected TreeMap<Integer, List<Game>> doInBackground(String... orgIds) {
-            Organization organization = repository.getOrganizationById(orgIds[0]);
-            List<Schedule> scheduleList = repository.getSchedulesForOrganization(orgIds[0]);
-            organization.setSchedules(scheduleList);
-            List<Game> gameList = repository.getGamesForSchedule(organization.getScheduleForCurrentYear().getScheduleId());
-            if (gameList == null) {
-                return null;
-            }
-            Collections.sort(gameList);
-            int numOfDaysInSchedule = gameList.get(gameList.size() - 1).getDay() + 1;
-            TreeMap<Integer, List<Game>> gamesTreeMap = new TreeMap<>();
-            for (int i = 0; i < numOfDaysInSchedule; i++) {
-                List<Game> gamesForDay = new ArrayList<>();
-                for (Game game : gameList) {
-                    if (game.getDay() == i) {
-                        gamesForDay.add(game);
-                    }
-                }
-                gamesTreeMap.put(i, gamesForDay);
-            }
-            return gamesTreeMap;
-
-        }
-
-        @Override
-        protected void onPostExecute(TreeMap<Integer, List<Game>> gamesTreeMap) {
-            super.onPostExecute(gamesTreeMap);
-            if (gamesTreeMap != null) {
-                listOfAllGamesByDay = gamesTreeMap;
-                gamesAreLoaded = true;
-                if (teamsAreLoaded && orgLoaded) {
-                    generateListOfGamesForUser();
-                    nextGame = findNextUnplayedGame(gamesForUserToPlay);
-                    enableGamePlayButtons();
-                    updateUI();
-                }
-            }
-        }
-    }
 
     private void enableGamePlayButtons() {
         mainBinding.editLineupButton.setEnabled(true);
@@ -622,4 +513,103 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.coachSetsLineupButton.setEnabled(true);
         mainBinding.startGameButton.setEnabled(true);
     }
+
+    private void loadAllTeams(final String orgId) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<League> leagueList = mRepository.getLeaguesForOrganization(orgId);
+                List<Division> divisionList = new ArrayList<>();
+                for (League league : leagueList) {
+                    divisionList.addAll(mRepository.getDivisionsForLeague(league.getLeagueId()));
+                }
+                List<Team> teamList = new ArrayList<>();
+                for (Division division : divisionList) {
+                    teamList.addAll(mRepository.getTeamsForDivision(division.getDivisionId()));
+                }
+                List<Player> playerList = new ArrayList<>();
+                for (Team team : teamList) {
+                    team.setPlayers(mRepository.getPlayersForTeam(team.getTeamId()));
+                    playerList.addAll(team.getPlayers());
+                }
+                for (Player player : playerList) {
+                    List<BattingStats> battingStatsList = mRepository.getBattingStatsForPlayer(player.getPlayerId());
+                    Collections.sort(battingStatsList);
+                    player.setBattingStats(battingStatsList);
+                    List<PitchingStats> pitchingStatsList = mRepository.getPitchingStatsForPlayer(player.getPlayerId());
+                    Collections.sort(pitchingStatsList);
+                    player.setPitchingStats(pitchingStatsList);
+                }
+                TreeMap<String, Team> teamTreeMap = new TreeMap<>();
+                if (!teamList.isEmpty()) {
+                    for (Team team : teamList) {
+                        teamTreeMap.put(team.getTeamName(), team);
+                    }
+                    listOfAllTeams = teamTreeMap;
+                    teamsAreLoaded = true;
+                    if (orgLoaded) {
+                        combineTeamsWithOrganization();
+                        if (gamesAreLoaded) {
+                            generateListOfGamesForUser();
+                            nextGame = findNextUnplayedGame(gamesForUserToPlay);
+                            AppExecutors.getInstance().mainThread().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    enableGamePlayButtons();
+                                    updateUI();
+                                }
+                            });
+                        }
+                    }
+
+                } else {
+                    Timber.e("Error!!! Error loading teams... teamList is empty.");
+                }
+            }
+        });
+
+    }
+
+    private void loadAllGames(final String orgId) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Organization organization = mRepository.getOrganizationById(orgId);
+                List<Schedule> scheduleList = mRepository.getSchedulesForOrganization(orgId);
+                organization.setSchedules(scheduleList);
+                List<Game> gameList = mRepository.getGamesForSchedule(organization.getScheduleForCurrentYear().getScheduleId());
+                if (gameList != null) {
+                    Collections.sort(gameList);
+                    int numOfDaysInSchedule = gameList.get(gameList.size() - 1).getDay() + 1;
+                    TreeMap<Integer, List<Game>> gamesTreeMap = new TreeMap<>();
+                    for (int i = 0; i < numOfDaysInSchedule; i++) {
+                        List<Game> gamesForDay = new ArrayList<>();
+                        for (Game game : gameList) {
+                            if (game.getDay() == i) {
+                                gamesForDay.add(game);
+                            }
+                        }
+                        gamesTreeMap.put(i, gamesForDay);
+                    }
+                    if (gamesTreeMap != null) {
+                        listOfAllGamesByDay = gamesTreeMap;
+                        gamesAreLoaded = true;
+                        if (teamsAreLoaded && orgLoaded) {
+                            generateListOfGamesForUser();
+                            nextGame = findNextUnplayedGame(gamesForUserToPlay);
+                            AppExecutors.getInstance().mainThread().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    enableGamePlayButtons();
+                                    updateUI();
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
 }

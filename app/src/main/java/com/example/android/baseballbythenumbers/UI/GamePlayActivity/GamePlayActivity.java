@@ -52,7 +52,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private Repository repository;
     private GameSimulator gameSimulator;
     private int homeErrorsAtGameStart;
-    private int vistorErrorsAtGameStart;
+    private int visitorErrorsAtGameStart;
     private boolean simRestOfGameInProgress;
     private boolean paused;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
@@ -113,7 +113,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         gameSimulator.startGame();
 
         homeErrorsAtGameStart = getTotalErrorsForTeam(homeTeam);
-        vistorErrorsAtGameStart = getTotalErrorsForTeam(visitingTeam);
+        visitorErrorsAtGameStart = getTotalErrorsForTeam(visitingTeam);
 
         updateUI();
     }
@@ -250,7 +250,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     updateVisitorHits();
                 }
                 if (gameSimulator.getErrorsMade() > 0) {
-                    activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - vistorErrorsAtGameStart)));
+                    activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - visitorErrorsAtGameStart)));
                 }
                 switch (inning) {
                     case 0:

@@ -26,17 +26,14 @@ import com.example.android.baseballbythenumbers.Repository.Repository;
  */
 public class BaseballByTheNumbersApp extends Application {
 
-    private AppExecutors mAppExecutors;
-
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mAppExecutors = new AppExecutors();
     }
 
     public AppDatabase getDatabase() {
-        return AppDatabase.getInstance(this, mAppExecutors);
+        return AppDatabase.getInstance(this);
     }
 
     public Repository getRepository() {

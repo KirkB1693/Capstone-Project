@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.os.AsyncTask;
 
+import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.Data.BattingLine;
 import com.example.android.baseballbythenumbers.Data.BattingStats;
 import com.example.android.baseballbythenumbers.Data.BoxScore;
@@ -39,81 +40,57 @@ public class Repository {
     private static Repository sInstance;
     private final AppDatabase mDatabase;
 
-    private BattingLineDao mBattingLineDao;
     private LiveData<List<BattingLine>> mBattingLines;
     private MutableLiveData<List<BattingLine>> mBattingLineSearchResults;
 
-    private BattingStatsDao mBattingStatsDao;
     private LiveData<List<BattingStats>> mBattingStats;
 
-    private BoxScoreDao mBoxScoreDao;
     private LiveData<List<BoxScore>> mBoxScore;
 
-    private DivisionDao mDivisionDao;
     private LiveData<List<Division>> mDivisions;
 
-    private GameDao mGameDao;
     private LiveData<List<Game>> mGames;
 
-    private LeagueDao mLeagueDao;
     private LiveData<List<League>> mLeagues;
 
-    private OrganizationDao mOrganizationDao;
     private LiveData<List<Organization>> mOrganizations;
 
-    private PitchingLineDao mPitchingLineDao;
     private LiveData<List<PitchingLine>> mPitchingLines;
 
-    private PitchingStatsDao mPitchingStatsDao;
     private LiveData<List<PitchingStats>> mPitchingStats;
 
-    private PlayersDao mPlayersDao;
     private LiveData<List<Player>> mPlayers;
 
-    private ScheduleDao mScheduleDao;
     private LiveData<List<Schedule>> mSchedules;
 
-    private TeamDao mTeamDao;
     private LiveData<List<Team>> mTeams;
 
     private Repository(final AppDatabase database) {
         mDatabase = database;
 
-        mBattingLineDao = database.getBattingLineDao();
-        mBattingLines = mBattingLineDao.getAllBattingLines();
+        mBattingLines = mDatabase.getBattingLineDao().getAllBattingLines();
 
-        mOrganizationDao = database.getOrganizationDao();
-        mOrganizations = mOrganizationDao.getAllOrganizations();
+        mOrganizations = mDatabase.getOrganizationDao().getAllOrganizations();
 
-        mScheduleDao = database.getScheduleDao();
-        mSchedules = mScheduleDao.getAllSchedules();
+        mSchedules = mDatabase.getScheduleDao().getAllSchedules();
 
-        mGameDao = database.getGameDao();
-        mGames = mGameDao.getAllGames();
+        mGames = mDatabase.getGameDao().getAllGames();
 
-        mBoxScoreDao = database.getBoxScoreDao();
-        mBoxScore = mBoxScoreDao.getAllBoxScores();
+        mBoxScore = mDatabase.getBoxScoreDao().getAllBoxScores();
 
-        mPitchingLineDao = database.getPitchingLineDao();
-        mPitchingLines = mPitchingLineDao.getAllPitchingLines();
+        mPitchingLines = mDatabase.getPitchingLineDao().getAllPitchingLines();
 
-        mLeagueDao = database.getLeagueDao();
-        mLeagues = mLeagueDao.getAllLeagues();
+        mLeagues = mDatabase.getLeagueDao().getAllLeagues();
 
-        mDivisionDao = database.getDivisionDao();
-        mDivisions = mDivisionDao.getAllDivisions();
+        mDivisions = mDatabase.getDivisionDao().getAllDivisions();
 
-        mTeamDao = database.getTeamDao();
-        mTeams = mTeamDao.getAllTeams();
+        mTeams = mDatabase.getTeamDao().getAllTeams();
 
-        mPlayersDao = database.getPlayersDao();
-        mPlayers = mPlayersDao.getAllPlayers();
+        mPlayers = mDatabase.getPlayersDao().getAllPlayers();
 
-        mBattingStatsDao = database.getBattingStatsDao();
-        mBattingStats = mBattingStatsDao.getAllBattingStats();
+        mBattingStats = mDatabase.getBattingStatsDao().getAllBattingStats();
 
-        mPitchingStatsDao = database.getPitchingStatsDao();
-        mPitchingStats = mPitchingStatsDao.getAllPitchingStats();
+        mPitchingStats = mDatabase.getPitchingStatsDao().getAllPitchingStats();
     }
 
     public static Repository getInstance(final AppDatabase database) {
@@ -128,19 +105,19 @@ public class Repository {
     }
 
     public LiveData<List<PitchingLine>> getLiveDataPitchingLinesForBoxScore(String boxScoreId){
-        return mPitchingLineDao.findLiveDataPitchingLinesForBoxScore(boxScoreId);
+        return mDatabase.getPitchingLineDao().findLiveDataPitchingLinesForBoxScore(boxScoreId);
     }
 
     public LiveData<List<BattingLine>> getLiveDataBattingLinesForBoxScore(String boxScoreId){
-        return mBattingLineDao.findLiveDataBattingLinesForBoxScore(boxScoreId);
+        return mDatabase.getBattingLineDao().findLiveDataBattingLinesForBoxScore(boxScoreId);
     }
 
     public LiveData<Game> getLiveDataForGame(final String gameId) {
-        LiveData<Game> gameLiveData = mGameDao.findGameWithGameId(gameId);
+        LiveData<Game> gameLiveData = mDatabase.getGameDao().findGameWithGameId(gameId);
         gameLiveData = Transformations.switchMap(gameLiveData, new Function<Game, LiveData<Game>>() {
             @Override
             public LiveData<Game> apply(final Game inputGame) {
-                LiveData<List<BoxScore>> boxScoreListLiveData = mBoxScoreDao.findLiveDataBoxScoresForGame(inputGame.getGameId());
+                LiveData<List<BoxScore>> boxScoreListLiveData = mDatabase.getBoxScoreDao().findLiveDataBoxScoresForGame(inputGame.getGameId());
                 LiveData<Game> outputGameLiveData = Transformations.map(boxScoreListLiveData, new Function<List<BoxScore>, Game>() {
                     @Override
                     public Game apply(List<BoxScore> inputBoxScoreList) {
@@ -161,21 +138,25 @@ public class Repository {
         return gameLiveData;
     }
 
-
     public void deleteAll()  {
-        new deleteAllOrganizationsAsyncTask(mOrganizationDao).execute();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getOrganizationDao().deleteAll();
+            }
+        });
     }
 
     public Organization getOrganizationById (String id) {
-        return mOrganizationDao.getOrganizationById(id);
+        return mDatabase.getOrganizationDao().getOrganizationById(id);
     }
 
     public List<Schedule> getSchedulesForOrganization (String orgId){
-        return mScheduleDao.getSchedulesForOrganization(orgId);
+        return mDatabase.getScheduleDao().getSchedulesForOrganization(orgId);
     }
 
     public Team getTeamWithTeamName (String teamName) {
-        return mTeamDao.getTeamWithTeamName(teamName);
+        return mDatabase.getTeamDao().getTeamWithTeamName(teamName);
     }
 
     public LiveData<List<BattingLine>> getAllBattingLines () {
@@ -183,180 +164,99 @@ public class Repository {
     }
 
     public List<BattingLine> getBattingLinesForBoxScore (String boxScoreId) {
-        return mBattingLineDao.findBattingLinesForBoxScore(boxScoreId);
+        return mDatabase.getBattingLineDao().findBattingLinesForBoxScore(boxScoreId);
     }
 
-    public void insertBattingLine (BattingLine battingLine) {
-        new insertBattingLineAsyncTask(mBattingLineDao).execute(battingLine);
+    public void insertBattingLine (final BattingLine battingLine) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingLineDao().insert(battingLine);
+            }
+        });
     }
 
-    private static class insertBattingLineAsyncTask extends AsyncTask<BattingLine, Void, Void> {
-
-        private BattingLineDao mAsyncTaskBattingLineDao;
-
-        insertBattingLineAsyncTask(BattingLineDao battingLineDao) {
-            mAsyncTaskBattingLineDao = battingLineDao;
-        }
-
-        @Override
-        protected Void doInBackground(final BattingLine... battingLines) {
-            mAsyncTaskBattingLineDao.insert(battingLines[0]);
-            return null;
-        }
+    public void insertAllBattingLines (final List<BattingLine> battingLines) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingLineDao().insertAll(battingLines);
+            }
+        });
     }
 
-    @SuppressWarnings("unchecked")
-    public void insertAllBattingLines (List<BattingLine> battingLines) {
-        new insertAllBattingLinesAsyncTask(mBattingLineDao).execute(battingLines);
+
+    public void updateBattingLine (final BattingLine battingLine) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingLineDao().update(battingLine);
+            }
+        });
     }
-
-    private static class insertAllBattingLinesAsyncTask extends AsyncTask<List<BattingLine>, Void, Void> {
-
-        private BattingLineDao mAsyncTaskBattingLineDao;
-
-        insertAllBattingLinesAsyncTask(BattingLineDao battingLineDao) {
-            mAsyncTaskBattingLineDao = battingLineDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<BattingLine>... battingLinesLists) {
-            mAsyncTaskBattingLineDao.insertAll(battingLinesLists[0]);
-            return null;
-        }
-
-    }
-
-    public void updateBattingLine (BattingLine battingLine) {
-        new updateBattingLineAsyncTask(mBattingLineDao).execute(battingLine);
-    }
-
-    private static class updateBattingLineAsyncTask extends AsyncTask<BattingLine, Void, Void>{
-        private BattingLineDao mAsyncTaskBattingLineDao;
-
-        updateBattingLineAsyncTask(BattingLineDao mBattingLineDao) {
-            mAsyncTaskBattingLineDao = mBattingLineDao;
-        }
-
-        @Override
-        protected Void doInBackground(BattingLine... battingLines) {
-            mAsyncTaskBattingLineDao.update(battingLines[0]);
-            return null;
-        }
-    }
-
 
     public LiveData<List<Organization>> getAllOrganizations () {
         return mOrganizations;
     }
 
     public Organization[] getAnyOrganization() {
-        return mOrganizationDao.getAnyOrganization();
+        return mDatabase.getOrganizationDao().getAnyOrganization();
     }
 
-    public void insertOrganization (Organization Organization) {
-        new insertOrganizationAsyncTask(mOrganizationDao).execute(Organization);
-    }
+    public void insertOrganization (final Organization Organization) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getOrganizationDao().insert(Organization);
+            }
+        });
 
-    private static class insertOrganizationAsyncTask extends AsyncTask<Organization, Void, Void> {
-
-        private OrganizationDao mAsyncTaskOrganizationDao;
-
-        insertOrganizationAsyncTask(OrganizationDao OrganizationDao) {
-            mAsyncTaskOrganizationDao = OrganizationDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Organization... Organizations) {
-            mAsyncTaskOrganizationDao.insert(Organizations[0]);
-            return null;
-        }
     }
 
 
 
-    public void updateOrganization (Organization Organization) {
-        new updateOrganizationAsyncTask(mOrganizationDao).execute(Organization);
+
+    public void updateOrganization (final Organization Organization) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getOrganizationDao().update(Organization);
+            }
+        });
     }
-
-    private static class updateOrganizationAsyncTask extends AsyncTask<Organization, Void, Void>{
-        private OrganizationDao mAsyncTaskOrganizationDao;
-
-        updateOrganizationAsyncTask(OrganizationDao mOrganizationDao) {
-            mAsyncTaskOrganizationDao = mOrganizationDao;
-        }
-
-        @Override
-        protected Void doInBackground(Organization... Organizations) {
-            mAsyncTaskOrganizationDao.update(Organizations[0]);
-            return null;
-        }
-    }
-
 
     public LiveData<List<Schedule>> getAllSchedules () {
         return mSchedules;
     }
 
-    public void insertSchedule (Schedule schedule) {
-        new insertScheduleAsyncTask(mScheduleDao).execute(schedule);
-    }
-
-    private static class insertScheduleAsyncTask extends AsyncTask<Schedule, Void, Void> {
-
-        private ScheduleDao mAsyncTaskScheduleDao;
-
-        insertScheduleAsyncTask(ScheduleDao ScheduleDao) {
-            mAsyncTaskScheduleDao = ScheduleDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Schedule... Schedules) {
-            mAsyncTaskScheduleDao.insert(Schedules[0]);
-            return null;
-        }
+    public void insertSchedule (final Schedule schedule) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getScheduleDao().insert(schedule);
+            }
+        });
     }
 
 
-
-    public void updateSchedule (Schedule schedule) {
-        new updateScheduleAsyncTask(mScheduleDao).execute(schedule);
+    public void updateSchedule (final Schedule schedule) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getScheduleDao().update(schedule);
+            }
+        });
     }
 
-    private static class updateScheduleAsyncTask extends AsyncTask<Schedule, Void, Void>{
-        private ScheduleDao mAsyncTaskScheduleDao;
-
-        updateScheduleAsyncTask(ScheduleDao mScheduleDao) {
-            mAsyncTaskScheduleDao = mScheduleDao;
-        }
-
-        @Override
-        protected Void doInBackground(Schedule... schedules) {
-            mAsyncTaskScheduleDao.update(schedules[0]);
-            return null;
-        }
-    }
 
     @SuppressWarnings("unchecked")
-    public void insertAllSchedules (List<Schedule> schedules) {
-        new insertAllSchedulesAsyncTask(mScheduleDao).execute(schedules);
-    }
-
-    private static class insertAllSchedulesAsyncTask extends AsyncTask<List<Schedule>, Void, Void> {
-
-        private ScheduleDao mAsyncTaskScheduleDao;
-
-        insertAllSchedulesAsyncTask(ScheduleDao scheduleDao) {
-            mAsyncTaskScheduleDao = scheduleDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<Schedule>... schedulesLists) {
-            mAsyncTaskScheduleDao.insertAll(schedulesLists[0]);
-            return null;
-        }
-
+    public void insertAllSchedules (final List<Schedule> schedules) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getScheduleDao().insertAll(schedules);
+            }
+        });
     }
 
 
@@ -365,76 +265,45 @@ public class Repository {
     }
     
     public List<Game> getGamesForSchedule(String scheduleId) {
-        return mGameDao.findGamesForSchedule(scheduleId); 
+        return mDatabase.getGameDao().findGamesForSchedule(scheduleId);
     }
     
     public List<Game> getGamesForDay (int day, String scheduleId) {
-        return mGameDao.findGamesForDayInSchedule(day, scheduleId);
+        return mDatabase.getGameDao().findGamesForDayInSchedule(day, scheduleId);
     }
 
     public List<Game> getGamesForTeamInSchedule(String teamName, String scheduleId){
-        return mGameDao.findGamesForTeamNameInSchedule(teamName, scheduleId);
+        return mDatabase.getGameDao().findGamesForTeamNameInSchedule(teamName, scheduleId);
     }
 
-    public void insertGame (Game game) {
-        new insertGameAsyncTask(mGameDao).execute(game);
-    }
-
-    private static class insertGameAsyncTask extends AsyncTask<Game, Void, Void> {
-
-        private GameDao mAsyncTaskGameDao;
-
-        insertGameAsyncTask(GameDao GameDao) {
-            mAsyncTaskGameDao = GameDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Game... Games) {
-            mAsyncTaskGameDao.insert(Games[0]);
-            return null;
-        }
+    public void insertGame (final Game game) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getGameDao().insert(game);
+            }
+        });
     }
 
 
-
-    public void updateGame (Game game) {
-        new updateGameAsyncTask(mGameDao).execute(game);
+    public void updateGame (final Game game) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getGameDao().update(game);
+            }
+        });
     }
 
-    private static class updateGameAsyncTask extends AsyncTask<Game, Void, Void>{
-        private GameDao mAsyncTaskGameDao;
-
-        updateGameAsyncTask(GameDao mGameDao) {
-            mAsyncTaskGameDao = mGameDao;
-        }
-
-        @Override
-        protected Void doInBackground(Game... games) {
-            int updateResult = mAsyncTaskGameDao.update(games[0]);
-            return null;
-        }
-    }
 
     @SuppressWarnings("unchecked")
-    public void insertAllGames (List<Game> games) {
-        new insertAllGamesAsyncTask(mGameDao).execute(games);
-    }
-
-    private static class insertAllGamesAsyncTask extends AsyncTask<List<Game>, Void, Void> {
-
-        private GameDao mAsyncTaskGameDao;
-
-        insertAllGamesAsyncTask(GameDao gameDao) {
-            mAsyncTaskGameDao = gameDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<Game>... gamesLists) {
-            mAsyncTaskGameDao.insertAll(gamesLists[0]);
-            return null;
-        }
-
+    public void insertAllGames (final List<Game> games) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getGameDao().insertAll(games);
+            }
+        });
     }
 
 
@@ -443,44 +312,25 @@ public class Repository {
     }
 
     public List<BoxScore> getBoxScoresForGame(String gameId) {
-        return mBoxScoreDao.findBoxScoresForGame(gameId);
+        return mDatabase.getBoxScoreDao().findBoxScoresForGame(gameId);
     }
 
-    public void insertBoxScore (BoxScore boxScore) {
-        new insertBoxScoreAsyncTask(mBoxScoreDao).execute(boxScore);
-    }
-
-    private static class insertBoxScoreAsyncTask extends AsyncTask<BoxScore, Void, Void> {
-
-        private BoxScoreDao mAsyncTaskBoxScoreDao;
-
-        insertBoxScoreAsyncTask(BoxScoreDao BoxScoreDao) {
-            mAsyncTaskBoxScoreDao = BoxScoreDao;
-        }
-
-        @Override
-        protected Void doInBackground(final BoxScore... BoxScores) {
-            mAsyncTaskBoxScoreDao.insert(BoxScores[0]);
-            return null;
-        }
+    public void insertBoxScore (final BoxScore boxScore) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBoxScoreDao().insert(boxScore);
+            }
+        });
     }
     
-    public void updateBoxScore (BoxScore boxScore) {
-        new updateBoxScoreAsyncTask(mBoxScoreDao).execute(boxScore);
-    }
-
-    private static class updateBoxScoreAsyncTask extends AsyncTask<BoxScore, Void, Void>{
-        private BoxScoreDao mAsyncTaskBoxScoreDao;
-
-        updateBoxScoreAsyncTask(BoxScoreDao mBoxScoreDao) {
-            mAsyncTaskBoxScoreDao = mBoxScoreDao;
-        }
-
-        @Override
-        protected Void doInBackground(BoxScore... boxScores) {
-            mAsyncTaskBoxScoreDao.update(boxScores[0]);
-            return null;
-        }
+    public void updateBoxScore (final BoxScore boxScore) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBoxScoreDao().update(boxScore);
+            }
+        });
     }
 
     public LiveData<List<PitchingLine>> getAllPitchingLines () {
@@ -488,68 +338,35 @@ public class Repository {
     }
 
     public List<PitchingLine> getPitchingLinesForBoxScore (String boxScoreId) {
-        return mPitchingLineDao.findPitchingLinesForBoxScore(boxScoreId);
+        return mDatabase.getPitchingLineDao().findPitchingLinesForBoxScore(boxScoreId);
     }
 
-    public void insertPitchingLine (PitchingLine pitchingLine) {
-        new insertPitchingLineAsyncTask(mPitchingLineDao).execute(pitchingLine);
+    public void insertPitchingLine (final PitchingLine pitchingLine) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingLineDao().insert(pitchingLine);
+            }
+        });
     }
 
-    private static class insertPitchingLineAsyncTask extends AsyncTask<PitchingLine, Void, Void> {
-
-        private PitchingLineDao mAsyncTaskPitchingLineDao;
-
-        insertPitchingLineAsyncTask(PitchingLineDao PitchingLineDao) {
-            mAsyncTaskPitchingLineDao = PitchingLineDao;
-        }
-
-        @Override
-        protected Void doInBackground(final PitchingLine... PitchingLines) {
-            mAsyncTaskPitchingLineDao.insert(PitchingLines[0]);
-            return null;
-        }
-    }
-
-
-
-    public void updatePitchingLine (PitchingLine pitchingLine) {
-        new updatePitchingLineAsyncTask(mPitchingLineDao).execute(pitchingLine);
-    }
-
-    private static class updatePitchingLineAsyncTask extends AsyncTask<PitchingLine, Void, Void>{
-        private PitchingLineDao mAsyncTaskPitchingLineDao;
-
-        updatePitchingLineAsyncTask(PitchingLineDao mPitchingLineDao) {
-            mAsyncTaskPitchingLineDao = mPitchingLineDao;
-        }
-
-        @Override
-        protected Void doInBackground(PitchingLine... pitchingLines) {
-            mAsyncTaskPitchingLineDao.update(pitchingLines[0]);
-            return null;
-        }
+    public void updatePitchingLine (final PitchingLine pitchingLine) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingLineDao().update(pitchingLine);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
-    public void insertAllPitchingLines (List<PitchingLine> pitchingLines) {
-        new insertAllPitchingLinesAsyncTask(mPitchingLineDao).execute(pitchingLines);
-    }
-
-    private static class insertAllPitchingLinesAsyncTask extends AsyncTask<List<PitchingLine>, Void, Void> {
-
-        private PitchingLineDao mAsyncTaskPitchingLineDao;
-
-        insertAllPitchingLinesAsyncTask(PitchingLineDao pitchingLineDao) {
-            mAsyncTaskPitchingLineDao = pitchingLineDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<PitchingLine>... pitchingLinesLists) {
-            mAsyncTaskPitchingLineDao.insertAll(pitchingLinesLists[0]);
-            return null;
-        }
-
+    public void insertAllPitchingLines (final List<PitchingLine> pitchingLines) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingLineDao().insertAll(pitchingLines);
+            }
+        });
     }
 
     public LiveData<List<League>> getAllLeagues () {
@@ -557,275 +374,149 @@ public class Repository {
     }
 
     public List<League> getLeaguesForOrganization (String orgId) {
-        return mLeagueDao.findLeaguesForOrganization(orgId);
+        return mDatabase.getLeagueDao().findLeaguesForOrganization(orgId);
     }
 
-    public void insertLeague (League league) {
-        new insertLeagueAsyncTask(mLeagueDao).execute(league);
-    }
-
-    private static class insertLeagueAsyncTask extends AsyncTask<League, Void, Void> {
-
-        private LeagueDao mAsyncTaskLeagueDao;
-
-        insertLeagueAsyncTask(LeagueDao LeagueDao) {
-            mAsyncTaskLeagueDao = LeagueDao;
-        }
-
-        @Override
-        protected Void doInBackground(final League... Leagues) {
-            mAsyncTaskLeagueDao.insert(Leagues[0]);
-            return null;
-        }
+    public void insertLeague (final League league) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getLeagueDao().insert(league);
+            }
+        });
     }
 
 
-
-    public void updateLeague (League league) {
-        new updateLeagueAsyncTask(mLeagueDao).execute(league);
+    public void updateLeague (final League league) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getLeagueDao().update(league);
+            }
+        });
     }
 
-    private static class updateLeagueAsyncTask extends AsyncTask<League, Void, Void>{
-        private LeagueDao mAsyncTaskLeagueDao;
-
-        updateLeagueAsyncTask(LeagueDao mLeagueDao) {
-            mAsyncTaskLeagueDao = mLeagueDao;
-        }
-
-        @Override
-        protected Void doInBackground(League... leagues) {
-            mAsyncTaskLeagueDao.update(leagues[0]);
-            return null;
-        }
-    }
 
     @SuppressWarnings("unchecked")
-    public void insertAllLeagues (List<League> leagues) {
-        new insertAllLeaguesAsyncTask(mLeagueDao).execute(leagues);
+    public void insertAllLeagues (final List<League> leagues) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getLeagueDao().insertAll(leagues);
+            }
+        });
     }
 
-    private static class insertAllLeaguesAsyncTask extends AsyncTask<List<League>, Void, Void> {
-
-        private LeagueDao mAsyncTaskLeagueDao;
-
-        insertAllLeaguesAsyncTask(LeagueDao leagueDao) {
-            mAsyncTaskLeagueDao = leagueDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<League>... leaguesLists) {
-            mAsyncTaskLeagueDao.insertAll(leaguesLists[0]);
-            return null;
-        }
-
-    }
 
     public LiveData<List<Division>> getAllDivisions () {
         return mDivisions;
     }
 
     public List<Division> getDivisionsForLeague(String leagueId) {
-        return mDivisionDao.findDivisionsForLeague(leagueId);
+        return mDatabase.getDivisionDao().findDivisionsForLeague(leagueId);
     }
 
-    public void insertDivision (Division division) {
-        new insertDivisionAsyncTask(mDivisionDao).execute(division);
+    public void insertDivision (final Division division) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getDivisionDao().insert(division);
+            }
+        });
     }
 
-    private static class insertDivisionAsyncTask extends AsyncTask<Division, Void, Void> {
-
-        private DivisionDao mAsyncTaskDivisionDao;
-
-        insertDivisionAsyncTask(DivisionDao DivisionDao) {
-            mAsyncTaskDivisionDao = DivisionDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Division... Divisions) {
-            mAsyncTaskDivisionDao.insert(Divisions[0]);
-            return null;
-        }
+    public void updateDivision (final Division division) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getDivisionDao().update(division);
+            }
+        });
     }
 
-
-
-    public void updateDivision (Division division) {
-        new updateDivisionAsyncTask(mDivisionDao).execute(division);
+    public void insertAllDivisions (final List<Division> divisions) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getDivisionDao().insertAll(divisions);
+            }
+        });
     }
 
-    private static class updateDivisionAsyncTask extends AsyncTask<Division, Void, Void>{
-        private DivisionDao mAsyncTaskDivisionDao;
-
-        updateDivisionAsyncTask(DivisionDao mDivisionDao) {
-            mAsyncTaskDivisionDao = mDivisionDao;
-        }
-
-        @Override
-        protected Void doInBackground(Division... divisions) {
-            mAsyncTaskDivisionDao.update(divisions[0]);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void insertAllDivisions (List<Division> divisions) {
-        new insertAllDivisionsAsyncTask(mDivisionDao).execute(divisions);
-    }
-
-    private static class insertAllDivisionsAsyncTask extends AsyncTask<List<Division>, Void, Void> {
-
-        private DivisionDao mAsyncTaskDivisionDao;
-
-        insertAllDivisionsAsyncTask(DivisionDao divisionDao) {
-            mAsyncTaskDivisionDao = divisionDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<Division>... divisionsLists) {
-            mAsyncTaskDivisionDao.insertAll(divisionsLists[0]);
-            return null;
-        }
-
-    }
 
     public LiveData<List<Team>> getAllTeams () {
         return mTeams;
     }
 
     public List<Team> getTeamsForDivision(String divisionId) {
-        return mTeamDao.findTeamsForDivision(divisionId);
+        return mDatabase.getTeamDao().findTeamsForDivision(divisionId);
     }
 
-    public void insertTeam (Team team) {
-        new insertTeamAsyncTask(mTeamDao).execute(team);
+    public void insertTeam (final Team team) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getTeamDao().insert(team);
+            }
+        });
     }
 
-    private static class insertTeamAsyncTask extends AsyncTask<Team, Void, Void> {
-
-        private TeamDao mAsyncTaskTeamDao;
-
-        insertTeamAsyncTask(TeamDao TeamDao) {
-            mAsyncTaskTeamDao = TeamDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Team... Teams) {
-            mAsyncTaskTeamDao.insert(Teams[0]);
-            return null;
-        }
+    public void updateTeam (final Team team) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getTeamDao().update(team);
+            }
+        });
     }
 
 
 
-    public void updateTeam (Team team) {
-        new updateTeamAsyncTask(mTeamDao).execute(team);
+    public void insertAllTeams (final List<Team> teams) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getTeamDao().insertAll(teams);
+            }
+        });
     }
 
-    private static class updateTeamAsyncTask extends AsyncTask<Team, Void, Void>{
-        private TeamDao mAsyncTaskTeamDao;
-
-        updateTeamAsyncTask(TeamDao mTeamDao) {
-            mAsyncTaskTeamDao = mTeamDao;
-        }
-
-        @Override
-        protected Void doInBackground(Team... teams) {
-            mAsyncTaskTeamDao.update(teams[0]);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void insertAllTeams (List<Team> teams) {
-        new insertAllTeamsAsyncTask(mTeamDao).execute(teams);
-    }
-
-    private static class insertAllTeamsAsyncTask extends AsyncTask<List<Team>, Void, Void> {
-
-        private TeamDao mAsyncTaskTeamDao;
-
-        insertAllTeamsAsyncTask(TeamDao teamDao) {
-            mAsyncTaskTeamDao = teamDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<Team>... teamsLists) {
-            mAsyncTaskTeamDao.insertAll(teamsLists[0]);
-            return null;
-        }
-
-    }
 
     public LiveData<List<Player>> getAllPlayers () {
         return mPlayers;
     }
 
     public List<Player> getPlayersForTeam(String teamId) {
-        return mPlayersDao.findPlayersForTeam(teamId);
+        return mDatabase.getPlayersDao().findPlayersForTeam(teamId);
     }
 
-    public void insertPlayer (Player player) {
-        new insertPlayerAsyncTask(mPlayersDao).execute(player);
-    }
-
-    private static class insertPlayerAsyncTask extends AsyncTask<Player, Void, Void> {
-
-        private PlayersDao mAsyncTaskPlayerDao;
-
-        insertPlayerAsyncTask(PlayersDao PlayerDao) {
-            mAsyncTaskPlayerDao = PlayerDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Player... Players) {
-            mAsyncTaskPlayerDao.insert(Players[0]);
-            return null;
-        }
+    public void insertPlayer (final Player player) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPlayersDao().insert(player);
+            }
+        });
     }
 
 
-
-    public void updatePlayer (Player player) {
-        new updatePlayerAsyncTask(mPlayersDao).execute(player);
+    public void updatePlayer (final Player player) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPlayersDao().update(player);
+            }
+        });
     }
 
-    private static class updatePlayerAsyncTask extends AsyncTask<Player, Void, Void>{
-        private PlayersDao mAsyncTaskPlayerDao;
 
-        updatePlayerAsyncTask(PlayersDao mPlayersDao) {
-            mAsyncTaskPlayerDao = mPlayersDao;
-        }
-
-        @Override
-        protected Void doInBackground(Player... players) {
-            mAsyncTaskPlayerDao.update(players[0]);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void insertAllPlayers (List<Player> players) {
-        new insertAllPlayersAsyncTask(mPlayersDao).execute(players);
-    }
-
-    private static class insertAllPlayersAsyncTask extends AsyncTask<List<Player>, Void, Void> {
-
-        private PlayersDao mAsyncTaskPlayerDao;
-
-        insertAllPlayersAsyncTask(PlayersDao playerDao) {
-            mAsyncTaskPlayerDao = playerDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<Player>... playersLists) {
-            mAsyncTaskPlayerDao.insertAll(playersLists[0]);
-            return null;
-        }
-
+    public void insertAllPlayers (final List<Player> players) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPlayersDao().insertAll(players);
+            }
+        });
     }
 
 
@@ -834,68 +525,36 @@ public class Repository {
     }
 
     public List<BattingStats> getBattingStatsForPlayer(String playerId) {
-        return mBattingStatsDao.findBattingStatsForPlayer(playerId);
+        return mDatabase.getBattingStatsDao().findBattingStatsForPlayer(playerId);
     }
 
-    public void insertBattingStats (BattingStats battingStats) {
-        new insertBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
-    }
-
-    private static class insertBattingStatsAsyncTask extends AsyncTask<BattingStats, Void, Void> {
-
-        private BattingStatsDao mAsyncTaskBattingStatsDao;
-
-        insertBattingStatsAsyncTask(BattingStatsDao battingStatsDao) {
-            mAsyncTaskBattingStatsDao = battingStatsDao;
-        }
-
-        @Override
-        protected Void doInBackground(final BattingStats... battingStats) {
-            mAsyncTaskBattingStatsDao.insert(battingStats[0]);
-            return null;
-        }
+    public void insertBattingStats (final BattingStats battingStats) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingStatsDao().insert(battingStats);
+            }
+        });
     }
 
 
-
-    public void updateBattingStats (BattingStats battingStats) {
-        new updateBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
+    public void updateBattingStats (final BattingStats battingStats) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingStatsDao().update(battingStats);
+            }
+        });
     }
 
-    private static class updateBattingStatsAsyncTask extends AsyncTask<BattingStats, Void, Void>{
-        private BattingStatsDao mAsyncTaskBattingStatsDao;
 
-        updateBattingStatsAsyncTask(BattingStatsDao mBattingStatsDao) {
-            mAsyncTaskBattingStatsDao = mBattingStatsDao;
-        }
-
-        @Override
-        protected Void doInBackground(BattingStats... battingStats) {
-            mAsyncTaskBattingStatsDao.update(battingStats[0]);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void insertAllBattingStats (List<BattingStats> battingStats) {
-        new insertAllBattingStatsAsyncTask(mBattingStatsDao).execute(battingStats);
-    }
-
-    private static class insertAllBattingStatsAsyncTask extends AsyncTask<List<BattingStats>, Void, Void> {
-
-        private BattingStatsDao mAsyncTaskBattingStatsDao;
-
-        insertAllBattingStatsAsyncTask(BattingStatsDao battingStatsDao) {
-            mAsyncTaskBattingStatsDao = battingStatsDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<BattingStats>... battingStatsList) {
-            mAsyncTaskBattingStatsDao.insertAll(battingStatsList[0]);
-            return null;
-        }
-
+    public void insertAllBattingStats (final List<BattingStats> battingStats) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getBattingStatsDao().insertAll(battingStats);
+            }
+        });
     }
 
     public LiveData<List<PitchingStats>> getAllPitchingStats () {
@@ -903,84 +562,36 @@ public class Repository {
     }
 
     public List<PitchingStats> getPitchingStatsForPlayer(String playerId) {
-        return mPitchingStatsDao.findPitchingStatsForPlayer(playerId);
+        return mDatabase.getPitchingStatsDao().findPitchingStatsForPlayer(playerId);
     }
 
-    public void insertPitchingStats (PitchingStats game) {
-        new insertPitchingStatsAsyncTask(mPitchingStatsDao).execute(game);
-    }
-
-    private static class insertPitchingStatsAsyncTask extends AsyncTask<PitchingStats, Void, Void> {
-
-        private PitchingStatsDao mAsyncTaskPitchingStatsDao;
-
-        insertPitchingStatsAsyncTask(PitchingStatsDao PitchingStatsDao) {
-            mAsyncTaskPitchingStatsDao = PitchingStatsDao;
-        }
-
-        @Override
-        protected Void doInBackground(final PitchingStats... PitchingStats) {
-            mAsyncTaskPitchingStatsDao.insert(PitchingStats[0]);
-            return null;
-        }
+    public void insertPitchingStats (final PitchingStats pitchingStats) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingStatsDao().insert(pitchingStats);
+            }
+        });
     }
 
 
-
-    public void updatePitchingStats (PitchingStats game) {
-        new updatePitchingStatsAsyncTask(mPitchingStatsDao).execute(game);
-    }
-
-    private static class updatePitchingStatsAsyncTask extends AsyncTask<PitchingStats, Void, Void>{
-        private PitchingStatsDao mAsyncTaskPitchingStatsDao;
-
-        updatePitchingStatsAsyncTask(PitchingStatsDao mPitchingStatsDao) {
-            mAsyncTaskPitchingStatsDao = mPitchingStatsDao;
-        }
-
-        @Override
-        protected Void doInBackground(PitchingStats... pitchingStats) {
-            mAsyncTaskPitchingStatsDao.update(pitchingStats[0]);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void insertAllPitchingStats (List<PitchingStats> pitchingStatsList) {
-        new insertAllPitchingStatsAsyncTask(mPitchingStatsDao).execute(pitchingStatsList);
-    }
-
-    private static class insertAllPitchingStatsAsyncTask extends AsyncTask<List<PitchingStats>, Void, Void> {
-
-        private PitchingStatsDao mAsyncTaskPitchingStatsDao;
-
-        insertAllPitchingStatsAsyncTask(PitchingStatsDao pitchingStatsDao) {
-            mAsyncTaskPitchingStatsDao = pitchingStatsDao;
-        }
-
-        @SafeVarargs
-        @Override
-        protected final Void doInBackground(final List<PitchingStats>... pitchingStatList) {
-            mAsyncTaskPitchingStatsDao.insertAll(pitchingStatList[0]);
-            return null;
-        }
-
+    public void updatePitchingStats (final PitchingStats pitchingStats) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingStatsDao().update(pitchingStats);
+            }
+        });
     }
 
 
-    private static class deleteAllOrganizationsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private OrganizationDao mAsyncTaskDao;
-
-        deleteAllOrganizationsAsyncTask(OrganizationDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            mAsyncTaskDao.deleteAll();
-            return null;
-        }
+    public void insertAllPitchingStats (final List<PitchingStats> pitchingStatsList) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.getPitchingStatsDao().insertAll(pitchingStatsList);
+            }
+        });
     }
-
 
 }
