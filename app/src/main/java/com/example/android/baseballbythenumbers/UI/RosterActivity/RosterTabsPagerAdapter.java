@@ -1,18 +1,22 @@
 package com.example.android.baseballbythenumbers.UI.RosterActivity;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 
+import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.R;
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
+import java.nio.LongBuffer;
+import java.util.ArrayDeque;
+import java.util.Map;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -21,11 +25,14 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
     private Team mTeam;
+    private Player mCurrentPlayer;
+    private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-    public RosterTabsPagerAdapter(Context context, FragmentManager fm, Team team) {
+    public RosterTabsPagerAdapter(Context context, FragmentManager fm, Team team, Player currentPlayer) {
         super(fm);
         mContext = context;
         mTeam = team;
+        mCurrentPlayer = currentPlayer;
     }
 
     @Override
@@ -38,10 +45,27 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
                 PitchingRotationFragment pitchingRotationFragment = PitchingRotationFragment.newInstance(mTeam);
                 return pitchingRotationFragment;
             case 2:
-                PlayerDetailFragment playerDetailFragment = PlayerDetailFragment.newInstance(mTeam);
+                PlayerDetailFragment playerDetailFragment = PlayerDetailFragment.newInstance(mCurrentPlayer);
                 return playerDetailFragment;
         }
         return null;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        registeredFragments.put(position, fragment);
+        return fragment;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        registeredFragments.remove(position);
+        super.destroyItem(container, position, object);
+    }
+
+    public Fragment getRegisteredFragment(int position) {
+        return registeredFragments.get(position);
     }
 
     @Nullable

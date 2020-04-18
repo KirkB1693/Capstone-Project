@@ -9,25 +9,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayerDetailBinding;
 
 public class PlayerDetailFragment extends Fragment {
 
-    private static final String ARG_TEAM = "team";
-    private Team mTeam;
-
+    private static final String ARG_PLAYER = "player";
+    private Player mPlayer;
     private FragmentPlayerDetailBinding playerDetailBinding;
 
     public PlayerDetailFragment(){
     }
 
-    public static PlayerDetailFragment newInstance(Team team) {
+    public static PlayerDetailFragment newInstance(Player player) {
         PlayerDetailFragment fragment = new PlayerDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_TEAM, team);
-        fragment.setArguments(args);
+        if (player != null) {
+            Bundle args = new Bundle();
+            args.putParcelable(ARG_PLAYER, player);
+            fragment.setArguments(args);
+        }
         return fragment;
     }
 
@@ -35,7 +37,7 @@ public class PlayerDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mTeam = getArguments().getParcelable(ARG_TEAM);
+            mPlayer = getArguments().getParcelable(ARG_PLAYER);
         }
     }
 
@@ -48,10 +50,38 @@ public class PlayerDetailFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARG_PLAYER, mPlayer);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mPlayer = savedInstanceState.getParcelable(ARG_PLAYER);
+            updateUI();
+        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateUI();
+    }
+
+    public void setPlayerToDisplayDetail (Player player) {
+        mPlayer = player;
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PLAYER, player);
+        this.setArguments(args);
+        updateUI();
+    }
+
+    private void updateUI() {
+        if (mPlayer != null) {
+            playerDetailBinding.playerDetailPlayerNameTv.setText(mPlayer.getName());
+        }
+    }
 
 }
