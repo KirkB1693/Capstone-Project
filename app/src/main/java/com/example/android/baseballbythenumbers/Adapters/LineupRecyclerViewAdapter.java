@@ -71,10 +71,10 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
 
         holder.mLineupPlayerPosition.setText(getPositionNameFromPrimaryPosition(holder.mPlayer.getPrimaryPosition()));
 
-        int contactRating = holder.mPlayer.getBattingContactRating(holder.mPlayer);
-        int eyeRating = holder.mPlayer.getBattingEyeRating(holder.mPlayer);
-        int powerRating = holder.mPlayer.getBattingPowerRating(holder.mPlayer);
-        int speedRating = holder.mPlayer.getBattingSpeedRating(holder.mPlayer);
+        int contactRating = holder.mPlayer.getBattingContactRating();
+        int eyeRating = holder.mPlayer.getBattingEyeRating();
+        int powerRating = holder.mPlayer.getBattingPowerRating();
+        int speedRating = holder.mPlayer.getBattingSpeedRating();
         int overallRating = (2 * (contactRating + eyeRating) + (powerRating + speedRating)) / 6;
         setProgressBarDrawable(overallRating, holder.mLineupPlayerOverallBattingRating);
         holder.mLineupPlayerOverallBattingRating.setProgress(overallRating);

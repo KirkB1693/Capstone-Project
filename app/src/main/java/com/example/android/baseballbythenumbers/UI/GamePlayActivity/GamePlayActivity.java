@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.Data.BattingLine;
@@ -44,6 +45,16 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     public static final int RUNNER_ON_SECOND_KEY = 2;
     public static final int RUNNER_ON_FIRST_KEY = 1;
     public static final int BATTER_KEY = 0;
+
+    public static final String CURRENT_GAME_STATE = "current_game_state";
+    public static final int INITIAL_GAME_STATE = 0;
+    public static final int USER_TEAM_PITCHING_GAME_STATE = 1;
+    public static final int USER_TEAM_BATTING_GAME_STATE = 2;
+    public static final int SIM_REST_OF_GAME_STATE = 3;
+    public static final int GAME_OVER_STATE = 4;
+
+    private int currentGameState;
+
     private Game game;
     private Team homeTeam;
     private Team visitingTeam;
@@ -65,6 +76,12 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         setContentView(R.layout.activity_game_play);
         activityGamePlayBinding = DataBindingUtil.setContentView(this, R.layout.activity_game_play);
 
+        if (savedInstanceState != null) {
+            currentGameState = savedInstanceState.getInt(CURRENT_GAME_STATE);
+        } else {
+            currentGameState = INITIAL_GAME_STATE;
+        }
+
         Intent intent = getIntent();
         if (intent != null) {
             Bundle extras = intent.getExtras();
@@ -76,7 +93,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     visitingTeam = extras.getParcelable(MainActivity.VISITING_TEAM_EXTRA);
                     usersTeamName = extras.getString(MainActivity.USER_TEAM_NAME);
                     initializeScoreboard();
-                    GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game);
+                    GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game, currentGameState);
                     ViewPager viewPager = findViewById(R.id.view_pager);
                     viewPager.setAdapter(gamePlayTabsPagerAdapter);
                     TabLayout tabs = findViewById(R.id.tabs);
@@ -88,6 +105,14 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 }
             }
         }
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_GAME_STATE, currentGameState);
     }
 
     private void initializeScoreboard() {
@@ -145,6 +170,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
         switch (buttonId) {
             case R.id.pinch_hit_button:
+                Toast.makeText(this, "This will allow you to choose a pinch hitter in the future.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sim_this_at_bat_button:
                 if (!isGameOver()) {
@@ -155,12 +181,10 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 paused = true;
                 simRestOfGameInProgress = false;
                 scheduledExecutorService.shutdownNow();
-                pauseButton.setVisibility(View.GONE);
-                simRestOfGameButton.setVisibility(View.VISIBLE);
-                simAtBatButton.setVisibility(View.VISIBLE);
                 setButtonsBasedOnHittingTeam();
                 break;
             case R.id.sub_pitcher_button:
+                Toast.makeText(this, "This will allow you to choose a relief pitcher in the future.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sim_rest_of_game_button:
                 if (!isGameOver()) {
@@ -170,9 +194,12 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     subPitcherButton.setVisibility(View.GONE);
                     simAtBatButton.setVisibility(View.GONE);
                     simRestOfGameInProgress = true;
+                    currentGameState = SIM_REST_OF_GAME_STATE;
                     simRestOfGame();
                 }
                 break;
+            case R.id.finalize_game_button:
+                setEndGameButtonsOnManageGameFragment();
         }
     }
 
@@ -181,23 +208,21 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             String fragmentTag = makeFragmentName(R.id.view_pager, 0);
             Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
             if (manageGameFragment != null && manageGameFragment.isVisible()) {
-                Button pinchHitButton = findViewById(R.id.pinch_hit_button);
-                Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
                 if (gameSimulator.isVisitorHitting()) {
                     if (visitingTeam.getTeamName().equals(usersTeamName)) {
-                        pinchHitButton.setVisibility(View.VISIBLE);
-                        subPitcherButton.setVisibility(View.GONE);
+                        ((ManageGameFragment) manageGameFragment).setTeamBattingVisibility();
+                        currentGameState = USER_TEAM_BATTING_GAME_STATE;
                     } else {
-                        pinchHitButton.setVisibility(View.GONE);
-                        subPitcherButton.setVisibility(View.VISIBLE);
+                        ((ManageGameFragment) manageGameFragment).setTeamPitchingVisibility();
+                        currentGameState = USER_TEAM_PITCHING_GAME_STATE;
                     }
                 } else {
                     if (visitingTeam.getTeamName().equals(usersTeamName)) {
-                        pinchHitButton.setVisibility(View.GONE);
-                        subPitcherButton.setVisibility(View.VISIBLE);
+                        ((ManageGameFragment) manageGameFragment).setTeamPitchingVisibility();
+                        currentGameState = USER_TEAM_PITCHING_GAME_STATE;
                     } else {
-                        pinchHitButton.setVisibility(View.VISIBLE);
-                        subPitcherButton.setVisibility(View.GONE);
+                        ((ManageGameFragment) manageGameFragment).setTeamBattingVisibility();
+                        currentGameState = USER_TEAM_BATTING_GAME_STATE;
                     }
                 }
             }
@@ -304,6 +329,15 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                             activityGamePlayBinding.inning12VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
                         }
                         break;
+                    default:
+                        if(!isGameOver()) {
+                            activityGamePlayBinding.inning12LabelTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12LabelTv.setText(String.format(Locale.getDefault(), "%d", inning));
+                            activityGamePlayBinding.inning12VisitorScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12HomeScoreTv.setVisibility(View.VISIBLE);
+                            activityGamePlayBinding.inning12VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        }
+                        break;
                 }
             } else {
                 activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.INVISIBLE);
@@ -353,6 +387,9 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     case 11:
                         activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
                         break;
+                    default:
+                        activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
+                        break;
                 }
 
             }
@@ -362,6 +399,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             animateRunners();
             if (isGameOver()) {
                 activityGamePlayBinding.gamePlayAtBatResultTv.setText("Game Over!");
+                setEndGameButtonsOnManageGameFragment();
                 processEndOfGame();
                 scheduledExecutorService.shutdownNow();
                 try {
@@ -369,27 +407,17 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                setEndGameButtonsOnManageGameFragment();
             } else {
                 setButtonsBasedOnHittingTeam();
             }
     }
 
     private void setEndGameButtonsOnManageGameFragment() {
+        currentGameState = GAME_OVER_STATE;
         String fragmentTag = makeFragmentName(R.id.view_pager, 0);
         Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (manageGameFragment != null && manageGameFragment.isVisible()) {
-            Button pauseButton = findViewById(R.id.pause_button);
-            Button pinchHitButton = findViewById(R.id.pinch_hit_button);
-            Button simRestOfGameButton = findViewById(R.id.sim_rest_of_game_button);
-            Button subPitcherButton = findViewById(R.id.sub_pitcher_button);
-            Button simAtBatButton = findViewById(R.id.sim_this_at_bat_button);
-
-            pauseButton.setVisibility(View.GONE);
-            pinchHitButton.setVisibility(View.GONE);
-            simRestOfGameButton.setVisibility(View.GONE);
-            subPitcherButton.setVisibility(View.GONE);
-            simAtBatButton.setVisibility(View.GONE);
+            ((ManageGameFragment) manageGameFragment).setEndOfGameVisibility();
         }
     }
 

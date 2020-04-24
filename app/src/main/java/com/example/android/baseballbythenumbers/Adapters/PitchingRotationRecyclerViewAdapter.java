@@ -83,10 +83,10 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
                 ", W " + holder.mPlayer.getPitchingStats().get(0).getWins() + ", L " + holder.mPlayer.getPitchingStats().get(0).getLosses() + ", S " + holder.mPlayer.getPitchingStats().get(0).getSaves();
         holder.mRotationPlayerStats.setText(currentStats);
 
-        int movementRating = holder.mPlayer.getMovementRating(holder.mPlayer);
-        int deceptionRating = holder.mPlayer.getDeceptionRating(holder.mPlayer);
-        int accuracyRating = holder.mPlayer.getAccuracyRating(holder.mPlayer);
-        int stamina = holder.mPlayer.getPitchingStaminaRating(holder.mPlayer);
+        int movementRating = holder.mPlayer.getMovementRating();
+        int deceptionRating = holder.mPlayer.getDeceptionRating();
+        int accuracyRating = holder.mPlayer.getAccuracyRating();
+        int stamina = holder.mPlayer.getPitchingStaminaRating();
         setProgressBarDrawable(stamina, holder.mRotationPlayerStamina);
         holder.mRotationPlayerStamina.setProgress(stamina);
 

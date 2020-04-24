@@ -11,13 +11,381 @@
             android:id="@+id/player_detail_player_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:textSize="18sp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/primary_dark_text"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Joe Player" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_player_name_tv" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <TextView
+            android:id="@+id/player_detail_batting_stats_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Batting Stats and Ratings"
+            android:textColor="@color/primary_dark_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+        <TextView
+            android:id="@+id/player_detail_pitching_stats_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Pitching Stats and Ratings"
+            android:textColor="@color/primary_dark_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <TextView
+            android:id="@+id/player_detail_position"
+            style="@style/LineupPlayerInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/player_detail_player_name_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/player_detail_player_name_tv"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="SP" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_batting_stats_label">
+
+            <TextView
+                android:id="@+id/player_detail_batting_stats_this_season"
+                style="@style/LineupPlayerInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Avg .360 , OBP .400, HR 5, SB 2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:weightSum="16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+            <TextView
+                android:id="@+id/player_detail_batting_contact_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Contact" />
+
+            <TextView
+                android:id="@+id/player_detail_batting_eye_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Eye" />
+
+
+            <TextView
+                android:id="@+id/player_detail_batting_power_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Power" />
+
+            <TextView
+                android:id="@+id/player_detail_batting_speed_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Speed" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:weightSum="16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+            <ProgressBar
+                android:id="@+id/player_detail_batting_contact_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="100"
+                android:progressDrawable="@drawable/player_rating_bar_green" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_batting_eye_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/player_rating_bar_yellow" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_batting_power_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="30"
+                android:progressDrawable="@drawable/player_rating_bar_red" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_batting_speed_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="30"
+                android:progressDrawable="@drawable/player_rating_bar_red" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:weightSum="12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_pitching_stats_label">
+
+            <TextView
+                android:id="@+id/player_detail_pitching_player_stats"
+                style="@style/LineupPlayerInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="ERA 3.60 , WHIP 1.40" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:weightSum="16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+            <TextView
+                android:id="@+id/player_detail_pitching_stamina_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Stamina" />
+
+            <TextView
+                android:id="@+id/player_detail_pitching_accuracy_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Accuracy" />
+
+            <TextView
+                android:id="@+id/player_detail_pitching_deception_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Deception" />
+
+            <TextView
+                android:id="@+id/player_detail_pitching_movement_label"
+                style="@style/BoxScoreData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center_horizontal"
+                android:text="Movement" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:weightSum="16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+            <ProgressBar
+                android:id="@+id/player_detail_pitching_stamina_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="100"
+                android:progressDrawable="@drawable/player_rating_bar_green" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_pitching_accuracy_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="100"
+                android:progressDrawable="@drawable/player_rating_bar_green" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_pitching_deception_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/player_rating_bar_yellow" />
+
+            <ProgressBar
+                android:id="@+id/player_detail_pitching_movement_pb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:max="100"
+                android:padding="7dp"
+                android:progress="30"
+                android:progressDrawable="@drawable/player_rating_bar_red" />
+
+
+        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>

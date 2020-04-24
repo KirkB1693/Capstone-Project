@@ -17,18 +17,20 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
     private Game mGame;
+    private int mCurrentGameState;
 
-    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game) {
+    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game, int currentGameState) {
         super(fm);
         mContext = context;
         mGame = game;
+        mCurrentGameState = currentGameState;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                ManageGameFragment manageGame = ManageGameFragment.newInstance();
+                ManageGameFragment manageGame = ManageGameFragment.newInstance(mCurrentGameState);
                 return manageGame;
             case 1:
                 PlayByPlayFragment playByPlay = PlayByPlayFragment.newInstance(mGame);
