@@ -54,6 +54,11 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mGameState = savedInstanceState.getInt(ARG_GAME_STATE);
+            updateUI();
+        }
+
     }
 
     @Override
@@ -65,14 +70,21 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameBinding.simThisAtBatButton.setOnClickListener(this);
         manageGameBinding.simRestOfGameButton.setOnClickListener(this);
         manageGameBinding.finalizeGameButton.setOnClickListener(this);
-        if (savedInstanceState != null) {
-            savedInstanceState.putInt(ARG_GAME_STATE, mGameState);
-        } else {
-            Bundle args = new Bundle();
-            args.putInt(ARG_GAME_STATE, mGameState);
-            this.setArguments(args);
+        if (getArguments() != null) {
+            mGameState = getArguments().getInt(ARG_GAME_STATE);
         }
+        updateUI();
+    }
 
+    public void setButtonsToDisplay(int gameState) {
+        mGameState = gameState;
+        Bundle args = new Bundle();
+        args.putInt(ARG_GAME_STATE, gameState);
+        this.setArguments(args);
+        updateUI();
+    }
+
+    private void updateUI() {
         switch (mGameState) {
             case GamePlayActivity.INITIAL_GAME_STATE:
                 setInitialGameVisibility();
@@ -94,8 +106,6 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
                 break;
         }
     }
-
-
 
 
     @Override
@@ -120,7 +130,14 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameClickListener.manageGameOnClickResponse(view.getId());
     }
 
-    public void setInitialGameVisibility(){
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ARG_GAME_STATE, mGameState);
+    }
+
+
+    private void setInitialGameVisibility(){
         manageGameBinding.pinchHitButton.setVisibility(View.GONE);
         manageGameBinding.subPitcherButton.setVisibility(View.GONE);
         manageGameBinding.pauseButton.setVisibility(View.GONE);
@@ -129,7 +146,7 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameBinding.simThisAtBatButton.setVisibility(View.VISIBLE);
     }
 
-    public void setTeamBattingVisibility() {
+    private void setTeamBattingVisibility() {
         manageGameBinding.pinchHitButton.setVisibility(View.VISIBLE);
         manageGameBinding.subPitcherButton.setVisibility(View.GONE);
         manageGameBinding.pauseButton.setVisibility(View.GONE);
@@ -138,7 +155,7 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameBinding.simThisAtBatButton.setVisibility(View.VISIBLE);
     }
 
-    public void setTeamPitchingVisibility() {
+    private void setTeamPitchingVisibility() {
         manageGameBinding.pinchHitButton.setVisibility(View.GONE);
         manageGameBinding.subPitcherButton.setVisibility(View.VISIBLE);
         manageGameBinding.pauseButton.setVisibility(View.GONE);
@@ -146,7 +163,8 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameBinding.simRestOfGameButton.setVisibility(View.VISIBLE);
         manageGameBinding.simThisAtBatButton.setVisibility(View.VISIBLE);
     }
-    public void setSimGameVisibility() {
+
+    private void setSimGameVisibility() {
         manageGameBinding.pinchHitButton.setVisibility(View.GONE);
         manageGameBinding.subPitcherButton.setVisibility(View.GONE);
         manageGameBinding.pauseButton.setVisibility(View.VISIBLE);
@@ -155,7 +173,7 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
         manageGameBinding.simThisAtBatButton.setVisibility(View.GONE);
     }
 
-    public void setEndOfGameVisibility(){
+    private void setEndOfGameVisibility(){
         manageGameBinding.finalizeGameButton.setVisibility(View.VISIBLE);
         manageGameBinding.pinchHitButton.setVisibility(View.GONE);
         manageGameBinding.simRestOfGameButton.setVisibility(View.GONE);

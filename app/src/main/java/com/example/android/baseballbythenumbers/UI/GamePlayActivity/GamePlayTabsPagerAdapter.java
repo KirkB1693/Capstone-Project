@@ -17,9 +17,9 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
     private Game mGame;
-    private int mCurrentGameState;
+    private Integer mCurrentGameState;
 
-    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game, int currentGameState) {
+    public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game, Integer currentGameState) {
         super(fm);
         mContext = context;
         mGame = game;
