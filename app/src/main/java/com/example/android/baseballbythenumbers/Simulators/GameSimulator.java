@@ -20,6 +20,11 @@ import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.google.gson.Gson;
+import com.example.android.baseballbythenumbers.JsonHelpers.JsonHelpers;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,7 +82,7 @@ public class GameSimulator {
     private TreeMap<Integer, Player> defense;
     private String visitingTeamName;
     private String homeTeamName;
-    private String batttingTeamName;
+    private String battingTeamName;
     private String fieldingTeamName;
     private Player pitcherOfRecordForWin;
     private Player pitcherOfRecordForLoss;
@@ -163,7 +168,7 @@ public class GameSimulator {
             currentBatter = currentAtBat.getCurrentBatter();
             outs = currentAtBat.getOuts();
             if (currentAtBat.isHit()) {
-                hitsInInning ++;
+                hitsInInning++;
             }
             checkIfFutureRunsAreEarned(currentAtBat);
 
@@ -200,7 +205,7 @@ public class GameSimulator {
         }
         gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         gameLog.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
-        gameLog.append(batttingTeamName).append(" now at bat : ");
+        gameLog.append(battingTeamName).append(" now at bat : ");
     }
 
     private void playGame() {
@@ -318,7 +323,7 @@ public class GameSimulator {
             currentBatter = currentBatterVisitor;
             lineup = visitingLineup;
             defense = homeDefense;
-            batttingTeamName = visitingTeamName;
+            battingTeamName = visitingTeamName;
             fieldingTeamName = homeTeamName;
             homeTeamFinishedAtBat = true;
         } else {
@@ -326,7 +331,7 @@ public class GameSimulator {
             currentBatter = currentBatterHome;
             lineup = homeLineup;
             defense = visitingDefense;
-            batttingTeamName = homeTeamName;
+            battingTeamName = homeTeamName;
             fieldingTeamName = visitingTeamName;
             homeTeamFinishedAtBat = false;
         }
@@ -355,7 +360,7 @@ public class GameSimulator {
                 pitcherOfRecordForHittingTeam = homeDefense.get(SCOREKEEPING_PITCHER);
             }
             gameLog.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
-            gameLog.append(batttingTeamName).append(" now at bat : ");
+            gameLog.append(battingTeamName).append(" now at bat : ");
         }
     }
 
@@ -1012,10 +1017,9 @@ public class GameSimulator {
         lineup = visitingLineup;
         defense = homeDefense;
 
-        homeTeamName = homeTeam.getTeamCity() + " " + homeTeam.getTeamName();
-        visitingTeamName = visitingTeam.getTeamCity() + " " + visitingTeam.getTeamName();
+        setTeamNames();
 
-        batttingTeamName = visitingTeamName;
+        battingTeamName = visitingTeamName;
         fieldingTeamName = homeTeamName;
 
         homeRelievers = PitchingRotationGenerator.getAvailableRelievers(homeTeam);
@@ -1081,6 +1085,11 @@ public class GameSimulator {
         initializeGameLog();
 
         homeTeamBattedInNinth = false;
+    }
+
+    private void setTeamNames() {
+        homeTeamName = homeTeam.getTeamCity() + " " + homeTeam.getTeamName();
+        visitingTeamName = visitingTeam.getTeamCity() + " " + visitingTeam.getTeamName();
     }
 
     private void initializeBoxScore(BoxScore boxScore, TreeMap<Integer, Player> lineup, TreeMap<Integer, Player> defense) {
@@ -1302,23 +1311,23 @@ public class GameSimulator {
         return errorsMade;
     }
 
-    public int getHitsInInning(){
+    public int getHitsInInning() {
         return hitsInInning;
     }
 
     public int getInningsPlayed() {
-        return (inningsPlayed/10);
+        return (inningsPlayed / 10);
     }
 
     public boolean isVisitorHitting() {
         return isVisitorHitting;
     }
 
-    public SpannableStringBuilder getCurrentAtBatSummary(){
+    public SpannableStringBuilder getCurrentAtBatSummary() {
         return atBatSummary;
     }
 
-    public int getVisitorScore(){
+    public int getVisitorScore() {
         return visitorScore;
     }
 
@@ -1360,5 +1369,49 @@ public class GameSimulator {
 
     public boolean didHomeTeamBatInNinth() {
         return homeTeamBattedInNinth;
+    }
+
+    public void continueGame(String storedGameData) {
+        setTeamNames();
+        restoreGameData(storedGameData);
+        return;
+    }
+
+
+    private void restoreGameData(String storedGameData) {
+        try {
+            Gson gson = new Gson();
+            JSONObject storedGameDataJson = new JSONObject(storedGameData);
+            JSONObject animationDataJson = storedGameDataJson.getJSONObject("animationData");
+            JsonHelpers jsonHelpers = new JsonHelpers();
+            animationData = jsonHelpers.getAnimationDataFromJson(animationDataJson);
+            areRunsEarned = storedGameDataJson.getBoolean("areRunsEarned");
+            atBatSummary = new SpannableStringBuilder();
+            String tempAtBatString = storedGameDataJson.getString("atBatSummary");
+            atBatSummary.append(tempAtBatString);
+            batterStaminaAdjustment = storedGameDataJson.getInt("batterStaminaAdjustment");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getGameSimulatorData() {
+        Gson gson = new Gson();
+
+        StringBuilder jsonSimulatorData = new StringBuilder();
+        jsonSimulatorData.append("{");
+        jsonSimulatorData.append(" \"animationData\" : ");
+        jsonSimulatorData.append(gson.toJson(animationData));
+        jsonSimulatorData.append(", \"areRunsEarned\" : ");
+        jsonSimulatorData.append(gson.toJson(areRunsEarned));
+        jsonSimulatorData.append(", \"atBatSummary\" : ");
+        jsonSimulatorData.append(gson.toJson(atBatSummary.toString()));
+        jsonSimulatorData.append(", \"batterStaminaAdjustment\" : ");
+        jsonSimulatorData.append(gson.toJson(batterStaminaAdjustment));
+        jsonSimulatorData.append("}");
+        return jsonSimulatorData.toString();
+    }
+
+    public void restoreGameSimulatorData(String storedGameData) {
     }
 }

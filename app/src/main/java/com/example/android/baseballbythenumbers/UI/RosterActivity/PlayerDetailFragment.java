@@ -72,6 +72,9 @@ public class PlayerDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            mPlayer = getArguments().getParcelable(ARG_PLAYER);
+        }
         updateUI();
     }
 

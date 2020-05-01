@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.UI.GamePlayActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -10,6 +11,7 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.View;
@@ -54,7 +56,17 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     public static final int SIM_REST_OF_GAME_STATE = 3;
     public static final int GAME_OVER_STATE = 4;
 
+    private static final String SAVED_GAME = "saved_game";
+    private static final String SAVED_ORGANIZATION = "saved_organization";
+    private static final String SAVED_HOME_TEAM = "saved_home_team";
+    private static final String SAVED_VISITING_TEAM = "saved_visiting_team";
+    private static final String SAVED_USER_TEAM_NAME = "saved_user_team_name";
+    private static final String SAVED_HOME_ERRORS_AT_START = "saved_home_errors_at_start";
+    private static final String SAVED_VISITOR_ERRORS_AT_START = "saved_visitor_errors_at_start";
+    private static final String SAVED_GAME_DATA = "saved_game_data";
+
     private int currentGameState;
+    private String savedGameData;
 
     private Game game;
     private Team homeTeam;
@@ -79,31 +91,47 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
         if (savedInstanceState != null) {
             currentGameState = savedInstanceState.getInt(CURRENT_GAME_STATE);
+            game = savedInstanceState.getParcelable(SAVED_GAME);
+            if (game != null) {
+                organization = savedInstanceState.getParcelable(SAVED_ORGANIZATION);
+                homeTeam = savedInstanceState.getParcelable(SAVED_HOME_TEAM);
+                visitingTeam = savedInstanceState.getParcelable(SAVED_VISITING_TEAM);
+                usersTeamName = savedInstanceState.getString(SAVED_USER_TEAM_NAME);
+                homeErrorsAtGameStart = savedInstanceState.getInt(SAVED_HOME_ERRORS_AT_START);
+                visitorErrorsAtGameStart = savedInstanceState.getInt(SAVED_VISITOR_ERRORS_AT_START);
+                GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game, currentGameState);
+                ViewPager viewPager = findViewById(R.id.view_pager);
+                viewPager.setAdapter(gamePlayTabsPagerAdapter);
+                TabLayout tabs = findViewById(R.id.tabs);
+                tabs.setupWithViewPager(viewPager);
+                activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
+                repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();
+                savedGameData = savedInstanceState.getString(SAVED_GAME_DATA, "");
+                continueGame();
+            }
         } else {
             currentGameState = INITIAL_GAME_STATE;
-        }
+            Intent intent = getIntent();
+            if (intent != null) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    game = extras.getParcelable(MainActivity.NEXT_GAME_EXTRA);
+                    if (game != null) {
+                        organization = extras.getParcelable(MainActivity.ORGANIZATION_EXTRA);
+                        homeTeam = extras.getParcelable(MainActivity.HOME_TEAM_EXTRA);
+                        visitingTeam = extras.getParcelable(MainActivity.VISITING_TEAM_EXTRA);
+                        usersTeamName = extras.getString(MainActivity.USER_TEAM_NAME);
+                        GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game, currentGameState);
+                        ViewPager viewPager = findViewById(R.id.view_pager);
+                        viewPager.setAdapter(gamePlayTabsPagerAdapter);
+                        TabLayout tabs = findViewById(R.id.tabs);
+                        tabs.setupWithViewPager(viewPager);
+                        activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
+                        repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();
+                        initializeScoreboard();
+                        setupGame();
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                game = extras.getParcelable(MainActivity.NEXT_GAME_EXTRA);
-                if (game != null) {
-                    organization = extras.getParcelable(MainActivity.ORGANIZATION_EXTRA);
-                    homeTeam = extras.getParcelable(MainActivity.HOME_TEAM_EXTRA);
-                    visitingTeam = extras.getParcelable(MainActivity.VISITING_TEAM_EXTRA);
-                    usersTeamName = extras.getString(MainActivity.USER_TEAM_NAME);
-                    initializeScoreboard();
-                    GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game, currentGameState);
-                    ViewPager viewPager = findViewById(R.id.view_pager);
-                    viewPager.setAdapter(gamePlayTabsPagerAdapter);
-                    TabLayout tabs = findViewById(R.id.tabs);
-                    tabs.setupWithViewPager(viewPager);
-                    activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
-                    repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();
-                    ;
-
-                    setupGame();
+                    }
                 }
             }
         }
@@ -111,10 +139,20 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_GAME_STATE, currentGameState);
+        outState.putParcelable(SAVED_GAME, game);
+        outState.putParcelable(SAVED_ORGANIZATION, organization);
+        outState.putParcelable(SAVED_HOME_TEAM, homeTeam);
+        outState.putParcelable(SAVED_VISITING_TEAM, visitingTeam);
+        outState.putString(SAVED_USER_TEAM_NAME, usersTeamName);
+        outState.putInt(SAVED_HOME_ERRORS_AT_START, homeErrorsAtGameStart);
+        outState.putInt(SAVED_VISITOR_ERRORS_AT_START, visitorErrorsAtGameStart);
+        savedGameData = gameSimulator.getGameSimulatorData();
+        outState.putString(SAVED_GAME_DATA, savedGameData);
     }
 
     private void initializeScoreboard() {
@@ -129,6 +167,16 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void setupGame() {
+        setupGameSimulator();
+        gameSimulator.startGame();
+
+        homeErrorsAtGameStart = getTotalErrorsForTeam(homeTeam);
+        visitorErrorsAtGameStart = getTotalErrorsForTeam(visitingTeam);
+
+        updateUI();
+    }
+
+    private void setupGameSimulator() {
         boolean homeTeamControl = false;
         boolean visitingTeamControl = false;
         if (homeTeam.getTeamName().equals(usersTeamName)) {
@@ -137,10 +185,22 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             visitingTeamControl = true;
         }
         gameSimulator = new GameSimulator(this, game, homeTeam, homeTeamControl, visitingTeam, visitingTeamControl, organization.getCurrentYear(), repository);
-        gameSimulator.startGame();
+    }
 
-        homeErrorsAtGameStart = getTotalErrorsForTeam(homeTeam);
-        visitorErrorsAtGameStart = getTotalErrorsForTeam(visitingTeam);
+    private void continueGame() {
+        setupGameSimulator();
+
+
+    /*    gameSimulator.setDefense();
+        gameSimulator.setHomeDefense();
+        gameSimulator.setVisitingDefense();
+        gameSimulator.setHomePinchHitters();
+        gameSimulator.setVisitorPinchHitters();
+        gameSimulator.setLineup();
+        gameSimulator.setHomeRelievers();
+        gameSimulator.setVisitorRelievers();*/
+
+        gameSimulator.continueGame(savedGameData);
 
         updateUI();
     }
@@ -157,9 +217,32 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     @Override
     public void onBackPressed() {
         // do something on back.
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (isGameOver()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Are you sure? By exiting you will lose all progress in this game");
+            alertDialogBuilder.setPositiveButton("Exit (Lose progress)", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("Stay here", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing as user is staying here
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
 
 
