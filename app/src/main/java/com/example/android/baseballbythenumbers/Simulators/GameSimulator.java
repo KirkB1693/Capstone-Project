@@ -23,6 +23,7 @@ import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.google.gson.Gson;
 import com.example.android.baseballbythenumbers.JsonHelpers.JsonHelpers;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -119,8 +120,10 @@ public class GameSimulator {
         this.context = context;
         this.game = game;
         this.homeTeam = homeTeam;
+        this.homeTeamName = homeTeam.getTeamName();
         this.homeTeamManualControl = homeTeamManualControl;
         this.visitingTeam = visitingTeam;
+        this.visitingTeamName = visitingTeam.getTeamName();
         this.visitingTeamManualControl = visitingTeamManualControl;
         this.year = year;
         mRepository = repository;
@@ -1380,7 +1383,6 @@ public class GameSimulator {
 
     private void restoreGameData(String storedGameData) {
         try {
-            Gson gson = new Gson();
             JSONObject storedGameDataJson = new JSONObject(storedGameData);
             JSONObject animationDataJson = storedGameDataJson.getJSONObject("animationData");
             JsonHelpers jsonHelpers = new JsonHelpers();
@@ -1390,6 +1392,80 @@ public class GameSimulator {
             String tempAtBatString = storedGameDataJson.getString("atBatSummary");
             atBatSummary.append(tempAtBatString);
             batterStaminaAdjustment = storedGameDataJson.getInt("batterStaminaAdjustment");
+            isVisitorHitting = storedGameDataJson.getBoolean("isVisitorHitting");
+            currentBatterHome = storedGameDataJson.getInt("currentBatterHome");
+            currentBatterVisitor = storedGameDataJson.getInt("currentBatterVisitor");
+            JSONObject homeDefenseJson = storedGameDataJson.getJSONObject("homeDefense");
+            homeDefense = jsonHelpers.getTreeMapDataFromJson(homeDefenseJson, homeTeam, visitingTeam);
+            JSONObject visitingDefenseJson = storedGameDataJson.getJSONObject("visitingDefense");
+            visitingDefense = jsonHelpers.getTreeMapDataFromJson(visitingDefenseJson, homeTeam, visitingTeam);
+            errorsMade = storedGameDataJson.getInt("errorsMade");
+            gameNotOver = storedGameDataJson.getBoolean("gameNotOver");
+            gameNotStarted = false;
+            gameState = storedGameDataJson.getInt("gameState");
+            hitsInInning = storedGameDataJson.getInt("hitsInInning");
+            homeCloserUsed = storedGameDataJson.getBoolean("homeCloserUsed");
+            visitorCloserUsed = storedGameDataJson.getBoolean("visitorCloserUsed");
+            JSONObject homeLineupJson = storedGameDataJson.getJSONObject("homeLineup");
+            homeLineup = jsonHelpers.getTreeMapDataFromJson(homeLineupJson, homeTeam, visitingTeam);
+            JSONObject visitingLineupJson = storedGameDataJson.getJSONObject("visitingLineup");
+            visitingLineup = jsonHelpers.getTreeMapDataFromJson(visitingLineupJson, homeTeam, visitingTeam);
+            JSONObject homePinchHittersJson = storedGameDataJson.getJSONObject("homePinchHitters");
+            homePinchHitters = jsonHelpers.getTreeMapDataFromJson(homePinchHittersJson, homeTeam, visitingTeam);
+            JSONObject visitorPinchHittersJson = storedGameDataJson.getJSONObject("visitorPinchHitters");
+            visitorPinchHitters = jsonHelpers.getTreeMapDataFromJson(visitorPinchHittersJson, homeTeam, visitingTeam);
+            homePitcherNumber = storedGameDataJson.getInt("homePitcherNumber");
+            visitorPitcherNumber = storedGameDataJson.getInt("visitorPitcherNumber");
+            JSONObject homeRelieversJson = storedGameDataJson.getJSONObject("homeRelievers");
+            homeRelievers = jsonHelpers.getTreeMapDataFromJson(homeRelieversJson, homeTeam, visitingTeam);
+            JSONObject visitorRelieversJson = storedGameDataJson.getJSONObject("visitorRelievers");
+            visitorRelievers = jsonHelpers.getTreeMapDataFromJson(visitorRelieversJson, homeTeam, visitingTeam);
+            homeScore = storedGameDataJson.getInt("homeScore");
+            visitorScore = storedGameDataJson.getInt("visitorScore");
+            isHomeTeamWinning = (homeScore > visitorScore);
+            isVisitingTeamWinning = (visitorScore > homeScore);
+            homeSubstituteNumber = storedGameDataJson.getInt("homeSubstituteNumber");
+            visitorSubstituteNumber = storedGameDataJson.getInt("visitorSubstituteNumber");
+            homeTeamBattedInNinth = storedGameDataJson.getBoolean("homeTeamBattedInNinth");
+            homeTeamFinishedAtBat = storedGameDataJson.getBoolean("homeTeamFinishedAtBat");
+            inningsPlayed = storedGameDataJson.getInt("inningsPlayed");
+            isHit = storedGameDataJson.getBoolean("isHit");
+
+            JSONObject pitcherOfRecordForHittingTeamString = storedGameDataJson.getJSONObject("pitcherOfRecordForHittingTeam");
+            pitcherOfRecordForHittingTeam = jsonHelpers.getPlayerFromJson(pitcherOfRecordForHittingTeamString);
+
+
+            if (storedGameDataJson.has("pitcherOfRecordForLoss") && storedGameDataJson.getString("pitcherOfRecordForLoss").toString() != "null") {
+                JSONObject pitcherOfRecordForLossString = storedGameDataJson.getJSONObject("pitcherOfRecordForLoss");
+                pitcherOfRecordForLoss = jsonHelpers.getPlayerFromJson(pitcherOfRecordForLossString);
+            }
+
+            if (storedGameDataJson.has("pitcherOfRecordForWin") && storedGameDataJson.getString("pitcherOfRecordForWin").toString() != "null") {
+                JSONObject pitcherOfRecordForWinString = storedGameDataJson.getJSONObject("pitcherOfRecordForWin");
+                pitcherOfRecordForWin = jsonHelpers.getPlayerFromJson(pitcherOfRecordForWinString);
+            }
+
+
+            pitcherStaminaAdjustment = storedGameDataJson.getInt("pitcherStaminaAdjustment");
+            JSONArray runnersJsonArray = storedGameDataJson.getJSONArray("runners");
+            runners = jsonHelpers.getRunnersDataFromJson(runnersJsonArray, homeTeam, visitingTeam);
+            runsScoredInHalfInning = storedGameDataJson.getInt("runsScoredInHalfInning");
+            switchSides = storedGameDataJson.getBoolean("switchSides");
+            year = storedGameDataJson.getInt("year");
+
+            if (isVisitorHitting) {
+                battingTeamName = visitingTeamName;
+                fieldingTeamName = homeTeamName;
+                currentBatter = currentBatterVisitor;
+                defense = homeDefense;
+                lineup = visitingLineup;
+            } else {
+                battingTeamName = homeTeamName;
+                fieldingTeamName = visitingTeamName;
+                currentBatter = currentBatterHome;
+                defense = visitingDefense;
+                lineup = homeLineup;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1408,6 +1484,81 @@ public class GameSimulator {
         jsonSimulatorData.append(gson.toJson(atBatSummary.toString()));
         jsonSimulatorData.append(", \"batterStaminaAdjustment\" : ");
         jsonSimulatorData.append(gson.toJson(batterStaminaAdjustment));
+        jsonSimulatorData.append(", \"currentBatterHome\" : ");
+        jsonSimulatorData.append(gson.toJson(currentBatterHome));
+        jsonSimulatorData.append(", \"currentBatterVisitor\" : ");
+        jsonSimulatorData.append(gson.toJson(currentBatterVisitor));
+        jsonSimulatorData.append(", \"isVisitorHitting\" : ");
+        jsonSimulatorData.append(gson.toJson(isVisitorHitting));
+        jsonSimulatorData.append(", \"homeDefense\" : ");
+        jsonSimulatorData.append(gson.toJson(homeDefense));
+        jsonSimulatorData.append(", \"visitingDefense\" : ");
+        jsonSimulatorData.append(gson.toJson(visitingDefense));
+        jsonSimulatorData.append(", \"errorsMade\" : ");
+        jsonSimulatorData.append(gson.toJson(errorsMade));
+        jsonSimulatorData.append(", \"gameNotOver\" : ");
+        jsonSimulatorData.append(gson.toJson(gameNotOver));
+        jsonSimulatorData.append(", \"gameState\" : ");
+        jsonSimulatorData.append(gson.toJson(gameState));
+        jsonSimulatorData.append(", \"hitsInInning\" : ");
+        jsonSimulatorData.append(gson.toJson(hitsInInning));
+        jsonSimulatorData.append(", \"homeCloserUsed\" : ");
+        jsonSimulatorData.append(gson.toJson(homeCloserUsed));
+        jsonSimulatorData.append(", \"visitorCloserUsed\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorCloserUsed));
+        jsonSimulatorData.append(", \"homeLineup\" : ");
+        jsonSimulatorData.append(gson.toJson(homeLineup));
+        jsonSimulatorData.append(", \"visitingLineup\" : ");
+        jsonSimulatorData.append(gson.toJson(visitingLineup));
+        jsonSimulatorData.append(", \"homePinchHitters\" : ");
+        jsonSimulatorData.append(gson.toJson(homePinchHitters));
+        jsonSimulatorData.append(", \"visitorPinchHitters\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorPinchHitters));
+        jsonSimulatorData.append(", \"homePitcherNumber\" : ");
+        jsonSimulatorData.append(gson.toJson(homePitcherNumber));
+        jsonSimulatorData.append(", \"visitorPitcherNumber\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorPitcherNumber));
+        jsonSimulatorData.append(", \"homeRelievers\" : ");
+        jsonSimulatorData.append(gson.toJson(homeRelievers));
+        jsonSimulatorData.append(", \"visitorRelievers\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorRelievers));
+        jsonSimulatorData.append(", \"homeScore\" : ");
+        jsonSimulatorData.append(gson.toJson(homeScore));
+        jsonSimulatorData.append(", \"visitorScore\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorScore));
+        jsonSimulatorData.append(", \"homeSubstituteNumber\" : ");
+        jsonSimulatorData.append(gson.toJson(homeSubstituteNumber));
+        jsonSimulatorData.append(", \"visitorSubstituteNumber\" : ");
+        jsonSimulatorData.append(gson.toJson(visitorSubstituteNumber));
+        jsonSimulatorData.append(", \"homeTeamBattedInNinth\" : ");
+        jsonSimulatorData.append(gson.toJson(homeTeamBattedInNinth));
+        jsonSimulatorData.append(", \"homeTeamFinishedAtBat\" : ");
+        jsonSimulatorData.append(gson.toJson(homeTeamFinishedAtBat));
+        jsonSimulatorData.append(", \"inningsPlayed\" : ");
+        jsonSimulatorData.append(gson.toJson(inningsPlayed));
+        jsonSimulatorData.append(", \"isHit\" : ");
+        jsonSimulatorData.append(gson.toJson(isHit));
+        jsonSimulatorData.append(", \"pitcherOfRecordForHittingTeam\" : ");
+
+        jsonSimulatorData.append(gson.toJson(pitcherOfRecordForHittingTeam));
+
+        jsonSimulatorData.append(", \"pitcherOfRecordForLoss\" : ");
+            jsonSimulatorData.append(gson.toJson(pitcherOfRecordForLoss));
+
+        jsonSimulatorData.append(", \"pitcherOfRecordForWin\" : ");
+            jsonSimulatorData.append(gson.toJson(pitcherOfRecordForWin));
+
+        jsonSimulatorData.append(", \"pitcherStaminaAdjustment\" : ");
+        jsonSimulatorData.append(gson.toJson(pitcherStaminaAdjustment));
+        jsonSimulatorData.append(", \"runners\" : ");
+        jsonSimulatorData.append(gson.toJson(runners));
+        jsonSimulatorData.append(", \"runsScoredInHalfInning\" : ");
+        jsonSimulatorData.append(gson.toJson(runsScoredInHalfInning));
+        jsonSimulatorData.append(", \"switchSides\" : ");
+        jsonSimulatorData.append(gson.toJson(switchSides));
+        jsonSimulatorData.append(", \"year\" : ");
+        jsonSimulatorData.append(gson.toJson(year));
+
         jsonSimulatorData.append("}");
         return jsonSimulatorData.toString();
     }

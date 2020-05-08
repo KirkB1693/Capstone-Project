@@ -190,16 +190,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private void continueGame() {
         setupGameSimulator();
 
-
-    /*    gameSimulator.setDefense();
-        gameSimulator.setHomeDefense();
-        gameSimulator.setVisitingDefense();
-        gameSimulator.setHomePinchHitters();
-        gameSimulator.setVisitorPinchHitters();
-        gameSimulator.setLineup();
-        gameSimulator.setHomeRelievers();
-        gameSimulator.setVisitorRelievers();*/
-
         gameSimulator.continueGame(savedGameData);
 
         updateUI();
