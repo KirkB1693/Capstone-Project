@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.UI.GamePlayActivity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -13,9 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
@@ -27,9 +26,16 @@ import com.example.android.baseballbythenumbers.Data.Runner;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 import com.example.android.baseballbythenumbers.UI.MainActivity.MainActivity;
+import com.example.android.baseballbythenumbers.ViewModels.GamePlayViewModel;
 import com.example.android.baseballbythenumbers.databinding.ActivityGamePlayBinding;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -56,11 +62,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     public static final int SIM_REST_OF_GAME_STATE = 3;
     public static final int GAME_OVER_STATE = 4;
 
-    private static final String SAVED_GAME = "saved_game";
-    private static final String SAVED_ORGANIZATION = "saved_organization";
-    private static final String SAVED_HOME_TEAM = "saved_home_team";
-    private static final String SAVED_VISITING_TEAM = "saved_visiting_team";
-    private static final String SAVED_USER_TEAM_NAME = "saved_user_team_name";
     private static final String SAVED_HOME_ERRORS_AT_START = "saved_home_errors_at_start";
     private static final String SAVED_VISITOR_ERRORS_AT_START = "saved_visitor_errors_at_start";
     private static final String SAVED_GAME_DATA = "saved_game_data";
@@ -74,13 +75,14 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private String usersTeamName;
     private Organization organization;
     private Repository repository;
-    private GameSimulator gameSimulator;
+    private ResourceProvider resourceProvider;
     private int homeErrorsAtGameStart;
     private int visitorErrorsAtGameStart;
     private boolean simRestOfGameInProgress;
     private boolean paused;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
+    private GamePlayViewModel gamePlayViewModel;
     private ActivityGamePlayBinding activityGamePlayBinding;
 
     @Override
@@ -88,15 +90,17 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         activityGamePlayBinding = DataBindingUtil.setContentView(this, R.layout.activity_game_play);
+        gamePlayViewModel = ViewModelProviders.of(this).get(GamePlayViewModel.class);
+        resourceProvider = ((BaseballByTheNumbersApp) getApplication()).getResourceProvider();
 
         if (savedInstanceState != null) {
             currentGameState = savedInstanceState.getInt(CURRENT_GAME_STATE);
-            game = savedInstanceState.getParcelable(SAVED_GAME);
+            game = gamePlayViewModel.getGame();
             if (game != null) {
-                organization = savedInstanceState.getParcelable(SAVED_ORGANIZATION);
-                homeTeam = savedInstanceState.getParcelable(SAVED_HOME_TEAM);
-                visitingTeam = savedInstanceState.getParcelable(SAVED_VISITING_TEAM);
-                usersTeamName = savedInstanceState.getString(SAVED_USER_TEAM_NAME);
+                organization = gamePlayViewModel.getOrganization();
+                homeTeam = gamePlayViewModel.getHomeTeam();
+                visitingTeam = gamePlayViewModel.getVisitingTeam();
+                usersTeamName = gamePlayViewModel.getUsersTeamName();
                 homeErrorsAtGameStart = savedInstanceState.getInt(SAVED_HOME_ERRORS_AT_START);
                 visitorErrorsAtGameStart = savedInstanceState.getInt(SAVED_VISITOR_ERRORS_AT_START);
                 GamePlayTabsPagerAdapter gamePlayTabsPagerAdapter = new GamePlayTabsPagerAdapter(this, getSupportFragmentManager(), game, currentGameState);
@@ -128,6 +132,12 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                         tabs.setupWithViewPager(viewPager);
                         activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
                         repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();
+                        gamePlayViewModel.setGame(game);
+                        gamePlayViewModel.setHomeTeam(homeTeam);
+                        gamePlayViewModel.setVisitingTeam(visitingTeam);
+                        gamePlayViewModel.setUsersTeamName(usersTeamName);
+                        gamePlayViewModel.setOrganization(organization);
+                        gamePlayViewModel.setRepository(repository);
                         initializeScoreboard();
                         setupGame();
 
@@ -144,16 +154,10 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_GAME_STATE, currentGameState);
-        outState.putParcelable(SAVED_GAME, game);
-        outState.putParcelable(SAVED_ORGANIZATION, organization);
-        outState.putParcelable(SAVED_HOME_TEAM, homeTeam);
-        outState.putParcelable(SAVED_VISITING_TEAM, visitingTeam);
-        outState.putString(SAVED_USER_TEAM_NAME, usersTeamName);
         outState.putInt(SAVED_HOME_ERRORS_AT_START, homeErrorsAtGameStart);
         outState.putInt(SAVED_VISITOR_ERRORS_AT_START, visitorErrorsAtGameStart);
-        savedGameData = gameSimulator.getGameSimulatorData();
-        outState.putString(SAVED_GAME_DATA, savedGameData);
     }
+
 
     private void initializeScoreboard() {
         activityGamePlayBinding.scoreboardHomeNameTv.setText(game.getHomeTeamName());
@@ -167,8 +171,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void setupGame() {
-        setupGameSimulator();
-        gameSimulator.startGame();
+        gamePlayViewModel.setupGameSimulator(resourceProvider);
+        gamePlayViewModel.getGameSimulator().startGame();
 
         homeErrorsAtGameStart = getTotalErrorsForTeam(homeTeam);
         visitorErrorsAtGameStart = getTotalErrorsForTeam(visitingTeam);
@@ -176,21 +180,10 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         updateUI();
     }
 
-    private void setupGameSimulator() {
-        boolean homeTeamControl = false;
-        boolean visitingTeamControl = false;
-        if (homeTeam.getTeamName().equals(usersTeamName)) {
-            homeTeamControl = true;
-        } else {
-            visitingTeamControl = true;
-        }
-        gameSimulator = new GameSimulator(this, game, homeTeam, homeTeamControl, visitingTeam, visitingTeamControl, organization.getCurrentYear(), repository);
-    }
 
     private void continueGame() {
-        setupGameSimulator();
 
-        gameSimulator.continueGame(savedGameData);
+        gamePlayViewModel.getGameSimulator().continueGame();
 
         updateUI();
     }
@@ -278,7 +271,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             String fragmentTag = makeFragmentName(R.id.view_pager, 0);
             Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
             if (manageGameFragment != null && manageGameFragment.isVisible()) {
-                if (gameSimulator.isVisitorHitting()) {
+                if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
                     if (visitingTeam.getTeamName().equals(usersTeamName)) {
                         currentGameState = USER_TEAM_BATTING_GAME_STATE;
                         ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
@@ -312,7 +305,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 GamePlayActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        gameSimulator.simAtBatWithHumanControl();
+                        gamePlayViewModel.getGameSimulator().simAtBatWithHumanControl();
                         updateUI();
                     }
                 });
@@ -324,30 +317,59 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void simCurrentAtBat() {
-        gameSimulator.simAtBatWithHumanControl();
+        gamePlayViewModel.getGameSimulator().simAtBatWithHumanControl();
         updateUI();
     }
 
     private void updateUI() {
-        Player currentPitcher = gameSimulator.getDefense().get(SCOREKEEPING_PITCHER);
+        Player currentPitcher = gamePlayViewModel.getGameSimulator().getDefense().get(SCOREKEEPING_PITCHER);
         if (currentPitcher != null) {
             displayCurrentPitcher(currentPitcher);
         }
-        Player currentBatter = gameSimulator.getLineup().get(gameSimulator.getCurrentBatter());
+        Player currentBatter = gamePlayViewModel.getGameSimulator().getLineup().get(gamePlayViewModel.getGameSimulator().getCurrentBatter());
         if (currentBatter != null) {
             displayCurrentBatter(currentBatter);
         }
-        int runs = gameSimulator.getRunsScoredInHalfInning();
-        int inning = gameSimulator.getInningsPlayed();
-        if (gameSimulator.isVisitorHitting()) {
+        activityGamePlayBinding.scoreboardVisitorNameTv.setText(visitingTeam.getTeamName());
+        activityGamePlayBinding.scoreboardHomeNameTv.setText(homeTeam.getTeamName());
+        setInningScoresOnScoreboard();
+        updateVisitorHits();
+        activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - visitorErrorsAtGameStart)));
+        updateHomeHits();
+        activityGamePlayBinding.scoreboardErrorsHomeTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(homeTeam) - homeErrorsAtGameStart)));
+
+        if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
             activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.VISIBLE);
             activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.INVISIBLE);
-            if (gameSimulator.getHitsInInning() > 0) {
-                updateVisitorHits();
+
+
+        } else {
+            activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.INVISIBLE);
+            activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.VISIBLE);
+
+        }
+        activityGamePlayBinding.gamePlayAtBatResultTv.setText(gamePlayViewModel.getGameSimulator().getCurrentAtBatSummary());
+        activityGamePlayBinding.scoreboardRunsVisitorTv.setText(String.format(Locale.getDefault(), "%d", gamePlayViewModel.getGameSimulator().getVisitorScore()));
+        activityGamePlayBinding.scoreboardRunsHomeTv.setText(String.format(Locale.getDefault(), "%d", gamePlayViewModel.getGameSimulator().getHomeScore()));
+        animateRunners();
+        if (isGameOver()) {
+            activityGamePlayBinding.gamePlayAtBatResultTv.setText("Game Over!");
+            setEndGameButtonsOnManageGameFragment();
+            processEndOfGame();
+            scheduledExecutorService.shutdownNow();
+            try {
+                scheduledExecutorService.awaitTermination(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            if (gameSimulator.getErrorsMade() > 0) {
-                activityGamePlayBinding.scoreboardErrorsVisitorTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(visitingTeam) - visitorErrorsAtGameStart)));
-            }
+        } else {
+            setButtonsBasedOnHittingTeam();
+        }
+    }
+
+    private void setInningScoresOnScoreboard() {
+        int inning = 0;
+        for (Integer runs : gamePlayViewModel.getGameSimulator().getRunsScoredByInningforVisitingTeam()) {
             switch (inning) {
                 case 0:
                     activityGamePlayBinding.inning1VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
@@ -403,22 +425,17 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 default:
                     if (!isGameOver()) {
                         activityGamePlayBinding.inning12LabelTv.setVisibility(View.VISIBLE);
-                        activityGamePlayBinding.inning12LabelTv.setText(String.format(Locale.getDefault(), "%d", inning));
+                        activityGamePlayBinding.inning12LabelTv.setText(String.format(Locale.getDefault(), "%d", (inning + 1)));
                         activityGamePlayBinding.inning12VisitorScoreTv.setVisibility(View.VISIBLE);
                         activityGamePlayBinding.inning12HomeScoreTv.setVisibility(View.VISIBLE);
                         activityGamePlayBinding.inning12VisitorScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
                     }
                     break;
             }
-        } else {
-            activityGamePlayBinding.scoreboardVisitorIconIv.setVisibility(View.INVISIBLE);
-            activityGamePlayBinding.scoreboardHomeIconIv.setVisibility(View.VISIBLE);
-            if (gameSimulator.getHitsInInning() > 0) {
-                updateHomeHits();
-            }
-            if (gameSimulator.getErrorsMade() > 0) {
-                activityGamePlayBinding.scoreboardErrorsHomeTv.setText(String.format(Locale.getDefault(), "%d", (getTotalErrorsForTeam(homeTeam) - homeErrorsAtGameStart)));
-            }
+            inning++;
+        }
+        inning = 0;
+        for (Integer runs : gamePlayViewModel.getGameSimulator().getRunsScoredByInningforHomeTeam()) {
             switch (inning) {
                 case 0:
                     activityGamePlayBinding.inning1HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
@@ -462,25 +479,10 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
                     break;
             }
+            inning++;
 
         }
-        activityGamePlayBinding.gamePlayAtBatResultTv.setText(gameSimulator.getCurrentAtBatSummary());
-        activityGamePlayBinding.scoreboardRunsVisitorTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getVisitorScore()));
-        activityGamePlayBinding.scoreboardRunsHomeTv.setText(String.format(Locale.getDefault(), "%d", gameSimulator.getHomeScore()));
-        animateRunners();
-        if (isGameOver()) {
-            activityGamePlayBinding.gamePlayAtBatResultTv.setText("Game Over!");
-            setEndGameButtonsOnManageGameFragment();
-            processEndOfGame();
-            scheduledExecutorService.shutdownNow();
-            try {
-                scheduledExecutorService.awaitTermination(10, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            setButtonsBasedOnHittingTeam();
-        }
+
     }
 
     private void setEndGameButtonsOnManageGameFragment() {
@@ -494,8 +496,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     private void processEndOfGame() {
 
-        game.setHomeScore(gameSimulator.getHomeScore());
-        game.setVisitorScore(gameSimulator.getVisitorScore());
+        game.setHomeScore(gamePlayViewModel.getGameSimulator().getHomeScore());
+        game.setVisitorScore(gamePlayViewModel.getGameSimulator().getVisitorScore());
         game.setPlayedGame(true);
 
         repository.updateGame(game);
@@ -518,16 +520,16 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private boolean homeTeamBattedInNinth() {
-        return gameSimulator.didHomeTeamBatInNinth();
+        return gamePlayViewModel.getGameSimulator().didHomeTeamBatInNinth();
     }
 
     private boolean isGameOver() {
-        return !gameSimulator.isGameNotOver();
+        return !(gamePlayViewModel.getGameSimulator().isGameNotOver());
     }
 
     private void animateRunners() {
         setRunnersOnUI(new Runner[]{null, null, null});
-        TreeMap<Integer, Pair<Integer, Boolean>> animationData = gameSimulator.getAnimationData();
+        TreeMap<Integer, Pair<Integer, Boolean>> animationData = gamePlayViewModel.getGameSimulator().getAnimationData();
         if (animationData != null) {
 
             Pair<Integer, Boolean> runnerOnThirdAnimationData = null;
@@ -574,7 +576,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                 @Override
                                 public void onAnimationEnd(Drawable drawable) {
                                     super.onAnimationEnd(drawable);
-                                    setRunnersOnUI(gameSimulator.getRunners());
+                                    setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                 }
                             });
                         }
@@ -599,7 +601,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                             @Override
                                             public void onAnimationEnd(Drawable drawable) {
                                                 super.onAnimationEnd(drawable);
-                                                setRunnersOnUI(gameSimulator.getRunners());
+                                                setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                             }
                                         });
                                     }
@@ -612,7 +614,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                             @Override
                                             public void onAnimationEnd(Drawable drawable) {
                                                 super.onAnimationEnd(drawable);
-                                                setRunnersOnUI(gameSimulator.getRunners());
+                                                setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                             }
                                         });
                                     }
@@ -649,7 +651,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                         @Override
                                                         public void onAnimationEnd(Drawable drawable) {
                                                             super.onAnimationEnd(drawable);
-                                                            setRunnersOnUI(gameSimulator.getRunners());
+                                                            setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                         }
                                                     });
                                                 }
@@ -662,7 +664,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                         @Override
                                                         public void onAnimationEnd(Drawable drawable) {
                                                             super.onAnimationEnd(drawable);
-                                                            setRunnersOnUI(gameSimulator.getRunners());
+                                                            setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                         }
                                                     });
                                                 }
@@ -709,7 +711,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                                     @Override
                                                                     public void onAnimationEnd(Drawable drawable) {
                                                                         super.onAnimationEnd(drawable);
-                                                                        setRunnersOnUI(gameSimulator.getRunners());
+                                                                        setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                                     }
                                                                 });
                                                             }
@@ -722,7 +724,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                                     @Override
                                                                     public void onAnimationEnd(Drawable drawable) {
                                                                         super.onAnimationEnd(drawable);
-                                                                        setRunnersOnUI(gameSimulator.getRunners());
+                                                                        setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                                     }
                                                                 });
                                                             }
@@ -780,7 +782,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                                                 @Override
                                                                                 public void onAnimationEnd(Drawable drawable) {
                                                                                     super.onAnimationEnd(drawable);
-                                                                                    setRunnersOnUI(gameSimulator.getRunners());
+                                                                                    setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                                                 }
                                                                             });
                                                                         }
@@ -793,7 +795,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                                                                                 @Override
                                                                                 public void onAnimationEnd(Drawable drawable) {
                                                                                     super.onAnimationEnd(drawable);
-                                                                                    setRunnersOnUI(gameSimulator.getRunners());
+                                                                                    setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                                                                                 }
                                                                             });
                                                                         }
@@ -820,7 +822,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         if (runnerOnFirstAnimationData.first != null && runnerOnFirstAnimationData.second != null) {
             switch (runnerOnFirstAnimationData.first) {
                 case 0:
-                    setRunnersOnUI(gameSimulator.getRunners());
+                    setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                     break;
                 case 1:
                     AnimatedVectorDrawableCompat firstToSecond = AnimatedVectorDrawableCompat.create(this, R.drawable.animate_first_to_second);
@@ -972,7 +974,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     });
                 }
             } else {
-                setRunnersOnUI(gameSimulator.getRunners());
+                setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
             }
         }
     }
@@ -981,7 +983,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         if (runnerOnSecondAnimationData.first != null && runnerOnSecondAnimationData.second != null) {
             switch (runnerOnSecondAnimationData.first) {
                 case 0:
-                    setRunnersOnUI(gameSimulator.getRunners());
+                    setRunnersOnUI(gamePlayViewModel.getGameSimulator().getRunners());
                     break;
                 case 1:
                     AnimatedVectorDrawableCompat secondToThird = AnimatedVectorDrawableCompat.create(this, R.drawable.animate_second_to_third);
@@ -1055,7 +1057,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void setRunnersOnUI(Runner[] runners) {
-        int gameState = gameSimulator.getGameState();
+        int gameState = gamePlayViewModel.getGameSimulator().getGameState();
         if (gameState >= 17) {
             gameState -= 16;
         } else if (gameState >= 9) {
@@ -1149,8 +1151,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         DecimalFormat decimalFormat = new DecimalFormat(".000");
         String batterInfo = currentBatter.getName() + "\n(AVG " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getAverage())
                 + ", OBP " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getOnBasePct()) + ")";
-        boolean batterIsTired = gameSimulator.getBatterStaminaAdjustment() > 0;
-        if (gameSimulator.isVisitorHitting()) {
+        boolean batterIsTired = gamePlayViewModel.getGameSimulator().getBatterStaminaAdjustment() > 0;
+        if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
             activityGamePlayBinding.gameScreenVisitorPlayerTv.setText(batterInfo);
             if (batterIsTired) {
                 activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.red));
@@ -1171,8 +1173,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private void displayCurrentPitcher(Player currentPitcher) {
         String pitcherInfo = currentPitcher.getName() + "\n(ERA " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getERA())
                 + ", WHIP " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getWHIP()) + ")";
-        boolean pitcherIsTired = gameSimulator.getPitcherStaminaAdjustment() > 0;
-        if (gameSimulator.isVisitorHitting()) {
+        boolean pitcherIsTired = gamePlayViewModel.getGameSimulator().getPitcherStaminaAdjustment() > 0;
+        if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
             activityGamePlayBinding.gameScreenHomePlayerTv.setText(pitcherInfo);
             if (pitcherIsTired) {
                 activityGamePlayBinding.gameScreenVisitorPlayerTv.setBackgroundColor(getResources().getColor(R.color.red));

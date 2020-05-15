@@ -26,6 +26,15 @@ import com.example.android.baseballbythenumbers.Repository.Repository;
  */
 public class BaseballByTheNumbersApp extends Application {
 
+    // Resource Provider
+    private ResourceProvider mResourceProvider;
+    public ResourceProvider getResourceProvider() {
+        if (mResourceProvider == null)
+            mResourceProvider = new ResourceProvider(this);
+
+        return mResourceProvider;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,4 +48,6 @@ public class BaseballByTheNumbersApp extends Application {
     public Repository getRepository() {
         return Repository.getInstance(getDatabase());
     }
+
+
 }

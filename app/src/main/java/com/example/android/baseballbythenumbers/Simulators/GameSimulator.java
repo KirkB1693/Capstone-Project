@@ -1,13 +1,9 @@
 package com.example.android.baseballbythenumbers.Simulators;
 
-import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.support.v4.util.Pair;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 
 import com.example.android.baseballbythenumbers.Data.BattingLine;
@@ -20,12 +16,7 @@ import com.example.android.baseballbythenumbers.Data.Team;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
-import com.google.gson.Gson;
-import com.example.android.baseballbythenumbers.JsonHelpers.JsonHelpers;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +35,7 @@ import static com.example.android.baseballbythenumbers.Simulators.AtBatSimulator
 public class GameSimulator {
 
     public static final int DEFAULT_RECOVERY = 15;
-    private Context context;
+    private ResourceProvider resourceProvider;
 
     private Team homeTeam;
 
@@ -108,6 +99,8 @@ public class GameSimulator {
     private SpannableStringBuilder atBatSummary;
     private Repository mRepository;
     private int gameState;
+    private ArrayList<Integer> runsScoredByInningforHomeTeam;
+    private ArrayList<Integer> runsScoredByInningforVisitingTeam;
     private TreeMap<Integer, Pair<Integer, Boolean>> animationData;
 
     private static SpannableStringBuilder gameLog;
@@ -116,8 +109,8 @@ public class GameSimulator {
 
     private Game game;
 
-    public GameSimulator(Context context, Game game, Team homeTeam, boolean homeTeamManualControl, Team visitingTeam, boolean visitingTeamManualControl, int year, Repository repository) {
-        this.context = context;
+    public GameSimulator(ResourceProvider resourceProvider, Game game, Team homeTeam, boolean homeTeamManualControl, Team visitingTeam, boolean visitingTeamManualControl, int year, Repository repository) {
+        this.resourceProvider = resourceProvider;
         this.game = game;
         this.homeTeam = homeTeam;
         this.homeTeamName = homeTeam.getTeamName();
@@ -156,7 +149,7 @@ public class GameSimulator {
             gameLog.append("\n\n");
 
             Player playerWePinchHitFor = shouldWePinchHit(lineup.get(currentBatter));
-            AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher(), year, mRepository);
+            AtBatSimulator currentAtBat = generateNewAtBat(resourceProvider, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher(), year, mRepository);
 
             gameLog.append(lineup.get(currentBatter).getName()).append(" : ");
             getBatterStaminaAdjustment(lineup.get(currentBatter));
@@ -202,10 +195,7 @@ public class GameSimulator {
     private void initializeGameLog() {
         int start = gameLog.length();
         gameLog.append("                             --- ").append(getInningString(inningsPlayed / 10 + 1)).append(" Inning ---                             \n\n");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
+
         gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         gameLog.append(defense.get(SCOREKEEPING_PITCHER).getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
         gameLog.append(battingTeamName).append(" now at bat : ");
@@ -217,7 +207,7 @@ public class GameSimulator {
             gameLog.append("\n\n");
 
             Player playerWePinchHitFor = shouldWePinchHit(lineup.get(currentBatter));
-            AtBatSimulator currentAtBat = generateNewAtBat(context, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher(), year, mRepository);
+            AtBatSimulator currentAtBat = generateNewAtBat(resourceProvider, freshCount, outs, currentBatter, lineup, runners, defense, getBattingLineForCurrentBatter(), getPitchingLineForCurrentPitcher(), year, mRepository);
 
             gameLog.append(lineup.get(currentBatter).getName()).append(" : ");
             getBatterStaminaAdjustment(lineup.get(currentBatter));
@@ -259,10 +249,25 @@ public class GameSimulator {
     private void updateRunsScored(AtBatSimulator currentAtBat) {
         if (isVisitorHitting) {
             visitorScore += currentAtBat.getRunsScored();
+
         } else {
             homeScore += currentAtBat.getRunsScored();
         }
         runsScoredInHalfInning += currentAtBat.getRunsScored();
+        int inningToUpdate = getInningsPlayed();
+        if(isVisitorHitting) {
+            if (runsScoredByInningforVisitingTeam.size()-1 < inningToUpdate) {
+                runsScoredByInningforVisitingTeam.add(runsScoredInHalfInning);
+            } else {
+                runsScoredByInningforVisitingTeam.set(inningToUpdate, runsScoredInHalfInning);
+            }
+        } else {
+            if (runsScoredByInningforHomeTeam.size()-1 < inningToUpdate) {
+                runsScoredByInningforHomeTeam.add(runsScoredInHalfInning);
+            } else {
+                runsScoredByInningforHomeTeam.set(inningToUpdate, runsScoredInHalfInning);
+            }
+        }
     }
 
     private void updatePitchersOfRecord(AtBatSimulator currentAtBat, Player pitcherOfRecordForHittingTeam) {
@@ -348,10 +353,7 @@ public class GameSimulator {
             start = gameLog.length();
             if (homeTeamFinishedAtBat) {
                 gameLog.append("                             --- ").append(getInningString(inningsPlayed / 10 + 1)).append(" Inning ---                             \n\n");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
+
                 gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             if (!isPitcher(defense.get(SCOREKEEPING_PITCHER))) {     // if we pinch hit for pitcher with a position player, we need a new pitcher
@@ -426,10 +428,6 @@ public class GameSimulator {
         visitorPitchersUsed.append(visitingDefense.get(SCOREKEEPING_PITCHER).getName()).append(" pitches thrown : ").append(visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
         start = gameLog.length();
         gameLog.append("\n\n                             --- GAME OVER!!! ---                             \n\n");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            gameLog.setSpan(new BackgroundColorSpan(context.getColor(R.color.colorPrimaryDark)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.white)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
 
         gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         gameLog.append("Final Score :\n").append(homeTeamName).append(" ").append(Integer.toString(homeScore)).append(" - ")
@@ -617,9 +615,7 @@ public class GameSimulator {
             homePitchersUsed.append(pitcher.getName()).append(" Pitches Thrown when subbed : ").append(pitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
                     .append(pinchHitter.getName()).append(" pinch hits in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
         }
-        int start = gameLog.length();
         gameLog.append("\n\nNow Pinch Hitting for ").append(pitcher.getName()).append(" : \n\n").append(pinchHitter.getName()).append(" : ");
-        formatSubstitution(start);
     }
 
     private Player getBestPinchHitter() {
@@ -902,16 +898,9 @@ public class GameSimulator {
                         .append(newPitcher.getName()).append(" enters the game in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
             }
         }
-        int start = gameLog.length();
         gameLog.append("\n\nNow Pitching : ").append(newPitcher.getName()).append(" ");
-        formatSubstitution(start);
     }
 
-    private void formatSubstitution(int start) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            gameLog.setSpan(new ForegroundColorSpan(context.getColor(R.color.colorPrimary)), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-    }
 
     private int checkSituationForBestRelieverToBringIn() {
         int pitchingScore = visitorScore;
@@ -1029,7 +1018,11 @@ public class GameSimulator {
         visitorRelievers = PitchingRotationGenerator.getAvailableRelievers(visitingTeam);
 
         homeScore = 0;
+        runsScoredByInningforHomeTeam = new ArrayList<>();
+        runsScoredByInningforHomeTeam.add(homeScore);
         visitorScore = 0;
+        runsScoredByInningforVisitingTeam = new ArrayList<>();
+        runsScoredByInningforVisitingTeam.add(visitorScore);
 
         inningsPlayed = 0;
 
@@ -1157,7 +1150,7 @@ public class GameSimulator {
     private String getInningString(int inningsPlayed) {
         switch (inningsPlayed) {
             case 1:
-                return context.getResources().getString(R.string.first_inning_label);
+                return resourceProvider.getString(R.string.first_inning_label);
             case 2:
                 return "Second";
             case 3:
@@ -1214,8 +1207,8 @@ public class GameSimulator {
         }
     }
 
-    private AtBatSimulator generateNewAtBat(Context context, int[] freshCount, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense, BattingLine battingLine, PitchingLine pitchingLine, int year, Repository repository) {
-        return new AtBatSimulator(context, freshCount, outs, currentBatter, lineupFromDefense, runners, defense, battingLine, pitchingLine, year, repository);
+    private AtBatSimulator generateNewAtBat(ResourceProvider resourceProvider, int[] freshCount, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense, BattingLine battingLine, PitchingLine pitchingLine, int year, Repository repository) {
+        return new AtBatSimulator(resourceProvider, freshCount, outs, currentBatter, lineupFromDefense, runners, defense, battingLine, pitchingLine, year, repository);
     }
 
     public static SpannableStringBuilder getGameRecapString() {
@@ -1374,195 +1367,19 @@ public class GameSimulator {
         return homeTeamBattedInNinth;
     }
 
-    public void continueGame(String storedGameData) {
+    public ArrayList<Integer> getRunsScoredByInningforHomeTeam() {
+        return runsScoredByInningforHomeTeam;
+    }
+
+    public ArrayList<Integer> getRunsScoredByInningforVisitingTeam() {
+        return runsScoredByInningforVisitingTeam;
+    }
+
+    public void continueGame() {
         setTeamNames();
-        restoreGameData(storedGameData);
         return;
     }
 
 
-    private void restoreGameData(String storedGameData) {
-        try {
-            JSONObject storedGameDataJson = new JSONObject(storedGameData);
-            JSONObject animationDataJson = storedGameDataJson.getJSONObject("animationData");
-            JsonHelpers jsonHelpers = new JsonHelpers();
-            animationData = jsonHelpers.getAnimationDataFromJson(animationDataJson);
-            areRunsEarned = storedGameDataJson.getBoolean("areRunsEarned");
-            atBatSummary = new SpannableStringBuilder();
-            String tempAtBatString = storedGameDataJson.getString("atBatSummary");
-            atBatSummary.append(tempAtBatString);
-            batterStaminaAdjustment = storedGameDataJson.getInt("batterStaminaAdjustment");
-            isVisitorHitting = storedGameDataJson.getBoolean("isVisitorHitting");
-            currentBatterHome = storedGameDataJson.getInt("currentBatterHome");
-            currentBatterVisitor = storedGameDataJson.getInt("currentBatterVisitor");
-            JSONObject homeDefenseJson = storedGameDataJson.getJSONObject("homeDefense");
-            homeDefense = jsonHelpers.getTreeMapDataFromJson(homeDefenseJson, homeTeam, visitingTeam);
-            JSONObject visitingDefenseJson = storedGameDataJson.getJSONObject("visitingDefense");
-            visitingDefense = jsonHelpers.getTreeMapDataFromJson(visitingDefenseJson, homeTeam, visitingTeam);
-            errorsMade = storedGameDataJson.getInt("errorsMade");
-            gameNotOver = storedGameDataJson.getBoolean("gameNotOver");
-            gameNotStarted = false;
-            gameState = storedGameDataJson.getInt("gameState");
-            hitsInInning = storedGameDataJson.getInt("hitsInInning");
-            homeCloserUsed = storedGameDataJson.getBoolean("homeCloserUsed");
-            visitorCloserUsed = storedGameDataJson.getBoolean("visitorCloserUsed");
-            JSONObject homeLineupJson = storedGameDataJson.getJSONObject("homeLineup");
-            homeLineup = jsonHelpers.getTreeMapDataFromJson(homeLineupJson, homeTeam, visitingTeam);
-            JSONObject visitingLineupJson = storedGameDataJson.getJSONObject("visitingLineup");
-            visitingLineup = jsonHelpers.getTreeMapDataFromJson(visitingLineupJson, homeTeam, visitingTeam);
-            JSONObject homePinchHittersJson = storedGameDataJson.getJSONObject("homePinchHitters");
-            homePinchHitters = jsonHelpers.getTreeMapDataFromJson(homePinchHittersJson, homeTeam, visitingTeam);
-            JSONObject visitorPinchHittersJson = storedGameDataJson.getJSONObject("visitorPinchHitters");
-            visitorPinchHitters = jsonHelpers.getTreeMapDataFromJson(visitorPinchHittersJson, homeTeam, visitingTeam);
-            homePitcherNumber = storedGameDataJson.getInt("homePitcherNumber");
-            visitorPitcherNumber = storedGameDataJson.getInt("visitorPitcherNumber");
-            JSONObject homeRelieversJson = storedGameDataJson.getJSONObject("homeRelievers");
-            homeRelievers = jsonHelpers.getTreeMapDataFromJson(homeRelieversJson, homeTeam, visitingTeam);
-            JSONObject visitorRelieversJson = storedGameDataJson.getJSONObject("visitorRelievers");
-            visitorRelievers = jsonHelpers.getTreeMapDataFromJson(visitorRelieversJson, homeTeam, visitingTeam);
-            homeScore = storedGameDataJson.getInt("homeScore");
-            visitorScore = storedGameDataJson.getInt("visitorScore");
-            isHomeTeamWinning = (homeScore > visitorScore);
-            isVisitingTeamWinning = (visitorScore > homeScore);
-            homeSubstituteNumber = storedGameDataJson.getInt("homeSubstituteNumber");
-            visitorSubstituteNumber = storedGameDataJson.getInt("visitorSubstituteNumber");
-            homeTeamBattedInNinth = storedGameDataJson.getBoolean("homeTeamBattedInNinth");
-            homeTeamFinishedAtBat = storedGameDataJson.getBoolean("homeTeamFinishedAtBat");
-            inningsPlayed = storedGameDataJson.getInt("inningsPlayed");
-            isHit = storedGameDataJson.getBoolean("isHit");
 
-            JSONObject pitcherOfRecordForHittingTeamString = storedGameDataJson.getJSONObject("pitcherOfRecordForHittingTeam");
-            pitcherOfRecordForHittingTeam = jsonHelpers.getPlayerFromJson(pitcherOfRecordForHittingTeamString);
-
-
-            if (storedGameDataJson.has("pitcherOfRecordForLoss") && storedGameDataJson.getString("pitcherOfRecordForLoss").toString() != "null") {
-                JSONObject pitcherOfRecordForLossString = storedGameDataJson.getJSONObject("pitcherOfRecordForLoss");
-                pitcherOfRecordForLoss = jsonHelpers.getPlayerFromJson(pitcherOfRecordForLossString);
-            }
-
-            if (storedGameDataJson.has("pitcherOfRecordForWin") && storedGameDataJson.getString("pitcherOfRecordForWin").toString() != "null") {
-                JSONObject pitcherOfRecordForWinString = storedGameDataJson.getJSONObject("pitcherOfRecordForWin");
-                pitcherOfRecordForWin = jsonHelpers.getPlayerFromJson(pitcherOfRecordForWinString);
-            }
-
-
-            pitcherStaminaAdjustment = storedGameDataJson.getInt("pitcherStaminaAdjustment");
-            JSONArray runnersJsonArray = storedGameDataJson.getJSONArray("runners");
-            runners = jsonHelpers.getRunnersDataFromJson(runnersJsonArray, homeTeam, visitingTeam);
-            runsScoredInHalfInning = storedGameDataJson.getInt("runsScoredInHalfInning");
-            switchSides = storedGameDataJson.getBoolean("switchSides");
-            year = storedGameDataJson.getInt("year");
-
-            if (isVisitorHitting) {
-                battingTeamName = visitingTeamName;
-                fieldingTeamName = homeTeamName;
-                currentBatter = currentBatterVisitor;
-                defense = homeDefense;
-                lineup = visitingLineup;
-            } else {
-                battingTeamName = homeTeamName;
-                fieldingTeamName = visitingTeamName;
-                currentBatter = currentBatterHome;
-                defense = visitingDefense;
-                lineup = homeLineup;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getGameSimulatorData() {
-        Gson gson = new Gson();
-
-        StringBuilder jsonSimulatorData = new StringBuilder();
-        jsonSimulatorData.append("{");
-        jsonSimulatorData.append(" \"animationData\" : ");
-        jsonSimulatorData.append(gson.toJson(animationData));
-        jsonSimulatorData.append(", \"areRunsEarned\" : ");
-        jsonSimulatorData.append(gson.toJson(areRunsEarned));
-        jsonSimulatorData.append(", \"atBatSummary\" : ");
-        jsonSimulatorData.append(gson.toJson(atBatSummary.toString()));
-        jsonSimulatorData.append(", \"batterStaminaAdjustment\" : ");
-        jsonSimulatorData.append(gson.toJson(batterStaminaAdjustment));
-        jsonSimulatorData.append(", \"currentBatterHome\" : ");
-        jsonSimulatorData.append(gson.toJson(currentBatterHome));
-        jsonSimulatorData.append(", \"currentBatterVisitor\" : ");
-        jsonSimulatorData.append(gson.toJson(currentBatterVisitor));
-        jsonSimulatorData.append(", \"isVisitorHitting\" : ");
-        jsonSimulatorData.append(gson.toJson(isVisitorHitting));
-        jsonSimulatorData.append(", \"homeDefense\" : ");
-        jsonSimulatorData.append(gson.toJson(homeDefense));
-        jsonSimulatorData.append(", \"visitingDefense\" : ");
-        jsonSimulatorData.append(gson.toJson(visitingDefense));
-        jsonSimulatorData.append(", \"errorsMade\" : ");
-        jsonSimulatorData.append(gson.toJson(errorsMade));
-        jsonSimulatorData.append(", \"gameNotOver\" : ");
-        jsonSimulatorData.append(gson.toJson(gameNotOver));
-        jsonSimulatorData.append(", \"gameState\" : ");
-        jsonSimulatorData.append(gson.toJson(gameState));
-        jsonSimulatorData.append(", \"hitsInInning\" : ");
-        jsonSimulatorData.append(gson.toJson(hitsInInning));
-        jsonSimulatorData.append(", \"homeCloserUsed\" : ");
-        jsonSimulatorData.append(gson.toJson(homeCloserUsed));
-        jsonSimulatorData.append(", \"visitorCloserUsed\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorCloserUsed));
-        jsonSimulatorData.append(", \"homeLineup\" : ");
-        jsonSimulatorData.append(gson.toJson(homeLineup));
-        jsonSimulatorData.append(", \"visitingLineup\" : ");
-        jsonSimulatorData.append(gson.toJson(visitingLineup));
-        jsonSimulatorData.append(", \"homePinchHitters\" : ");
-        jsonSimulatorData.append(gson.toJson(homePinchHitters));
-        jsonSimulatorData.append(", \"visitorPinchHitters\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorPinchHitters));
-        jsonSimulatorData.append(", \"homePitcherNumber\" : ");
-        jsonSimulatorData.append(gson.toJson(homePitcherNumber));
-        jsonSimulatorData.append(", \"visitorPitcherNumber\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorPitcherNumber));
-        jsonSimulatorData.append(", \"homeRelievers\" : ");
-        jsonSimulatorData.append(gson.toJson(homeRelievers));
-        jsonSimulatorData.append(", \"visitorRelievers\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorRelievers));
-        jsonSimulatorData.append(", \"homeScore\" : ");
-        jsonSimulatorData.append(gson.toJson(homeScore));
-        jsonSimulatorData.append(", \"visitorScore\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorScore));
-        jsonSimulatorData.append(", \"homeSubstituteNumber\" : ");
-        jsonSimulatorData.append(gson.toJson(homeSubstituteNumber));
-        jsonSimulatorData.append(", \"visitorSubstituteNumber\" : ");
-        jsonSimulatorData.append(gson.toJson(visitorSubstituteNumber));
-        jsonSimulatorData.append(", \"homeTeamBattedInNinth\" : ");
-        jsonSimulatorData.append(gson.toJson(homeTeamBattedInNinth));
-        jsonSimulatorData.append(", \"homeTeamFinishedAtBat\" : ");
-        jsonSimulatorData.append(gson.toJson(homeTeamFinishedAtBat));
-        jsonSimulatorData.append(", \"inningsPlayed\" : ");
-        jsonSimulatorData.append(gson.toJson(inningsPlayed));
-        jsonSimulatorData.append(", \"isHit\" : ");
-        jsonSimulatorData.append(gson.toJson(isHit));
-        jsonSimulatorData.append(", \"pitcherOfRecordForHittingTeam\" : ");
-
-        jsonSimulatorData.append(gson.toJson(pitcherOfRecordForHittingTeam));
-
-        jsonSimulatorData.append(", \"pitcherOfRecordForLoss\" : ");
-            jsonSimulatorData.append(gson.toJson(pitcherOfRecordForLoss));
-
-        jsonSimulatorData.append(", \"pitcherOfRecordForWin\" : ");
-            jsonSimulatorData.append(gson.toJson(pitcherOfRecordForWin));
-
-        jsonSimulatorData.append(", \"pitcherStaminaAdjustment\" : ");
-        jsonSimulatorData.append(gson.toJson(pitcherStaminaAdjustment));
-        jsonSimulatorData.append(", \"runners\" : ");
-        jsonSimulatorData.append(gson.toJson(runners));
-        jsonSimulatorData.append(", \"runsScoredInHalfInning\" : ");
-        jsonSimulatorData.append(gson.toJson(runsScoredInHalfInning));
-        jsonSimulatorData.append(", \"switchSides\" : ");
-        jsonSimulatorData.append(gson.toJson(switchSides));
-        jsonSimulatorData.append(", \"year\" : ");
-        jsonSimulatorData.append(gson.toJson(year));
-
-        jsonSimulatorData.append("}");
-        return jsonSimulatorData.toString();
-    }
-
-    public void restoreGameSimulatorData(String storedGameData) {
-    }
 }

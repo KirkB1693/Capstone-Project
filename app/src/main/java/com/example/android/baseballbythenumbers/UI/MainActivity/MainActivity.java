@@ -26,6 +26,7 @@ import com.example.android.baseballbythenumbers.Data.PitchingStats;
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Schedule;
 import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.UI.GamePlayActivity.GamePlayActivity;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator;
 import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TreeMap<Integer, List<Game>> listOfAllGamesByDay;
     private boolean gamesAreLoaded;
     private boolean orgLoaded;
+    private ResourceProvider resourceProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         JodaTimeAndroid.init(this);
 
         mRepository = ((BaseballByTheNumbersApp) getApplicationContext()).getRepository();
+        resourceProvider = ((BaseballByTheNumbersApp) getApplicationContext()).getResourceProvider();
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         dayOfSchedule = 0;
@@ -192,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void simGame(Game game, Team homeTeam, Team visitingTeam) {
 
-        GameSimulator gameSimulator = new GameSimulator(this, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear(), mRepository);
+        GameSimulator gameSimulator = new GameSimulator(resourceProvider, game, homeTeam, false, visitingTeam, false, organization.getCurrentYear(), mRepository);
         int[] result = gameSimulator.simulateGame();
 
         game.setHomeScore(result[0]);
