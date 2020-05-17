@@ -156,6 +156,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         outState.putInt(CURRENT_GAME_STATE, currentGameState);
         outState.putInt(SAVED_HOME_ERRORS_AT_START, homeErrorsAtGameStart);
         outState.putInt(SAVED_VISITOR_ERRORS_AT_START, visitorErrorsAtGameStart);
+        scheduledExecutorService.shutdownNow();
     }
 
 
@@ -182,9 +183,10 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
 
     private void continueGame() {
-
         gamePlayViewModel.getGameSimulator().continueGame();
-
+        if (currentGameState == SIM_REST_OF_GAME_STATE) {
+            simRestOfGame();
+        }
         updateUI();
     }
 
@@ -251,13 +253,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 break;
             case R.id.sim_rest_of_game_button:
                 if (!isGameOver()) {
-                    simRestOfGameInProgress = true;
-                    currentGameState = SIM_REST_OF_GAME_STATE;
-                    String fragmentTag = makeFragmentName(R.id.view_pager, 0);
-                    Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
-                    if (manageGameFragment != null && manageGameFragment.isVisible()) {
-                        ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
-                    }
                     simRestOfGame();
                 }
                 break;
@@ -297,7 +292,13 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void simRestOfGame() {
-
+        simRestOfGameInProgress = true;
+        currentGameState = SIM_REST_OF_GAME_STATE;
+        String fragmentTag = makeFragmentName(R.id.view_pager, 0);
+        Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        if (manageGameFragment != null && manageGameFragment.isVisible()) {
+            ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
+        }
         scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
             @Override

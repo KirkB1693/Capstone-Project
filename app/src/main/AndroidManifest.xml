@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".UI.StandingsActivity.StandingsActivity"
+            android:label="@string/title_activity_standings"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".UI.RosterActivity.RosterActivity"
             android:label="@string/title_activity_roster"
             android:parentActivityName=".UI.MainActivity.MainActivity"

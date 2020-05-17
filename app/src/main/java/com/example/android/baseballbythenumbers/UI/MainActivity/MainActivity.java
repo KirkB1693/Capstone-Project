@@ -36,6 +36,7 @@ import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.Simulators.GameSimulator;
 import com.example.android.baseballbythenumbers.UI.RosterActivity.RosterActivity;
+import com.example.android.baseballbythenumbers.UI.StandingsActivity.StandingsActivity;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.coachSetsLineupButton.setOnClickListener(this);
         mainBinding.startGameButton.setOnClickListener(this);
         mainBinding.simulateGameButton.setOnClickListener(this);
+        mainBinding.standingsButton.setOnClickListener(this);
 
         orgLoaded = false;
         teamsAreLoaded = false;
@@ -238,7 +240,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.simulateGameButton:
                 onSimulateGameButtonPressed();
                 break;
+            case R.id.standingsButton:
+                onStandingsButtonPressed();
+                break;
         }
+    }
+
+    private void onStandingsButtonPressed() {
+        Intent standingsIntent = new Intent(this, StandingsActivity.class);
+        this.startActivity(standingsIntent);
+        this.finish();
     }
 
     private void startRosterActivity() {
@@ -506,6 +517,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.simulateGameButton.setEnabled(false);
         mainBinding.coachSetsLineupButton.setEnabled(false);
         mainBinding.startGameButton.setEnabled(false);
+        mainBinding.standingsButton.setEnabled(false);
     }
 
 
@@ -515,6 +527,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.simulateGameButton.setEnabled(true);
         mainBinding.coachSetsLineupButton.setEnabled(true);
         mainBinding.startGameButton.setEnabled(true);
+        mainBinding.standingsButton.setEnabled(true);
     }
 
     private void loadAllTeams(final String orgId) {
