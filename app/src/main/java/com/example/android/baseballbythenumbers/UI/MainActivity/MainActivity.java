@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onStandingsButtonPressed() {
         Intent standingsIntent = new Intent(this, StandingsActivity.class);
+        standingsIntent.putExtra(ORGANIZATION_EXTRA, organization);
         this.startActivity(standingsIntent);
         this.finish();
     }

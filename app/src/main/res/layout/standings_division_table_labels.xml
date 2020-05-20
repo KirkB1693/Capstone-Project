@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:id="@+id/labelsRowForDivisionTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/BoxScoreLabels">
+
+        <TextView
+            android:id="@+id/standingsTeamName"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:text="Team Name"
+            style="@style/BoxScoreLabels"
+            android:gravity="start"/>
+
+        <TextView
+            android:id="@+id/standingsRecord"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:text="Record"
+            style="@style/BoxScoreLabels"/>
+
+        <TextView
+            android:id="@+id/standingsPct"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:text="Win %"
+            style="@style/BoxScoreLabels"/>
+    </TableRow>
+</TableLayout>
+</layout>

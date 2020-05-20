@@ -15,14 +15,14 @@ import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity (tableName = "teams", foreignKeys = @ForeignKey(entity = Division.class, parentColumns = "divisionId", childColumns = "divisionId", onDelete = CASCADE),indices = @Index(value = "divisionId"))
-public class Team implements Parcelable
-{
+@Entity(tableName = "teams", foreignKeys = @ForeignKey(entity = Division.class, parentColumns = "divisionId", childColumns = "divisionId", onDelete = CASCADE), indices = @Index(value = "divisionId"))
+public class Team implements Parcelable {
     @PrimaryKey
     @NonNull
     private String teamId;
@@ -66,8 +66,7 @@ public class Team implements Parcelable
             return (new Team[size]);
         }
 
-    }
-            ;
+    };
 
     protected Team(Parcel in) {
         teamId = in.readString();
@@ -88,14 +87,12 @@ public class Team implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     *
      */
 
     public Team() {
     }
 
     /**
-     *
      * @param teamName
      * @param teamBudget
      * @param teamCity
@@ -181,7 +178,7 @@ public class Team implements Parcelable
     }
 
     public void incrementWins() {
-        wins ++;
+        wins++;
     }
 
     public int getLosses() {
@@ -193,12 +190,39 @@ public class Team implements Parcelable
     }
 
     public void incrementLosses() {
-        losses ++;
+        losses++;
     }
+
+    public static Comparator<Team> WonLossRecordComparator = new Comparator<Team>() {
+        @Override
+        public int compare(Team team1, Team team2) {
+            int winLossPctTeam1;
+            int winLossPctTeam2;
+            if (team1.wins != 0 && team2.wins != 0) {
+                winLossPctTeam1 = (int) (team1.wins * 100000.0 / (team1.wins + team1.losses));
+                winLossPctTeam2 = (int) (team2.wins * 100000.0 / (team2.wins + team2.losses));
+            } else {
+                winLossPctTeam1 = team1.wins;
+                winLossPctTeam2 = team2.wins;
+            }
+
+            if (winLossPctTeam1 == winLossPctTeam2) {  // if the percentages are equal put them in alphabetical order
+                if ((team1.getTeamName()).compareToIgnoreCase((team2.getTeamName())) > 0) {
+                    winLossPctTeam1 = 1;
+                    winLossPctTeam2 = 0;
+                } else {
+                    winLossPctTeam1 = 0;
+                    winLossPctTeam2 = 1;
+                }
+            }
+            //descending order so winLossPctTeam2 - winLossPctTeam1 --> Gives output in order from best to worst W-L pct number
+            return winLossPctTeam2 - winLossPctTeam1;
+        }
+    };
 
     @Override
     public String toString() {
-        return "Team Name : " + teamName + "\nTeam City : " + teamCity + "\nTeam Budget : " + teamBudget +"\nPlayers :\n" + players.toString();
+        return "Team Name : " + teamName + "\nTeam City : " + teamCity + "\nTeam Budget : " + teamBudget + "\nPlayers :\n" + players.toString();
     }
 
     @Override

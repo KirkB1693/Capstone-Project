@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:id="@+id/standings_empty_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/standings_empty_team_name_tv"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:gravity="start"
+            tools:text="San Diego Padres"/>
+
+        <TextView
+            android:id="@+id/standings_empty_record_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"
+            tools:text="21-21"/>
+
+        <TextView
+            android:id="@+id/standings_empty_win_pct_tv"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            style="@style/BoxScoreData"
+            tools:text=".500"/>
+
+
+    </TableRow>
+</TableLayout>
+</layout>
