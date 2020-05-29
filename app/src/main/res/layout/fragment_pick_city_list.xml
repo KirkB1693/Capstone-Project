@@ -11,5 +11,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".UI.NewLeagueSetupActivity.PickCityFragment"
+        tools:context=".ui.newleaguesetup.PickCityFragment"
         tools:listitem="@layout/pick_city_list_item" />

@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -98,9 +100,6 @@ public class PitchingLine implements Parcelable, Comparable<PitchingLine>{
     public final static Parcelable.Creator<PitchingLine> CREATOR = new Creator<PitchingLine>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public PitchingLine createFromParcel(Parcel in) {
             return new PitchingLine(in);
         }
@@ -213,11 +212,12 @@ public class PitchingLine implements Parcelable, Comparable<PitchingLine>{
         this.pitcherNumber = pitcherNumber;
     }
 
+    @NotNull
     public String getPitchingLineId() {
         return pitchingLineId;
     }
 
-    public void setPitchingLineId(String pitchingLineId) {
+    public void setPitchingLineId(@NotNull String pitchingLineId) {
         this.pitchingLineId = pitchingLineId;
     }
 

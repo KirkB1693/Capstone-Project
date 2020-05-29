@@ -1,311 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
-<android.support.v4.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UI.StandingsActivity.StandingsActivity"
-    tools:showIn="@layout/activity_standings">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.standings.StandingsActivity"
+        tools:showIn="@layout/activity_standings">
 
-        <TextView
-            android:id="@+id/league1TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            tools:text="League 1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/league1division1TV"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league1TV"
-            tools:text="Division 1" />
+            <TextView
+                android:id="@+id/league1TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="League 1" />
 
-        <TableLayout
-            android:id="@+id/league1division1Table"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league1division1TV">
+            <TextView
+                android:id="@+id/league1division1TV"
+                style="@style/StandingsDivisionLabels"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1TV"
+                tools:text="Division 1" />
 
-            <include layout="@layout/standings_division_table_labels" />
+            <TableLayout
+                android:id="@+id/league1division1Table"
+                style="@style/StandingsTables"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division1TV">
 
-            <include layout="@layout/standings_table_empty_row" />
+                <include layout="@layout/standings_division_table_labels" />
 
-        </TableLayout>
+                <include layout="@layout/standings_table_empty_row" />
 
-        <TextView
-            android:id="@+id/league1division2TV"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            tools:text="Division 2"
-            app:layout_constraintTop_toBottomOf="@+id/league1division1Table" />
+            </TableLayout>
 
-        <TableLayout
-            android:id="@+id/league1division2Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league1division2TV">
+            <TextView
+                android:id="@+id/league1division2TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division1Table"
+                tools:text="Division 2" />
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TableLayout
+                android:id="@+id/league1division2Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division2TV"/>
 
-        </TableLayout>
+            <TextView
+                android:id="@+id/league1division3TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division2Table"
+                tools:text="Division 3" />
 
-        <TextView
-            android:id="@+id/league1division3TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 3"
-            app:layout_constraintTop_toBottomOf="@+id/league1division2Table" />
+            <TableLayout
+                android:id="@+id/league1division3Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division3TV"/>
 
-        <TableLayout
-            android:id="@+id/league1division3Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league1division3TV">
+            <TextView
+                android:id="@+id/league1division4TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division3Table"
+                tools:text="Division 4" />
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TableLayout
+                android:id="@+id/league1division4Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league1division4TV"/>
 
-        </TableLayout>
+            <TextView
+                android:id="@+id/league2TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/league1TV"
+                app:layout_constraintStart_toStartOf="@+id/league1TV"
+                app:layout_constraintTop_toBottomOf="@id/league1division4Table"
+                tools:text="League 2" />
 
-        <TextView
-            android:id="@+id/league1division4TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 4"
-            app:layout_constraintTop_toBottomOf="@+id/league1division3Table" />
+            <TextView
+                android:id="@+id/league2division1TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2TV"
+                tools:text="Division 1" />
 
-        <TableLayout
-            android:id="@+id/league1division4Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league1division4TV">
+            <TableLayout
+                android:id="@+id/league2division1Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division1TV"/>
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TextView
+                android:id="@+id/league2division2TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division1Table"
+                tools:text="Division 2" />
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/league2division2Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division2TV"/>
 
-        <TextView
-            android:id="@+id/league2TV"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="@+id/league1TV"
-            app:layout_constraintStart_toStartOf="@+id/league1TV"
-            app:layout_constraintTop_toBottomOf="@id/league1division4Table"
-            tools:text="League 2" />
+            <TextView
+                android:id="@+id/league2division3TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division2Table"
+                tools:text="Division 3" />
 
-        <TextView
-            android:id="@+id/league2division1TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 1"
-            app:layout_constraintTop_toBottomOf="@+id/league2TV" />
+            <TableLayout
+                android:id="@+id/league2division3Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division3TV"/>
 
-        <TableLayout
-            android:id="@+id/league2division1Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league2division1TV">
+            <TextView
+                android:id="@+id/league2division4TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division3Table"
+                tools:text="Division 4" />
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TableLayout
+                android:id="@+id/league2division4Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league2division4TV"/>
 
-        </TableLayout>
+            <TextView
+                android:id="@+id/league3TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/league1TV"
+                app:layout_constraintStart_toStartOf="@id/league1TV"
+                app:layout_constraintTop_toTopOf="@id/league2division4Table"
+                tools:text="League 3" />
 
-        <TextView
-            android:id="@+id/league2division2TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 2"
-            app:layout_constraintTop_toBottomOf="@+id/league2division1Table" />
+            <TextView
+                android:id="@+id/league3division1TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3TV"
+                tools:text="Division 1" />
 
-        <TableLayout
-            android:id="@+id/league2division2Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league2division2TV">
+            <TableLayout
+                android:id="@+id/league3division1Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division1TV"/>
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TextView
+                android:id="@+id/league3division2TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division1Table"
+                tools:text="Division 2" />
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/league3division2Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division2TV"/>
 
-        <TextView
-            android:id="@+id/league2division3TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 3"
-            app:layout_constraintTop_toBottomOf="@+id/league2division2Table" />
+            <TextView
+                android:id="@+id/league3division3TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division2Table"
+                tools:text="Division 3" />
 
-        <TableLayout
-            android:id="@+id/league2division3Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league2division3TV">
+            <TableLayout
+                android:id="@+id/league3division3Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division3TV"/>
 
-            <include layout="@layout/standings_division_table_labels"/>
+            <TextView
+                android:id="@+id/league3division4TV"
+                style="@style/StandingsDivisionLabels"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division3Table"
+                tools:text="Division 4" />
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/league3division4Table"
+                style="@style/StandingsTables"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/league3division4TV"/>
 
-        <TextView
-            android:id="@+id/league2division4TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 4"
-            app:layout_constraintTop_toBottomOf="@+id/league2division3Table" />
-
-        <TableLayout
-            android:id="@+id/league2division4Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league2division4TV">
-
-            <include layout="@layout/standings_division_table_labels"/>
-
-        </TableLayout>
-
-        <TextView
-            android:id="@+id/league3TV"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            tools:text="League 3"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="@id/league1TV"
-            app:layout_constraintStart_toStartOf="@id/league1TV"
-            app:layout_constraintTop_toTopOf="@id/league2division4Table"/>
-
-        <TextView
-            android:id="@+id/league3division1TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 1"
-            app:layout_constraintTop_toBottomOf="@+id/league3TV" />
-
-        <TableLayout
-            android:id="@+id/league3division1Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league3division1TV">
-
-            <include layout="@layout/standings_division_table_labels"/>
-
-        </TableLayout>
-
-        <TextView
-            android:id="@+id/league3division2TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 2"
-            app:layout_constraintTop_toBottomOf="@+id/league3division1Table" />
-
-        <TableLayout
-            android:id="@+id/league3division2Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league3division2TV">
-
-            <include layout="@layout/standings_division_table_labels"/>
-
-        </TableLayout>
-
-        <TextView
-            android:id="@+id/league3division3TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 3"
-            app:layout_constraintTop_toBottomOf="@+id/league3division2Table" />
-
-        <TableLayout
-            android:id="@+id/league3division3Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league3division3TV">
-
-            <include layout="@layout/standings_division_table_labels"/>
-
-        </TableLayout>
-
-        <TextView
-            android:id="@+id/league3division4TV"
-            android:visibility="gone"
-            style="@style/StandingsDivisionLabels"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Division 4"
-            app:layout_constraintTop_toBottomOf="@+id/league3division3Table" />
-
-        <TableLayout
-            android:id="@+id/league3division4Table"
-            android:visibility="gone"
-            style="@style/StandingsTables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/league3division4TV">
-
-            <include layout="@layout/standings_division_table_labels"/>
-
-        </TableLayout>
-    </android.support.constraint.ConstraintLayout>
-</android.support.v4.widget.NestedScrollView>
+            <ProgressBar
+                android:id="@+id/standingsProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
 </layout>

@@ -22,6 +22,9 @@ public interface GameDao {
         @Update
         int update(Game... games);
 
+        @Update
+        int updateAll(List<Game> gamesList);
+
         @Delete
         void delete(Game... games);
 

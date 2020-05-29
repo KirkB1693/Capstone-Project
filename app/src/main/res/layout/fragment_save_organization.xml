@@ -7,7 +7,7 @@
         android:id="@+id/create_league_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".UI.NewLeagueSetupActivity.SaveOrganizationFragment">
+        tools:context=".ui.newleaguesetup.SaveOrganizationFragment">
 
         <TextView
             android:id="@+id/org_save_tv"
@@ -18,7 +18,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center"
-            android:text="Saving Organization..."
+            android:text="@string/saving_organization_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

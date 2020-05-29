@@ -9,8 +9,8 @@
 <android.support.constraint.ConstraintLayout
     android:id="@+id/manage_game_constraint_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".UI.GamePlayActivity.ManageGameFragment">
+    android:layout_height="wrap_content"
+    tools:context=".ui.gameplay.ManageGameFragment">
 
     <Button
         android:id="@+id/sim_this_at_bat_button"
@@ -21,7 +21,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Sim Current At Bat"
+        android:text="@string/sim_current_at_bat_button_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Pinch Hit"
+        android:text="@string/pinch_hit_button_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/finalize_game_button" />
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Sub Pitcher"
+        android:text="@string/sub_pitcher_button_label"
         app:layout_constraintEnd_toEndOf="@+id/sim_this_at_bat_button"
         app:layout_constraintStart_toStartOf="@+id/sim_this_at_bat_button"
         app:layout_constraintTop_toBottomOf="@+id/pinch_hit_button" />
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Sim Rest Of Game"
+        android:text="@string/sim_rest_of_game_button_label"
         app:layout_constraintEnd_toEndOf="@+id/sim_this_at_bat_button"
         app:layout_constraintStart_toStartOf="@+id/sim_this_at_bat_button"
         app:layout_constraintTop_toBottomOf="@+id/sim_this_at_bat_button" />
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Pause Game"
+        android:text="@string/pause_game_button_label"
         app:layout_constraintEnd_toEndOf="@+id/sim_this_at_bat_button"
         app:layout_constraintStart_toStartOf="@+id/sim_this_at_bat_button"
         app:layout_constraintTop_toBottomOf="@+id/sim_rest_of_game_button" />
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Finalize Game"
+        android:text="@string/finalize_game_button_label"
         app:layout_constraintEnd_toEndOf="@+id/sim_this_at_bat_button"
         app:layout_constraintStart_toStartOf="@+id/sim_this_at_bat_button"
         app:layout_constraintTop_toBottomOf="@+id/pause_button" />

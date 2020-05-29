@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.UI.NewLeagueSetupActivity.PickCityFragment.OnListFragmentInteractionListener;
+import com.example.android.baseballbythenumbers.ui.newleaguesetup.PickCityFragment.OnListFragmentInteractionListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,10 +63,11 @@ public class MyPickCityRecyclerViewAdapter extends RecyclerView.Adapter<MyPickCi
         private ViewHolder(View view) {
             super(view);
             mView = view;
-            mCardView = (CardView) view.findViewById(R.id.city_list_item_cv);
-            mContentView = (TextView) view.findViewById(R.id.city_List_item_tv);
+            mCardView = view.findViewById(R.id.city_list_item_cv);
+            mContentView = view.findViewById(R.id.city_List_item_tv);
         }
 
+        @NotNull
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

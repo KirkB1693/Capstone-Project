@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light_background"
-        tools:context=".UI.GamePlayActivity.GamePlayActivity">
+        tools:context=".ui.gameplay.GamePlayActivity">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -31,7 +31,7 @@
                 android:minHeight="60dp"
                 app:tabSelectedTextColor="@color/primaryTextColor"
                 app:tabTextColor="@color/divider"
-                tools:context=".UI.GamePlayActivity.GamePlayActivity" />
+                tools:context=".ui.gameplay.GamePlayActivity" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
@@ -69,7 +69,8 @@
                     style="@style/ScoreboardLabels"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/blank_space" />
 
                 <TextView
                     android:id="@+id/scoreboard_blank_label"
@@ -171,7 +172,8 @@
                     android:layout_height="15dp"
                     android:scaleType="fitXY"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_batter"/>
+                    app:srcCompat="@drawable/ic_batter"
+                    android:contentDescription="@string/scoreboard_icon_content_description" />
 
                 <TextView
                     android:id="@+id/scoreboard_visitor_name_tv"
@@ -273,7 +275,8 @@
                     android:layout_height="15dp"
                     android:scaleType="fitXY"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_batter"/>
+                    app:srcCompat="@drawable/ic_batter"
+                    android:contentDescription="@string/scoreboard_icon_content_description" />
 
                 <TextView
                     android:id="@+id/scoreboard_home_name_tv"
@@ -432,7 +435,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="8dp"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/gameplay_baseball_diamond_content_description"
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
@@ -452,7 +455,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image" />
+            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            android:contentDescription="@string/gameplay_animation_of_the_batter_content_description" />
 
         <ImageView
             android:id="@+id/animate_runner_on_first_iv"
@@ -467,7 +471,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image" />
+            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            android:contentDescription="@string/gameplay_animation_of_the_runner_on_first_content_description" />
 
         <ImageView
             android:id="@+id/animate_runner_on_second_iv"
@@ -482,7 +487,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image" />
+            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            android:contentDescription="@string/gameplay_animation_of_the_runner_on_second_content_description" />
 
         <ImageView
             android:id="@+id/animate_runner_on_third_iv"
@@ -497,7 +503,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image" />
+            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            android:contentDescription="@string/gameplay_animation_of_runner_on_third_content_description" />
 
         <ImageView
             android:id="@+id/baserunners_iv"
@@ -512,7 +519,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/score_background_image"
             app:layout_constraintEnd_toEndOf="@+id/score_background_image"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image" />
+            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            android:contentDescription="@string/gameplay_baserunners_content_description" />
 
         <TextView
             android:id="@+id/game_play_at_bat_result_tv"

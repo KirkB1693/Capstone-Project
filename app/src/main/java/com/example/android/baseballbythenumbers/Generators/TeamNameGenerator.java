@@ -35,7 +35,7 @@ public class TeamNameGenerator {
             this.random = new Random(options.getRandomSeed());
         }
         try {
-            teamNames = loadTeamNames(R.raw.teamnicknames);
+            teamNames = loadTeamNames();
         } catch (IOException e) {
             Timber.e("IOException while loading names files.  You may not get any results!");
         }
@@ -58,7 +58,7 @@ public class TeamNameGenerator {
      * @return the picked name.
      */
     private String pickName(final TreeMap<Float, String> map) {
-        assert !map.isEmpty();
+        if (map.isEmpty()) return null;
 
         Float key = null;
         while (key == null) {
@@ -76,12 +76,11 @@ public class TeamNameGenerator {
     /**
      * Loads all of the names in the given file into a TreeMap keyed by the name's cumulative frequency.
      *
-     * @param fileResource the resource path to the text file containing the names to load.
      * @return a TreeMap of all names in the file.
      */
-    private TreeMap<Float, String> loadTeamNames(final int fileResource) throws IOException {
+    private TreeMap<Float, String> loadTeamNames() throws IOException {
         TreeMap<Float, String> names = new TreeMap<>();
-        InputStream is = context.getResources().openRawResource(fileResource);
+        InputStream is = context.getResources().openRawResource(R.raw.teamnicknames);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line = reader.readLine();

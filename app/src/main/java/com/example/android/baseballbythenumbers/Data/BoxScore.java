@@ -54,9 +54,6 @@ public class BoxScore implements Parcelable {
     public final static Parcelable.Creator<BoxScore> CREATOR = new Creator<BoxScore>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public BoxScore createFromParcel(Parcel in) {
             return new BoxScore(in);
         }

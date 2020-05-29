@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +16,9 @@ import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupFragment;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupItemMoveCallback;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.LineupStartDragListener;
+import com.example.android.baseballbythenumbers.ui.roster.LineupFragment;
+import com.example.android.baseballbythenumbers.ui.roster.LineupItemMoveCallback;
+import com.example.android.baseballbythenumbers.ui.roster.LineupStartDragListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +52,7 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
         return new ViewHolder(view);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
@@ -99,7 +101,9 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
                 }
                 return false;
             }
+
         });
+
     }
 
     private void setProgressBarDrawable(int progress, ProgressBar progressBar) {
@@ -143,7 +147,7 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
         private final CardView mCardView;
         private final TextView mLineupPlaceInOrderView;
@@ -154,18 +158,19 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
         private final ImageView mReorder;
         private Player mPlayer;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
-            mCardView = (CardView) view.findViewById(R.id.lineup_cardview);
-            mLineupPlaceInOrderView = (TextView) view.findViewById(R.id.lineup_place_in_order);
-            mLineupPlayerName = (TextView) view.findViewById(R.id.lineup_name_of_player);
-            mLineupPlayerPosition = (TextView) view.findViewById(R.id.lineup_player_position);
-            mLineupPlayerStats = (TextView) view.findViewById(R.id.lineup_player_stats);
-            mLineupPlayerOverallBattingRating = (ProgressBar) view.findViewById(R.id.lineup_overall_rating_pb);
-            mReorder = (ImageView) view.findViewById(R.id.lineup_reorder);
+            mCardView = view.findViewById(R.id.lineup_cardview);
+            mLineupPlaceInOrderView = view.findViewById(R.id.lineup_place_in_order);
+            mLineupPlayerName = view.findViewById(R.id.lineup_name_of_player);
+            mLineupPlayerPosition = view.findViewById(R.id.lineup_player_position);
+            mLineupPlayerStats = view.findViewById(R.id.lineup_player_stats);
+            mLineupPlayerOverallBattingRating = view.findViewById(R.id.lineup_overall_rating_pb);
+            mReorder = view.findViewById(R.id.lineup_reorder);
         }
 
+        @NotNull
         @Override
         public String toString() {
             return super.toString() + " '" + mLineupPlayerName.getText() + "'";

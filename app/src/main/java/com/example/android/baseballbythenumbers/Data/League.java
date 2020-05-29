@@ -42,9 +42,6 @@ public class League implements Parcelable
     public final static Parcelable.Creator<League> CREATOR = new Creator<League>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public League createFromParcel(Parcel in) {
             return new League(in);
         }
@@ -61,7 +58,7 @@ public class League implements Parcelable
         leagueName = in.readString();
         useDh = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            divisions = new ArrayList<Division>();
+            divisions = new ArrayList<>();
             in.readList(divisions, Division.class.getClassLoader());
         } else {
             divisions = null;
@@ -116,11 +113,12 @@ public class League implements Parcelable
         this.divisions = divisions;
     }
 
+    @NotNull
     public String getLeagueId() {
         return leagueId;
     }
 
-    public void setLeagueId(String leagueId) {
+    public void setLeagueId(@NotNull String leagueId) {
         this.leagueId = leagueId;
     }
 

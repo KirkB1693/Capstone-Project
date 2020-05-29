@@ -11,7 +11,8 @@
     <TableRow
         android:id="@+id/standings_empty_row"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/standings_empty_team_name_tv"

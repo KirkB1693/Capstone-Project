@@ -9,6 +9,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
@@ -342,11 +344,12 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
         this.playerId = playerId;
     }
 
+    @NotNull
     public String getBattingStatsId() {
         return battingStatsId;
     }
 
-    public void setBattingStatsId(String battingStatsId) {
+    public void setBattingStatsId(@NotNull String battingStatsId) {
         this.battingStatsId = battingStatsId;
     }
 
@@ -366,13 +369,14 @@ public class BattingStats implements Parcelable, Comparable<BattingStats> {
         }
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return new StringBuilder().append("\nYear : ").append(year).append(", Games : ").append(games).append(", Plate Appearances : ").append(plateAppearances)
-                .append("\nHits : ").append(hits).append(", Singles : ").append(singles).append(", Doubles : ").append(doubles).append(", Triples : ").append(triples).append(" Home Runs : ").append(homeRuns)
-                .append("\nRuns : ").append(runs).append(", RBI : ").append(runsBattedIn).append(", BB : ").append(walks).append(", SO : ").append(strikeOuts).append(", HBP : ").append(hitByPitch)
-                .append(", SB : ").append(stolenBases).append(", CS : ").append(caughtStealing).append("\nGround Balls : ").append(groundBalls).append(", Line Drives : ").append(lineDrives)
-                .append(", Fly Balls : ").append(flyBalls).append("\nErrors : ").append(errors).append(", Avg : ").append(getAvg()).append(", OBP : ").append(getOBP()).toString();
+        return "\nYear : " + year + ", Games : " + games + ", Plate Appearances : " + plateAppearances +
+                "\nHits : " + hits + ", Singles : " + singles + ", Doubles : " + doubles + ", Triples : " + triples + " Home Runs : " + homeRuns +
+                "\nRuns : " + runs + ", RBI : " + runsBattedIn + ", BB : " + walks + ", SO : " + strikeOuts + ", HBP : " + hitByPitch +
+                ", SB : " + stolenBases + ", CS : " + caughtStealing + "\nGround Balls : " + groundBalls + ", Line Drives : " + lineDrives +
+                ", Fly Balls : " + flyBalls + "\nErrors : " + errors + ", Avg : " + getAvg() + ", OBP : " + getOBP();
     }
 
     private int getOBP() {

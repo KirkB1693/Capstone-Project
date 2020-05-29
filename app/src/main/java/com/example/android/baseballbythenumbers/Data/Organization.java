@@ -67,9 +67,6 @@ public class Organization implements Parcelable {
     public final static Parcelable.Creator<Organization> CREATOR = new Creator<Organization>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Organization createFromParcel(Parcel in) {
             return new Organization(in);
         }
@@ -89,13 +86,13 @@ public class Organization implements Parcelable {
         interleaguePlay = in.readByte() != 0x00;
         seriesLength = in.readInt();
         if (in.readByte() == 0x01) {
-            leagues = new ArrayList<League>();
+            leagues = new ArrayList<>();
             in.readList(leagues, League.class.getClassLoader());
         } else {
             leagues = null;
         }
         if (in.readByte() == 0x01) {
-            schedules = new ArrayList<Schedule>();
+            schedules = new ArrayList<>();
             in.readList(schedules, Schedule.class.getClassLoader());
         } else {
             schedules = null;

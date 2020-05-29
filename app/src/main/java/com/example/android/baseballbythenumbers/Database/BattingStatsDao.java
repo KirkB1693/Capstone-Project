@@ -22,6 +22,9 @@ public interface BattingStatsDao {
     @Update
     void update(BattingStats... battingStats);
 
+    @Update
+    void updateAll(List<BattingStats> battingStatsList);
+
     @Delete
     void delete(BattingStats... battingStats);
     @Query("SELECT * FROM batting_stats")

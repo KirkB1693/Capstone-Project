@@ -83,9 +83,6 @@ public class Game implements Parcelable, Comparable<Game> {
     public final static Parcelable.Creator<Game> CREATOR = new Creator<Game>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Game createFromParcel(Parcel in) {
             return new Game(in);
         }

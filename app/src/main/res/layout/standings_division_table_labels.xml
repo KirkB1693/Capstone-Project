@@ -20,7 +20,7 @@
             android:paddingLeft="4dp"
             android:paddingEnd="4dp"
             android:paddingRight="4dp"
-            android:text="Team Name"
+            android:text="@string/standings_team_name_label"
             style="@style/BoxScoreLabels"
             android:gravity="start"/>
 
@@ -28,14 +28,14 @@
             android:id="@+id/standingsRecord"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            android:text="Record"
+            android:text="@string/standings_record_label"
             style="@style/BoxScoreLabels"/>
 
         <TextView
             android:id="@+id/standingsPct"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            android:text="Win %"
+            android:text="@string/standings_win_pct_label"
             style="@style/BoxScoreLabels"/>
     </TableRow>
 </TableLayout>

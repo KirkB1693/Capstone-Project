@@ -32,9 +32,7 @@ public class DivisionGenerator {
 
         if (teamMakeup != null) {
             if (teamMakeup.length == 15) {
-                for (int i = 0; i < teamMakeup.length; i++) {
-                    teamMakeupToUse[i] = teamMakeup [i];
-                }
+                System.arraycopy(teamMakeup, 0, teamMakeupToUse, 0, teamMakeup.length);
             }
         }
 
@@ -46,7 +44,7 @@ public class DivisionGenerator {
         for (int i = 0; i < divisionSize; i++) {
             userTeamPlaced = !teamNameGenerator.checkIfUserTeamNameInList(userTeamName);
             String cityName = getUniqueCity(newTeamList, divisionName, userTeamCity);
-            String teamName = "";
+            String teamName;
             if (cityName.equals(userTeamCity) && !userTeamPlaced) {
                 teamName = userTeamName;
                 teamNameGenerator.removeUserTeamNameFromList(userTeamName);  // Makes sure that another team doesn't have the same name as the user picked

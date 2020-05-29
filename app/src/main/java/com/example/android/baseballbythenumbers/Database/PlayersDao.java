@@ -22,6 +22,9 @@ public interface PlayersDao {
     @Update
     void update(Player... players);
 
+    @Update
+    void updateAll(List<Player> playerList);
+
     @Delete
     void delete(Player... players);
     @Query("SELECT * FROM players")

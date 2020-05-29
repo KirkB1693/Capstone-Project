@@ -677,8 +677,7 @@ public class HitterGenerator {
     // If percentToCheck is below min set it to min, if it is above max set it to max, otherwise return the percentToCheck
     private int checkBounds(int percentToCheck, int min, int max) {
         if (percentToCheck < min) return min;
-        if (percentToCheck > max) return max;
-        return percentToCheck;
+        return Math.min(percentToCheck, max);
     }
 
     private HittingPercentages generateHittingPercentages() {
@@ -792,7 +791,7 @@ public class HitterGenerator {
         int firstStrikePct = getRandomNormalizedPercentage(PITCHER_FIRST_STRIKE_STD_DEV, PITCHER_FIRST_STRIKE_PCT_MEAN, PITCHER_FIRST_STRIKE_PCT_MIN, PITCHER_FIRST_STRIKE_PCT_MAX);
 
         List<Integer> pitchTypes = new ArrayList<>();
-        int stamina = 0;
+        int stamina;
 
         int numberOfPitchTypes = getRandomNormalizedPercentage(1, 2, 1, 3);
 

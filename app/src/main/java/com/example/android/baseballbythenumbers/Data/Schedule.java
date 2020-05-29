@@ -49,9 +49,6 @@ public class Schedule implements Parcelable, Comparable<Schedule> {
     public final static Parcelable.Creator<Schedule> CREATOR = new Creator<Schedule>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Schedule createFromParcel(Parcel in) {
             return new Schedule(in);
         }
@@ -68,7 +65,7 @@ public class Schedule implements Parcelable, Comparable<Schedule> {
         organizationId = in.readString();
         scheduleYear = in.readInt();
         if (in.readByte() == 0x01) {
-            gameList = new ArrayList<Game>();
+            gameList = new ArrayList<>();
             in.readList(gameList, Game.class.getClassLoader());
         } else {
             gameList = null;

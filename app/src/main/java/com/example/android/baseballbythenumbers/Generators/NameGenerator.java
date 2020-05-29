@@ -66,7 +66,7 @@ public class NameGenerator
      * @return the picked name.
      */
     private String pickName(final TreeMap<Float, String> map) {
-        assert !map.isEmpty();
+        if (map.isEmpty()) return null;
 
         Float key = null;
         while (key == null) {

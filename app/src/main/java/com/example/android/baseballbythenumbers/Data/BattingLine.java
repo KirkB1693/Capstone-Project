@@ -100,9 +100,6 @@ public class BattingLine implements Parcelable, Comparable<BattingLine> {
     public final static Parcelable.Creator<BattingLine> CREATOR = new Creator<BattingLine>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public BattingLine createFromParcel(Parcel in) {
             return new BattingLine(in);
         }

@@ -19,6 +19,7 @@ import com.example.android.baseballbythenumbers.Repository.Repository;
 import com.example.android.baseballbythenumbers.ResourceProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
@@ -99,8 +100,8 @@ public class GameSimulator {
     private SpannableStringBuilder atBatSummary;
     private Repository mRepository;
     private int gameState;
-    private ArrayList<Integer> runsScoredByInningforHomeTeam;
-    private ArrayList<Integer> runsScoredByInningforVisitingTeam;
+    private ArrayList<Integer> runsScoredByInningForHomeTeam;
+    private ArrayList<Integer> runsScoredByInningForVisitingTeam;
     private TreeMap<Integer, Pair<Integer, Boolean>> animationData;
 
     private static SpannableStringBuilder gameLog;
@@ -141,7 +142,6 @@ public class GameSimulator {
         gameLog = new SpannableStringBuilder();
         doPregameSetup();
 
-        return;
     }
 
     public void simAtBatWithHumanControl() {
@@ -256,16 +256,16 @@ public class GameSimulator {
         runsScoredInHalfInning += currentAtBat.getRunsScored();
         int inningToUpdate = getInningsPlayed();
         if(isVisitorHitting) {
-            if (runsScoredByInningforVisitingTeam.size()-1 < inningToUpdate) {
-                runsScoredByInningforVisitingTeam.add(runsScoredInHalfInning);
+            if (runsScoredByInningForVisitingTeam.size()-1 < inningToUpdate) {
+                runsScoredByInningForVisitingTeam.add(runsScoredInHalfInning);
             } else {
-                runsScoredByInningforVisitingTeam.set(inningToUpdate, runsScoredInHalfInning);
+                runsScoredByInningForVisitingTeam.set(inningToUpdate, runsScoredInHalfInning);
             }
         } else {
-            if (runsScoredByInningforHomeTeam.size()-1 < inningToUpdate) {
-                runsScoredByInningforHomeTeam.add(runsScoredInHalfInning);
+            if (runsScoredByInningForHomeTeam.size()-1 < inningToUpdate) {
+                runsScoredByInningForHomeTeam.add(runsScoredInHalfInning);
             } else {
-                runsScoredByInningforHomeTeam.set(inningToUpdate, runsScoredInHalfInning);
+                runsScoredByInningForHomeTeam.set(inningToUpdate, runsScoredInHalfInning);
             }
         }
     }
@@ -312,9 +312,7 @@ public class GameSimulator {
                 gameLog.append("--- That's the end of the bottom of the ").append(getInningString(inningsPlayed / 10 + 1)).append(" ---\n\n");
                 gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            for (int i = 0; i < runners.length; i++) {
-                runners[i] = null;
-            }
+            Arrays.fill(runners, null);
             outs = 0;
             switchSides = true;
             processEndOfHalfInning();
@@ -558,10 +556,6 @@ public class GameSimulator {
             if (inningsPlayed >= 80) {
                 return pinchHitForPitcher(player, lineupToChange, defenseToChange);
             }
-            // if after the ninth inning and starter is still in the game
-            if (inningsPlayed >= 90 && player.getPrimaryPosition() == STARTING_PITCHER) {
-                return pinchHitForPitcher(player, lineupToChange, defenseToChange);
-            }
         }
         return null;
     }
@@ -593,7 +587,7 @@ public class GameSimulator {
         BattingLine newBattingLine;
         boolean visitorHitting = isVisitorHitting;
         if (isPitcher(newHitter)) {
-            visitorHitting = !visitorHitting;               // Pitchers are only subbed in on defense so need to switch which boxscore the batting line is added to
+            visitorHitting = !visitorHitting;               // Pitchers are only subbed in on defense so need to switch which box score the batting line is added to
         }
         if (visitorHitting) {
             newBattingLine = new BattingLine(game.getVisitorBoxScore().getBoxScoreId(), placeInOrder, true, visitorSubstituteNumber, newHitter.getName());
@@ -631,7 +625,7 @@ public class GameSimulator {
         if (runnerInScoringPosition()) {
             while (pinchHitterKey == -1) {
                 if (pinchHittersAvailable.ceilingKey(1) != null) {
-                    pinchHitterKey = pinchHittersAvailable.ceilingKey(1);               // Get best available pinchhitter
+                    pinchHitterKey = pinchHittersAvailable.ceilingKey(1);               // Get best available pinch hitter
                 }
             }
             pinchHitter = pinchHittersAvailable.get(pinchHitterKey);
@@ -643,7 +637,7 @@ public class GameSimulator {
             int pinchHitterPosition = 5;
             while (pinchHitterKey == -1) {
                 if (pinchHittersAvailable.ceilingKey(pinchHitterPosition) != null) {
-                    pinchHitterKey = pinchHittersAvailable.ceilingKey(pinchHitterPosition);               // Get a lower ranked pinchhitter
+                    pinchHitterKey = pinchHittersAvailable.ceilingKey(pinchHitterPosition);               // Get a lower ranked pinch hitter
                 }
                 pinchHitterPosition--;
             }
@@ -654,7 +648,7 @@ public class GameSimulator {
             int pinchHitterPosition = 2;
             while (pinchHitterKey == -1) {
                 if (pinchHittersAvailable.ceilingKey(pinchHitterPosition) != null) {
-                    pinchHitterKey = pinchHittersAvailable.ceilingKey(pinchHitterPosition);               // Get second best available pinchhitter
+                    pinchHitterKey = pinchHittersAvailable.ceilingKey(pinchHitterPosition);               // Get second best available pinch hitter
                 }
                 pinchHitterPosition--;
             }
@@ -665,11 +659,7 @@ public class GameSimulator {
     }
 
     private boolean isPitcher(Player player) {
-        if (player.getPrimaryPosition() == STARTING_PITCHER || player.getPrimaryPosition() == LONG_RELIEVER || player.getPrimaryPosition() == SHORT_RELEIVER) {
-            return true;
-        } else {
-            return false;
-        }
+        return player.getPrimaryPosition() == STARTING_PITCHER || player.getPrimaryPosition() == LONG_RELIEVER || player.getPrimaryPosition() == SHORT_RELEIVER;
     }
 
     private boolean shouldWeSwitchPitchers(Player currentPitcher) {
@@ -911,14 +901,14 @@ public class GameSimulator {
             battingScore = visitorScore;
             relievers = homeRelievers;
         }
-        int reliverToBringIn = -1;
+        int relieverToBringIn = -1;
         if (inningsPlayed < 50) {  // Things are bad bring in worst long reliever
             for (TreeMap.Entry<Integer, Player> entry : relievers.entrySet()) {
                 if (entry.getValue().getPrimaryPosition() == LONG_RELIEVER) {
-                    reliverToBringIn = entry.getKey();
+                    relieverToBringIn = entry.getKey();
                 }
             }
-            return reliverToBringIn;
+            return relieverToBringIn;
         }
         int relieverPositionToStartSearch = 1;    // Best available reliever = 1
         if (pitchingScore - battingScore < -2) {
@@ -932,8 +922,8 @@ public class GameSimulator {
             for (TreeMap.Entry<Integer, Player> entry : relievers.entrySet()) {
                 count++;
                 if (relieverPositionToStartSearch <= count) {
-                    reliverToBringIn = entry.getKey();
-                    return reliverToBringIn;
+                    relieverToBringIn = entry.getKey();
+                    return relieverToBringIn;
                 }
             }
         }
@@ -942,8 +932,8 @@ public class GameSimulator {
             for (TreeMap.Entry<Integer, Player> entry : relievers.entrySet()) {
                 count++;
                 if (relieverPositionToStartSearch <= count) {
-                    reliverToBringIn = entry.getKey();
-                    return reliverToBringIn;
+                    relieverToBringIn = entry.getKey();
+                    return relieverToBringIn;
                 }
             }
         }
@@ -952,12 +942,12 @@ public class GameSimulator {
             for (TreeMap.Entry<Integer, Player> entry : relievers.entrySet()) {
                 count++;
                 if (relieverPositionToStartSearch <= count) {
-                    reliverToBringIn = entry.getKey();
-                    return reliverToBringIn;
+                    relieverToBringIn = entry.getKey();
+                    return relieverToBringIn;
                 }
             }
         }
-        return reliverToBringIn;
+        return relieverToBringIn;
     }
 
     private void getBatterStaminaAdjustment(Player batter) {
@@ -980,8 +970,8 @@ public class GameSimulator {
 
     private void doPregameSetup() {
         // this is a new game so players have had a chance to rest and regain some stamina
-        reduceFatigueforPlayers(homeTeam);
-        reduceFatigueforPlayers(visitingTeam);
+        reduceFatigueForPlayers(homeTeam);
+        reduceFatigueForPlayers(visitingTeam);
 
         homeLineup = lineupFromTeam(homeTeam, homeTeam.isUseDh());
         homeDefense = defenseFromLineup(homeLineup, homeTeam, homeTeam.isUseDh());
@@ -1018,11 +1008,11 @@ public class GameSimulator {
         visitorRelievers = PitchingRotationGenerator.getAvailableRelievers(visitingTeam);
 
         homeScore = 0;
-        runsScoredByInningforHomeTeam = new ArrayList<>();
-        runsScoredByInningforHomeTeam.add(homeScore);
+        runsScoredByInningForHomeTeam = new ArrayList<>();
+        runsScoredByInningForHomeTeam.add(homeScore);
         visitorScore = 0;
-        runsScoredByInningforVisitingTeam = new ArrayList<>();
-        runsScoredByInningforVisitingTeam.add(visitorScore);
+        runsScoredByInningForVisitingTeam = new ArrayList<>();
+        runsScoredByInningForVisitingTeam.add(visitorScore);
 
         inningsPlayed = 0;
 
@@ -1119,15 +1109,11 @@ public class GameSimulator {
 
     private boolean hitterNotTired(Player player) {
         int staminaLeft = player.getHittingPercentages().getStamina() - player.getHittingPercentages().getStaminaUsed();
-        if (staminaLeft < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return staminaLeft >= 0;
 
     }
 
-    private void reduceFatigueforPlayers(Team team) {
+    private void reduceFatigueForPlayers(Team team) {
         for (Player player : team.getPlayers()) {
             int newHittingStaminaUsed = player.getHittingPercentages().getStaminaUsed() - DEFAULT_RECOVERY;
             if (newHittingStaminaUsed < 0) {
@@ -1207,8 +1193,8 @@ public class GameSimulator {
         }
     }
 
-    private AtBatSimulator generateNewAtBat(ResourceProvider resourceProvider, int[] freshCount, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense, BattingLine battingLine, PitchingLine pitchingLine, int year, Repository repository) {
-        return new AtBatSimulator(resourceProvider, freshCount, outs, currentBatter, lineupFromDefense, runners, defense, battingLine, pitchingLine, year, repository);
+    private AtBatSimulator generateNewAtBat(ResourceProvider resourceProvider, int[] count, int outs, int currentBatter, TreeMap<Integer, Player> lineupFromDefense, Runner[] runners, TreeMap<Integer, Player> defense, BattingLine battingLine, PitchingLine pitchingLine, int year, Repository repository) {
+        return new AtBatSimulator(resourceProvider, count, outs, currentBatter, lineupFromDefense, runners, defense, battingLine, pitchingLine, year, repository);
     }
 
     public static SpannableStringBuilder getGameRecapString() {
@@ -1367,17 +1353,16 @@ public class GameSimulator {
         return homeTeamBattedInNinth;
     }
 
-    public ArrayList<Integer> getRunsScoredByInningforHomeTeam() {
-        return runsScoredByInningforHomeTeam;
+    public ArrayList<Integer> getRunsScoredByInningForHomeTeam() {
+        return runsScoredByInningForHomeTeam;
     }
 
-    public ArrayList<Integer> getRunsScoredByInningforVisitingTeam() {
-        return runsScoredByInningforVisitingTeam;
+    public ArrayList<Integer> getRunsScoredByInningForVisitingTeam() {
+        return runsScoredByInningForVisitingTeam;
     }
 
     public void continueGame() {
         setTeamNames();
-        return;
     }
 
 

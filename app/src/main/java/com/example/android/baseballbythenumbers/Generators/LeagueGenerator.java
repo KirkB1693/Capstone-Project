@@ -12,7 +12,7 @@ import java.util.List;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.CENTRAL;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.EAST;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NORTH;
-import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NO_DIVISONS;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NO_DIVISIONS;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.SOUTH;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.WEST;
 
@@ -39,10 +39,10 @@ public class LeagueGenerator {
 
         switch (numberOfDivisions) {
             case 0:
-                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISIONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 1:
-                divisions.add(divisionGenerator.generateDivision(NO_DIVISONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
+                divisions.add(divisionGenerator.generateDivision(NO_DIVISIONS, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));
                 break;
             case 2:
                 divisions.add(divisionGenerator.generateDivision(WEST, useDH, divisionSize, teamMakeup, cityGenerator, teamNameGenerator, newLeague.getLeagueId(), userTeamName, userTeamCity, progressBar));

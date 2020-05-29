@@ -1,7 +1,5 @@
 package com.example.android.baseballbythenumbers.JsonHelpers;
 
-import android.support.v4.util.Pair;
-
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.Data.Team;
 import com.google.gson.Gson;
@@ -48,7 +46,7 @@ public class JsonHelpers {
     public Player getPlayerFromJson(JSONObject playerJsonObject) {
         Gson gson = new Gson();
         Player player = null;
-        if (playerJsonObject.toString() != null) {
+        if (playerJsonObject != null) {
             player = gson.fromJson(String.valueOf(playerJsonObject), Player.class);
         }
         return player;

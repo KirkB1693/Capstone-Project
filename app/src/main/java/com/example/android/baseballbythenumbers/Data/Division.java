@@ -39,9 +39,6 @@ public class Division implements Parcelable
     public final static Parcelable.Creator<Division> CREATOR = new Creator<Division>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Division createFromParcel(Parcel in) {
             return new Division(in);
         }
@@ -58,7 +55,7 @@ public class Division implements Parcelable
         leagueId = in.readString();
         divisionName = in.readString();
         if (in.readByte() == 0x01) {
-            teams = new ArrayList<Team>();
+            teams = new ArrayList<>();
             in.readList(teams, Team.class.getClassLoader());
         } else {
             teams = null;

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:stretchColumns="*">
 
     <TableRow
         android:id="@+id/box_score_detail_empty_row"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/box_score_details_empty_pitcher_tv"

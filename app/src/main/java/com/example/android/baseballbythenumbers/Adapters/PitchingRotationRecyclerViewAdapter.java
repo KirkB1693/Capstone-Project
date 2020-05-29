@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +16,9 @@ import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.Data.Player;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationFragment;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationItemMoveCallback;
-import com.example.android.baseballbythenumbers.UI.RosterActivity.PitchingRotationStartDragListener;
+import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationFragment;
+import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationItemMoveCallback;
+import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationStartDragListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +52,7 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
         return new ViewHolder(view);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
@@ -65,7 +67,7 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
             String rotationPositionText = "LR"+longRelieverPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         } else if (position == mPlayers.size() - 1) {
-            holder.mRotationPlaceInOrderView.setText("CL)");
+            holder.mRotationPlaceInOrderView.setText(R.string.rotation_label_closer);
         } else {
             int shortRelieverPosition = position - 6;
             String rotationPositionText = "SR"+shortRelieverPosition + ")";
@@ -74,9 +76,9 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
         if (holder.mPlayer.getPrimaryPosition() == STARTING_PITCHER) {
             holder.mRotationPlayerPosition.setText(getPositionNameFromPrimaryPosition(holder.mPlayer.getPrimaryPosition()));
         } else if (holder.mPlayer.getPrimaryPosition() == LONG_RELIEVER) {
-            holder.mRotationPlayerPosition.setText("LR");
+            holder.mRotationPlayerPosition.setText(R.string.rotation_label_long_reliever);
         } else if (holder.mPlayer.getPrimaryPosition() == SHORT_RELEIVER) {
-            holder.mRotationPlayerPosition.setText("SR");
+            holder.mRotationPlayerPosition.setText(R.string.rotation_label_short_reliever);
         }
 
         String currentStats = "ERA " + holder.mPlayer.getPitchingStats().get(0).getERA() + ", WHIP " + holder.mPlayer.getPitchingStats().get(0).getWHIP() +
@@ -173,16 +175,17 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
         private ViewHolder(View view) {
             super(view);
             mView = view;
-            mCardView = (CardView) view.findViewById(R.id.pitching_rotation_cardview);
-            mRotationPlaceInOrderView = (TextView) view.findViewById(R.id.pitching_rotation_place_in_order);
-            mRotationPlayerName = (TextView) view.findViewById(R.id.pitching_rotation_name_of_player);
-            mRotationPlayerPosition = (TextView) view.findViewById(R.id.pitching_rotation_position);
-            mRotationPlayerStats = (TextView) view.findViewById(R.id.pitching_rotation_player_stats);
-            mRotationPlayerStamina = (ProgressBar) view.findViewById(R.id.pitching_rotation_stamina_rating_pb);
-            mRotationPlayerOverall = (ProgressBar) view.findViewById(R.id.pitching_rotation_overall_rating_pb);
-            mReorder = (ImageView) view.findViewById(R.id.rotation_reorder_icon_iv);
+            mCardView = view.findViewById(R.id.pitching_rotation_cardview);
+            mRotationPlaceInOrderView = view.findViewById(R.id.pitching_rotation_place_in_order);
+            mRotationPlayerName = view.findViewById(R.id.pitching_rotation_name_of_player);
+            mRotationPlayerPosition = view.findViewById(R.id.pitching_rotation_position);
+            mRotationPlayerStats = view.findViewById(R.id.pitching_rotation_player_stats);
+            mRotationPlayerStamina = view.findViewById(R.id.pitching_rotation_stamina_rating_pb);
+            mRotationPlayerOverall = view.findViewById(R.id.pitching_rotation_overall_rating_pb);
+            mReorder = view.findViewById(R.id.rotation_reorder_icon_iv);
         }
 
+        @NotNull
         @Override
         public String toString() {
             return super.toString() + " '" + mRotationPlayerName.getText() + "'";

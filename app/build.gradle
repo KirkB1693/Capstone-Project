@@ -5,6 +5,7 @@ android {
     defaultConfig {
         applicationId "com.example.android.baseballbythenumbers"
         minSdkVersion 15
+        //noinspection OldTargetApi
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -15,14 +16,16 @@ android {
             }
         }
         vectorDrawables.useSupportLibrary = true
-        viewBinding.enabled = true
+        buildFeatures{
+            dataBinding = true
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        dataBinding.enabled = true
+
     }
 }
 

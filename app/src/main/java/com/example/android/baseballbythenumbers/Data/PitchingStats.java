@@ -9,6 +9,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DecimalFormat;
 import java.util.UUID;
 
@@ -427,11 +429,12 @@ public class PitchingStats implements Parcelable, Comparable<PitchingStats> {
         this.playerId = playerId;
     }
 
+    @NotNull
     public String getPitchingStatsId() {
         return pitchingStatsId;
     }
 
-    public void setPitchingStatsId(String pitchingStatsId) {
+    public void setPitchingStatsId(@NotNull String pitchingStatsId) {
         this.pitchingStatsId = pitchingStatsId;
     }
 

@@ -19,7 +19,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text="Lineup"
+            android:text="@string/lineup_label"
             android:textColor="@color/primaryTextColor"
             android:textSize="36sp"
             android:fontFamily="sans-serif-medium"

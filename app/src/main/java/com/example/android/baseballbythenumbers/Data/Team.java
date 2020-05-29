@@ -55,9 +55,6 @@ public class Team implements Parcelable {
     public final static Parcelable.Creator<Team> CREATOR = new Creator<Team>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Team createFromParcel(Parcel in) {
             return new Team(in);
         }
@@ -78,7 +75,7 @@ public class Team implements Parcelable {
         wins = in.readInt();
         losses = in.readInt();
         if (in.readByte() == 0x01) {
-            players = new ArrayList<Player>();
+            players = new ArrayList<>();
             in.readList(players, Player.class.getClassLoader());
         } else {
             players = null;
@@ -220,6 +217,7 @@ public class Team implements Parcelable {
         }
     };
 
+    @NotNull
     @Override
     public String toString() {
         return "Team Name : " + teamName + "\nTeam City : " + teamCity + "\nTeam Budget : " + teamBudget + "\nPlayers :\n" + players.toString();

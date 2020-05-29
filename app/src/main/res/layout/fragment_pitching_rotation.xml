@@ -18,7 +18,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text="Pitching Rotation"
+            android:text="@string/pitching_rotation_label"
             android:textColor="@color/primary_dark_text"
             android:textSize="18sp"
             android:textStyle="bold"

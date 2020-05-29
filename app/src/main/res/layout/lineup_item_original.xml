@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center_horizontal"
-                    android:text="Contact" />
+                    android:text="@string/contact_stats_label" />
 
                 <TextView
                     android:id="@+id/lineup_eye_label"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center_horizontal"
-                    android:text="Eye" />
+                    android:text="@string/eye_stats_label" />
 
                 <TextView
                     android:id="@+id/lineup_power_label"
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center_horizontal"
-                    android:text="Power" />
+                    android:text="@string/power_stats_label" />
 
 
                 <TextView
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center_horizontal"
-                    android:text="Speed" />
+                    android:text="@string/speed_stats_label" />
 
 
             </LinearLayout>
@@ -202,7 +202,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_weight="2"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="@string/lineup_reorder_content_description" />
     </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

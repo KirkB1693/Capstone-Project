@@ -5,7 +5,7 @@ public class Constants {
     // Data is taken from 2009-2018 seasons with minimum at bats for batters and innings pitched for pitchers in order to get solid averages over time and eliminate extreme stats due to small sample size.
     // Data was sourced mainly from FanGraphs.com, but some stats not available at FanGraphs were sourced at Baseball-Reference.com
 
-    public class PitcherBaseStats {
+    public static class PitcherBaseStats {
         //Pitcher Base Percentages to 4 decimal places represented by integers (2950 = 29.50%)
         public static final int PITCHER_O_SWING_PCT_MEAN = 2950;
         public static final int PITCHER_O_SWING_PCT_STD_DEV = 281;
@@ -143,7 +143,7 @@ public class Constants {
 
     }
 
-    public class PitcherBatting {
+    public static class PitcherBatting {
         public static final int PITCHER_BATTING_O_SWING_PCT_MEAN = 3401;
         public static final int PITCHER_BATTING_O_SWING_PCT_STD_DEV = 712;
         public static final int PITCHER_BATTING_O_SWING_PCT_MIN = 1540;
@@ -260,7 +260,7 @@ public class Constants {
         public static final int PITCHER_BATTING_STAMINA_MAX = 162;
     }
 
-    public class BatterBaseStats {
+    public static class BatterBaseStats {
         public static final int BATTING_O_SWING_PCT_MEAN = 2963;
         public static final int BATTING_O_SWING_PCT_STD_DEV = 521;
         public static final int BATTING_O_SWING_PCT_MIN = 1600;
@@ -428,7 +428,7 @@ public class Constants {
     }
 
     public static class DivisionNames {
-        public static final String NO_DIVISONS = "";
+        public static final String NO_DIVISIONS = "";
         public static final String WEST = "West";
         public static final String EAST = "East";
         public static final String CENTRAL = "Central";

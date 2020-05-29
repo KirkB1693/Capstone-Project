@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="32dp"
-            tools:context=".UI.NewLeagueSetupActivity.PickCountriesFragment">
+            tools:context=".ui.newleaguesetup.PickCountriesFragment">
 
 
             <TextView
@@ -25,7 +25,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:gravity="center"
-                android:text="Please choose the countries you would like to include in your new league :"
+                android:text="@string/countries_to_include_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="32dp"
-                android:text="Done"
+                android:text="@string/done_button_label"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/chooseCountryLabelTV"
                 app:layout_constraintStart_toStartOf="@+id/chooseCountryLabelTV"

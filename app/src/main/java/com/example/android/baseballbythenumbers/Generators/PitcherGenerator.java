@@ -171,9 +171,9 @@ public class PitcherGenerator {
     }
 
     public List<Player> generatePitchers(String teamId, ProgressBar progressBar) {
-        List<Player> starters = new ArrayList<>();
-        List<Player> longRelievers = new ArrayList<>();
-        List<Player> shortRelievers = new ArrayList<>();
+        List<Player> starters;
+        List<Player> longRelievers;
+        List<Player> shortRelievers;
         this.progressBar = progressBar;
 
         starters = generateStarters(teamId);
@@ -426,8 +426,7 @@ public class PitcherGenerator {
     // If percentToCheck is below min set it to min, if it is above max set it to max, otherwise return the percentToCheck
     private int checkBounds(int percentToCheck, int min, int max) {
         if (percentToCheck < min) return min;
-        if (percentToCheck > max) return max;
-        return percentToCheck;
+        return Math.min(percentToCheck, max);
     }
 
     private HittingPercentages generateHittingPercentages() {

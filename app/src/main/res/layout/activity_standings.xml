@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".UI.StandingsActivity.StandingsActivity">
+    tools:context=".ui.standings.StandingsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -34,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ballpark_photo"
                 android:scaleType="centerCrop"
-                />
+                android:contentDescription="@string/standings_collapsing_toolbar_image_content_description" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

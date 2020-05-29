@@ -4,6 +4,8 @@ import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 public class PitchingPercentages implements Parcelable
 {
 
@@ -287,6 +289,7 @@ public class PitchingPercentages implements Parcelable
     }
 
 
+    @NotNull
     @Override
     public String toString() {
         return "O Swing Pct : " + formatPct(oSwingPct) + ", Z Swing Pct : " + formatPct(zSwingPct) + ", O Contact Pct : " + formatPct(oContactPct) + ", Z Contact Pct : " + formatPct(zContactPct) +

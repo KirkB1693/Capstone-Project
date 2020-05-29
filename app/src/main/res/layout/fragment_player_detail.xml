@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Batting Stats and Ratings"
+            android:text="@string/batting_stats_and_ratings_label"
             android:textColor="@color/primary_dark_text"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Pitching Stats and Ratings"
+            android:text="@string/pitching_stats_and_ratings_label"
             android:textColor="@color/primary_dark_text"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Contact" />
+                android:text="@string/contact_stats_label" />
 
             <TextView
                 android:id="@+id/player_detail_batting_eye_label"
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Eye" />
+                android:text="@string/eye_stats_label" />
 
 
             <TextView
@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Power" />
+                android:text="@string/power_stats_label" />
 
             <TextView
                 android:id="@+id/player_detail_batting_speed_label"
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Speed" />
+                android:text="@string/speed_stats_label" />
 
 
         </LinearLayout>
@@ -288,7 +288,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Stamina" />
+                android:text="@string/stamina_stats_label" />
 
             <TextView
                 android:id="@+id/player_detail_pitching_accuracy_label"
@@ -297,7 +297,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Accuracy" />
+                android:text="@string/accuracy_stats_label" />
 
             <TextView
                 android:id="@+id/player_detail_pitching_deception_label"
@@ -306,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Deception" />
+                android:text="@string/deception_stats_label" />
 
             <TextView
                 android:id="@+id/player_detail_pitching_movement_label"
@@ -315,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="center_horizontal"
-                android:text="Movement" />
+                android:text="@string/movement_stats_label" />
 
 
         </LinearLayout>

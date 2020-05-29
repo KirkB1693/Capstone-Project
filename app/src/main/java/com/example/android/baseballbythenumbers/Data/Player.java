@@ -10,6 +10,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -249,11 +251,12 @@ public class Player implements Parcelable
         this.teamId = teamId;
     }
 
+    @NotNull
     public String getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(@NotNull String playerId) {
         this.playerId = playerId;
     }
 
@@ -351,6 +354,7 @@ public class Player implements Parcelable
 
 
 
+    @NotNull
     @Override
     public String toString() {
         return "Name : " + firstName + " " + middleName + " " + lastName + "\n"+

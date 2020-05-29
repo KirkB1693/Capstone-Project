@@ -1,5 +1,7 @@
 package com.example.android.baseballbythenumbers.Generators;
 
+import org.jetbrains.annotations.NotNull;
+
 public class NameGeneratorOptions
 {
 
@@ -47,6 +49,7 @@ public class NameGeneratorOptions
         return result;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "NameGeneratorOptions{" +

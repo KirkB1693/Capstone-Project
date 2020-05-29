@@ -19,6 +19,9 @@ public interface BoxScoreDao {
         @Update
         void update(BoxScore... boxScores);
 
+        @Update
+        void updateAll(List<BoxScore> boxScoreList);
+
         @Delete
         void delete(BoxScore... boxScores);
 

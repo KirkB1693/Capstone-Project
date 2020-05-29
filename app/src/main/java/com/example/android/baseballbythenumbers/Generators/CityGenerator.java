@@ -24,14 +24,14 @@ import static com.example.android.baseballbythenumbers.Constants.Constants.Count
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.CENTRAL;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.EAST;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NORTH;
-import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NO_DIVISONS;
+import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.NO_DIVISIONS;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.SOUTH;
 import static com.example.android.baseballbythenumbers.Constants.Constants.DivisionNames.WEST;
 
 public class CityGenerator {
     private final Random random;
 
-    private int numberOfDivisions = 0;
+    private int numberOfDivisions;
 
     private int countriesIncluded;
 
@@ -64,28 +64,28 @@ public class CityGenerator {
         try {
             switch (numberOfDivisions) {
                 case 0:
-                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
+                    allCityNames = loadTeamNames(NO_DIVISIONS);
                     break;
                 case 1:
-                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
+                    allCityNames = loadTeamNames(NO_DIVISIONS);
                     break;
                 case 2:
-                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
-                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    westCityNames = loadTeamNames(WEST);
+                    eastCityNames = loadTeamNames(EAST);
                     break;
                 case 3:
-                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
-                    centralCityNames = loadTeamNames(R.raw.cities_metroarea, CENTRAL);
-                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    westCityNames = loadTeamNames(WEST);
+                    centralCityNames = loadTeamNames(CENTRAL);
+                    eastCityNames = loadTeamNames(EAST);
                     break;
                 case 4:
-                    westCityNames = loadTeamNames(R.raw.cities_metroarea, WEST);
-                    northCityNames = loadTeamNames(R.raw.cities_metroarea, NORTH);
-                    southCityNames = loadTeamNames(R.raw.cities_metroarea, SOUTH);
-                    eastCityNames = loadTeamNames(R.raw.cities_metroarea, EAST);
+                    westCityNames = loadTeamNames(WEST);
+                    northCityNames = loadTeamNames(NORTH);
+                    southCityNames = loadTeamNames(SOUTH);
+                    eastCityNames = loadTeamNames(EAST);
                     break;
                 default:
-                    allCityNames = loadTeamNames(R.raw.cities_metroarea, NO_DIVISONS);
+                    allCityNames = loadTeamNames(NO_DIVISIONS);
             }
 
         } catch (IOException e) {
@@ -158,14 +158,19 @@ public class CityGenerator {
                 }
 
             case 4:
-                if (divisionName.equals(WEST)) {
-                    return (pickName(westCityNames));  // City Name
-                } else if (divisionName.equals(NORTH)) {
-                    return (pickName(northCityNames));  // City Name
-                } else if (divisionName.equals(SOUTH)) {
-                    return (pickName(southCityNames));  // City Name
-                } else {
-                    return (pickName(eastCityNames));  // City Name
+                switch (divisionName) {
+                    case WEST:
+                        return (pickName(westCityNames));  // City Name
+
+                    case NORTH:
+                        return (pickName(northCityNames));  // City Name
+
+                    case SOUTH:
+                        return (pickName(southCityNames));  // City Name
+
+                    default:
+                        return (pickName(eastCityNames));  // City Name
+
                 }
             default:
                 return (pickName(allCityNames));  // City Name
@@ -181,7 +186,7 @@ public class CityGenerator {
      * @return the picked name.
      */
     private String pickName(final TreeMap<Float, String> map) {
-        assert !map.isEmpty();
+        if (map.isEmpty()) return null;
 
         Float key = null;
         while (key == null) {
@@ -202,12 +207,11 @@ public class CityGenerator {
     /**
      * Loads all of the names in the given file into a TreeMap keyed by the city's cumulative frequency, which is a product of it's size. (i.e. bigger cities are picked more often)
      *
-     * @param fileResource the resource path to the text file containing the names to load.
      * @return a TreeMap of all names in the file.
      */
-    private TreeMap<Float, String> loadTeamNames(final int fileResource, String divisionName) throws IOException {
+    private TreeMap<Float, String> loadTeamNames(String divisionName) throws IOException {
         TreeMap<Float, String> names = new TreeMap<>();
-        InputStream is = context.getResources().openRawResource(fileResource);
+        InputStream is = context.getResources().openRawResource(R.raw.cities_metroarea);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line = reader.readLine();
@@ -310,11 +314,7 @@ public class CityGenerator {
         if (countriesIncluded == ALL_COUNTRIES) {
             return true;
         } else {
-            if (listOfCountriesIncluded.contains(countryToCheck)) {
-                return true;
-            } else {
-                return false;
-            }
+            return listOfCountriesIncluded.contains(countryToCheck);
         }
     }
 
@@ -340,14 +340,15 @@ public class CityGenerator {
                 }
 
             case 4:
-                if (divisionName.equals(WEST)) {
-                    return westCityNames.containsValue(userCity);
-                } else if (divisionName.equals(NORTH)) {
-                    return northCityNames.containsValue(userCity);
-                } else if (divisionName.equals(SOUTH)) {
-                    return southCityNames.containsValue(userCity);
-                } else {
-                    return eastCityNames.containsValue(userCity);
+                switch (divisionName) {
+                    case WEST:
+                        return westCityNames.containsValue(userCity);
+                    case NORTH:
+                        return northCityNames.containsValue(userCity);
+                    case SOUTH:
+                        return southCityNames.containsValue(userCity);
+                    default:
+                        return eastCityNames.containsValue(userCity);
                 }
             default:
                 return allCityNames.containsValue(userCity);
