@@ -18,8 +18,8 @@ package com.example.android.baseballbythenumbers;
 
 import android.app.Application;
 
-import com.example.android.baseballbythenumbers.Database.AppDatabase;
-import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.example.android.baseballbythenumbers.database.AppDatabase;
+import com.example.android.baseballbythenumbers.repository.Repository;
 
 /**
  * Android Application class. Used for accessing singletons.
@@ -38,7 +38,7 @@ public class BaseballByTheNumbersApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        mResourceProvider = getResourceProvider();
     }
 
     public AppDatabase getDatabase() {

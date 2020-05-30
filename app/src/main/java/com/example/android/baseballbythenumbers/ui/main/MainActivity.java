@@ -17,23 +17,23 @@ import android.widget.Toast;
 import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.BuildConfig;
-import com.example.android.baseballbythenumbers.Data.BattingStats;
-import com.example.android.baseballbythenumbers.Data.Game;
-import com.example.android.baseballbythenumbers.Data.Organization;
-import com.example.android.baseballbythenumbers.Data.PitchingStats;
-import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Schedule;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.data.BattingStats;
+import com.example.android.baseballbythenumbers.data.Game;
+import com.example.android.baseballbythenumbers.data.Organization;
+import com.example.android.baseballbythenumbers.data.PitchingStats;
+import com.example.android.baseballbythenumbers.data.Player;
+import com.example.android.baseballbythenumbers.data.Schedule;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.ui.gameplay.GamePlayActivity;
-import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.LineupGenerator;
-import com.example.android.baseballbythenumbers.Generators.LineupAndDefense.PitchingRotationGenerator;
-import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
+import com.example.android.baseballbythenumbers.generators.lineupAndDefense.LineupGenerator;
+import com.example.android.baseballbythenumbers.generators.lineupAndDefense.PitchingRotationGenerator;
+import com.example.android.baseballbythenumbers.generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.ui.newleaguesetup.NewLeagueSetupActivity;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.example.android.baseballbythenumbers.repository.Repository;
 import com.example.android.baseballbythenumbers.ui.roster.RosterActivity;
 import com.example.android.baseballbythenumbers.ui.standings.StandingsActivity;
-import com.example.android.baseballbythenumbers.ViewModels.MainActivityViewModel;
+import com.example.android.baseballbythenumbers.viewModels.MainActivityViewModel;
 import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -363,8 +363,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void resetTeamRecords() {
-        for (TreeMap.Entry entry : listOfAllTeams.entrySet()) {
-            Team team = (Team) entry.getValue();
+        for (TreeMap.Entry<String, Team> entry : listOfAllTeams.entrySet()) {
+            Team team = entry.getValue();
             team.setWins(0);
             team.setLosses(0);
             mRepository.updateTeam(team);
@@ -391,8 +391,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private List<Player> getAllPlayers() {
         List<Player> playerList = new ArrayList<>();
-        for (TreeMap.Entry entry : listOfAllTeams.entrySet()) {
-            Team team = (Team) entry.getValue();
+        for (TreeMap.Entry<String, Team> entry : listOfAllTeams.entrySet()) {
+            Team team = entry.getValue();
             playerList.addAll(team.getPlayers());
         }
         return playerList;

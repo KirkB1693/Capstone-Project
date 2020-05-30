@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.baseballbythenumbers.Adapters.PitchingRotationRecyclerViewAdapter;
-import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.adapters.PitchingRotationRecyclerViewAdapter;
+import com.example.android.baseballbythenumbers.data.Player;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentPitchingRotationBinding;
 
@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.android.baseballbythenumbers.Constants.Positions.LONG_RELIEVER;
-import static com.example.android.baseballbythenumbers.Constants.Positions.SHORT_RELEIVER;
-import static com.example.android.baseballbythenumbers.Constants.Positions.STARTING_PITCHER;
+import static com.example.android.baseballbythenumbers.constants.Positions.LONG_RELIEVER;
+import static com.example.android.baseballbythenumbers.constants.Positions.SHORT_RELIEVER;
+import static com.example.android.baseballbythenumbers.constants.Positions.STARTING_PITCHER;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -66,7 +66,7 @@ public class PitchingRotationFragment extends Fragment implements PitchingRotati
 
         List<Player> pitchers = new ArrayList<>();
         for (Player player : mTeam.getPlayers()) {
-            if (player.getPrimaryPosition() == STARTING_PITCHER || player.getPrimaryPosition() == LONG_RELIEVER || player.getPrimaryPosition() == SHORT_RELEIVER) {
+            if (player.getPrimaryPosition() == STARTING_PITCHER || player.getPrimaryPosition() == LONG_RELIEVER || player.getPrimaryPosition() == SHORT_RELIEVER) {
                 pitchers.add(player);
             }
         }

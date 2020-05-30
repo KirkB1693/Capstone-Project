@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
-import com.example.android.baseballbythenumbers.Data.Game;
+import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.ViewModels.PlayByPlayViewModel;
+import com.example.android.baseballbythenumbers.viewModels.PlayByPlayViewModel;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayByPlayBinding;
 
 public class PlayByPlayFragment extends Fragment {

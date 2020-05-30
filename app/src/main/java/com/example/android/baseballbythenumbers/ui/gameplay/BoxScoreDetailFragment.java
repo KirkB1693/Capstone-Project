@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.example.android.baseballbythenumbers.Data.BattingLine;
-import com.example.android.baseballbythenumbers.Data.Game;
-import com.example.android.baseballbythenumbers.Data.PitchingLine;
+import com.example.android.baseballbythenumbers.data.BattingLine;
+import com.example.android.baseballbythenumbers.data.Game;
+import com.example.android.baseballbythenumbers.data.PitchingLine;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.ViewModels.BoxScoreDetailViewModel;
+import com.example.android.baseballbythenumbers.viewModels.BoxScoreDetailViewModel;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreDetailBinding;
 
 import java.text.DecimalFormat;

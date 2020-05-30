@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.data.Player;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.R;
 
 import org.jetbrains.annotations.NotNull;

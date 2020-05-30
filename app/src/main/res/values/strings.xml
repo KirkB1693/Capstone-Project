@@ -161,7 +161,7 @@
     <string name="organization_saving_divisions_label">Saving Divisions…</string>
     <string name="organizations_saving_teams_label">Saving Teams…</string>
     <string name="organization_saving_players_label">Saving Players…</string>
-    <string name="organization_saving_plaver_stats_label">Saving Player Stats…</string>
+    <string name="organization_saving_player_stats_label">Saving Player Stats…</string>
     <string name="organization_saving_schedule_label">Saving Schedule…</string>
     <string name="organization_finished_saving_label">Finished Saving!</string>
 

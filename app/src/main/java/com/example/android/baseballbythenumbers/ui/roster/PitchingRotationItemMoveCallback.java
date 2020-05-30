@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.example.android.baseballbythenumbers.Adapters.PitchingRotationRecyclerViewAdapter;
+import com.example.android.baseballbythenumbers.adapters.PitchingRotationRecyclerViewAdapter;
 
 import org.jetbrains.annotations.NotNull;
 

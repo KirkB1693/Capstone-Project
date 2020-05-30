@@ -10,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
-import com.example.android.baseballbythenumbers.Data.BattingStats;
-import com.example.android.baseballbythenumbers.Data.Division;
-import com.example.android.baseballbythenumbers.Data.Game;
-import com.example.android.baseballbythenumbers.Data.League;
-import com.example.android.baseballbythenumbers.Data.Organization;
-import com.example.android.baseballbythenumbers.Data.PitchingStats;
-import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Schedule;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.data.BattingStats;
+import com.example.android.baseballbythenumbers.data.Division;
+import com.example.android.baseballbythenumbers.data.Game;
+import com.example.android.baseballbythenumbers.data.League;
+import com.example.android.baseballbythenumbers.data.Organization;
+import com.example.android.baseballbythenumbers.data.PitchingStats;
+import com.example.android.baseballbythenumbers.data.Player;
+import com.example.android.baseballbythenumbers.data.Schedule;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.example.android.baseballbythenumbers.repository.Repository;
 import com.example.android.baseballbythenumbers.databinding.FragmentSaveOrganizationBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ public class SaveOrganizationFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param newOrganization
+     * @param newOrganization the organization to be saved in room
      * @return A new instance of fragment SaveOrganizationFragment.
      */
     
@@ -145,7 +145,7 @@ public class SaveOrganizationFragment extends Fragment {
                 saveOrganizationBinding.generateOrgProgressbar.post(new Runnable() {
                     @Override
                     public void run() {
-                        saveOrganizationBinding.orgSaveTv.setText(R.string.organization_saving_plaver_stats_label);
+                        saveOrganizationBinding.orgSaveTv.setText(R.string.organization_saving_player_stats_label);
                     }
                 });
                 List<BattingStats> battingStatsList = new ArrayList<>();

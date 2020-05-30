@@ -19,17 +19,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
-import com.example.android.baseballbythenumbers.Data.BattingLine;
-import com.example.android.baseballbythenumbers.Data.Game;
-import com.example.android.baseballbythenumbers.Data.Organization;
-import com.example.android.baseballbythenumbers.Data.Player;
-import com.example.android.baseballbythenumbers.Data.Runner;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.data.BattingLine;
+import com.example.android.baseballbythenumbers.data.Game;
+import com.example.android.baseballbythenumbers.data.Organization;
+import com.example.android.baseballbythenumbers.data.Player;
+import com.example.android.baseballbythenumbers.data.Runner;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.Repository.Repository;
+import com.example.android.baseballbythenumbers.repository.Repository;
 import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
-import com.example.android.baseballbythenumbers.ViewModels.GamePlayViewModel;
+import com.example.android.baseballbythenumbers.viewModels.GamePlayViewModel;
 import com.example.android.baseballbythenumbers.databinding.ActivityGamePlayBinding;
 
 import java.text.DecimalFormat;
@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.android.baseballbythenumbers.Constants.Positions.SCOREKEEPING_PITCHER;
+import static com.example.android.baseballbythenumbers.constants.Positions.SCOREKEEPING_PITCHER;
 
 public class GamePlayActivity extends AppCompatActivity implements ManageGameFragment.ManageGameClickListener, View.OnClickListener {
 
@@ -264,20 +264,17 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
                     if (visitingTeam.getTeamName().equals(usersTeamName)) {
                         currentGameState = USER_TEAM_BATTING_GAME_STATE;
-                        ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
                     } else {
                         currentGameState = USER_TEAM_PITCHING_GAME_STATE;
-                        ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
                     }
                 } else {
                     if (visitingTeam.getTeamName().equals(usersTeamName)) {
                         currentGameState = USER_TEAM_PITCHING_GAME_STATE;
-                        ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
                     } else {
                         currentGameState = USER_TEAM_BATTING_GAME_STATE;
-                        ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
                     }
                 }
+                ((ManageGameFragment) manageGameFragment).setButtonsToDisplay(currentGameState);
             }
         }
     }
@@ -467,9 +464,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                     break;
                 case 10:
                     activityGamePlayBinding.inning11HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
-                    break;
-                case 11:
-                    activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
                     break;
                 default:
                     activityGamePlayBinding.inning12HomeScoreTv.setText(String.format(Locale.getDefault(), "%d", runs));
@@ -1060,12 +1054,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             gameState -= 8;
         }
         switch (gameState) {
-            case 1:
-                activityGamePlayBinding.baserunnersIv.setVisibility(View.INVISIBLE);
-                activityGamePlayBinding.runnerOnFirstTv.setVisibility(View.GONE);
-                activityGamePlayBinding.runnerOnSecondTv.setVisibility(View.GONE);
-                activityGamePlayBinding.runnerOnThirdTv.setVisibility(View.GONE);
-                break;
             case 2:
                 activityGamePlayBinding.baserunnersIv.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseball_game_state_2));
                 activityGamePlayBinding.baserunnersIv.setVisibility(View.VISIBLE);
@@ -1189,9 +1177,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.throw_pitch_fab:
-                break;
+        if (view.getId() == R.id.throw_pitch_fab) {
+            // TODO implement one pitch at a time
         }
     }
 }

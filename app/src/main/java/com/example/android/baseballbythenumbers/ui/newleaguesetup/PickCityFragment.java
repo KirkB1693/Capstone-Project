@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.baseballbythenumbers.Adapters.MyPickCityRecyclerViewAdapter;
-import com.example.android.baseballbythenumbers.Generators.CityGenerator;
+import com.example.android.baseballbythenumbers.adapters.MyPickCityRecyclerViewAdapter;
+import com.example.android.baseballbythenumbers.generators.CityGenerator;
 import com.example.android.baseballbythenumbers.R;
 
 import java.util.List;

@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.baseballbythenumbers.Data.Game;
+import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreBinding;
 

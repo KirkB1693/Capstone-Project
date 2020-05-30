@@ -13,10 +13,10 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.android.baseballbythenumbers.Data.Organization;
-import com.example.android.baseballbythenumbers.Data.Schedule;
-import com.example.android.baseballbythenumbers.Generators.OrganizationGenerator;
-import com.example.android.baseballbythenumbers.Generators.ScheduleGenerator;
+import com.example.android.baseballbythenumbers.data.Organization;
+import com.example.android.baseballbythenumbers.data.Schedule;
+import com.example.android.baseballbythenumbers.generators.OrganizationGenerator;
+import com.example.android.baseballbythenumbers.generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentNewLeagueOptionsBinding;
 
@@ -70,8 +70,8 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param countries
-     * @param userCity
+     * @param countries a number representing the countries to pick cities from
+     * @param userCity the name of the users city
      * @return A new instance of fragment SaveOrganizationFragment.
      */
 
@@ -184,7 +184,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
     }
 
     private boolean inputsAreValid() {
-        return (isUserNameValid() && isTeamNameValid() && areLeaguesSelectedValid() && isDivisionSelectioValid() && isTeamSelectionValid() && isGamesInSeriesSelectionValid());
+        return (isUserNameValid() && isTeamNameValid() && areLeaguesSelectedValid() && isDivisionSelectionValid() && isTeamSelectionValid() && isGamesInSeriesSelectionValid());
     }
 
     private boolean isGamesInSeriesSelectionValid() {
@@ -205,7 +205,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         return false;
     }
 
-    private boolean isDivisionSelectioValid() {
+    private boolean isDivisionSelectionValid() {
         if (divisionSpinner.getSelectedItemPosition() > 0) {
             mNumOfDivisions = Integer.parseInt((String) divisionSpinner.getSelectedItem());
             return true;
@@ -303,11 +303,9 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.start_season_button:
-                showProgressBar();
-                onStartSeasonButtonPressed(view);
-                break;
+        if (view.getId() == R.id.start_season_button) {
+            showProgressBar();
+            onStartSeasonButtonPressed(view);
         }
     }
 

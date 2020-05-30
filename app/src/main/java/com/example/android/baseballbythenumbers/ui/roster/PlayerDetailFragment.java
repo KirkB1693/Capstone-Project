@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.android.baseballbythenumbers.Constants.Positions;
-import com.example.android.baseballbythenumbers.Data.Player;
+import com.example.android.baseballbythenumbers.constants.Positions;
+import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayerDetailBinding;
 

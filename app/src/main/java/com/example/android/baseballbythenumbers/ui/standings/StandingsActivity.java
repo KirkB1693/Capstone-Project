@@ -13,13 +13,13 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.android.baseballbythenumbers.AppExecutors;
-import com.example.android.baseballbythenumbers.Data.Division;
-import com.example.android.baseballbythenumbers.Data.League;
-import com.example.android.baseballbythenumbers.Data.Organization;
-import com.example.android.baseballbythenumbers.Data.Team;
+import com.example.android.baseballbythenumbers.data.Division;
+import com.example.android.baseballbythenumbers.data.League;
+import com.example.android.baseballbythenumbers.data.Organization;
+import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
-import com.example.android.baseballbythenumbers.ViewModels.StandingsViewModel;
+import com.example.android.baseballbythenumbers.viewModels.StandingsViewModel;
 import com.example.android.baseballbythenumbers.databinding.ActivityStandingsBinding;
 
 import java.text.DecimalFormat;

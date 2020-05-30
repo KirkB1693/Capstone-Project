@@ -5,7 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.android.baseballbythenumbers.Data.Organization;
+import com.example.android.baseballbythenumbers.data.Organization;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
 import com.example.android.baseballbythenumbers.databinding.ActivityNewLeagueSetupBinding;

@@ -20,11 +20,11 @@ import com.example.android.baseballbythenumbers.databinding.FragmentPickCountrie
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.ALL_COUNTRIES;
-import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.CANADA;
-import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.JAPAN;
-import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.MEXICO;
-import static com.example.android.baseballbythenumbers.Constants.Constants.Countries.USA;
+import static com.example.android.baseballbythenumbers.constants.Constants.Countries.ALL_COUNTRIES;
+import static com.example.android.baseballbythenumbers.constants.Constants.Countries.CANADA;
+import static com.example.android.baseballbythenumbers.constants.Constants.Countries.JAPAN;
+import static com.example.android.baseballbythenumbers.constants.Constants.Countries.MEXICO;
+import static com.example.android.baseballbythenumbers.constants.Constants.Countries.USA;
 
 
 public class PickCountriesFragment extends Fragment implements View.OnClickListener {
@@ -111,10 +111,8 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.doneWithCountriesButton:
-                onDoneWithCountriesButtonPressed(view);
-                break;
+        if (view.getId() == R.id.doneWithCountriesButton) {
+            onDoneWithCountriesButtonPressed(view);
         }
 
     }
