@@ -2,14 +2,16 @@ package com.example.android.baseballbythenumbers.ui.newleaguesetup;
 
 import android.app.Application;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.BattingStats;
 import com.example.android.baseballbythenumbers.data.Division;
 import com.example.android.baseballbythenumbers.data.Game;
@@ -19,9 +21,8 @@ import com.example.android.baseballbythenumbers.data.PitchingStats;
 import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Schedule;
 import com.example.android.baseballbythenumbers.data.Team;
-import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.repository.Repository;
 import com.example.android.baseballbythenumbers.databinding.FragmentSaveOrganizationBinding;
+import com.example.android.baseballbythenumbers.repository.Repository;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,7 @@
 package com.example.android.baseballbythenumbers.simulators;
 
 import android.graphics.Typeface;
-import android.support.v4.util.Pair;
+import androidx.core.util.Pair;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;

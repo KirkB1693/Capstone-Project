@@ -1,19 +1,20 @@
 package com.example.android.baseballbythenumbers.ui.gameplay;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.baseballbythenumbers.data.Game;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreBinding;
+import com.google.android.material.tabs.TabLayout;
 
 public class BoxScoreFragment extends Fragment {
 

@@ -1,21 +1,22 @@
 package com.example.android.baseballbythenumbers.ui.gameplay;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
-import com.example.android.baseballbythenumbers.data.Game;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.viewModels.PlayByPlayViewModel;
+import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayByPlayBinding;
+import com.example.android.baseballbythenumbers.viewModels.PlayByPlayViewModel;
 
 public class PlayByPlayFragment extends Fragment {
 
@@ -59,7 +60,7 @@ public class PlayByPlayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(PlayByPlayViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(PlayByPlayViewModel.class);
         mViewModel.setGame(mGame.getGameId());
 
         gameObserver = new Observer<Game>() {
@@ -69,7 +70,7 @@ public class PlayByPlayFragment extends Fragment {
             }
         };
 
-        mViewModel.getGame().observe(this, gameObserver);
+        mViewModel.getGame().observe(getViewLifecycleOwner(), gameObserver);
 
 
     }

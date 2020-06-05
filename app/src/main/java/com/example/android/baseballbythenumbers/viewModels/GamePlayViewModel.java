@@ -1,12 +1,13 @@
 package com.example.android.baseballbythenumbers.viewModels;
 
-import android.arch.lifecycle.ViewModel;
 
+import androidx.lifecycle.ViewModel;
+
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.data.Organization;
 import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.repository.Repository;
-import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.simulators.GameSimulator;
 
 public class GamePlayViewModel extends ViewModel {

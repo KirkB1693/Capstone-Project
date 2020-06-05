@@ -1,9 +1,10 @@
 package com.example.android.baseballbythenumbers.repository;
 
-import android.arch.core.util.Function;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
+
+import androidx.arch.core.util.Function;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.data.BattingLine;

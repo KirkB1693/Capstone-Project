@@ -1,26 +1,27 @@
 package com.example.android.baseballbythenumbers.ui.standings;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.android.baseballbythenumbers.AppExecutors;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.Division;
 import com.example.android.baseballbythenumbers.data.League;
 import com.example.android.baseballbythenumbers.data.Organization;
 import com.example.android.baseballbythenumbers.data.Team;
-import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.databinding.ActivityStandingsBinding;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
 import com.example.android.baseballbythenumbers.viewModels.StandingsViewModel;
-import com.example.android.baseballbythenumbers.databinding.ActivityStandingsBinding;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -38,7 +39,7 @@ private StandingsViewModel standingsViewModel;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standings);
         activityStandingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_standings);
-        standingsViewModel = ViewModelProviders.of(this).get(StandingsViewModel.class);
+        standingsViewModel = new ViewModelProvider(this).get(StandingsViewModel.class);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

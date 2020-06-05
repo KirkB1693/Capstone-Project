@@ -1,36 +1,37 @@
 package com.example.android.baseballbythenumbers.ui.gameplay;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.graphics.drawable.Animatable2Compat;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
+import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.data.BattingLine;
 import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.data.Organization;
 import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Runner;
 import com.example.android.baseballbythenumbers.data.Team;
-import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.databinding.ActivityGamePlayBinding;
 import com.example.android.baseballbythenumbers.repository.Repository;
-import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
 import com.example.android.baseballbythenumbers.viewModels.GamePlayViewModel;
-import com.example.android.baseballbythenumbers.databinding.ActivityGamePlayBinding;
+import com.google.android.material.tabs.TabLayout;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
         activityGamePlayBinding = DataBindingUtil.setContentView(this, R.layout.activity_game_play);
-        gamePlayViewModel = ViewModelProviders.of(this).get(GamePlayViewModel.class);
+        gamePlayViewModel = new ViewModelProvider(this).get(GamePlayViewModel.class);
         resourceProvider = ((BaseballByTheNumbersApp) getApplication()).getResourceProvider();
 
         if (savedInstanceState != null) {

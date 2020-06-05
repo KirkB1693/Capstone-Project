@@ -3,9 +3,6 @@ package com.example.android.baseballbythenumbers.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,8 +11,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.baseballbythenumbers.data.Player;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationFragment;
 import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationItemMoveCallback;
 import com.example.android.baseballbythenumbers.ui.roster.PitchingRotationStartDragListener;

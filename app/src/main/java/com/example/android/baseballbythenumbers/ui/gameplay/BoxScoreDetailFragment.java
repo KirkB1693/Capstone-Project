@@ -1,26 +1,27 @@
 package com.example.android.baseballbythenumbers.ui.gameplay;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.BattingLine;
 import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.data.PitchingLine;
-import com.example.android.baseballbythenumbers.R;
-import com.example.android.baseballbythenumbers.viewModels.BoxScoreDetailViewModel;
 import com.example.android.baseballbythenumbers.databinding.FragmentBoxScoreDetailBinding;
+import com.example.android.baseballbythenumbers.viewModels.BoxScoreDetailViewModel;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -74,7 +75,7 @@ public class BoxScoreDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(getActivity()).get(BoxScoreDetailViewModel.class);
+        mViewModel = new ViewModelProvider(getActivity()).get(BoxScoreDetailViewModel.class);
         mViewModel.setGame(mGame.getGameId());
 
         gameObserver = new Observer<Game>() {
@@ -86,7 +87,7 @@ public class BoxScoreDetailFragment extends Fragment {
             }
         };
 
-        mViewModel.getGame().observe(this, gameObserver);
+        mViewModel.getGame().observe(getViewLifecycleOwner(), gameObserver);
     }
 
     private void updateFragmentUIBattingLines(List<BattingLine> battingLines) {

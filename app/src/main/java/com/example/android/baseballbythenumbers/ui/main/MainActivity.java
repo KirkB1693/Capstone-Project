@@ -1,22 +1,24 @@
 package com.example.android.baseballbythenumbers.ui.main;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
+
 import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.BuildConfig;
+import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.BattingStats;
 import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.data.Organization;
@@ -24,17 +26,16 @@ import com.example.android.baseballbythenumbers.data.PitchingStats;
 import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Schedule;
 import com.example.android.baseballbythenumbers.data.Team;
-import com.example.android.baseballbythenumbers.ui.gameplay.GamePlayActivity;
+import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
+import com.example.android.baseballbythenumbers.generators.ScheduleGenerator;
 import com.example.android.baseballbythenumbers.generators.lineupAndDefense.LineupGenerator;
 import com.example.android.baseballbythenumbers.generators.lineupAndDefense.PitchingRotationGenerator;
-import com.example.android.baseballbythenumbers.generators.ScheduleGenerator;
-import com.example.android.baseballbythenumbers.ui.newleaguesetup.NewLeagueSetupActivity;
-import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.repository.Repository;
+import com.example.android.baseballbythenumbers.ui.gameplay.GamePlayActivity;
+import com.example.android.baseballbythenumbers.ui.newleaguesetup.NewLeagueSetupActivity;
 import com.example.android.baseballbythenumbers.ui.roster.RosterActivity;
 import com.example.android.baseballbythenumbers.ui.standings.StandingsActivity;
 import com.example.android.baseballbythenumbers.viewModels.MainActivityViewModel;
-import com.example.android.baseballbythenumbers.databinding.ActivityMainBinding;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

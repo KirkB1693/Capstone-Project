@@ -1,14 +1,15 @@
 package com.example.android.baseballbythenumbers.data;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
+import static androidx.room.ForeignKey.CASCADE;
 import static com.example.android.baseballbythenumbers.constants.Constants.BatterBaseStats.BATTING_DOUBLE_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MEAN;
 import static com.example.android.baseballbythenumbers.constants.Constants.BatterBaseStats.BATTING_HOME_RUN_PCT_MIN;
@@ -54,7 +55,7 @@ import static com.example.android.baseballbythenumbers.constants.Positions.getPo
 import static com.example.android.baseballbythenumbers.generators.PitcherGenerator.ONE_HUNDRED_PERCENT;
 
 @SuppressWarnings("NotNullFieldNotInitialized")
-@Entity (tableName = "players", foreignKeys = @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId", onDelete = CASCADE), indices = @Index(value = "teamId"))
+@Entity(tableName = "players", foreignKeys = @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId", onDelete = CASCADE), indices = @Index(value = "teamId"))
 public class Player implements Parcelable
 {
     @PrimaryKey

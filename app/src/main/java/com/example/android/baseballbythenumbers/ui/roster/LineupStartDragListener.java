@@ -1,10 +1,11 @@
 package com.example.android.baseballbythenumbers.ui.roster;
 
-import android.support.v7.widget.RecyclerView;
+
+import com.example.android.baseballbythenumbers.adapters.LineupRecyclerViewAdapter;
 
 public class LineupStartDragListener {
 
     public interface StartDragListener {
-        void requestDrag(RecyclerView.ViewHolder viewHolder);
+        void requestDrag(LineupRecyclerViewAdapter.ViewHolder viewHolder);
     }
 }

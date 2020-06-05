@@ -6,7 +6,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/manage_game_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -80,6 +80,6 @@
         app:layout_constraintStart_toStartOf="@+id/sim_this_at_bat_button"
         app:layout_constraintTop_toBottomOf="@+id/pause_button" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 </layout>

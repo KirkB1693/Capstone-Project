@@ -1,17 +1,18 @@
 package com.example.android.baseballbythenumbers.simulators;
 
-import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
 import android.text.SpannableStringBuilder;
 
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
+
+import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.data.BattingLine;
 import com.example.android.baseballbythenumbers.data.PitchingLine;
 import com.example.android.baseballbythenumbers.data.PitchingStats;
 import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Runner;
-import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.repository.Repository;
-import com.example.android.baseballbythenumbers.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

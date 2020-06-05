@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="@+id/center_guideline"
             app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:tabTextColor="@color/divider"
                 tools:context=".ui.gameplay.GamePlayActivity" />
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -411,7 +411,7 @@
             app:layout_constraintTop_toTopOf="@+id/game_screen_visitor_player_tv"
             tools:text="Home Player Info" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/throw_pitch_fab"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -543,14 +543,14 @@
             app:layout_constraintTop_toTopOf="@+id/score_background_image"
             tools:text="At Bat Result" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent=".175" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/center_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -609,5 +609,5 @@
             tools:text="Runner On 2nd" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

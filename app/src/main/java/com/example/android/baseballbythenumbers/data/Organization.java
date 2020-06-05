@@ -1,12 +1,13 @@
 package com.example.android.baseballbythenumbers.data;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,7 +21,7 @@ import java.util.UUID;
 import static com.example.android.baseballbythenumbers.constants.TableNames.ORGANIZATION_TABLE_NAME;
 
 @SuppressWarnings("NotNullFieldNotInitialized")
-@Entity (tableName = ORGANIZATION_TABLE_NAME)
+@Entity(tableName = ORGANIZATION_TABLE_NAME)
 public class Organization implements Parcelable {
 
     @SerializedName("id")

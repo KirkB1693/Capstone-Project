@@ -1,7 +1,8 @@
 package com.example.android.baseballbythenumbers.viewModels;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+
+import androidx.lifecycle.AndroidViewModel;
 
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.data.Organization;

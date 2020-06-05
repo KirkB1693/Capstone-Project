@@ -1,11 +1,13 @@
 package com.example.android.baseballbythenumbers.viewModels;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.example.android.baseballbythenumbers.AppExecutors;
 import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.data.BattingLine;
 import com.example.android.baseballbythenumbers.data.BattingStats;
 import com.example.android.baseballbythenumbers.data.BoxScore;
@@ -19,7 +21,6 @@ import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Schedule;
 import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.repository.Repository;
-import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.simulators.GameSimulator;
 
 import java.util.ArrayList;

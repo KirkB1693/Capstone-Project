@@ -1,11 +1,12 @@
 package com.example.android.baseballbythenumbers.adapters;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.ui.newleaguesetup.PickCityFragment.OnListFragmentInteractionListener;
