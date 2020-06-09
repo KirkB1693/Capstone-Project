@@ -39,6 +39,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
     public static final int NUMBER_OF_PLAYERS_ON_ROSTER = 26;
     private static final String ARG_COUNTRIES = "countries";
     private static final String ARG_USER_CITY = "user_city";
+    private static final String ARG_USER_NAME = "user_name";
 
     private int countries;
     private String userCity;
@@ -62,6 +63,8 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
 
     private OnFragmentInteractionListener mListener;
 
+    private String userName;
+
     public NewLeagueOptionsFragment() {
         // Required empty public constructor
     }
@@ -76,11 +79,12 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
      * @return A new instance of fragment SaveOrganizationFragment.
      */
 
-    public static NewLeagueOptionsFragment newInstance(int countries, String userCity) {
+    public static NewLeagueOptionsFragment newInstance(int countries, String userCity, String userName) {
         NewLeagueOptionsFragment fragment = new NewLeagueOptionsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COUNTRIES, countries);
         args.putString(ARG_USER_CITY, userCity);
+        args.putString(ARG_USER_NAME, userName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,6 +95,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         if (getArguments() != null) {
             countries = getArguments().getInt(ARG_COUNTRIES);
             userCity = getArguments().getString(ARG_USER_CITY);
+            userName = getArguments().getString(ARG_USER_NAME);
         }
     }
 
@@ -114,6 +119,9 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         gamesInSeriesSpinner = newLeagueOptionsBinding.gamesInSeriesSpinner;
         leagueNames = new ArrayList<>();
         leagueUsesDh = new ArrayList<>();
+        if (!userName.isEmpty()) {
+            newLeagueOptionsBinding.userNameEt.setText(userName);
+        }
     }
 
     public void onStartSeasonButtonPressed(View view) {

@@ -164,5 +164,10 @@
     <string name="organization_saving_player_stats_label">Saving Player Stats…</string>
     <string name="organization_saving_schedule_label">Saving Schedule…</string>
     <string name="organization_finished_saving_label">Finished Saving!</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="main_screen_title_prefix">GM :\u0020\ </string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_empty_text">Can\'t find any teams!!!</string>
 
 </resources>

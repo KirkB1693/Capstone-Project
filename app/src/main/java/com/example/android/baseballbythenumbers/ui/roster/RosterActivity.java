@@ -30,6 +30,9 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roster);
         activityRosterBinding = DataBindingUtil.setContentView(this, R.layout.activity_roster);
+        activityRosterBinding.rosterToolbar.setTitle(getString(R.string.app_name));
+        setSupportActionBar(activityRosterBinding.rosterToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState != null) {
             current_player = savedInstanceState.getParcelable(CURRENT_PLAYER_SELECTED);

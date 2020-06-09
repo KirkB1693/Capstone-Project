@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/primaryColor"
+    android:paddingTop="@dimen/widget_small_margin"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:weightSum="15">
+
+    <TextView
+        android:id="@+id/widget_item_team_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/standings_team_name_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="7"/>
+
+    <TextView
+        android:id="@+id/widget_team_record_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/standings_record_label"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="4"/>
+
+    <TextView
+        android:id="@+id/widget_item_winning_percentage_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/standings_win_pct_label"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="4"/>
+
+</LinearLayout>

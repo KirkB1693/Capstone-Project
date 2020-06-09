@@ -2,6 +2,7 @@ package com.example.android.baseballbythenumbers.ui.standings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,8 +41,8 @@ private StandingsViewModel standingsViewModel;
         activityStandingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_standings);
         standingsViewModel = new ViewModelProvider(this).get(StandingsViewModel.class);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(activityStandingsBinding.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Standings");
 
@@ -321,8 +321,15 @@ private StandingsViewModel standingsViewModel;
                     (Context.LAYOUT_INFLATER_SERVICE);
             TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.standings_division_table_labels, null);
             tableLayout.addView(labelsRow);
+            Boolean changebackground = true;
             for (Team team: teams) {
+                changebackground = !changebackground;
                 TableLayout teamRow = (TableLayout) inflater.inflate(R.layout.standings_table_empty_row, null);
+                if (changebackground) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        teamRow.setBackgroundColor(getColor(R.color.light_background));
+                    }
+                }
                 TextView teamNameTV = teamRow.findViewById(R.id.standings_empty_team_name_tv);
                 teamNameTV.setText(String.format("%s %s", team.getTeamCity(), team.getTeamName()));
                 TextView teamRecordTV = teamRow.findViewById(R.id.standings_empty_record_tv);
@@ -342,6 +349,12 @@ private StandingsViewModel standingsViewModel;
             }
             tableLayout.setStretchAllColumns(true);
         }
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

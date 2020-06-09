@@ -22,12 +22,21 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
     private ActivityNewLeagueSetupBinding newLeagueSetupBinding;
     private int countries;
     private String cityName;
+    private String mUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_league_setup);
         newLeagueSetupBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_league_setup);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                mUserName = extras.getString(MainActivity.USER_NAME_EXTRA);
+            }
+        }
 
         PickCountriesFragment fragment;
         if (savedInstanceState != null) {
@@ -60,7 +69,7 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
 
     private void changeFragmentsToNewLeagueOptions() {
         newLeagueSetupBinding.newLeagueSetupLabel.setText(R.string.finish_league_setup_label);
-        NewLeagueOptionsFragment fragment = NewLeagueOptionsFragment.newInstance(countries, cityName);
+        NewLeagueOptionsFragment fragment = NewLeagueOptionsFragment.newInstance(countries, cityName, mUserName);
         getSupportFragmentManager().beginTransaction().replace(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, FINISH_LEAGUE_SETUP_FRAGMENT_TAG)
                 .addToBackStack(PICK_CITIES_FRAGMENT_TAG).commit();
     }

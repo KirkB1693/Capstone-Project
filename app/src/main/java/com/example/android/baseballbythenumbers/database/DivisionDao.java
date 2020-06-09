@@ -30,4 +30,7 @@ public interface DivisionDao {
 
     @Query("SELECT * FROM divisions WHERE leagueId=:leagueId")
     List<Division> findDivisionsForLeague(String leagueId);
+
+    @Query("SELECT * FROM divisions WHERE divisionId=:divisionId LIMIT 1")
+    Division findDivisionById(String divisionId);
 }

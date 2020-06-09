@@ -207,13 +207,13 @@ public class Team implements Parcelable {
                 winLossPctTeam2 = team2.wins;
             }
 
-            if (winLossPctTeam1 == winLossPctTeam2) {  // if the percentages are equal put them in alphabetical order
-                if ((team1.getTeamName()).compareToIgnoreCase((team2.getTeamName())) > 0) {
-                    winLossPctTeam1 = 1;
-                    winLossPctTeam2 = 0;
-                } else {
+            if (winLossPctTeam1 == winLossPctTeam2) {  // if the percentages are equal put them in alphabetical order by city
+                if ((team1.getTeamCity()).compareToIgnoreCase((team2.getTeamCity())) > 0) {
                     winLossPctTeam1 = 0;
                     winLossPctTeam2 = 1;
+                } else {
+                    winLossPctTeam1 = 1;
+                    winLossPctTeam2 = 0;
                 }
             }
             //descending order so winLossPctTeam2 - winLossPctTeam1 --> Gives output in order from best to worst W-L pct number

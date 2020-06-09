@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_background_wrapper_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="@dimen/widget_small_margin"
+    android:weightSum="15">
+
+    <TextView
+        android:id="@+id/widget_item_team_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="San Diego"
+        android:textColor="@color/black"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="7"/>
+
+    <TextView
+        android:id="@+id/widget_team_record_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="21 - 10"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="4"/>
+
+    <TextView
+        android:id="@+id/widget_item_winning_percentage_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text=".500"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/widget_team_name_text_size"
+        android:layout_weight="4"/>
+
+</LinearLayout>
