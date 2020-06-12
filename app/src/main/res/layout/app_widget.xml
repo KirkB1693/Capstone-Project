@@ -1,18 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_wrapper_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/widget_wrapper_ll"
-    android:background="@color/primaryColor"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/widget_margin"
-    android:orientation="vertical">
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/widgetDivisionTV"
+        style="@style/StandingsDivisionLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        style="@style/StandingsDivisionLabels"
         android:textColor="@color/white"
         tools:text="Division 1" />
 
@@ -23,11 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:divider="@null"
-        android:background="@color/white"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:divider="@null"
         tools:listitem="@layout/widget_item"
         tools:text="List of teams..." />
 
@@ -35,14 +36,13 @@
         android:id="@+id/empty_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="@dimen/widget_small_margin"
-        android:layout_marginEnd="@dimen/widget_small_margin"
         android:layout_marginStart="@dimen/widget_small_margin"
         android:layout_marginTop="@dimen/widget_small_margin"
+        android:layout_marginEnd="@dimen/widget_small_margin"
+        android:layout_marginBottom="@dimen/widget_small_margin"
+        android:gravity="center"
         android:text="@string/widget_empty_text"
-        android:textColor="@color/white"
-        />
+        android:textColor="@color/white" />
 
 </LinearLayout>

@@ -19,6 +19,8 @@ import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.databinding.FragmentLineupBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -74,7 +76,7 @@ public class LineupFragment extends Fragment implements LineupStartDragListener.
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnLineupFragmentInteractionListener) {
             mListener = (OnLineupFragmentInteractionListener) context;

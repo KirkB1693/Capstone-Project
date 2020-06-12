@@ -18,8 +18,6 @@ public class GamePlayViewModel extends ViewModel {
     private String usersTeamName;
     private Organization organization;
     private Repository repository;
-    private int homeErrorsAtGameStart;
-    private int visitorErrorsAtGameStart;
 
     public void setGame(Game game) {
         this.game = game;
@@ -69,33 +67,10 @@ public class GamePlayViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public int getHomeErrorsAtGameStart() {
-        return homeErrorsAtGameStart;
-    }
-
-    public void setHomeErrorsAtGameStart(int homeErrorsAtGameStart) {
-        this.homeErrorsAtGameStart = homeErrorsAtGameStart;
-    }
-
-    public int getVisitorErrorsAtGameStart() {
-        return visitorErrorsAtGameStart;
-    }
-
-    public void setVisitorErrorsAtGameStart(int visitorErrorsAtGameStart) {
-        this.visitorErrorsAtGameStart = visitorErrorsAtGameStart;
-    }
-
-    public void setGameSimulator(GameSimulator mGameSimulator) {
-        this.mGameSimulator = mGameSimulator;
-    }
-
     public GameSimulator getGameSimulator() {
         return mGameSimulator;
     }
 
-    public void simAtBat() {
-        mGameSimulator.simAtBatWithHumanControl();
-    }
 
     public void setupGameSimulator(ResourceProvider resourceProvider) {
         boolean homeTeamControl = false;

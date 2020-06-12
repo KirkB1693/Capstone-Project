@@ -19,6 +19,8 @@ import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.databinding.FragmentPitchingRotationBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -91,7 +93,7 @@ public class PitchingRotationFragment extends Fragment implements PitchingRotati
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnPitchingRotationFragmentInteractionListener) {
             mListener = (OnPitchingRotationFragmentInteractionListener) context;

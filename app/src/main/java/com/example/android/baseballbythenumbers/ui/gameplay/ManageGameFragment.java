@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.databinding.FragmentManageGameBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ManageGameFragment extends Fragment implements View.OnClickListener {
 
     private FragmentManageGameBinding manageGameBinding;
@@ -86,9 +88,6 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
 
     private void updateUI() {
         switch (mGameState) {
-            case GamePlayActivity.INITIAL_GAME_STATE:
-                setInitialGameVisibility();
-                break;
             case GamePlayActivity.USER_TEAM_PITCHING_GAME_STATE:
                 setTeamPitchingVisibility();
                 break;
@@ -109,7 +108,7 @@ public class ManageGameFragment extends Fragment implements View.OnClickListener
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof ManageGameClickListener) {
             manageGameClickListener = (ManageGameClickListener) context;

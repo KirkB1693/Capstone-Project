@@ -43,6 +43,8 @@ public class NewLeagueSetupActivity extends AppCompatActivity implements PickCou
             fragment = (PickCountriesFragment) getSupportFragmentManager().findFragmentByTag(PICK_COUNTRIES_FRAGMENT_TAG);
         } else {
             fragment = new PickCountriesFragment();
+        }
+        if (fragment != null) {
             getSupportFragmentManager().beginTransaction().add(newLeagueSetupBinding.fragmentPlaceholder.getId(), fragment, PICK_COUNTRIES_FRAGMENT_TAG).commit();
         }
 

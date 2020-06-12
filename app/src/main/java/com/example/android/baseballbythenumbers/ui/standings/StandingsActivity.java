@@ -1,11 +1,16 @@
 package com.example.android.baseballbythenumbers.ui.standings;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -37,13 +42,19 @@ private StandingsViewModel standingsViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        }
         setContentView(R.layout.activity_standings);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            postponeEnterTransition();
+        }
         activityStandingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_standings);
         standingsViewModel = new ViewModelProvider(this).get(StandingsViewModel.class);
-
         setSupportActionBar(activityStandingsBinding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setTitle("Standings");
 
         Intent intent = getIntent();
@@ -82,8 +93,10 @@ private StandingsViewModel standingsViewModel;
         }
     }
 
-    private void setDivisionNames(int leagueNumber, League league) {
+    private void setDivisionNames(final int leagueNumber, League league) {
         int divisionNumber = 0;
+        final int totalLeagues = organization.getLeagues().size();
+        final int totalDivisions = league.getDivisions().size();
         for (final Division division: league.getDivisions()) {
             divisionNumber++;
             switch (leagueNumber) {
@@ -102,6 +115,9 @@ private StandingsViewModel standingsViewModel;
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league1division1Table);
                                             activityStandingsBinding.include.standingsProgressBar.setVisibility(View.GONE);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 1) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -119,6 +135,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league1division2Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 2) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -136,6 +155,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league1division3Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 3) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -153,6 +175,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league1division4Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 4) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -175,6 +200,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league2division1Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 1) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -192,6 +220,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league2division2Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 2) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -209,6 +240,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league2division3Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 3) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -226,6 +260,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league2division4Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 4) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -248,6 +285,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league3division1Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 1) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -265,6 +305,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league3division2Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 2) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -282,6 +325,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league3division3Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 3) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -299,6 +345,9 @@ private StandingsViewModel standingsViewModel;
                                         @Override
                                         public void run() {
                                             setTeamsInTable(teams, activityStandingsBinding.include.league3division4Table);
+                                            if (totalLeagues == leagueNumber && totalDivisions == 5) {
+                                                setupWindowAnimations();
+                                            }
                                         }
                                     });
                                 }
@@ -319,35 +368,49 @@ private StandingsViewModel standingsViewModel;
             tableLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
-            TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.standings_division_table_labels, null);
-            tableLayout.addView(labelsRow);
-            Boolean changebackground = true;
-            for (Team team: teams) {
-                changebackground = !changebackground;
-                TableLayout teamRow = (TableLayout) inflater.inflate(R.layout.standings_table_empty_row, null);
-                if (changebackground) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        teamRow.setBackgroundColor(getColor(R.color.light_background));
+            if (inflater != null) {
+                TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.standings_division_table_labels, null);
+                tableLayout.addView(labelsRow);
+                boolean changeBackground = true;
+                for (Team team : teams) {
+                    changeBackground = !changeBackground;
+                    TableLayout teamRow = (TableLayout) inflater.inflate(R.layout.standings_table_empty_row, null);
+                    if (changeBackground) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            teamRow.setBackgroundColor(getColor(R.color.light_background));
+                        }
                     }
+                    TextView teamNameTV = teamRow.findViewById(R.id.standings_empty_team_name_tv);
+                    teamNameTV.setText(String.format("%s %s", team.getTeamCity(), team.getTeamName()));
+                    TextView teamRecordTV = teamRow.findViewById(R.id.standings_empty_record_tv);
+                    String teamRecord = String.format(Locale.getDefault(), "%d - %d", team.getWins(), team.getLosses());
+                    teamRecordTV.setText(teamRecord);
+                    TextView teamWLPctTV = teamRow.findViewById(R.id.standings_empty_win_pct_tv);
+                    DecimalFormat decimalFormat = new DecimalFormat(".000");
+                    double winPct;
+                    if (team.getWins() == 0) {
+                        winPct = 0.0;
+                    } else {
+                        winPct = (team.getWins() * 1.0) / (team.getWins() + team.getLosses());
+                    }
+                    String winPctString = decimalFormat.format(winPct);
+                    teamWLPctTV.setText(winPctString);
+                    tableLayout.addView(teamRow);
                 }
-                TextView teamNameTV = teamRow.findViewById(R.id.standings_empty_team_name_tv);
-                teamNameTV.setText(String.format("%s %s", team.getTeamCity(), team.getTeamName()));
-                TextView teamRecordTV = teamRow.findViewById(R.id.standings_empty_record_tv);
-                String teamRecord = String.format(Locale.getDefault(), "%d - %d", team.getWins(), team.getLosses());
-                teamRecordTV.setText(teamRecord);
-                TextView teamWLPctTV = teamRow.findViewById(R.id.standings_empty_win_pct_tv);
-                DecimalFormat decimalFormat = new DecimalFormat(".000");
-                double winPct;
-                if (team.getWins() == 0) {
-                    winPct = 0.0;
-                } else {
-                    winPct = (team.getWins() * 1.0)/(team.getWins() + team.getLosses());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    tableLayout.setTransitionGroup(true);
                 }
-                String winPctString = decimalFormat.format(winPct);
-                teamWLPctTV.setText(winPctString);
-                tableLayout.addView(teamRow);
+                tableLayout.setStretchAllColumns(true);
             }
-            tableLayout.setStretchAllColumns(true);
+        }
+    }
+
+    private void setupWindowAnimations() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.slide_up);
+            getWindow().setEnterTransition(transition);
+            getWindow().setExitTransition(new Fade(Fade.OUT));
+            startPostponedEnterTransition();
         }
     }
 
@@ -360,8 +423,15 @@ private StandingsViewModel standingsViewModel;
     @Override
     public void onBackPressed() {
         // do something on back.
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            Intent standingsIntent = new Intent(StandingsActivity.this, MainActivity.class);
+            startActivity(standingsIntent, options.toBundle());
+            finishAfterTransition();
+        } else {
+            Intent standingsIntent = new Intent(this, MainActivity.class);
+            this.startActivity(standingsIntent);
+            finish();
+        }
     }
 }

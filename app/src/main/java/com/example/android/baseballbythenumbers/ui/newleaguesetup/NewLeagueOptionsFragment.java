@@ -294,7 +294,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

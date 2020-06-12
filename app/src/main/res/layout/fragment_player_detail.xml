@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_hitting_bars_ll" />
 
         <TextView
             android:id="@+id/player_detail_batting_stats_label"
@@ -92,7 +92,7 @@
             tools:text="SP" />
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
+            android:id="@+id/player_detail_hitting_stats_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -119,7 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout4"
+            android:id="@+id/player_detail_hitting_bar_labels_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -131,7 +131,7 @@
             android:weightSum="16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_hitting_stats_ll">
 
             <TextView
                 android:id="@+id/player_detail_batting_contact_label"
@@ -174,7 +174,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/player_detail_hitting_bars_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -186,7 +186,7 @@
             android:weightSum="16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_hitting_bar_labels_ll">
 
             <ProgressBar
                 android:id="@+id/player_detail_batting_contact_pb"
@@ -239,7 +239,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout5"
+            android:id="@+id/player_detail_pitching_stats_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -267,7 +267,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout7"
+            android:id="@+id/player_detail_pitching_bar_labels_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -279,7 +279,7 @@
             android:weightSum="16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_pitching_stats_ll">
 
             <TextView
                 android:id="@+id/player_detail_pitching_stamina_label"
@@ -321,7 +321,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout6"
+            android:id="@+id/player_detail_pitching_bars_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -333,7 +333,7 @@
             android:weightSum="16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+            app:layout_constraintTop_toBottomOf="@+id/player_detail_pitching_bar_labels_ll">
 
             <ProgressBar
                 android:id="@+id/player_detail_pitching_stamina_pb"
@@ -385,6 +385,20 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/empty_player_detail_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/empty_player_detail_text"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

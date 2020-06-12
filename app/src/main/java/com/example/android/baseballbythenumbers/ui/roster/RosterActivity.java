@@ -17,6 +17,8 @@ import com.example.android.baseballbythenumbers.ui.main.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RosterActivity extends AppCompatActivity implements LineupFragment.OnLineupFragmentInteractionListener, PitchingRotationFragment.OnPitchingRotationFragmentInteractionListener {
 
     private static final String CURRENT_PLAYER_SELECTED = "current_player_selected";
@@ -32,8 +34,9 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
         activityRosterBinding = DataBindingUtil.setContentView(this, R.layout.activity_roster);
         activityRosterBinding.rosterToolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(activityRosterBinding.rosterToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         if (savedInstanceState != null) {
             current_player = savedInstanceState.getParcelable(CURRENT_PLAYER_SELECTED);
         } else {
@@ -90,7 +93,7 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(CURRENT_PLAYER_SELECTED, current_player);
     }

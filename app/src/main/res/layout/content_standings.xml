@@ -61,6 +61,7 @@
             <TableLayout
                 android:id="@+id/league1division2Table"
                 style="@style/StandingsTables"
+                android:transitionGroup="true"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

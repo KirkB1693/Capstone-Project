@@ -1,5 +1,6 @@
 package com.example.android.baseballbythenumbers.ui.main;
 
+import android.app.ActivityOptions;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,7 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +55,11 @@ import com.example.android.baseballbythenumbers.viewModels.MainActivityViewModel
 import com.example.android.baseballbythenumbers.widget.BaseballByTheNumbersAppWidgetProvider;
 import com.example.android.baseballbythenumbers.widget.BaseballByTheNumbersWidgetService;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -97,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Boolean setupNewLeague = false;
 
+    private AdView mAdView;
+
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private boolean mConfigureWidget;
 
@@ -106,8 +118,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        setupWindowAnimations();
         mainBinding.mainToolbar.setTitle("");
         setSupportActionBar(mainBinding.mainToolbar);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -180,6 +202,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkForUserSignIn();
     }
 
+    private void setupWindowAnimations() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition transitionOut = TransitionInflater.from(this).inflateTransition(R.transition.fade_out);
+            getWindow().setExitTransition(transitionOut);
+            getWindow().setEnterTransition(new Fade(Fade.IN));
+        }
+    }
+
     private void checkForUserSignIn() {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -205,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
+                                    .setTheme(R.style.LoginTheme)
                                     .setAvailableProviders(providers)
                                     .build(),
                             RC_SIGN_IN);
@@ -336,20 +367,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Player nextVisitingStarter = PitchingRotationGenerator.getBestStarterAvailableForNextGame(mainActivityViewModel.getVisitingTeam());
             mainBinding.include.mainProgressBar.setVisibility(View.GONE);
             mainBinding.include.homeCityTV.setText(mainActivityViewModel.getHomeTeam().getTeamCity());
-            mainBinding.include.homeTeamNameTV.setText(mainActivityViewModel.getHomeTeam().getTeamName());
+            mainBinding.include.mainHomeTeamNameTV.setText(mainActivityViewModel.getHomeTeam().getTeamName());
             String homeWL = formatWL(mainActivityViewModel.getHomeTeam());
-            mainBinding.include.homeTeamWLTV.setText(homeWL);
-            mainBinding.include.homeStarterTV.setText(nextHomeStarter.getName());
+            mainBinding.include.mainHomeTeamWLTV.setText(homeWL);
+            mainBinding.include.mainHomeStarterTV.setText(nextHomeStarter.getName());
             String homeStarterStats = formatStarterStats(nextHomeStarter.getPitchingStats());
-            mainBinding.include.homeStarterStatsTV.setText(homeStarterStats);
+            mainBinding.include.mainHomeStarterStatsTV.setText(homeStarterStats);
 
-            mainBinding.include.visitingTeamNameTV.setText(mainActivityViewModel.getVisitingTeam().getTeamName());
+            mainBinding.include.mainVisitingTeamNameTV.setText(mainActivityViewModel.getVisitingTeam().getTeamName());
             mainBinding.include.visitingCityTV.setText(mainActivityViewModel.getVisitingTeam().getTeamCity());
             String visitorWL = formatWL(mainActivityViewModel.getVisitingTeam());
             mainBinding.include.visitingTeamWLTV.setText(visitorWL);
-            mainBinding.include.visitingStarterTV.setText(nextVisitingStarter.getName());
+            mainBinding.include.mainVisitingStarterTV.setText(nextVisitingStarter.getName());
             String visitingStarterStats = formatStarterStats(nextVisitingStarter.getPitchingStats());
-            mainBinding.include.visitingStarterStatsTV.setText(visitingStarterStats);
+            mainBinding.include.mainVisitingStarterStatsTV.setText(visitingStarterStats);
         } else {
             Timber.e("Error!!! Either home or visiting team was null!");
         }
@@ -422,9 +453,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onStandingsButtonPressed() {
-        Intent standingsIntent = new Intent(this, StandingsActivity.class);
-        standingsIntent.putExtra(ORGANIZATION_EXTRA, organization);
-        this.startActivity(standingsIntent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            Intent standingsIntent = new Intent(MainActivity.this, StandingsActivity.class);
+            standingsIntent.putExtra(ORGANIZATION_EXTRA, organization);
+            startActivity(standingsIntent, options.toBundle());
+        } else {
+            Intent standingsIntent = new Intent(this, StandingsActivity.class);
+            standingsIntent.putExtra(ORGANIZATION_EXTRA, organization);
+            this.startActivity(standingsIntent);
+        }
     }
 
     private void startRosterActivity() {

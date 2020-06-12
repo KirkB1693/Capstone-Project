@@ -15,6 +15,8 @@ import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.adapters.MyPickCityRecyclerViewAdapter;
 import com.example.android.baseballbythenumbers.generators.CityGenerator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -81,7 +83,7 @@ public class PickCityFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;

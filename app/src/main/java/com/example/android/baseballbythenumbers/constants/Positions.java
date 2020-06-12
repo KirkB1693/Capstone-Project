@@ -101,8 +101,6 @@ public class Positions {
                 return SCOREKEEPING_CENTER_FIELD;
             case RIGHT_FIELD:
                 return SCOREKEEPING_RIGHT_FIELD;
-            case DESIGNATED_HITTER:
-                return 0;
             default:
                 return 0;
         }

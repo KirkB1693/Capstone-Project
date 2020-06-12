@@ -3,7 +3,6 @@ package com.example.android.baseballbythenumbers.repository;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.android.baseballbythenumbers.AppExecutors;
@@ -31,7 +30,6 @@ public class Repository {
     private final AppDatabase mDatabase;
 
     private LiveData<List<BattingLine>> mBattingLines;
-    private MutableLiveData<List<BattingLine>> mBattingLineSearchResults;
 
     private LiveData<List<BattingStats>> mBattingStats;
 
@@ -149,18 +147,6 @@ public class Repository {
         return mDatabase.getScheduleDao().getSchedulesForOrganization(orgId);
     }
 
-    public Team getTeamWithTeamName (String teamName) {
-        return mDatabase.getTeamDao().getTeamWithTeamName(teamName);
-    }
-
-    public LiveData<List<BattingLine>> getAllBattingLines () {
-        return mBattingLines;
-    }
-
-    public List<BattingLine> getBattingLinesForBoxScore (String boxScoreId) {
-        return mDatabase.getBattingLineDao().findBattingLinesForBoxScore(boxScoreId);
-    }
-
     public void insertBattingLine (final BattingLine battingLine) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
             @Override
@@ -192,13 +178,6 @@ public class Repository {
         futureList.add(future);
     }
 
-    public LiveData<List<Organization>> getAllOrganizations () {
-        return mOrganizations;
-    }
-
-    public Organization[] getAnyOrganization() {
-        return mDatabase.getOrganizationDao().getAnyOrganization();
-    }
 
     public void insertOrganization (final Organization Organization) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -211,8 +190,6 @@ public class Repository {
     }
 
 
-
-
     public void updateOrganization (final Organization Organization) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
             @Override
@@ -223,26 +200,11 @@ public class Repository {
         futureList.add(future);
     }
 
-    public LiveData<List<Schedule>> getAllSchedules () {
-        return mSchedules;
-    }
-
     public void insertSchedule (final Schedule schedule) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
             @Override
             public void run() {
                 mDatabase.getScheduleDao().insert(schedule);
-            }
-        });
-        futureList.add(future);
-    }
-
-
-    public void updateSchedule (final Schedule schedule) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getScheduleDao().update(schedule);
             }
         });
         futureList.add(future);
@@ -259,33 +221,9 @@ public class Repository {
         futureList.add(future);
     }
 
-
-    public LiveData<List<Game>> getAllGames () {
-        return mGames;
-    }
-    
     public List<Game> getGamesForSchedule(String scheduleId) {
         return mDatabase.getGameDao().findGamesForSchedule(scheduleId);
     }
-    
-    public List<Game> getGamesForDay (int day, String scheduleId) {
-        return mDatabase.getGameDao().findGamesForDayInSchedule(day, scheduleId);
-    }
-
-    public List<Game> getGamesForTeamInSchedule(String teamName, String scheduleId){
-        return mDatabase.getGameDao().findGamesForTeamNameInSchedule(teamName, scheduleId);
-    }
-
-    public void insertGame (final Game game) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getGameDao().insert(game);
-            }
-        });
-        futureList.add(future);
-    }
-
 
     public void updateGame (final Game game) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -318,15 +256,6 @@ public class Repository {
         futureList.add(future);
     }
 
-
-    public LiveData<List<BoxScore>> getAllBoxScores () {
-        return mBoxScore;
-    }
-
-    public List<BoxScore> getBoxScoresForGame(String gameId) {
-        return mDatabase.getBoxScoreDao().findBoxScoresForGame(gameId);
-    }
-
     public void insertBoxScore (final BoxScore boxScore) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
             @Override
@@ -357,13 +286,6 @@ public class Repository {
         futureList.add(future);
     }
 
-    public LiveData<List<PitchingLine>> getAllPitchingLines () {
-        return mPitchingLines;
-    }
-
-    public List<PitchingLine> getPitchingLinesForBoxScore (String boxScoreId) {
-        return mDatabase.getPitchingLineDao().findPitchingLinesForBoxScore(boxScoreId);
-    }
 
     public void insertPitchingLine (final PitchingLine pitchingLine) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -394,34 +316,8 @@ public class Repository {
         });
         futureList.add(future);
     }
-
-    public LiveData<List<League>> getAllLeagues () {
-        return mLeagues;
-    }
-
     public List<League> getLeaguesForOrganization (String orgId) {
         return mDatabase.getLeagueDao().findLeaguesForOrganization(orgId);
-    }
-
-    public void insertLeague (final League league) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getLeagueDao().insert(league);
-            }
-        });
-        futureList.add(future);
-    }
-
-
-    public void updateLeague (final League league) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getLeagueDao().update(league);
-            }
-        });
-        futureList.add(future);
     }
 
 
@@ -436,33 +332,10 @@ public class Repository {
     }
 
 
-    public LiveData<List<Division>> getAllDivisions () {
-        return mDivisions;
-    }
-
     public List<Division> getDivisionsForLeague(String leagueId) {
         return mDatabase.getDivisionDao().findDivisionsForLeague(leagueId);
     }
 
-    public void insertDivision (final Division division) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getDivisionDao().insert(division);
-            }
-        });
-        futureList.add(future);
-    }
-
-    public void updateDivision (final Division division) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getDivisionDao().update(division);
-            }
-        });
-        futureList.add(future);
-    }
 
     public void insertAllDivisions (final List<Division> divisions) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -474,24 +347,10 @@ public class Repository {
         futureList.add(future);
     }
 
-
-    public LiveData<List<Team>> getAllTeams () {
-        return mTeams;
-    }
-
     public List<Team> getTeamsForDivision(String divisionId) {
         return mDatabase.getTeamDao().findTeamsForDivision(divisionId);
     }
 
-    public void insertTeam (final Team team) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getTeamDao().insert(team);
-            }
-        });
-        futureList.add(future);
-    }
 
     public void updateTeam (final Team team) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -523,25 +382,9 @@ public class Repository {
         futureList.add(future);
     }
 
-
-    public LiveData<List<Player>> getAllPlayers () {
-        return mPlayers;
-    }
-
     public List<Player> getPlayersForTeam(String teamId) {
         return mDatabase.getPlayersDao().findPlayersForTeam(teamId);
     }
-
-    public void insertPlayer (final Player player) {
-        Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.getPlayersDao().insert(player);
-            }
-        });
-        futureList.add(future);
-    }
-
 
     public void updatePlayer (final Player player) {
         Future<?> future = AppExecutors.getInstance().diskIO().submit(new Runnable() {
@@ -572,11 +415,6 @@ public class Repository {
             }
         });
         futureList.add(future);
-    }
-
-
-    public LiveData<List<BattingStats>> getAllBattingStats () {
-        return mBattingStats;
     }
 
     public List<BattingStats> getBattingStatsForPlayer(String playerId) {
@@ -623,10 +461,6 @@ public class Repository {
             }
         });
         futureList.add(future);
-    }
-
-    public LiveData<List<PitchingStats>> getAllPitchingStats () {
-        return mPitchingStats;
     }
 
     public List<PitchingStats> getPitchingStatsForPlayer(String playerId) {
@@ -676,6 +510,6 @@ public class Repository {
     }
 
     public List<Future<?>> getFutureList() {
-        return futureList;
+        return futureList;                             // used to see when database calls have completed
     }
 }

@@ -51,7 +51,7 @@ public class PitchingRotationGenerator {
     public static Player getBestStarterAvailableForNextGame(Team team) {
         List<Player> possibleStarters = new ArrayList<>();
         for (Player player : team.getPlayers()) {
-            if (player.getPrimaryPosition() == STARTING_PITCHER && pitcherNotTiredForNextGame(player, STARTING_PITCHER)) {
+            if (player.getPrimaryPosition() == STARTING_PITCHER && pitcherNotTiredForNextGame(player)) {
                 possibleStarters.add(player);
             }
         }
@@ -120,15 +120,7 @@ public class PitchingRotationGenerator {
         return false;
     }
 
-    private static boolean pitcherNotTiredForNextGame(Player pitcher, int primaryPosition) {
-        int pitcherStaminaLeft = pitcher.getPitchingPercentages().getPitchingStamina() - pitcher.getPitchingPercentages().getPitchingStaminaUsed();
-        switch (primaryPosition) {
-            case STARTING_PITCHER:
-                return (pitcher.getPitchingPercentages().getPitchingStaminaUsed() < 2*((pitcher.getPitchingPercentages().getPitchingStamina() / STARTER_DAYS_TO_RECOVER_FULLY)));
-            case LONG_RELIEVER:
-            case SHORT_RELIEVER:
-                return (pitcherStaminaLeft >= SHORT_RELIEVER_STAMINA_MIN);
-        }
-        return false;
+    private static boolean pitcherNotTiredForNextGame(Player pitcher) {
+        return (pitcher.getPitchingPercentages().getPitchingStaminaUsed() < 2*((pitcher.getPitchingPercentages().getPitchingStamina() / STARTER_DAYS_TO_RECOVER_FULLY)));
     }
 }

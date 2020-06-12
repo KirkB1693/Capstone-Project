@@ -21,11 +21,8 @@ import com.example.android.baseballbythenumbers.viewModels.PlayByPlayViewModel;
 public class PlayByPlayFragment extends Fragment {
 
     private static final String ARG_GAME = "game_for_pbp";
-    private PlayByPlayViewModel mViewModel;
 
     private Game mGame;
-
-    private Observer<Game> gameObserver;
 
     private FragmentPlayByPlayBinding fragmentPlayByPlayBinding;
 
@@ -60,13 +57,15 @@ public class PlayByPlayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(PlayByPlayViewModel.class);
+        PlayByPlayViewModel mViewModel = new ViewModelProvider(this).get(PlayByPlayViewModel.class);
         mViewModel.setGame(mGame.getGameId());
 
-        gameObserver = new Observer<Game>() {
+        Observer<Game> gameObserver = new Observer<Game>() {
             @Override
             public void onChanged(@Nullable Game game) {
-                updatePlayByPlayUI(game);
+                if (game != null) {
+                    updatePlayByPlayUI(game);
+                }
             }
         };
 

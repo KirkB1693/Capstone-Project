@@ -110,7 +110,7 @@ public class HittingPercentages implements Parcelable
      * @param zSwingPct percentage of time the batter swings at a pitch in the strike zone
      * @param lineDrivePct percentage of time batter hits a line drive when making contact
      * @param centerPct percentage of time the batter hits the ball up the middle of the field
-     * @param doublePct pecentage of ball hit for a double
+     * @param doublePct percentage of ball hit for a double
      * @param stolenBaseRate success rate on stolen bases
      * @param infieldFlyBallPct percentage of fly balls that are in the infield (pop ups)
      * @param homeRunPct percentage of balls hit that are home runs

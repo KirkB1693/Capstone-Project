@@ -27,12 +27,13 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
     public RosterTabsPagerAdapter(Context context, FragmentManager fm, Team team, Player currentPlayer) {
-        super(fm);
+        super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mContext = context;
         mTeam = team;
         mCurrentPlayer = currentPlayer;
     }
 
+    @NotNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -43,7 +44,7 @@ public class RosterTabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return PlayerDetailFragment.newInstance(mCurrentPlayer);
         }
-        return null;
+        return new Fragment();
     }
 
     @NotNull

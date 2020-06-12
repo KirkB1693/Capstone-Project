@@ -309,7 +309,7 @@ public class PitcherGenerator {
 
         int firstStrikePct = getRandomNormalizedPercentage(PITCHER_FIRST_STRIKE_STD_DEV, PITCHER_FIRST_STRIKE_PCT_MEAN, PITCHER_FIRST_STRIKE_PCT_MIN, PITCHER_FIRST_STRIKE_PCT_MAX);
 
-        List<Integer> pitchTypes = new ArrayList<>();
+        List<Integer> pitchTypes;
         int numberOfPitchTypes = MIN_PITCH_TYPES;
         int stamina = 0;
         if (primaryPosition == STARTING_PITCHER) {

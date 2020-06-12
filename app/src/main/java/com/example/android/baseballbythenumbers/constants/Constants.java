@@ -184,13 +184,13 @@ public class Constants {
         public static final int PITCHER_BATTING_MED_HIT_PCT_MIN = 4300;
         public static final int PITCHER_BATTING_MED_HIT_PCT_MAX = 6850;
 
-        public static final int PITCHER_BATTING_HOME_RUN_PCT_MEAN = 333;
-        public static final int PITCHER_BATTING_HOME_RUN_PCT_STD_DEV = 437;
+        // public static final int PITCHER_BATTING_HOME_RUN_PCT_MEAN = 333;
+        // public static final int PITCHER_BATTING_HOME_RUN_PCT_STD_DEV = 437;
         public static final int PITCHER_BATTING_HOME_RUN_PCT_MIN = 0;
         public static final int PITCHER_BATTING_HOME_RUN_PCT_MAX = 2110;
 
         public static final int PITCHER_BATTING_TRIPLE_PCT_MEAN = 22;
-        public static final int PITCHER_BATTING_TRIPLE_STD_DEV = 51;
+        // public static final int PITCHER_BATTING_TRIPLE_STD_DEV = 51;
         public static final int PITCHER_BATTING_TRIPLE_PCT_MIN = 0;
         public static final int PITCHER_BATTING_TRIPLE_PCT_MAX = 331;
 
@@ -200,7 +200,7 @@ public class Constants {
         public static final int PITCHER_BATTING_DOUBLE_PCT_MAX = 1017;
 
         public static final int PITCHER_BATTING_STOLEN_BASE_PCT_MEAN = 1307;
-        public static final int PITCHER_BATTING_STOLEN_BASE_STD_DEV = 3276;
+        // public static final int PITCHER_BATTING_STOLEN_BASE_STD_DEV = 3276;
         public static final int PITCHER_BATTING_STOLEN_BASE_PCT_MIN = 0;
         public static final int PITCHER_BATTING_STOLEN_BASE_PCT_MAX = 10000;
 
@@ -214,8 +214,8 @@ public class Constants {
         public static final int PITCHER_BATTING_HIT_BY_PITCH_PCT_MIN = 0;
         public static final int PITCHER_BATTING_HIT_BY_PITCH_PCT_MAX = 207;
 
-        public static final int PITCHER_BATTING_BABIP_PCT_MEAN = 2271;
-        public static final int PITCHER_BATTING_BABIP_STD_DEV = 551;
+        // public static final int PITCHER_BATTING_BABIP_PCT_MEAN = 2271;
+        // public static final int PITCHER_BATTING_BABIP_STD_DEV = 551;
         public static final int PITCHER_BATTING_BABIP_PCT_MIN = 1080;
         public static final int PITCHER_BATTING_BABIP_PCT_MAX = 4210;
 
@@ -306,25 +306,25 @@ public class Constants {
         public static final int BATTING_MED_HIT_PCT_MAX = 6660;
 
         public static final int BATTING_HOME_RUN_PCT_MEAN = 713;
-        public static final int BATTING_HOME_RUN_PCT_STD_DEV = 347;
+        // public static final int BATTING_HOME_RUN_PCT_STD_DEV = 347;
         public static final int BATTING_HOME_RUN_PCT_MIN = 41;
         public static final int BATTING_HOME_RUN_PCT_MAX = 2075;
         public static final int BATTING_HOME_RUN_RANGE = BATTING_HOME_RUN_PCT_MAX - BATTING_HOME_RUN_PCT_MIN - 200;
 
         public static final int BATTING_TRIPLE_PCT_MEAN = 214;
-        public static final int BATTING_TRIPLE_STD_RATE = 149;
+        // public static final int BATTING_TRIPLE_STD_RATE = 149;
         public static final int BATTING_TRIPLE_PCT_MIN = 177;
         public static final int BATTING_TRIPLE_PCT_MAX = 743;
-        public static final int BATTING_TRIPLE_RANGE = BATTING_TRIPLE_PCT_MAX - BATTING_TRIPLE_PCT_MIN;
+        // public static final int BATTING_TRIPLE_RANGE = BATTING_TRIPLE_PCT_MAX - BATTING_TRIPLE_PCT_MIN;
 
         public static final int BATTING_DOUBLE_PCT_MEAN = 1997;
         public static final int BATTING_DOUBLE_STD_DEV = 293;
         public static final int BATTING_DOUBLE_PCT_MIN = 987;
         public static final int BATTING_DOUBLE_PCT_MAX = 2744;
-        public static final int BATTING_DOUBLE_RANGE = BATTING_DOUBLE_PCT_MAX - BATTING_DOUBLE_PCT_MIN;
+        // public static final int BATTING_DOUBLE_RANGE = BATTING_DOUBLE_PCT_MAX - BATTING_DOUBLE_PCT_MIN;
 
         public static final int BATTING_STOLEN_BASE_PCT_MEAN = 6551;
-        public static final int BATTING_STOLEN_BASE_STD_DEV = 1667;
+        // public static final int BATTING_STOLEN_BASE_STD_DEV = 1667;
         public static final int BATTING_STOLEN_BASE_PCT_MIN = 1;
         public static final int BATTING_STOLEN_BASE_PCT_MAX = 9000;
 
@@ -338,8 +338,8 @@ public class Constants {
         public static final int BATTING_HIT_BY_PITCH_PCT_MIN = 6;
         public static final int BATTING_HIT_BY_PITCH_PCT_MAX = 572;
 
-        public static final int BATTING_BABIP_PCT_MEAN = 3001;
-        public static final int BATTING_BABIP_STD_DEV = 234;
+        // public static final int BATTING_BABIP_PCT_MEAN = 3001;
+        // public static final int BATTING_BABIP_STD_DEV = 234;
         public static final int BATTING_BABIP_PCT_MIN = 2330;
         public static final int BATTING_BABIP_PCT_MAX = 3600;
 

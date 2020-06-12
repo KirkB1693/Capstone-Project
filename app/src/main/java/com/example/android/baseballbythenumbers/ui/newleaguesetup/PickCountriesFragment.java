@@ -2,6 +2,7 @@ package com.example.android.baseballbythenumbers.ui.newleaguesetup;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -68,7 +69,9 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
         if (!pickCountriesBinding.unitedStatesCB.isChecked()){
             Toast toast = Toast.makeText(getContext(), "Currently the United States must be chosen, all other countries are optional", Toast.LENGTH_SHORT);
             View view = toast.getView();
-            view.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.secondaryColor), PorterDuff.Mode.SRC_IN);
+            if (getContext() != null) {
+                view.getBackground().setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(), R.color.secondaryColor), PorterDuff.Mode.SRC_IN));
+            }
             TextView text = view.findViewById(android.R.id.message);
             text.setTextColor(ContextCompat.getColor(getContext(), R.color.secondaryTextColor));
             text.setGravity(Gravity.CENTER);
@@ -94,7 +97,7 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnPickCountriesFragmentInteractionListener) {
             mListener = (OnPickCountriesFragmentInteractionListener) context;

@@ -19,12 +19,9 @@
                 android:id="@+id/simulateGameButton"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:enabled="false"
+                style="@style/MainButtonStyle"
+                app:backgroundTint="@color/colorPrimary"
                 android:text="@string/simulate_game_button_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,11 +31,9 @@
                 android:id="@+id/standingsButton"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                style="@style/MainButtonStyle"
+                app:backgroundTint="@color/colorPrimary"
                 android:enabled="false"
                 android:text="@string/standings_button_label"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +42,7 @@
 
 
             <TextView
-                android:id="@+id/nextGameLabelTV"
+                android:id="@+id/mainNextGameLabelTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -57,10 +52,10 @@
                 android:text="@string/next_game_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cityIV" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/homeTeamNameTV"
+                android:id="@+id/mainHomeTeamNameTV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -73,7 +68,7 @@
                 tools:text="Home Team Name" />
 
             <TextView
-                android:id="@+id/visitingTeamNameTV"
+                android:id="@+id/mainVisitingTeamNameTV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -82,7 +77,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="@+id/visitingCityTV"
                 app:layout_constraintStart_toStartOf="@+id/visitingCityTV"
-                app:layout_constraintTop_toTopOf="@+id/homeTeamNameTV"
+                app:layout_constraintTop_toTopOf="@+id/mainHomeTeamNameTV"
                 tools:text="Visiting Team Name" />
 
             <TextView
@@ -92,21 +87,21 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintEnd_toEndOf="@+id/visitingTeamNameTV"
-                app:layout_constraintStart_toStartOf="@+id/visitingTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/visitingTeamNameTV"
+                app:layout_constraintEnd_toEndOf="@+id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainVisitingTeamNameTV"
                 tools:text="0 - 0" />
 
             <TextView
-                android:id="@+id/homeTeamWLTV"
+                android:id="@+id/mainHomeTeamWLTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
-                app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/homeTeamNameTV"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeTeamNameTV"
                 tools:text="0 - 0" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -117,7 +112,7 @@
                 app:layout_constraintGuide_percent="0.5" />
 
             <ImageView
-                android:id="@+id/homeTeamLogoIV"
+                android:id="@+id/mainHomeTeamLogoIV"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -126,12 +121,12 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/no_image_available"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
-                app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@id/homeTeamWLTV" />
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@id/mainHomeTeamWLTV" />
 
             <ImageView
-                android:id="@+id/visitingTeamLogoIV"
+                android:id="@+id/mainVisitingTeamLogoIV"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -140,56 +135,56 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/no_image_available"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
-                app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
                 app:layout_constraintTop_toBottomOf="@id/visitingTeamWLTV" />
 
             <TextView
-                android:id="@+id/homeStarterTV"
+                android:id="@+id/mainHomeStarterTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
-                app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/homeTeamLogoIV"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeTeamLogoIV"
                 tools:text="Home Starting Pitcher" />
 
             <TextView
-                android:id="@+id/visitingStarterTV"
+                android:id="@+id/mainVisitingStarterTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
-                app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/visitingTeamLogoIV"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainVisitingTeamLogoIV"
                 tools:text="Visiting Starting Pitcher" />
 
             <TextView
-                android:id="@+id/homeStarterStatsTV"
+                android:id="@+id/mainHomeStarterStatsTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toEndOf="@+id/homeTeamNameTV"
-                app:layout_constraintStart_toStartOf="@+id/homeTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/homeStarterTV"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeStarterTV"
                 tools:text="ERA : 3.14  WHIP 1.25" />
 
             <TextView
-                android:id="@+id/visitingStarterStatsTV"
+                android:id="@+id/mainVisitingStarterStatsTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintEnd_toEndOf="@id/visitingTeamNameTV"
-                app:layout_constraintStart_toStartOf="@id/visitingTeamNameTV"
-                app:layout_constraintTop_toBottomOf="@id/visitingStarterTV"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@id/mainVisitingStarterTV"
                 tools:text="ERA : 3.14  WHIP 1.25" />
 
             <TextView
-                android:id="@+id/vsLabelTV"
+                android:id="@+id/mainVsLabelTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -199,10 +194,10 @@
                 android:gravity="center"
                 android:text="@string/vs_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/homeTeamWLTV"
+                app:layout_constraintBottom_toBottomOf="@+id/mainHomeTeamWLTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/homeTeamWLTV" />
+                app:layout_constraintTop_toTopOf="@+id/mainHomeTeamWLTV" />
 
             <View
                 android:id="@+id/separatorV"
@@ -210,18 +205,13 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeStarterStatsTV" />
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeStarterStatsTV" />
 
             <Button
                 android:id="@+id/editLineupButton"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:enabled="false"
+                style="@style/MainButtonStyle"
+                app:backgroundTint="@color/colorPrimary"
                 android:text="@string/edit_lineup_button_label"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
@@ -229,13 +219,8 @@
 
             <Button
                 android:id="@+id/coachSetsLineupButton"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:enabled="false"
+                style="@style/MainButtonStyle"
+                app:backgroundTint="@color/colorPrimary"
                 android:text="@string/have_coach_set_lineup_button_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -245,12 +230,9 @@
                 android:id="@+id/startGameButton"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                style="@style/MainButtonStyle"
+                app:backgroundTint="@color/colorPrimary"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:enabled="false"
                 android:text="@string/start_game_button_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -269,7 +251,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nextGameLabelTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainNextGameLabelTV"
                 tools:text="Home City Name" />
 
             <TextView
@@ -287,18 +269,27 @@
                 app:layout_constraintTop_toTopOf="@+id/homeCityTV"
                 tools:text="Visiting City Name" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/gameScoresCV"
-                android:layout_width="300dp"
+                android:layout_width="0dp"
                 android:layout_height="250dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="24dp"
-                android:elevation="5dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:elevation="3dp"
+                android:minWidth="300dp"
+                android:theme="@style/Theme.MaterialComponents.Light"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/primaryColor"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cityIV">
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/secondaryColor"
+                app:strokeWidth="3dp"
+                tools:targetApi="lollipop">
 
 
                 <LinearLayout
@@ -415,7 +406,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
 
             <ProgressBar
@@ -433,7 +424,28 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="lollipop" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/standingsButton"
+                app:layout_constraintVertical_bias=".85" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

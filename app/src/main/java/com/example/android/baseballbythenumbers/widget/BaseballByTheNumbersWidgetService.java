@@ -50,7 +50,6 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
     }
 
 
-
     private static void getFromDB(final String divisionId) {
 
         try {
@@ -100,8 +99,7 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
     public int getCount() {
         if (mTeamList != null) {
             return mTeamList.size();
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -110,11 +108,13 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
      * This method acts like the onBindViewHolder method in an Adapter
      *
      * @param position The current position of the item in the ListView to be displayed
-     * @return The RemoteViews object to display for the provided postion
+     * @return The RemoteViews object to display for the provided position
      */
     @Override
     public RemoteViews getViewAt(int position) {
-        if (mDivision == null || mTeamList.size() == 0) {return null;}
+        if (mDivision == null || mTeamList.size() == 0) {
+            return null;
+        }
         Team currentTeam = mTeamList.get(position);
         boolean userTeam = currentTeam.getTeamId().equals(mUserTeamID);
         boolean changeBackground = isEven(position);
@@ -146,7 +146,7 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
         if (currentTeam.getWins() == 0) {
             winPct = 0.0;
         } else {
-            winPct = (currentTeam.getWins() * 1.0)/(currentTeam.getWins() + currentTeam.getLosses());
+            winPct = (currentTeam.getWins() * 1.0) / (currentTeam.getWins() + currentTeam.getLosses());
         }
         String winPctString = decimalFormat.format(winPct);
         SpannableString spannableWinPct = new SpannableString(winPctString);
@@ -160,7 +160,7 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
     }
 
     private boolean isEven(int position) {
-        return ( ( position % 2 ) == 0 );
+        return ((position % 2) == 0);
     }
 
     @Override
@@ -185,9 +185,10 @@ class BaseballByTheNumbersAppRemoteViewsFactory extends BroadcastReceiver implem
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        if (intent.hasExtra(BaseballByTheNumbersWidgetService.DIVISION_TO_USE)) {
-            mDivisionID = intent.getExtras().getString(BaseballByTheNumbersWidgetService.DIVISION_TO_USE);
+        if (intent.getExtras() != null) {
+            if (intent.hasExtra(BaseballByTheNumbersWidgetService.DIVISION_TO_USE)) {
+                mDivisionID = intent.getExtras().getString(BaseballByTheNumbersWidgetService.DIVISION_TO_USE);
+            }
         }
     }
 }

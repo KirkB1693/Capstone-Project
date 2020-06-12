@@ -21,8 +21,6 @@ public class BoxScoreFragment extends Fragment {
     private static final String ARG_GAME = "game";
     private Game mGame;
 
-    private FragmentBoxScoreBinding boxScoreFragmentBinding;
-
     public BoxScoreFragment(){
     }
 
@@ -46,7 +44,7 @@ public class BoxScoreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        boxScoreFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_score, container, false);
+        FragmentBoxScoreBinding boxScoreFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_score, container, false);
         BoxScoreTabsPagerAdapter boxScoreTabsPagerAdapter = new BoxScoreTabsPagerAdapter(getContext(), getChildFragmentManager(), mGame);
         ViewPager boxScoreViewPager = boxScoreFragmentBinding.boxScoreViewPager;
         boxScoreViewPager.setAdapter(boxScoreTabsPagerAdapter);

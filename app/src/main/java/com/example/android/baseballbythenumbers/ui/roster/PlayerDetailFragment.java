@@ -88,6 +88,7 @@ public class PlayerDetailFragment extends Fragment {
 
     private void updateUI() {
         if (mPlayer != null) {
+            showPlayerDetails();
             playerDetailBinding.playerDetailPlayerNameTv.setText(mPlayer.getName());
             playerDetailBinding.playerDetailPosition.setText(Positions.getPositionNameFromPrimaryPosition(mPlayer.getPrimaryPosition()));
 
@@ -115,7 +116,33 @@ public class PlayerDetailFragment extends Fragment {
             playerDetailBinding.playerDetailPitchingDeceptionPb.setProgress(mPlayer.getDeceptionRating());
             setProgressBarDrawable(mPlayer.getMovementRating(), playerDetailBinding.playerDetailPitchingMovementPb);
             playerDetailBinding.playerDetailPitchingMovementPb.setProgress(mPlayer.getMovementRating());
+        } else {
+            showEmptyPlayerDetails();
         }
+    }
+
+    private void showEmptyPlayerDetails() {
+        playerDetailBinding.emptyPlayerDetailTv.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailPitchingStatsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailHittingBarsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailHittingStatsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailPitchingBarsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailHittingBarLabelsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailPitchingBarLabelsLl.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailBattingStatsLabel.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailPitchingStatsLabel.setVisibility(View.GONE);
+    }
+
+    private void showPlayerDetails() {
+        playerDetailBinding.emptyPlayerDetailTv.setVisibility(View.GONE);
+        playerDetailBinding.playerDetailPitchingStatsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailHittingBarsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailHittingStatsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailPitchingBarsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailHittingBarLabelsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailPitchingBarLabelsLl.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailBattingStatsLabel.setVisibility(View.VISIBLE);
+        playerDetailBinding.playerDetailPitchingStatsLabel.setVisibility(View.VISIBLE);
     }
 
     private void setProgressBarDrawable(int progress, ProgressBar progressBar) {

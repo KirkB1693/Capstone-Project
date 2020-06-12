@@ -90,7 +90,4 @@ public class OrganizationGenerator {
         return newOrganization;
     }
 
-    public interface buildProgressStatus{
-        void onProgressUpdate(int progressStatus);
-    }
 }

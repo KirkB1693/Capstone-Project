@@ -5,7 +5,7 @@
     android:initialLayout="@layout/app_widget"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/ic_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     tools:targetApi="jelly_bean_mr1"/>

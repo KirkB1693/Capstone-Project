@@ -12,7 +12,7 @@
     <string name="edit_lineup_button_label">Edit Lineup</string>
     <string name="have_coach_set_lineup_button_label">Have Coach Set Lineup</string>
     <string name="start_game_button_label">Start Game</string>
-    <string name="simulate_game_button_label">Simulate Game</string>
+    <string name="simulate_game_button_label">Simulate All Games For Day</string>
     <string name="vs_label">vs</string>
 
     <string name="united_states_cb_label">United States</string>
@@ -169,5 +169,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="widget_empty_text">Can\'t find any teams!!!</string>
+    <string name="empty_player_detail_text">Select a player from the lineup\nor rotation screen\nin order to see detail</string>
+    <string name="throw_pitch_fab_toast_message">In the future this will cause a single pitch to be thrown.</string>
 
 </resources>

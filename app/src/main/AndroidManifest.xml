@@ -12,8 +12,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        tools:targetApi="o">
+        android:theme="@style/AppTheme.NoActionBar.Transitions"
+        tools:targetApi="o"
+        >
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4529105715143307~3610894291"/>
         <receiver android:name=".widget.BaseballByTheNumbersAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -31,7 +35,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.Transitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +46,7 @@
             android:name=".ui.standings.StandingsActivity"
             android:label="@string/title_activity_standings"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.Transitions">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.baseballbythenumbers.ui.main.MainActivity" />
@@ -51,7 +55,7 @@
             android:name=".ui.roster.RosterActivity"
             android:label="@string/title_activity_roster"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.Transitions"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,13 +65,14 @@
             android:name=".ui.gameplay.GamePlayActivity"
             android:label="@string/title_activity_game_play"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.Transitions"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.baseballbythenumbers.ui.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.newleaguesetup.NewLeagueSetupActivity" />
+        <activity android:name=".ui.newleaguesetup.NewLeagueSetupActivity"
+            android:theme="@style/AppTheme.NoActionBar.Transitions"/>
     </application>
 
 </manifest>

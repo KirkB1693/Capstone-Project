@@ -199,7 +199,7 @@ public class SaveOrganizationFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OrgSaveEndSignal) {
             mListener = (OrgSaveEndSignal) context;

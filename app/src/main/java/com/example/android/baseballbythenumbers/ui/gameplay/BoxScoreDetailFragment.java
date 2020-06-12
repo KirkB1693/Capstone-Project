@@ -38,10 +38,6 @@ public class BoxScoreDetailFragment extends Fragment {
 
     private FragmentBoxScoreDetailBinding boxScoreDetailBinding;
 
-    private Observer<Game> gameObserver;
-    private Observer<List<BattingLine>> battingLineObserver;
-    private Observer<List<PitchingLine>> pitchingLineObserver;
-
     public BoxScoreDetailFragment() {
         // Required empty public constructor
     }
@@ -75,19 +71,22 @@ public class BoxScoreDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(getActivity()).get(BoxScoreDetailViewModel.class);
-        mViewModel.setGame(mGame.getGameId());
+        if (getActivity() != null) {
+            mViewModel = new ViewModelProvider(getActivity()).get(BoxScoreDetailViewModel.class);
+            mViewModel.setGame(mGame.getGameId());
 
-        gameObserver = new Observer<Game>() {
-            @Override
-            public void onChanged(@Nullable final Game game) {
-                //Update the UI
-                mGame = game;
-                updateFragmentUI(mGame);
-            }
-        };
+            //Update the UI
+            Observer<Game> gameObserver = new Observer<Game>() {
+                @Override
+                public void onChanged(@Nullable final Game game) {
+                    //Update the UI
+                    mGame = game;
+                    updateFragmentUI(mGame);
+                }
+            };
 
-        mViewModel.getGame().observe(getViewLifecycleOwner(), gameObserver);
+            mViewModel.getGame().observe(getViewLifecycleOwner(), gameObserver);
+        }
     }
 
     private void updateFragmentUIBattingLines(List<BattingLine> battingLines) {
@@ -95,54 +94,55 @@ public class BoxScoreDetailFragment extends Fragment {
         TableLayout tableLayout = boxScoreDetailBinding.boxScoreDetailHittersTable;
         tableLayout.removeAllViews();
 
+        if (getContext() != null && getContext().getApplicationContext() != null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getApplicationContext().getSystemService
+                    (Context.LAYOUT_INFLATER_SERVICE);
+            if (inflater != null) {
+                TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_batting_row_labels, null);
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getApplicationContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-        TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_batting_row_labels, null);
+                tableLayout.addView(labelsRow);
 
-        tableLayout.addView(labelsRow);
+                if (!battingLines.isEmpty()) {
+                    for (BattingLine battingLine : battingLines) {
+                        @SuppressLint("InflateParams") TableLayout dataRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_empty_batting_row, null);
+                        TextView batterTextView = dataRow.findViewById(R.id.box_score_details_empty_batter_tv);
+                        StringBuilder batterName = new StringBuilder();
+                        if (battingLine.isSubstitute()) {
+                            batterName.append("      ");
+                        }
+                        batterName.append(battingLine.getBatterName());
+                        batterTextView.setText(batterName);
+                        TextView abTextView = dataRow.findViewById(R.id.box_score_details_empty_AB_tv);
+                        abTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getAtBats()));
+                        TextView rTextView = dataRow.findViewById(R.id.box_score_details_empty_R_tv);
+                        rTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getRuns()));
+                        TextView hTextView = dataRow.findViewById(R.id.box_score_details_empty_H_tv);
+                        hTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getHits()));
+                        TextView rbiTextView = dataRow.findViewById(R.id.box_score_details_empty_RBI_tv);
+                        rbiTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getRbis()));
+                        TextView hrTextView = dataRow.findViewById(R.id.box_score_details_empty_HR_tv);
+                        hrTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getHomeRuns()));
+                        TextView bbTextView = dataRow.findViewById(R.id.box_score_details_empty_BB_tv);
+                        bbTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getWalks()));
+                        TextView kTextView = dataRow.findViewById(R.id.box_score_details_empty_K_tv);
+                        kTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getStrikeOuts()));
+                        TextView lobTextView = dataRow.findViewById(R.id.box_score_details_empty_LOB_tv);
+                        lobTextView.setText(String.format(Locale.getDefault(), "%d", battingLine.getLeftOnBase()));
+                        TextView avgTextView = dataRow.findViewById(R.id.box_score_details_empty_AVG_tv);
+                        DecimalFormat decimalFormat = new DecimalFormat(".000");
+                        String average = decimalFormat.format(battingLine.getAverage());
+                        avgTextView.setText(average);
+                        TextView obpTextView = dataRow.findViewById(R.id.box_score_details_empty_OBP_tv);
+                        String obp = decimalFormat.format(battingLine.getOnBasePct());
+                        obpTextView.setText(obp);
 
-        if (battingLines != null) {
-            if (!battingLines.isEmpty()) {
-                for (BattingLine battingLine : battingLines) {
-                    @SuppressLint("InflateParams") TableLayout dataRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_empty_batting_row, null);
-                    TextView batterTextView = dataRow.findViewById(R.id.box_score_details_empty_batter_tv);
-                    StringBuilder batterName = new StringBuilder();
-                    if (battingLine.isSubstitute()) {
-                        batterName.append("      ");
+                        tableLayout.addView(dataRow);
                     }
-                    batterName.append(battingLine.getBatterName());
-                    batterTextView.setText(batterName);
-                    TextView abTextView = dataRow.findViewById(R.id.box_score_details_empty_AB_tv);
-                    abTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getAtBats()));
-                    TextView rTextView = dataRow.findViewById(R.id.box_score_details_empty_R_tv);
-                    rTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getRuns()));
-                    TextView hTextView = dataRow.findViewById(R.id.box_score_details_empty_H_tv);
-                    hTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getHits()));
-                    TextView rbiTextView = dataRow.findViewById(R.id.box_score_details_empty_RBI_tv);
-                    rbiTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getRbis()));
-                    TextView hrTextView = dataRow.findViewById(R.id.box_score_details_empty_HR_tv);
-                    hrTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getHomeRuns()));
-                    TextView bbTextView = dataRow.findViewById(R.id.box_score_details_empty_BB_tv);
-                    bbTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getWalks()));
-                    TextView kTextView = dataRow.findViewById(R.id.box_score_details_empty_K_tv);
-                    kTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getStrikeOuts()));
-                    TextView lobTextView = dataRow.findViewById(R.id.box_score_details_empty_LOB_tv);
-                    lobTextView.setText(String.format(Locale.getDefault(),"%d",battingLine.getLeftOnBase()));
-                    TextView avgTextView = dataRow.findViewById(R.id.box_score_details_empty_AVG_tv);
-                    DecimalFormat decimalFormat = new DecimalFormat(".000");
-                    String average = decimalFormat.format(battingLine.getAverage());
-                    avgTextView.setText(average);
-                    TextView obpTextView = dataRow.findViewById(R.id.box_score_details_empty_OBP_tv);
-                    String obp = decimalFormat.format(battingLine.getOnBasePct());
-                    obpTextView.setText(obp);
-
-                    tableLayout.addView(dataRow);
                 }
+
+                tableLayout.setStretchAllColumns(true);
             }
         }
-
-        tableLayout.setStretchAllColumns(true);
     }
 
     private void updateFragmentUI(Game game) {
@@ -163,7 +163,7 @@ public class BoxScoreDetailFragment extends Fragment {
                 mViewModel.setPitchingLines(game.getVisitorBoxScore().getBoxScoreId());
             }
 
-            battingLineObserver = new Observer<List<BattingLine>>() {
+            Observer<List<BattingLine>> battingLineObserver = new Observer<List<BattingLine>>() {
                 @Override
                 public void onChanged(@Nullable List<BattingLine> battingLines) {
                     updateFragmentUIBattingLines(battingLines);
@@ -172,7 +172,7 @@ public class BoxScoreDetailFragment extends Fragment {
 
             mViewModel.getBattingLines().observe(this, battingLineObserver);
 
-            pitchingLineObserver = new Observer<List<PitchingLine>>() {
+            Observer<List<PitchingLine>> pitchingLineObserver = new Observer<List<PitchingLine>>() {
                 @Override
                 public void onChanged(@Nullable List<PitchingLine> pitchingLines) {
                     updateFragmentUIPitchingLines(pitchingLines);
@@ -188,52 +188,53 @@ public class BoxScoreDetailFragment extends Fragment {
         TableLayout tableLayout = boxScoreDetailBinding.boxScoreDetailPitchersTable;
         tableLayout.removeAllViews();
 
+        if (getContext() != null && getContext().getApplicationContext() != null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getApplicationContext().getSystemService
+                    (Context.LAYOUT_INFLATER_SERVICE);
+            if (inflater != null) {
+                TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_pitching_row_labels, null);
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getApplicationContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-        TableLayout labelsRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_pitching_row_labels, null);
+                tableLayout.addView(labelsRow);
 
-        tableLayout.addView(labelsRow);
+                if (!pitchingLines.isEmpty()) {
+                    for (PitchingLine pitchingLine : pitchingLines) {
+                        @SuppressLint("InflateParams") TableLayout dataRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_empty_pitching_row, null);
+                        TextView pitcherTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_tv);
+                        pitcherTextView.setText(pitchingLine.getPitcherName());
+                        TextView ipTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_IP_tv);
+                        DecimalFormat ipDecimalFormat = new DecimalFormat("#.#");
+                        ipTextView.setText(ipDecimalFormat.format(pitchingLine.getInningsPitched()));
+                        TextView hTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_H_tv);
+                        hTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getHitsAllowed()));
 
-        if (pitchingLines != null) {
-            if (!pitchingLines.isEmpty()) {
-                for (PitchingLine pitchingLine : pitchingLines) {
-                    @SuppressLint("InflateParams") TableLayout dataRow = (TableLayout) inflater.inflate(R.layout.box_score_detail_table_empty_pitching_row, null);
-                    TextView pitcherTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_tv);
-                    pitcherTextView.setText(pitchingLine.getPitcherName());
-                    TextView ipTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_IP_tv);
-                    DecimalFormat ipDecimalFormat = new DecimalFormat("#.#");
-                    ipTextView.setText(ipDecimalFormat.format(pitchingLine.getInningsPitched()));
-                    TextView hTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_H_tv);
-                    hTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getHitsAllowed()));
+                        TextView rTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_R_tv);
+                        rTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getRunsAllowed()));
 
-                    TextView rTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_R_tv);
-                    rTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getRunsAllowed()));
+                        TextView erTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_ER_tv);
+                        erTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getEarnedRuns()));
 
-                    TextView erTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_ER_tv);
-                    erTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getEarnedRuns()));
+                        TextView bbTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_BB_tv);
+                        bbTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getWalksAllowed()));
 
-                    TextView bbTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_BB_tv);
-                    bbTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getWalksAllowed()));
+                        TextView soTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_SO_tv);
+                        soTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getStrikeOutsMade()));
 
-                    TextView soTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_SO_tv);
-                    soTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getStrikeOutsMade()));
+                        TextView hrTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_HR_tv);
+                        hrTextView.setText(String.format(Locale.getDefault(), "%d", pitchingLine.getHomeRunsAllowed()));
 
-                    TextView hrTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_HR_tv);
-                    hrTextView.setText(String.format(Locale.getDefault(),"%d",pitchingLine.getHomeRunsAllowed()));
+                        TextView eraTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_ERA_tv);
+                        eraTextView.setText(pitchingLine.getEra());
 
-                    TextView eraTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_ERA_tv);
-                    eraTextView.setText(pitchingLine.getEra());
+                        TextView whipTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_WHIP_tv);
+                        whipTextView.setText(pitchingLine.getWhip());
 
-                    TextView whipTextView = dataRow.findViewById(R.id.box_score_details_empty_pitcher_WHIP_tv);
-                    whipTextView.setText(pitchingLine.getWhip());
-
-                    tableLayout.addView(dataRow);
+                        tableLayout.addView(dataRow);
+                    }
                 }
+
+                tableLayout.setStretchAllColumns(true);
             }
         }
-
-        tableLayout.setStretchAllColumns(true);
     }
 
 }

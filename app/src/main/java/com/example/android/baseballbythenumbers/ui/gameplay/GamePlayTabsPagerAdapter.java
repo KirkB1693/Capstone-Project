@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.Game;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -21,12 +23,13 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
     private Integer mCurrentGameState;
 
     public GamePlayTabsPagerAdapter(Context context, FragmentManager fm, Game game, Integer currentGameState) {
-        super(fm);
+        super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mContext = context;
         mGame = game;
         mCurrentGameState = currentGameState;
     }
 
+    @NotNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -36,8 +39,9 @@ public class GamePlayTabsPagerAdapter extends FragmentPagerAdapter {
                 return PlayByPlayFragment.newInstance(mGame);
             case 2:
                 return BoxScoreFragment.newInstance(mGame);
+            default:
+                return new Fragment();
         }
-        return null;
     }
 
     @Nullable

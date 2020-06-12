@@ -265,10 +265,6 @@ public class HitterGenerator {
 
     private final Random random;
 
-    private String hittingSide;
-
-    private String throwingHand;
-
     public HitterGenerator(Context context, NameGenerator nameGenerator, int catchers, int firstBasemen, int secondBasemen, int thirdBasemen, int shortstops, int leftField, int centerField, int rightField, int utilityInfield, int utilityOutfield, int utility, int designatedHitter) {
         this.context = context;
         this.nameGenerator = nameGenerator;
@@ -294,6 +290,8 @@ public class HitterGenerator {
         String switchHitter = context.getResources().getString(R.string.switch_hitter);
         List<Player> hitters = new ArrayList<>();
 
+        String hittingSide;
+        String throwingHand;
         for (int i = 0; i < catchers; i++) {
             Name newName = nameGenerator.generateName();
             double trueAge = ((random.nextGaussian() * HITTER_AGE_STD_DEV) + HITTER_AGE_MEAN);

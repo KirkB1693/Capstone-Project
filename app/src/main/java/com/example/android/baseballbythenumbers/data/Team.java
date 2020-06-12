@@ -216,7 +216,8 @@ public class Team implements Parcelable {
                     winLossPctTeam2 = 0;
                 }
             }
-            //descending order so winLossPctTeam2 - winLossPctTeam1 --> Gives output in order from best to worst W-L pct number
+            //descending order so winLossPctTeam2 - winLossPctTeam1 --> Gives output in order from best to worst W-L pct number, ties are ordered alphabetically by city
+            //noinspection ComparatorMethodParameterNotUsed
             return winLossPctTeam2 - winLossPctTeam1;
         }
     };

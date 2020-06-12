@@ -1,5 +1,7 @@
-<vector android:height="230dp" android:viewportHeight="230.15538"
-    android:viewportWidth="282.8385" android:width="283dp" xmlns:android="http://schemas.android.com/apk/res/android">
+<vector xmlns:tools="http://schemas.android.com/tools"
+    android:height="230dp" android:viewportHeight="230.15538"
+    android:viewportWidth="282.8385" android:width="283dp" xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="VectorRaster">
     <path android:fillColor="#ffffff"
         android:pathData="m138.996,107.403 l2.817,-2.787 2.791,2.821 -2.817,2.787z" android:strokeWidth="0.99841398"/>
     <path android:fillColor="#ffffff"

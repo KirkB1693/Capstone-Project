@@ -33,6 +33,8 @@ import com.example.android.baseballbythenumbers.ui.main.MainActivity;
 import com.example.android.baseballbythenumbers.viewModels.GamePlayViewModel;
 import com.google.android.material.tabs.TabLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +62,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     private static final String SAVED_HOME_ERRORS_AT_START = "saved_home_errors_at_start";
     private static final String SAVED_VISITOR_ERRORS_AT_START = "saved_visitor_errors_at_start";
-    private static final String SAVED_GAME_DATA = "saved_game_data";
 
     private int currentGameState;
-    private String savedGameData;
 
     private Game game;
     private Team homeTeam;
@@ -75,7 +75,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private int homeErrorsAtGameStart;
     private int visitorErrorsAtGameStart;
     private boolean simRestOfGameInProgress;
-    private boolean paused;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     private GamePlayViewModel gamePlayViewModel;
@@ -106,7 +105,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 tabs.setupWithViewPager(viewPager);
                 activityGamePlayBinding.throwPitchFab.setOnClickListener(this);
                 repository = ((BaseballByTheNumbersApp) getApplication()).getRepository();
-                savedGameData = savedInstanceState.getString(SAVED_GAME_DATA, "");
                 continueGame();
             }
         } else {
@@ -147,7 +145,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_GAME_STATE, currentGameState);
         outState.putInt(SAVED_HOME_ERRORS_AT_START, homeErrorsAtGameStart);
@@ -239,7 +237,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 }
                 break;
             case R.id.pause_button:
-                paused = true;
                 simRestOfGameInProgress = false;
                 scheduledExecutorService.shutdownNow();
                 setButtonsBasedOnHittingTeam();
@@ -1179,7 +1176,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.throw_pitch_fab) {
-            // TODO implement one pitch at a time
+            Toast.makeText(this, R.string.throw_pitch_fab_toast_message, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "351284768742",
+    "firebase_url": "https://baseballbythenumbers-a6445.firebaseio.com",
+    "project_id": "baseballbythenumbers-a6445",
+    "storage_bucket": "baseballbythenumbers-a6445.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351284768742:android:d8e183583fd5b2d80b7027",
+        "android_client_info": {
+          "package_name": "com.example.android.baseballbythenumbers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351284768742-6p9ngohem52fusmcus2ldccg2982n1pv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.baseballbythenumbers",
+            "certificate_hash": "e192f3fb38a50eb82792295803f53bfd9a078b77"
+          }
+        },
+        {
+          "client_id": "351284768742-a54v6slgjprc3vc5bc0q05f486040e96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPL3SJ-cpgqfFaFERKO2eS3RFNylYSsCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351284768742-a54v6slgjprc3vc5bc0q05f486040e96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
