@@ -538,13 +538,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     AppExecutors.getInstance().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            mainBinding.include.gameScoresCV.setVisibility(View.VISIBLE);
-                            mainBinding.include.gameScoresHomeCityTV.setText(teams.get(game.getHomeTeamName()).getTeamCity());
-                            mainBinding.include.gameScoresHomeTeamNameTV.setText(game.getHomeTeamName());
-                            mainBinding.include.gameScoresHomeScoreTV.setText(String.format(Locale.getDefault(),"%d",game.getHomeScore()));
-                            mainBinding.include.gameScoresVisitorCityTV.setText(teams.get(game.getVisitingTeamName()).getTeamCity());
-                            mainBinding.include.gameScoresVisitorTeamNameTV.setText(game.getVisitingTeamName());
-                            mainBinding.include.gameScoresVisitorScoreTV.setText(String.format(Locale.getDefault(),"%d", game.getVisitorScore()));
+                            Team homeTeam = teams.get(game.getHomeTeamName());
+                            Team visitingTeam = teams.get(game.getVisitingTeamName());
+                            if (homeTeam != null && visitingTeam != null) {
+                                mainBinding.include.gameScoresCV.setVisibility(View.VISIBLE);
+                                mainBinding.include.gameScoresHomeCityTV.setText(homeTeam.getTeamCity());
+                                mainBinding.include.gameScoresHomeTeamNameTV.setText(game.getHomeTeamName());
+                                mainBinding.include.gameScoresHomeScoreTV.setText(String.format(Locale.getDefault(), "%d", game.getHomeScore()));
+                                mainBinding.include.gameScoresVisitorCityTV.setText(visitingTeam.getTeamCity());
+                                mainBinding.include.gameScoresVisitorTeamNameTV.setText(game.getVisitingTeamName());
+                                mainBinding.include.gameScoresVisitorScoreTV.setText(String.format(Locale.getDefault(), "%d", game.getVisitorScore()));
+                            }
                          }
                     });
                     try {

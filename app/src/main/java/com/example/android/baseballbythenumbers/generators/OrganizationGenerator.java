@@ -29,8 +29,8 @@ public class OrganizationGenerator {
         this.context = context;
     }
 
-    public Organization generateOrganization(String organizationName, int currentYear, boolean interleaguePlay, int seriesLength,int numberOfLeagues, List<String> leagueNames, List<Boolean> useDH, int numOfTeamsPerDivision,
-                                             int numberOfDivisions, int countriesToInclude, int[] teamMakeup, String userTeamName, String userTeamCity, ProgressBar progressBar) {
+    public Organization generateOrganization(String organizationName, int currentYear, boolean interleaguePlay, int seriesLength, int numberOfLeagues, List<String> leagueNames, List<Boolean> useDH, int numOfTeamsPerDivision,
+                                             int numberOfDivisions, int countriesToInclude, @SuppressWarnings("ParameterCanBeLocal") int[] teamMakeup, String userTeamName, String userTeamCity, ProgressBar progressBar) {
         List<League> leagues = new ArrayList<>();
         LeagueGenerator leagueGenerator = new LeagueGenerator(context);
 

@@ -16,6 +16,7 @@ import timber.log.Timber;
 public class TeamNameGenerator {
     private final Random random;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final NameGeneratorOptions options;
 
     private TreeMap<Float, String> teamNames;

@@ -30,8 +30,5 @@ public interface PitchingLineDao {
         LiveData<List<PitchingLine>> getAllPitchingLines();
 
         @Query("SELECT * FROM pitching_line WHERE box_score_id=:boxScoreId")
-        List<PitchingLine> findPitchingLinesForBoxScore(String boxScoreId);
-
-        @Query("SELECT * FROM pitching_line WHERE box_score_id=:boxScoreId")
         LiveData<List<PitchingLine>> findLiveDataPitchingLinesForBoxScore(String boxScoreId);
 }

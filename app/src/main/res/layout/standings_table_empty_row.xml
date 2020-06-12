@@ -6,14 +6,12 @@
 <TableLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionGroup="true"
     android:stretchColumns="*">
 
     <TableRow
         android:id="@+id/standings_empty_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionGroup="true"
         tools:ignore="UselessParent">
 
         <TextView

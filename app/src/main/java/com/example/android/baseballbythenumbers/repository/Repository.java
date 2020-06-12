@@ -29,58 +29,10 @@ public class Repository {
     private static Repository sInstance;
     private final AppDatabase mDatabase;
 
-    private LiveData<List<BattingLine>> mBattingLines;
-
-    private LiveData<List<BattingStats>> mBattingStats;
-
-    private LiveData<List<BoxScore>> mBoxScore;
-
-    private LiveData<List<Division>> mDivisions;
-
-    private LiveData<List<Game>> mGames;
-
-    private LiveData<List<League>> mLeagues;
-
-    private LiveData<List<Organization>> mOrganizations;
-
-    private LiveData<List<PitchingLine>> mPitchingLines;
-
-    private LiveData<List<PitchingStats>> mPitchingStats;
-
-    private LiveData<List<Player>> mPlayers;
-
-    private LiveData<List<Schedule>> mSchedules;
-
-    private LiveData<List<Team>> mTeams;
-
     private List<Future<?>> futureList;
 
     private Repository(final AppDatabase database) {
         mDatabase = database;
-
-        mBattingLines = mDatabase.getBattingLineDao().getAllBattingLines();
-
-        mOrganizations = mDatabase.getOrganizationDao().getAllOrganizations();
-
-        mSchedules = mDatabase.getScheduleDao().getAllSchedules();
-
-        mGames = mDatabase.getGameDao().getAllGames();
-
-        mBoxScore = mDatabase.getBoxScoreDao().getAllBoxScores();
-
-        mPitchingLines = mDatabase.getPitchingLineDao().getAllPitchingLines();
-
-        mLeagues = mDatabase.getLeagueDao().getAllLeagues();
-
-        mDivisions = mDatabase.getDivisionDao().getAllDivisions();
-
-        mTeams = mDatabase.getTeamDao().getAllTeams();
-
-        mPlayers = mDatabase.getPlayersDao().getAllPlayers();
-
-        mBattingStats = mDatabase.getBattingStatsDao().getAllBattingStats();
-
-        mPitchingStats = mDatabase.getPitchingStatsDao().getAllPitchingStats();
 
         futureList = new ArrayList<>();
     }

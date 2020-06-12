@@ -18,6 +18,7 @@ public class NameGenerator
 {
     private final Random random;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final NameGeneratorOptions options;
 
     private TreeMap<Float, String> surnames;

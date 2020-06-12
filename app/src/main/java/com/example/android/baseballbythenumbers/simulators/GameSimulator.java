@@ -1000,19 +1000,31 @@ public class GameSimulator {
         visitorPinchHitters = getPinchHitters(visitingLineup, visitingTeam);
         homePinchHitters = getPinchHitters(homeLineup, homeTeam);
 
-        homeDefense.get(SCOREKEEPING_PITCHER).getPitchingStatsForYear(year).incrementGamesStarted();
-        homeDefense.get(SCOREKEEPING_PITCHER).getPitchingStatsForYear(year).incrementGames();
-        homeDefense.get(SCOREKEEPING_PITCHER).getBattingStatsForYear(year).incrementGames();
-        visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingStatsForYear(year).incrementGamesStarted();
-        visitingDefense.get(SCOREKEEPING_PITCHER).getPitchingStatsForYear(year).incrementGames();
-        visitingDefense.get(SCOREKEEPING_PITCHER).getBattingStatsForYear(year).incrementGames();
+        Player homePitcher = homeDefense.get(SCOREKEEPING_PITCHER);
+        if (homePitcher != null) {
+            homePitcher.getPitchingStatsForYear(year).incrementGamesStarted();
+            homePitcher.getPitchingStatsForYear(year).incrementGames();
+            homePitcher.getBattingStatsForYear(year).incrementGames();
+        }
+        Player visitingPitcher = visitingDefense.get(SCOREKEEPING_PITCHER);
+        if (visitingPitcher != null) {
+            visitingPitcher.getPitchingStatsForYear(year).incrementGamesStarted();
+            visitingPitcher.getPitchingStatsForYear(year).incrementGames();
+            visitingPitcher.getBattingStatsForYear(year).incrementGames();
+        }
 
         for (int i = 1; i < 10; i++) {
-            if (homeLineup.get(i).getPrimaryPosition() != STARTING_PITCHER) {
-                homeLineup.get(i).getBattingStatsForYear(year).incrementGames();
+            Player batter = homeLineup.get(i);
+            if (batter != null) {
+                if (batter.getPrimaryPosition() != STARTING_PITCHER) {
+                    batter.getBattingStatsForYear(year).incrementGames();
+                }
             }
-            if (visitingLineup.get(i).getPrimaryPosition() != STARTING_PITCHER) {
-                visitingLineup.get(i).getBattingStatsForYear(year).incrementGames();
+            batter = visitingLineup.get(i);
+            if (batter != null) {
+                if (batter.getPrimaryPosition() != STARTING_PITCHER) {
+                    batter.getBattingStatsForYear(year).incrementGames();
+                }
             }
         }
 
@@ -1049,9 +1061,10 @@ public class GameSimulator {
         homePitchersUsed = new StringBuilder();
         visitorPitchersUsed = new StringBuilder();
 
-        homePitchersUsed.append(homeTeamName).append(" Pitchers Used : \n").append(homeDefense.get(SCOREKEEPING_PITCHER).getName()).append("\n");
-        visitorPitchersUsed.append(visitingTeamName).append(" Pitchers Used : \n").append(visitingDefense.get(SCOREKEEPING_PITCHER).getName()).append("\n");
-
+        if (homePitcher != null && visitingPitcher != null) {
+            homePitchersUsed.append(homeTeamName).append(" Pitchers Used : \n").append(homePitcher.getName()).append("\n");
+            visitorPitchersUsed.append(visitingTeamName).append(" Pitchers Used : \n").append(visitingPitcher.getName()).append("\n");
+        }
 
         game.setVisitorScore(visitorScore);
         game.setHomeScore(homeScore);
@@ -1102,7 +1115,10 @@ public class GameSimulator {
             Player player = entry.getValue();
             boxScore.addBattingLine(new BattingLine(boxScore.getBoxScoreId(), entry.getKey(), false, 0, player.getName()));
         }
-        boxScore.addPitchingLine(new PitchingLine(boxScore.getBoxScoreId(), 1, defense.get(SCOREKEEPING_PITCHER).getName()));
+        Player pitcher = defense.get(SCOREKEEPING_PITCHER);
+        if (pitcher != null) {
+            boxScore.addPitchingLine(new PitchingLine(boxScore.getBoxScoreId(), 1, pitcher.getName()));
+        }
     }
 
     private TreeMap<Integer, Player> getPinchHitters(TreeMap<Integer, Player> currentLineup, Team currentTeam) {
