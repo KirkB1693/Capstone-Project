@@ -22,12 +22,23 @@ android {
         }
         multiDexEnabled true
     }
+    signingConfigs {
+        config {
+            keyAlias 'uploadBaseballByTheNumbers'
+            keyPassword 'udacity'
+            storeFile file('../keystores/upload-keystore.jks')
+            storePassword 'udacity'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+        debug {
 
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.example.android.baseballbythenumbers.ui.roster;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -14,12 +15,10 @@ import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.data.Team;
 import com.example.android.baseballbythenumbers.databinding.ActivityRosterBinding;
 import com.example.android.baseballbythenumbers.ui.main.MainActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RosterActivity extends AppCompatActivity implements LineupFragment.OnLineupFragmentInteractionListener, PitchingRotationFragment.OnPitchingRotationFragmentInteractionListener {
+public class RosterActivity extends AppCompatActivity implements LineupFragment.OnLineupFragmentInteractionListener, PitchingRotationFragment.OnPitchingRotationFragmentInteractionListener, View.OnClickListener {
 
     private static final String CURRENT_PLAYER_SELECTED = "current_player_selected";
     private ActivityRosterBinding activityRosterBinding;
@@ -71,15 +70,7 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
                     }
                 });
 
-                FloatingActionButton fab = findViewById(R.id.fab);
-
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                activityRosterBinding.saveFab.setOnClickListener(this);
             }
         }
     }
@@ -114,6 +105,13 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
         current_player = player;
         if (currentPagerFragment != null && currentPagerFragment instanceof PlayerDetailFragment) {
             ((PlayerDetailFragment) currentPagerFragment).setPlayerToDisplayDetail(player);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.save_fab) {
+            Toast.makeText(this, "In the future this will save the changes you made for use in the next game", Toast.LENGTH_SHORT).show();
         }
     }
 

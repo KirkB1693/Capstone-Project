@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
+import timber.log.Timber;
+
 import static com.example.android.baseballbythenumbers.constants.Positions.LONG_RELIEVER;
 import static com.example.android.baseballbythenumbers.constants.Positions.SCOREKEEPING_PITCHER;
 import static com.example.android.baseballbythenumbers.constants.Positions.SHORT_RELIEVER;
@@ -222,6 +224,8 @@ public class GameSimulator {
                 gameLog.append(batter.getName()).append(" : ");
                 getBatterStaminaAdjustment(batter);
                 getPitcherStaminaAdjustment(pitcher);
+            } else {
+                Timber.e("Pitcher or Batter was null during playGame in GameSimulator!");
             }
             int atBatResult = currentAtBat.simulateAtBat(pitcherStaminaAdjustment, batterStaminaAdjustment, areRunsEarned);
 
@@ -416,6 +420,9 @@ public class GameSimulator {
                     return pitchingLine;
                 }
             }
+            Timber.e("Pitching Line not found for current pitcher, this shouldn't happen!");
+        } else {
+            Timber.e("Pitcher submitted was null, this shouldn't happen!");
         }
         return null;
     }
@@ -760,6 +767,7 @@ public class GameSimulator {
             if (worstStarter != null) {
                 relievers.put(10, worstStarter);
             } else {
+                addPitchingLineForNewPitcher(currentPitcher);
                 return;                                    // Don't switch and the position player stays in....
             }
         }
@@ -817,22 +825,22 @@ public class GameSimulator {
                         lineupToModify.put(lineupPosition, newPitcher);
                     }
                 }
-
-
-                relievers.remove(relieverChoice);
-                if (isSaveOrHoldSituation() || pitcherOfRecordForSave != currentPitcher) {
-                    updateSaveAndHoldSituation(currentPitcher, newPitcher);
-                }
-
-                newPitcher.getPitchingStatsForYear(year).incrementGames();
-                newPitcher.getBattingStatsForYear(year).incrementGames();
-                addPitchingLineForNewPitcher(newPitcher);
-                if (lineupPosition != 0) {
-                    addBattingLineForSub(lineupPosition, newPitcher);
-                }
-                addPitchingChangeToLog(currentPitcher, newPitcher);
             }
         }
+        relievers.remove(relieverChoice);
+        if (isSaveOrHoldSituation() || pitcherOfRecordForSave != currentPitcher) {
+            updateSaveAndHoldSituation(currentPitcher, newPitcher);
+        }
+
+        newPitcher.getPitchingStatsForYear(year).incrementGames();
+        newPitcher.getBattingStatsForYear(year).incrementGames();
+        addPitchingLineForNewPitcher(newPitcher);
+        if (lineupPosition != 0) {
+            addBattingLineForSub(lineupPosition, newPitcher);
+        }
+        addPitchingChangeToLog(currentPitcher, newPitcher);
+
+
     }
 
     private void addPitchingLineForNewPitcher(Player newPitcher) {

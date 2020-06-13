@@ -481,7 +481,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gamePlayIntent.putExtra(ORGANIZATION_EXTRA, organization);
         gamePlayIntent.putExtra(USER_TEAM_NAME, mainActivityViewModel.getUsersTeam().getTeamName());
         this.startActivity(gamePlayIntent);
-        this.finish();
     }
 
     private void onCoachSetsLineupButtonPressed() {
@@ -643,5 +642,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.include.standingsButton.setEnabled(true);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }

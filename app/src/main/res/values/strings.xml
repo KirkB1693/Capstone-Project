@@ -127,7 +127,7 @@
     <string name="enter_coach_gm_name_hint">Enter Coach / GM Name</string>
     <string name="enter_team_name_hint">Enter Team Name</string>
     <string name="start_season_button_label">Start Season</string>
-    <string name="name_for_league_1_hint">Name for League (your team will be placed here)</string>
+    <string name="name_for_league_1_hint">Your League Name</string>
     <string name="name_for_league_2_hint">Name for League #2</string>
     <string name="name_for_league_3_hint">Name for League #3</string>
     <string name="use_dh_label">Use DH?</string>
