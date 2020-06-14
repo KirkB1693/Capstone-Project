@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Boolean setupNewLeague = false;
 
+    private Boolean needToPlayRemainingGames;
+
     private AdView mAdView;
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -150,13 +152,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mConfigureWidget = mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID;
         }
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                needToPlayRemainingGames = extras.getBoolean(GamePlayActivity.GAME_PLAY_FINISHED, false);  // Check if we need to play games when returning from GamePlayActivity
+            } else {
+                needToPlayRemainingGames = false;
+            }
+        } else {
+            needToPlayRemainingGames = false;
+        }
+
         if (mainActivityViewModel.getOrganization() != null) {
             setupOrganizationAndUI();
         } else {
             dayOfSchedule = 0;
             String orgId = null;
-
-            Intent intent = getIntent();                        // Check intent for an orgId
+            // Check intent for an orgId
             if (intent != null) {
                 Bundle extras = intent.getExtras();
                 if (extras != null) {
@@ -198,9 +211,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainBinding.include.startGameButton.setOnClickListener(this);
         mainBinding.include.simulateGameButton.setOnClickListener(this);
         mainBinding.include.standingsButton.setOnClickListener(this);
-        
+
         checkForUserSignIn();
+
+        if (needToPlayRemainingGames) {
+            startPlayingRestOfGames();
+        }
     }
+
 
     private void setupWindowAnimations() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -212,38 +230,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void checkForUserSignIn() {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // user is signed in
-                onSignedInInitialize(user.getDisplayName());
-                if (setupNewLeague) {
-                    goToNewLeagueSetupActivity();
-                }
-            } else {
-                if (!authFlag) {
-                    // user is signed out
-                    onSignedOutCleanup();
-                    // Choose authentication providers
-                    List<AuthUI.IdpConfig> providers = Arrays.asList(
-                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                            new AuthUI.IdpConfig.GoogleBuilder().build());
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // user is signed in
+                    onSignedInInitialize(user.getDisplayName());
+                    if (setupNewLeague) {
+                        goToNewLeagueSetupActivity();
+                    }
+                } else {
+                    if (!authFlag) {
+                        // user is signed out
+                        onSignedOutCleanup();
+                        // Choose authentication providers
+                        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                                new AuthUI.IdpConfig.EmailBuilder().build(),
+                                new AuthUI.IdpConfig.GoogleBuilder().build());
 
-                    // Create and launch sign-in intent
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setTheme(R.style.LoginTheme)
-                                    .setAvailableProviders(providers)
-                                    .build(),
-                            RC_SIGN_IN);
-                    authFlag = true;
+                        // Create and launch sign-in intent
+                        startActivityForResult(
+                                AuthUI.getInstance()
+                                        .createSignInIntentBuilder()
+                                        .setIsSmartLockEnabled(false)
+                                        .setTheme(R.style.LoginTheme)
+                                        .setAvailableProviders(providers)
+                                        .build(),
+                                RC_SIGN_IN);
+                        authFlag = true;
+                    }
                 }
             }
-        }
-    };
+        };
 
     }
 
@@ -260,10 +278,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setUsersDivision() {
         List<League> leagues = organization.getLeagues();
         List<Division> divisions = new ArrayList<>();
-        for (League league: leagues) {
+        for (League league : leagues) {
             divisions.addAll(league.getDivisions());
         }
-        for (Division division: divisions) {
+        for (Division division : divisions) {
             if (division.getDivisionId().equals(mainActivityViewModel.getUsersTeam().getDivisionId())) {
                 usersDivision = division;
                 break;
@@ -314,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onSignedInInitialize(String username) {
         mUsername = username;
-        mainBinding.mainToolbar.setTitle(getString(R.string.main_screen_title_prefix)+ mUsername);
+        mainBinding.mainToolbar.setTitle(getString(R.string.main_screen_title_prefix) + mUsername);
     }
 
     @Override
@@ -420,15 +438,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @NotNull
     private String formatWL(Team team) {
-        return String.format(Locale.getDefault(),"%d - %d", team.getWins(), team.getLosses());
+        return String.format(Locale.getDefault(), "%d - %d", team.getWins(), team.getLosses());
     }
 
     @NotNull
     private String formatStarterStats(List<PitchingStats> pitchingStats) {
-        return String.format(Locale.getDefault(),"ERA : %s, WHIP : %s", pitchingStats.get(organization.getCurrentYear()).getERA(), pitchingStats.get(organization.getCurrentYear()).getWHIP());
+        return String.format(Locale.getDefault(), "ERA : %s, WHIP : %s", pitchingStats.get(organization.getCurrentYear()).getERA(), pitchingStats.get(organization.getCurrentYear()).getWHIP());
     }
-
-
 
 
     @Override
@@ -484,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onCoachSetsLineupButtonPressed() {
-        TreeMap<Integer, Player> lineup = LineupGenerator.lineupFromTeam(mainActivityViewModel.getUsersTeam(), mainActivityViewModel.getHomeTeam().isUseDh());
+        TreeMap<Integer, Player> lineup = LineupGenerator.lineupFromTeam(mainActivityViewModel.getUsersTeam(), mainActivityViewModel.getHomeTeam().isUseDh());  // lineup is not used at the moment but will be soon
         Toast toast = Toast.makeText(this, "The Coach Filled Out The Lineup.", Toast.LENGTH_SHORT);
         formatToast(toast);
         toast.show();
@@ -548,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 mainBinding.include.gameScoresVisitorTeamNameTV.setText(game.getVisitingTeamName());
                                 mainBinding.include.gameScoresVisitorScoreTV.setText(String.format(Locale.getDefault(), "%d", game.getVisitorScore()));
                             }
-                         }
+                        }
                     });
                     try {
                         Thread.sleep(1500);
@@ -598,7 +614,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     private void addNewStatsForPlayers() {
         List<Player> playerList = getAllPlayers();
         for (Player player : playerList) {
@@ -622,6 +637,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             playerList.addAll(team.getPlayers());
         }
         return playerList;
+    }
+
+    private void startPlayingRestOfGames() {
+        disableGameButtons();
+        mainBinding.include.mainProgressBar.setVisibility(View.VISIBLE);
+        mainBinding.include.gameScoresCV.setVisibility(View.VISIBLE);
+        mainBinding.include.simulateGameButton.setEnabled(false);
+        dayOfSchedule = mainActivityViewModel.findLastUserGamePlayed(gamesForUserToPlay).getDay();
+        mainActivityViewModel.simAllGamesForDay(dayOfSchedule);
+        nextGame = mainActivityViewModel.findNextUnplayedGame(gamesForUserToPlay);
+        dayOfSchedule++;
+        if (nextGame != null) {
+            while (dayOfSchedule != nextGame.getDay()) {
+                if (dayOfSchedule > nextGame.getDay()) {
+                    break;
+                }
+                mainActivityViewModel.simAllGamesForDay(dayOfSchedule);
+                dayOfSchedule++;
+            }
+            if (mainActivityViewModel.getHomeTeam() == null || mainActivityViewModel.getVisitingTeam() == null) {
+                Timber.e("Games didn't load properly, either homeTeamName or visitingTeamName was null!!!");
+            }
+        } else {
+            endOfSeason();
+        }
+        displayGameResults();
+        waitForRoomReadWriteToComplete();
+        updateUI();
+
     }
 
 

@@ -32,7 +32,7 @@
     <style name="Scoreboard">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/scoreboard_data</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/ride_the_fader</item>
         <item name="android:background">@color/black</item>
         <item name="android:layout_width">12dp</item>
@@ -43,29 +43,15 @@
     <style name="ScoreboardLabels">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/scoreboard_labels</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
         </item>
         <item name="android:background">@color/primaryColor</item>
     </style>
 
-    <style name="ScoreboardDivider">
-        <item name="android:background">@color/secondaryTextColor</item>
-    </style>
-
-    <style name="ScoreboardDivider.Horizontal">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">2dp</item>
-    </style>
-
-    <style name="ScoreboardDivider.Vertical">
-        <item name="android:layout_width">2dp</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
     <style name="BoxScoreLabels">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/box_score_label_text_size</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
         </item>
@@ -74,15 +60,24 @@
 
     <style name="BoxScoreData">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/box_score_data_text_size</item>
         <item name="android:textColor">@color/primary_dark_text</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
         </item>
     </style>
 
-    <style name="LineupPlayerRatingsLabels">
+    <style name="StandingsLabels">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/standings_label_text_size</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
+        </item>
+        <item name="android:background">@color/primaryColor</item>
+    </style>
+
+    <style name="StandingsData">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/standings_data_text_size</item>
         <item name="android:textColor">@color/primary_dark_text</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed-medium
         </item>
@@ -127,6 +122,16 @@
         <item name="android:layout_marginRight">16dp</item>
         <item name="enabled">false</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MainButtonStyle.ManageGame">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="LoginTheme" parent="FirebaseUI">

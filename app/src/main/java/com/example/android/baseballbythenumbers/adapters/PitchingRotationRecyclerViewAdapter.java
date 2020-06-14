@@ -57,21 +57,21 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
-        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0,1) + ". " + holder.mPlayer.getLastName();
+        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0, 1) + ". " + holder.mPlayer.getLastName();
         holder.mRotationPlayerName.setText(firstInitialAndLastName);
         if (position < 5) {
             int rotationPosition = position + 1;
-            String rotationPositionText = "SP"+rotationPosition + ")";
+            String rotationPositionText = "SP" + rotationPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
-        } else if (position < 7){
+        } else if (position < 7) {
             int longRelieverPosition = position - 4;
-            String rotationPositionText = "LR"+longRelieverPosition + ")";
+            String rotationPositionText = "LR" + longRelieverPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         } else if (position == mPlayers.size() - 1) {
             holder.mRotationPlaceInOrderView.setText(R.string.rotation_label_closer);
         } else {
             int shortRelieverPosition = position - 6;
-            String rotationPositionText = "SR"+shortRelieverPosition + ")";
+            String rotationPositionText = "SR" + shortRelieverPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         }
         if (holder.mPlayer.getPrimaryPosition() == STARTING_PITCHER) {

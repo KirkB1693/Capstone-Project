@@ -12,13 +12,13 @@
         android:id="@+id/standings_empty_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent">
+        style="@style/StandingsData">
 
         <TextView
             android:id="@+id/standings_empty_team_name_tv"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            style="@style/BoxScoreData"
+            style="@style/StandingsData"
             android:paddingStart="4dp"
             android:paddingLeft="4dp"
             android:paddingEnd="4dp"
@@ -30,14 +30,14 @@
             android:id="@+id/standings_empty_record_tv"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            style="@style/BoxScoreData"
+            style="@style/StandingsData"
             tools:text="21-21"/>
 
         <TextView
             android:id="@+id/standings_empty_win_pct_tv"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            style="@style/BoxScoreData"
+            style="@style/StandingsData"
             tools:text=".500"/>
 
 

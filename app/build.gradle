@@ -38,6 +38,7 @@ android {
         }
         debug {
 
+        signingConfig signingConfigs.config
         }
     }
 }

@@ -528,19 +528,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:background="@color/light_background_for_at_bat_result"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/throw_pitch_fab"
             app:layout_constraintEnd_toStartOf="@+id/throw_pitch_fab"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/score_background_image"
-            app:layout_constraintTop_toTopOf="@+id/score_background_image"
+            app:layout_constraintTop_toBottomOf="@id/scoreboard_table_layout"
             tools:text="At Bat Result" />
 
         <androidx.constraintlayout.widget.Guideline

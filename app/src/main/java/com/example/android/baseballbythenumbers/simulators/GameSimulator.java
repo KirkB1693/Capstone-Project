@@ -177,6 +177,7 @@ public class GameSimulator {
             updateRunsScored(currentAtBat);
 
             updateBattingLines();
+            updatePitchingLines();
 
             updatePitchersOfRecord(currentAtBat, pitcherOfRecordForHittingTeam);
 
@@ -832,8 +833,10 @@ public class GameSimulator {
             updateSaveAndHoldSituation(currentPitcher, newPitcher);
         }
 
-        newPitcher.getPitchingStatsForYear(year).incrementGames();
-        newPitcher.getBattingStatsForYear(year).incrementGames();
+        if (newPitcher != null) {
+            newPitcher.getPitchingStatsForYear(year).incrementGames();
+            newPitcher.getBattingStatsForYear(year).incrementGames();
+        }
         addPitchingLineForNewPitcher(newPitcher);
         if (lineupPosition != 0) {
             addBattingLineForSub(lineupPosition, newPitcher);

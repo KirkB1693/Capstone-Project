@@ -209,6 +209,19 @@ public class MainActivityViewModel extends AndroidViewModel {
         return null;
     }
 
+    public Game findLastUserGamePlayed(List<Game> gameListForUsersTeam) {
+        Collections.sort(gameListForUsersTeam);
+        Game lastPlayedGame = null;
+        for (Game game : gameListForUsersTeam) {
+            if (!game.isPlayedGame()) {
+                return lastPlayedGame;
+            } else {
+                lastPlayedGame = game;
+            }
+        }
+        return lastPlayedGame;
+    }
+
     public List<Game> generateListOfGamesForUser() {
         if (!isOrganizationLoaded()) {
             return null;

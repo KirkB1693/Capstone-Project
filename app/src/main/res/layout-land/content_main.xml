@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.main.MainActivity"
+        tools:showIn="@layout/content_main">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.main.MainActivity">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
+
+            <Button
+                android:id="@+id/simulateGameButton"
+                style="@style/MainButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/simulate_game_button_label"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+
+            <Button
+                android:id="@+id/standingsButton"
+                style="@style/MainButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:enabled="false"
+                android:text="@string/standings_button_label"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/simulateGameButton" />
+
+
+            <TextView
+                android:id="@+id/mainNextGameLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:contentDescription="@string/next_game_label_content_desc"
+                android:text="@string/next_game_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adView" />
+
+            <TextView
+                android:id="@+id/mainHomeTeamNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/homeCityTV"
+                app:layout_constraintStart_toStartOf="@+id/homeCityTV"
+                app:layout_constraintTop_toBottomOf="@+id/homeCityTV"
+                tools:text="Home Team Name" />
+
+            <TextView
+                android:id="@+id/mainVisitingTeamNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/visitingCityTV"
+                app:layout_constraintStart_toStartOf="@+id/visitingCityTV"
+                app:layout_constraintTop_toTopOf="@+id/mainHomeTeamNameTV"
+                tools:text="Visiting Team Name" />
+
+            <TextView
+                android:id="@+id/visitingTeamWLTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainVisitingTeamNameTV"
+                tools:text="0 - 0" />
+
+            <TextView
+                android:id="@+id/mainHomeTeamWLTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeTeamNameTV"
+                tools:text="0 - 0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".25" />
+
+            <ImageView
+                android:id="@+id/mainHomeTeamLogoIV"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/main_home_team_logo_content_description"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_image_available"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@id/mainHomeTeamWLTV" />
+
+            <ImageView
+                android:id="@+id/mainVisitingTeamLogoIV"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/main_visiting_team_logo_content_description"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_image_available"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@id/visitingTeamWLTV" />
+
+            <TextView
+                android:id="@+id/mainHomeStarterTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeTeamLogoIV"
+                tools:text="Home Starting Pitcher" />
+
+            <TextView
+                android:id="@+id/mainVisitingStarterTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainVisitingTeamLogoIV"
+                tools:text="Visiting Starting Pitcher" />
+
+            <TextView
+                android:id="@+id/mainHomeStarterStatsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintStart_toStartOf="@+id/mainHomeTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/mainHomeStarterTV"
+                tools:text="ERA : 3.14  WHIP 1.25" />
+
+            <TextView
+                android:id="@+id/mainVisitingStarterStatsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintStart_toStartOf="@id/mainVisitingTeamNameTV"
+                app:layout_constraintTop_toBottomOf="@id/mainVisitingStarterTV"
+                tools:text="ERA : 3.14  WHIP 1.25" />
+
+            <TextView
+                android:id="@+id/mainVsLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:text="@string/vs_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="@+id/mainHomeTeamWLTV"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/mainHomeTeamWLTV" />
+
+            <View
+                android:id="@+id/separatorV"
+                style="@style/Divider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@id/adView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/editLineupButton"
+                style="@style/MainButtonStyle"
+                android:text="@string/edit_lineup_button_label"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@id/adView" />
+
+            <Button
+                android:id="@+id/coachSetsLineupButton"
+                style="@style/MainButtonStyle"
+                android:layout_marginTop="8dp"
+                android:text="@string/have_coach_set_lineup_button_label"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@id/editLineupButton" />
+
+            <Button
+                android:id="@+id/startGameButton"
+                style="@style/MainButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/start_game_button_label"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/coachSetsLineupButton" />
+
+            <TextView
+                android:id="@+id/homeCityTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mainNextGameLabelTV"
+                tools:text="Home City Name" />
+
+            <TextView
+                android:id="@+id/visitingCityTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toTopOf="@+id/homeCityTV"
+                tools:text="Visiting City Name" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/gameScoresCV"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:elevation="3dp"
+                android:minWidth="300dp"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adView"
+                app:strokeColor="@color/secondaryColor"
+                app:strokeWidth="3dp"
+                tools:targetApi="lollipop">
+
+
+                <LinearLayout
+                    android:id="@+id/gameScoresContainerLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/gameScoresHomeTeamLL"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/gameScoresHomeCityTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center|bottom"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="4sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="San Diego" />
+
+                        <TextView
+                            android:id="@+id/gameScoresHomeTeamNameTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center|top"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="4sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="Padres" />
+
+                        <TextView
+                            android:id="@+id/gameScoresHomeScoreTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="28sp"
+                            app:autoSizeStepGranularity="2sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="4" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/gameScoresVisitorLayoutLL"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/gameScoresVisitorCityTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center|bottom"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="4sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="Atlanta" />
+
+                        <TextView
+                            android:id="@+id/gameScoresVisitorTeamNameTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center|top"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="4sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="Braves" />
+
+                        <TextView
+                            android:id="@+id/gameScoresVisitorScoreTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:singleLine="true"
+                            android:textColor="@color/primaryTextColor"
+                            app:autoSizeMaxTextSize="100sp"
+                            app:autoSizeMinTextSize="28sp"
+                            app:autoSizeStepGranularity="2sp"
+                            app:autoSizeTextType="uniform"
+                            tools:text="1" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <ProgressBar
+                android:id="@+id/mainProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="lollipop" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

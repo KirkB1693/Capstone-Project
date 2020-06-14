@@ -57,7 +57,7 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
     @Override
     public void onBindViewHolder(@NotNull final ViewHolder holder, int position) {
         holder.mPlayer = mPlayers.get(position);
-        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0,1) + ". " + holder.mPlayer.getLastName();
+        String firstInitialAndLastName = holder.mPlayer.getFirstName().substring(0, 1) + ". " + holder.mPlayer.getLastName();
         holder.mLineupPlayerName.setText(firstInitialAndLastName);
         if (position < 9) {
             int lineupPosition = position + 1;

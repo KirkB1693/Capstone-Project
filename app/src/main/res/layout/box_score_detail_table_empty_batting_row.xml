@@ -6,7 +6,6 @@
     android:stretchColumns="*">
 
     <TableRow
-        android:id="@+id/box_score_detail_empty_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="UselessParent">

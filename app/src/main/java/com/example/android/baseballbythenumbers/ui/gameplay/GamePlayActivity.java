@@ -62,6 +62,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     private static final String SAVED_HOME_ERRORS_AT_START = "saved_home_errors_at_start";
     private static final String SAVED_VISITOR_ERRORS_AT_START = "saved_visitor_errors_at_start";
+    public static final String GAME_PLAY_FINISHED = "game_play_finished";
 
     private int currentGameState;
 
@@ -197,7 +198,9 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     public void onBackPressed() {
         // do something on back.
         if (isGameOver()) {
+            processEndOfGame();
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(GAME_PLAY_FINISHED, isGameOver());
             startActivity(intent);
             finish();
         } else {
@@ -239,7 +242,12 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             case R.id.pause_button:
                 simRestOfGameInProgress = false;
                 scheduledExecutorService.shutdownNow();
-                setButtonsBasedOnHittingTeam();
+                activityGamePlayBinding.throwPitchFab.setVisibility(View.VISIBLE);
+                if (isGameOver()) {
+                    setEndGameButtonsOnManageGameFragment();
+                } else {
+                    setButtonsBasedOnHittingTeam();
+                }
                 break;
             case R.id.sub_pitcher_button:
                 Toast.makeText(this, "This will allow you to choose a relief pitcher in the future.", Toast.LENGTH_SHORT).show();
@@ -284,6 +292,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     private void simRestOfGame() {
         simRestOfGameInProgress = true;
         currentGameState = SIM_REST_OF_GAME_STATE;
+        activityGamePlayBinding.throwPitchFab.setVisibility(View.GONE);
         String fragmentTag = makeFragmentName(R.id.view_pager, 0);
         Fragment manageGameFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (manageGameFragment != null && manageGameFragment.isVisible()) {
@@ -346,7 +355,6 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
         if (isGameOver()) {
             activityGamePlayBinding.gamePlayAtBatResultTv.setText(R.string.game_over_message);
             setEndGameButtonsOnManageGameFragment();
-            processEndOfGame();
             scheduledExecutorService.shutdownNow();
             try {
                 scheduledExecutorService.awaitTermination(10, TimeUnit.SECONDS);
