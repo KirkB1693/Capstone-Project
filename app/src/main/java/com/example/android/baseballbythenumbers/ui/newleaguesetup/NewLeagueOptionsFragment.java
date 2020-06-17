@@ -201,7 +201,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
             mNumOfGamesInSeries = Integer.parseInt((String) gamesInSeriesSpinner.getSelectedItem());
             return true;
         }
-        Toast.makeText(getContext(), "Please Select The Number Of Games Per Series", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.new_league_setup_error_toast_select_games_in_series, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -210,7 +210,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
             mNumOfTeamsInDivision = Integer.parseInt((String) teamsSpinner.getSelectedItem());
             return true;
         }
-        Toast.makeText(getContext(), "Please Select The Number Of Teams Per Division", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.new_league_setup_error_toast_select_number_of_teams_per_division, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -219,7 +219,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
             mNumOfDivisions = Integer.parseInt((String) divisionSpinner.getSelectedItem());
             return true;
         }
-        Toast.makeText(getContext(), "Please Select The Number Of Divisions For Each League", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.new_league_setup_error_toast_select_number_of_divisions, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -227,7 +227,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         int position = leagueSpinner.getSelectedItemPosition();
         switch (position) {
             case 0:
-                Toast.makeText(getContext(), "Please Select The Number Of Leagues", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.new_league_setup_select_number_of_leagues_error_toast, Toast.LENGTH_SHORT).show();
                 return false;
             case 1:
                 if (newLeagueOptionsBinding.league1NameEt.getText().length() > 0) {
@@ -238,7 +238,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
                     interleaguePlay = false;
                     return true;
                 }
-                Toast.makeText(getContext(), "Please Enter a League Name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.new_league_setup_enter_league_name_error_toast, Toast.LENGTH_SHORT).show();
                 return false;
             case 2:
                 if (newLeagueOptionsBinding.league1NameEt.getText().length() > 0 && newLeagueOptionsBinding.league2NameEt.getText().length() > 0) {
@@ -251,7 +251,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
                     interleaguePlay = newLeagueOptionsBinding.interleaguePlayCheckBox.isChecked();
                     return true;
                 }
-                Toast.makeText(getContext(), "Please Enter All League Names", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.new_league_setup_enter_all_league_names_error_toast, Toast.LENGTH_SHORT).show();
                 return false;
             case 3:
                 if (newLeagueOptionsBinding.league1NameEt.getText().length() > 0 && newLeagueOptionsBinding.league2NameEt.getText().length() > 0 &&
@@ -267,7 +267,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
                     interleaguePlay = newLeagueOptionsBinding.interleaguePlayCheckBox.isChecked();
                     return true;
                 }
-                Toast.makeText(getContext(), "Please Enter All League Names", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),  R.string.new_league_setup_enter_all_league_names_error_toast, Toast.LENGTH_SHORT).show();
                 return false;
             default:
                 return false;
@@ -278,7 +278,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         mUserName = String.valueOf(newLeagueOptionsBinding.userNameEt.getText());
         boolean validUserName = (mUserName.length() > 0);
         if (!validUserName) {
-            Toast.makeText(getContext(), "Please Enter A User Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.new_league_setup_error_toast_enter_user_name, Toast.LENGTH_SHORT).show();
         }
         return validUserName;
     }
@@ -287,7 +287,7 @@ public class NewLeagueOptionsFragment extends Fragment implements View.OnClickLi
         mTeamName = String.valueOf(newLeagueOptionsBinding.teamNameEt.getText());
         boolean validTeamName = (mTeamName.length() > 0);
         if (!validTeamName) {
-            Toast.makeText(getContext(), "Please Enter A Team Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.new_league_setup_error_toast_enter_team_name, Toast.LENGTH_SHORT).show();
         }
         return validTeamName;
     }

@@ -15,7 +15,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.android.baseballbythenumbers.BaseballByTheNumbersApp;
 import com.example.android.baseballbythenumbers.R;
+import com.example.android.baseballbythenumbers.ResourceProvider;
 import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.ui.roster.LineupFragment;
 import com.example.android.baseballbythenumbers.ui.roster.LineupItemMoveCallback;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.android.baseballbythenumbers.constants.Positions.getPositionNameFromPrimaryPosition;
 
@@ -35,13 +38,14 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
     private final LineupStartDragListener.StartDragListener mStartDragListener;
     private final Context mContext;
     private final LineupFragment.OnLineupFragmentInteractionListener mListener;
+    private ResourceProvider resourceProvider;
 
     public LineupRecyclerViewAdapter(Context context, List<Player> players, LineupStartDragListener.StartDragListener startDragListener, LineupFragment.OnLineupFragmentInteractionListener clickListener) {
         mPlayers = players;
         mStartDragListener = startDragListener;
         mContext = context;
         mListener = clickListener;
-
+        resourceProvider = ((BaseballByTheNumbersApp) context.getApplicationContext()).getResourceProvider();
         Collections.sort(mPlayers, Player.BestOnBaseComparator);
     }
 
@@ -64,12 +68,11 @@ public class LineupRecyclerViewAdapter extends RecyclerView.Adapter<LineupRecycl
             String lineupPositionText = lineupPosition + ")";
             holder.mLineupPlaceInOrderView.setText(lineupPositionText);
         } else {
-            holder.mLineupPlaceInOrderView.setText("B)");
+            holder.mLineupPlaceInOrderView.setText(R.string.lineup_bench_designator);
         }
 
         DecimalFormat decimalFormat = new DecimalFormat(".000");
-        String currentStats = "AVG " + decimalFormat.format(holder.mPlayer.getBattingStats().get(0).getAverage()) + ", OBP " + decimalFormat.format(holder.mPlayer.getBattingStats().get(0).getOnBasePct()) +
-                ", HR " + holder.mPlayer.getBattingStats().get(0).getHomeRuns() + ", SB " + holder.mPlayer.getBattingStats().get(0).getStolenBases();
+        String currentStats = String.format(Locale.getDefault(), resourceProvider.getString(R.string.lineup_stats_format), decimalFormat.format(holder.mPlayer.getBattingStats().get(0).getAverage()), decimalFormat.format(holder.mPlayer.getBattingStats().get(0).getOnBasePct()), holder.mPlayer.getBattingStats().get(0).getHomeRuns(), holder.mPlayer.getBattingStats().get(0).getStolenBases());
         holder.mLineupPlayerStats.setText(currentStats);
 
         holder.mLineupPlayerPosition.setText(getPositionNameFromPrimaryPosition(holder.mPlayer.getPrimaryPosition()));

@@ -314,10 +314,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_activity_toast_signed_in, Toast.LENGTH_SHORT).show();
                 authFlag = false;
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(MainActivity.this, "Signed in canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_activity_toast_sign_in_canceled, Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -438,12 +438,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @NotNull
     private String formatWL(Team team) {
-        return String.format(Locale.getDefault(), "%d - %d", team.getWins(), team.getLosses());
+        return String.format(Locale.getDefault(), getString(R.string.main_activity_format_team_win_loss), team.getWins(), team.getLosses());
     }
 
     @NotNull
     private String formatStarterStats(List<PitchingStats> pitchingStats) {
-        return String.format(Locale.getDefault(), "ERA : %s, WHIP : %s", pitchingStats.get(organization.getCurrentYear()).getERA(), pitchingStats.get(organization.getCurrentYear()).getWHIP());
+        return String.format(Locale.getDefault(), getString(R.string.main_activity_format_starter_stats), pitchingStats.get(organization.getCurrentYear()).getERA(), pitchingStats.get(organization.getCurrentYear()).getWHIP());
     }
 
 
@@ -501,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onCoachSetsLineupButtonPressed() {
         TreeMap<Integer, Player> lineup = LineupGenerator.lineupFromTeam(mainActivityViewModel.getUsersTeam(), mainActivityViewModel.getHomeTeam().isUseDh());  // lineup is not used at the moment but will be soon
-        Toast toast = Toast.makeText(this, "The Coach Filled Out The Lineup.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, R.string.main_activity_coach_set_lineup_button_toast, Toast.LENGTH_SHORT);
         formatToast(toast);
         toast.show();
     }

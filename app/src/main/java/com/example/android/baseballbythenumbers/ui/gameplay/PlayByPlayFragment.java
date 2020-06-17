@@ -1,10 +1,17 @@
 package com.example.android.baseballbythenumbers.ui.gameplay;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +24,15 @@ import com.example.android.baseballbythenumbers.R;
 import com.example.android.baseballbythenumbers.data.Game;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayByPlayBinding;
 import com.example.android.baseballbythenumbers.viewModels.PlayByPlayViewModel;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.graphics.Typeface.BOLD;
+import static androidx.core.content.ContextCompat.getColor;
 
 public class PlayByPlayFragment extends Fragment {
 
@@ -75,13 +91,62 @@ public class PlayByPlayFragment extends Fragment {
     }
 
     private void updatePlayByPlayUI(Game game) {
-        fragmentPlayByPlayBinding.gamePlayByPlayTv.setText(game.getGameLog());
+        String gameLog = game.getGameLog();
+        SpannableStringBuilder formattedGameLog = formatPlayByPlay(gameLog);
+        fragmentPlayByPlayBinding.gamePlayByPlayTv.setText(formattedGameLog, TextView.BufferType.SPANNABLE);
         fragmentPlayByPlayBinding.playByPlayScrollview.post(new Runnable() {
             @Override
             public void run() {
                 fragmentPlayByPlayBinding.playByPlayScrollview.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+    }
+
+    private SpannableStringBuilder formatPlayByPlay(String gameLog) {
+        SpannableStringBuilder formattedGameLog = new SpannableStringBuilder();
+        List<String> result = new ArrayList<>();
+        BufferedReader bufferedReader = new BufferedReader(new StringReader(gameLog));
+        try {
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                result.add(line);
+                line = bufferedReader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Context context = getContext();
+        for (String line : result) {
+            int spanStart = formattedGameLog.length();
+            int spanEnd = spanStart + line.length();
+            formattedGameLog.append(line);
+            if (line.contains("---")) {  // This is an inning separator or similar - make it bold and change text color to black
+                formattedGameLog.setSpan(new StyleSpan(BOLD),spanStart,spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+                    formattedGameLog.setSpan(new ForegroundColorSpan(getColor(context, R.color.black)), spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            if (line.toLowerCase().contains("out")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+                    formattedGameLog.setSpan(new ForegroundColorSpan(getColor(context, R.color.out)), spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else if (line.toLowerCase().contains("walked.") || line.toLowerCase().contains("single") || line.toLowerCase().contains("double") || line.toLowerCase().contains("triple")){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+                    formattedGameLog.setSpan(new ForegroundColorSpan(getColor(context, R.color.safe)), spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else if (line.toLowerCase().contains("home run")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null) {
+                    formattedGameLog.setSpan(new ForegroundColorSpan(getColor(context, R.color.primaryColor)), spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            if (line.toLowerCase().contains("score")) {
+                formattedGameLog.setSpan(new StyleSpan(BOLD),spanStart,spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            formattedGameLog.append("\n");
+        }
+        return formattedGameLog;
     }
 
 }

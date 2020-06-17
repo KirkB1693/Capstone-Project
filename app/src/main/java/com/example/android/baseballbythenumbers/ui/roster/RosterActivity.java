@@ -111,7 +111,7 @@ public class RosterActivity extends AppCompatActivity implements LineupFragment.
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.save_fab) {
-            Toast.makeText(this, "In the future this will save the changes you made for use in the next game", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.roster_fab_toast_message, Toast.LENGTH_SHORT).show();
         }
     }
 

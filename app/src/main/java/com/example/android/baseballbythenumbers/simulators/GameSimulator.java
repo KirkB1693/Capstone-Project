@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.TreeMap;
 
 import timber.log.Timber;
@@ -202,13 +203,13 @@ public class GameSimulator {
     private void initializeGameLog() {
         Player pitcher = defense.get(SCOREKEEPING_PITCHER);
         int start = gameLog.length();
-        gameLog.append("                             --- ").append(getInningString(inningsPlayed / 10 + 1)).append(" Inning ---                             \n\n");
+        gameLog.append(resourceProvider.getString(R.string.game_log_inning_label_start)).append(getInningString(inningsPlayed / 10 + 1)).append(resourceProvider.getString(R.string.game_log_inning_label_end));
 
         gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         if (pitcher != null && pitcher.getName() != null) {
-            gameLog.append(pitcher.getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
+            gameLog.append(pitcher.getName()).append(resourceProvider.getString(R.string.game_log_pitching_for_the)).append(fieldingTeamName).append(resourceProvider.getString(R.string.game_log_colon_double_new_line));
         }
-        gameLog.append(battingTeamName).append(" now at bat : ");
+        gameLog.append(battingTeamName).append(resourceProvider.getString(R.string.game_log_now_at_bat));
     }
 
     private void playGame() {
@@ -321,9 +322,9 @@ public class GameSimulator {
             gameLog.append("\n\n");
             start = gameLog.length();
             if (isVisitorHitting) {
-                gameLog.append("--- That's the end of the top of the ").append(getInningString(inningsPlayed / 10 + 1)).append(" ---\n\n");
+                gameLog.append(resourceProvider.getString(R.string.game_log_message_start)).append(resourceProvider.getString(R.string.game_log_inning_message_top_of_the)).append(getInningString(inningsPlayed / 10 + 1)).append(resourceProvider.getString(R.string.game_log_inning_message_end));
             } else {
-                gameLog.append("--- That's the end of the bottom of the ").append(getInningString(inningsPlayed / 10 + 1)).append(" ---\n\n");
+                gameLog.append(resourceProvider.getString(R.string.game_log_message_start)).append(resourceProvider.getString(R.string.game_log_inning_message_bottom_of_the)).append(getInningString(inningsPlayed / 10 + 1)).append(resourceProvider.getString(R.string.game_log_inning_message_end));
             }
             gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             Arrays.fill(runners, null);
@@ -364,7 +365,7 @@ public class GameSimulator {
         if (!(((inningsPlayed > 80 && homeScore > visitorScore) || inningsPlayed > 85) && ifScoreNotTiedAtEndOfInning(inningsPlayed, homeScore, visitorScore, homeTeamFinishedAtBat))) {
             start = gameLog.length();
             if (homeTeamFinishedAtBat) {
-                gameLog.append("                             --- ").append(getInningString(inningsPlayed / 10 + 1)).append(" Inning ---                             \n\n");
+                gameLog.append(resourceProvider.getString(R.string.game_log_inning_label_start)).append(getInningString(inningsPlayed / 10 + 1)).append(resourceProvider.getString(R.string.game_log_inning_label_end));
 
                 gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
@@ -379,9 +380,9 @@ public class GameSimulator {
             }
             pitcher = defense.get(SCOREKEEPING_PITCHER);
             if (pitcher != null && pitcher.getName() != null) {
-                gameLog.append(pitcher.getName()).append(" Pitching for the ").append(fieldingTeamName).append(" : \n\n");
+                gameLog.append(pitcher.getName()).append(resourceProvider.getString(R.string.game_log_pitching_for_the)).append(fieldingTeamName).append(" : \n\n");
             }
-            gameLog.append(battingTeamName).append(" now at bat : ");
+            gameLog.append(battingTeamName).append(resourceProvider.getString(R.string.game_log_now_at_bat));
         }
     }
 
@@ -452,14 +453,13 @@ public class GameSimulator {
         Player homePitcher = homeDefense.get(SCOREKEEPING_PITCHER);
         Player visitingPitcher = homeDefense.get(SCOREKEEPING_PITCHER);
         if (homePitcher != null && visitingPitcher != null) {
-            homePitchersUsed.append(homePitcher.getName()).append(" pitches thrown : ").append(homePitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
-            visitorPitchersUsed.append(visitingPitcher.getName()).append(" pitches thrown : ").append(visitingPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
+            homePitchersUsed.append(homePitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown)).append(homePitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
+            visitorPitchersUsed.append(visitingPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown)).append(visitingPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n");
             start = gameLog.length();
-            gameLog.append("\n\n                             --- GAME OVER!!! ---                             \n\n");
+            gameLog.append(resourceProvider.getString(R.string.game_log_game_over_message));
 
             gameLog.setSpan(new StyleSpan(Typeface.BOLD), start, gameLog.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            gameLog.append("Final Score :\n").append(homeTeamName).append(" ").append(Integer.toString(homeScore)).append(" - ")
-                    .append(visitingTeamName).append(" ").append(Integer.toString(visitorScore));
+            gameLog.append(String.format(Locale.getDefault(),resourceProvider.getString(R.string.game_log_final_score_format), homeTeamName, homeScore, visitingTeamName, visitorScore));
 
             game.setHomeScore(homeScore);
             game.setVisitorScore(visitorScore);
@@ -480,23 +480,19 @@ public class GameSimulator {
                 pitcherOfRecordForLoss.getPitchingStatsForYear(year).incrementCompleteGames();
             }
             if (homeScore > visitorScore) {
-                gameLog.append("\nWP : ").append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStatsForYear(year).getWins())).append("-")
-                        .append(Integer.toString(pitcherOfRecordForWin.getPitchingStatsForYear(year).getLosses())).append(") - LP : ")
-                        .append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStatsForYear(year).getWins())).append("-")
-                        .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStatsForYear(year).getLosses())).append(")");
+                gameLog.append(String.format(Locale.getDefault(), resourceProvider.getString(R.string.game_log_pitchers_of_record_home_team_wins_format), pitcherOfRecordForWin.getName(), pitcherOfRecordForWin.getPitchingStatsForYear(year).getWins(), pitcherOfRecordForWin.getPitchingStatsForYear(year).getLosses(),
+                        pitcherOfRecordForLoss.getName(), pitcherOfRecordForLoss.getPitchingStatsForYear(year).getWins(), pitcherOfRecordForLoss.getPitchingStatsForYear(year).getLosses()));
                 homeTeam.incrementWins();
                 visitingTeam.incrementLosses();
             } else {
-                gameLog.append("\nLP : ").append(pitcherOfRecordForLoss.getName()).append(" (").append(Integer.toString(pitcherOfRecordForLoss.getPitchingStatsForYear(year).getWins())).append("-")
-                        .append(Integer.toString(pitcherOfRecordForLoss.getPitchingStatsForYear(year).getLosses())).append(") - WP : ")
-                        .append(pitcherOfRecordForWin.getName()).append(" (").append(Integer.toString(pitcherOfRecordForWin.getPitchingStatsForYear(year).getWins())).append("-")
-                        .append(Integer.toString(pitcherOfRecordForWin.getPitchingStatsForYear(year).getLosses())).append(")");
+                gameLog.append(String.format(Locale.getDefault(), resourceProvider.getString(R.string.game_log_pitchers_of_record_visiting_team_wins_format), pitcherOfRecordForLoss.getName(), pitcherOfRecordForLoss.getPitchingStatsForYear(year).getWins(), pitcherOfRecordForLoss.getPitchingStatsForYear(year).getLosses(),
+                        pitcherOfRecordForWin.getName(), pitcherOfRecordForWin.getPitchingStatsForYear(year).getWins(), pitcherOfRecordForWin.getPitchingStatsForYear(year).getLosses()));
                 visitingTeam.incrementWins();
                 homeTeam.incrementLosses();
             }
             if (pitcherOfRecordForSave != null) {
                 pitcherOfRecordForSave.getPitchingStatsForYear(year).incrementSaves();
-                gameLog.append("\nSAVE : ").append(pitcherOfRecordForSave.getName()).append(" (").append(Integer.toString(pitcherOfRecordForSave.getPitchingStatsForYear(year).getSaves())).append(")");
+                gameLog.append(String.format(Locale.getDefault(), resourceProvider.getString(R.string.game_log_pitcher_of_record_for_save_format), pitcherOfRecordForSave.getName(), pitcherOfRecordForSave.getPitchingStatsForYear(year).getSaves()));
             }
         }
     }
@@ -634,13 +630,13 @@ public class GameSimulator {
 
     private void addPinchHitterForPitcherToLog(Player pitcher, Player pinchHitter) {
         if (isVisitorHitting) {
-            visitorPitchersUsed.append(pitcher.getName()).append(" Pitches Thrown when subbed : ").append(pitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
-                    .append(pinchHitter.getName()).append(" pinch hits in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+            visitorPitchersUsed.append(pitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown_when_subbed)).append(pitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
+                    .append(pinchHitter.getName()).append(resourceProvider.getString(R.string.pitchers_used_pinch_hits_in_the)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
         } else {
-            homePitchersUsed.append(pitcher.getName()).append(" Pitches Thrown when subbed : ").append(pitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
-                    .append(pinchHitter.getName()).append(" pinch hits in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+            homePitchersUsed.append(pitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown_when_subbed)).append(pitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
+                    .append(pinchHitter.getName()).append(resourceProvider.getString(R.string.pitchers_used_pinch_hits_in_the)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
         }
-        gameLog.append("\n\nNow Pinch Hitting for ").append(pitcher.getName()).append(" : \n\n").append(pinchHitter.getName()).append(" : ");
+        gameLog.append(resourceProvider.getString(R.string.game_log_now_pinch_hitting_for)).append(pitcher.getName()).append(" : \n\n").append(pinchHitter.getName()).append(" : ");
     }
 
     private Player getBestPinchHitter() {
@@ -902,24 +898,24 @@ public class GameSimulator {
     private void addPitchingChangeToLog(Player oldPitcher, Player newPitcher) {
         if (isPitcher(oldPitcher)) {
             if (isVisitorHitting) {
-                homePitchersUsed.append(oldPitcher.getName()).append(" Pitches Thrown when subbed : ").append(oldPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
-                        .append(newPitcher.getName()).append(" enters the game in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+                homePitchersUsed.append(oldPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown_when_subbed)).append(oldPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
+                        .append(newPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_enters_the_game_in)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
 
             } else {
-                visitorPitchersUsed.append(oldPitcher.getName()).append(" Pitches Thrown when subbed : ").append(oldPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
-                        .append(newPitcher.getName()).append(" enters the game in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+                visitorPitchersUsed.append(oldPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_pitches_thrown_when_subbed)).append(oldPitcher.getPitchingPercentages().getPitchingStaminaUsed()).append("\n")
+                        .append(newPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_enters_the_game_in)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
             }
 
         } else {
             if (isVisitorHitting) {
-                homePitchersUsed.append(oldPitcher.getName()).append(" was a Pinch Hitter ").append("\n")
-                        .append(newPitcher.getName()).append(" enters the game in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+                homePitchersUsed.append(oldPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_was_a_pinch_hitter)).append("\n")
+                        .append(newPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_enters_the_game_in)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
             } else {
-                visitorPitchersUsed.append(oldPitcher.getName()).append(" was a Pinch Hitter ").append("\n")
-                        .append(newPitcher.getName()).append(" enters the game in the ").append(getInningString(inningsPlayed / 10 + 1)).append("\n");
+                visitorPitchersUsed.append(oldPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_was_a_pinch_hitter)).append("\n")
+                        .append(newPitcher.getName()).append(resourceProvider.getString(R.string.pitchers_used_enters_the_game_in)).append(getInningString(inningsPlayed / 10 + 1)).append("\n");
             }
         }
-        gameLog.append("\n\nNow Pitching : ").append(newPitcher.getName()).append(" ");
+        gameLog.append(resourceProvider.getString(R.string.game_log_now_pitching)).append(newPitcher.getName()).append("\n");
     }
 
 
@@ -1073,8 +1069,8 @@ public class GameSimulator {
         visitorPitchersUsed = new StringBuilder();
 
         if (homePitcher != null && visitingPitcher != null) {
-            homePitchersUsed.append(homeTeamName).append(" Pitchers Used : \n").append(homePitcher.getName()).append("\n");
-            visitorPitchersUsed.append(visitingTeamName).append(" Pitchers Used : \n").append(visitingPitcher.getName()).append("\n");
+            homePitchersUsed.append(homeTeamName).append(resourceProvider.getString(R.string.pitchers_used_pitchers_used)).append(homePitcher.getName()).append("\n");
+            visitorPitchersUsed.append(visitingTeamName).append(resourceProvider.getString(R.string.pitchers_used_pitchers_used)).append(visitingPitcher.getName()).append("\n");
         }
 
         game.setVisitorScore(visitorScore);
@@ -1184,27 +1180,27 @@ public class GameSimulator {
             case 1:
                 return resourceProvider.getString(R.string.first_inning_label);
             case 2:
-                return "Second";
+                return resourceProvider.getString(R.string.inning_label_second);
             case 3:
-                return "Third";
+                return resourceProvider.getString(R.string.inning_label_third);
             case 4:
-                return "Fourth";
+                return resourceProvider.getString(R.string.inning_label_fourth);
             case 5:
-                return "Fifth";
+                return resourceProvider.getString(R.string.inning_label_fifth);
             case 6:
-                return "Sixth";
+                return resourceProvider.getString(R.string.inning_label_sixth);
             case 7:
-                return "Seventh";
+                return resourceProvider.getString(R.string.inning_label_seventh);
             case 8:
-                return "Eighth";
+                return resourceProvider.getString(R.string.inning_label_eighth);
             case 9:
-                return "Ninth";
+                return resourceProvider.getString(R.string.inning_label_ninth);
             case 10:
-                return "Tenth";
+                return resourceProvider.getString(R.string.inning_label_tenth);
             case 11:
-                return "Eleventh";
+                return resourceProvider.getString(R.string.inning_label_eleventh);
             case 12:
-                return "Twelfth";
+                return resourceProvider.getString(R.string.inning_label_twelfth);
             default:
                 return String.valueOf(inningsPlayed);
         }
@@ -1235,7 +1231,7 @@ public class GameSimulator {
         if (completeInning) {
             return baseInningString;
         } else {
-            return baseInningString + " and 1/2";
+            return baseInningString + resourceProvider.getString(R.string.innings_display_half_modifier);
         }
     }
 

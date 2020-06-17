@@ -67,7 +67,7 @@ public class PickCountriesFragment extends Fragment implements View.OnClickListe
 
     private int getWhichCountriesAreChecked() {
         if (!pickCountriesBinding.unitedStatesCB.isChecked()){
-            Toast toast = Toast.makeText(getContext(), "Currently the United States must be chosen, all other countries are optional", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), R.string.new_league_setup_error_toast_united_states_is_required, Toast.LENGTH_SHORT);
             View view = toast.getView();
             if (getContext() != null) {
                 view.getBackground().setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(), R.color.secondaryColor), PorterDuff.Mode.SRC_IN));

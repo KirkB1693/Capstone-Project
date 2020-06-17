@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.android.baseballbythenumbers.constants.Positions.LONG_RELIEVER;
 import static com.example.android.baseballbythenumbers.constants.Positions.SHORT_RELIEVER;
@@ -61,17 +62,17 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
         holder.mRotationPlayerName.setText(firstInitialAndLastName);
         if (position < 5) {
             int rotationPosition = position + 1;
-            String rotationPositionText = "SP" + rotationPosition + ")";
+            String rotationPositionText = mContext.getString(R.string.abbreviation_starting_pitcher) + rotationPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         } else if (position < 7) {
             int longRelieverPosition = position - 4;
-            String rotationPositionText = "LR" + longRelieverPosition + ")";
+            String rotationPositionText = mContext.getString(R.string.abbreviation_long_reliever) + longRelieverPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         } else if (position == mPlayers.size() - 1) {
             holder.mRotationPlaceInOrderView.setText(R.string.rotation_label_closer);
         } else {
             int shortRelieverPosition = position - 6;
-            String rotationPositionText = "SR" + shortRelieverPosition + ")";
+            String rotationPositionText = mContext.getString(R.string.abbreviation_short_reliever) + shortRelieverPosition + ")";
             holder.mRotationPlaceInOrderView.setText(rotationPositionText);
         }
         if (holder.mPlayer.getPrimaryPosition() == STARTING_PITCHER) {
@@ -82,8 +83,7 @@ public class PitchingRotationRecyclerViewAdapter extends RecyclerView.Adapter<Pi
             holder.mRotationPlayerPosition.setText(R.string.rotation_label_short_reliever);
         }
 
-        String currentStats = "ERA " + holder.mPlayer.getPitchingStats().get(0).getERA() + ", WHIP " + holder.mPlayer.getPitchingStats().get(0).getWHIP() +
-                ", W " + holder.mPlayer.getPitchingStats().get(0).getWins() + ", L " + holder.mPlayer.getPitchingStats().get(0).getLosses() + ", S " + holder.mPlayer.getPitchingStats().get(0).getSaves();
+        String currentStats = String.format(Locale.getDefault(), mContext.getString(R.string.rotation_stats_display_format), holder.mPlayer.getPitchingStats().get(0).getERA(), holder.mPlayer.getPitchingStats().get(0).getWHIP(), holder.mPlayer.getPitchingStats().get(0).getWins(), holder.mPlayer.getPitchingStats().get(0).getLosses(), holder.mPlayer.getPitchingStats().get(0).getSaves());
         holder.mRotationPlayerStats.setText(currentStats);
 
         int movementRating = holder.mPlayer.getMovementRating();

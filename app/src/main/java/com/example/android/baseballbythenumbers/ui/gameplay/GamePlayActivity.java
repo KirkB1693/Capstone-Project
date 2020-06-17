@@ -205,8 +205,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
             finish();
         } else {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Are you sure? By exiting you will lose all progress in this game");
-            alertDialogBuilder.setPositiveButton("Exit (Lose progress)", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setMessage(R.string.game_play_exit_question);
+            alertDialogBuilder.setPositiveButton(R.string.game_play_exit_lose_progress_option, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -215,7 +215,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 }
             });
 
-            alertDialogBuilder.setNegativeButton("Stay here", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton(R.string.game_play_exit_stay_here_option, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Do nothing as user is staying here
@@ -232,7 +232,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     public void manageGameOnClickResponse(int buttonId) {
         switch (buttonId) {
             case R.id.pinch_hit_button:
-                Toast.makeText(this, "This will allow you to choose a pinch hitter in the future.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.pinch_hit_button_toast_message, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sim_this_at_bat_button:
                 if (!isGameOver()) {
@@ -250,7 +250,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
                 }
                 break;
             case R.id.sub_pitcher_button:
-                Toast.makeText(this, "This will allow you to choose a relief pitcher in the future.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.sub_pitcher_button_toast_message, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sim_rest_of_game_button:
                 if (!isGameOver()) {
@@ -1139,8 +1139,8 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
 
     private void displayCurrentBatter(Player currentBatter) {
         DecimalFormat decimalFormat = new DecimalFormat(".000");
-        String batterInfo = currentBatter.getName() + "\n(AVG " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getAverage())
-                + ", OBP " + decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getOnBasePct()) + ")";
+        String batterInfo = String.format(Locale.getDefault(), getString(R.string.display_current_batter_format), currentBatter.getName() , decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getAverage())
+                , decimalFormat.format(currentBatter.getBattingStatsForYear(organization.getCurrentYear()).getOnBasePct()));
         boolean batterIsTired = gamePlayViewModel.getGameSimulator().getBatterStaminaAdjustment() > 0;
         if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
             activityGamePlayBinding.gameScreenVisitorPlayerTv.setText(batterInfo);
@@ -1161,8 +1161,7 @@ public class GamePlayActivity extends AppCompatActivity implements ManageGameFra
     }
 
     private void displayCurrentPitcher(Player currentPitcher) {
-        String pitcherInfo = currentPitcher.getName() + "\n(ERA " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getERA())
-                + ", WHIP " + (currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getWHIP()) + ")";
+        String pitcherInfo = String.format(Locale.getDefault(), getString(R.string.display_current_pitcher_format), currentPitcher.getName(), currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getERA(), currentPitcher.getPitchingStatsForYear(organization.getCurrentYear()).getWHIP());
         boolean pitcherIsTired = gamePlayViewModel.getGameSimulator().getPitcherStaminaAdjustment() > 0;
         if (gamePlayViewModel.getGameSimulator().isVisitorHitting()) {
             activityGamePlayBinding.gameScreenHomePlayerTv.setText(pitcherInfo);

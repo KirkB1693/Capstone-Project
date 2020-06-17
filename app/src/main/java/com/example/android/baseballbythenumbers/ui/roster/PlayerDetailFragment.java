@@ -18,6 +18,7 @@ import com.example.android.baseballbythenumbers.data.Player;
 import com.example.android.baseballbythenumbers.databinding.FragmentPlayerDetailBinding;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 public class PlayerDetailFragment extends Fragment {
 
@@ -93,8 +94,11 @@ public class PlayerDetailFragment extends Fragment {
             playerDetailBinding.playerDetailPosition.setText(Positions.getPositionNameFromPrimaryPosition(mPlayer.getPrimaryPosition()));
 
             DecimalFormat decimalFormat = new DecimalFormat(".000");
-            String currentBattingStats = "AVG " + decimalFormat.format(mPlayer.getBattingStats().get(0).getAverage()) + ", OBP " + decimalFormat.format(mPlayer.getBattingStats().get(0).getOnBasePct()) +
-                    ", HR " + mPlayer.getBattingStats().get(0).getHomeRuns() + ", SB " + mPlayer.getBattingStats().get(0).getStolenBases();
+            String currentBattingStats = String.format(Locale.getDefault(), getString(R.string.player_detail_batting_stats_format),
+                    decimalFormat.format(mPlayer.getBattingStats().get(0).getAverage()),
+                    decimalFormat.format(mPlayer.getBattingStats().get(0).getOnBasePct()),
+                    mPlayer.getBattingStats().get(0).getHomeRuns(),
+                    mPlayer.getBattingStats().get(0).getStolenBases());
             playerDetailBinding.playerDetailBattingStatsThisSeason.setText(currentBattingStats);
             setProgressBarDrawable(mPlayer.getBattingContactRating(), playerDetailBinding.playerDetailBattingContactPb);
             playerDetailBinding.playerDetailBattingContactPb.setProgress(mPlayer.getBattingContactRating());
@@ -105,8 +109,12 @@ public class PlayerDetailFragment extends Fragment {
             setProgressBarDrawable(mPlayer.getBattingSpeedRating(), playerDetailBinding.playerDetailBattingSpeedPb);
             playerDetailBinding.playerDetailBattingSpeedPb.setProgress(mPlayer.getBattingSpeedRating());
 
-            String currentPitchingStats = "ERA " + mPlayer.getPitchingStats().get(0).getERA() + ", WHIP " + mPlayer.getPitchingStats().get(0).getWHIP() +
-                    ", W " + mPlayer.getPitchingStats().get(0).getWins() + ", L " + mPlayer.getPitchingStats().get(0).getLosses() + ", S " + mPlayer.getPitchingStats().get(0).getSaves();
+            String currentPitchingStats = String.format(Locale.getDefault(), getString(R.string.player_detail_pitching_stats_format),
+                    mPlayer.getPitchingStats().get(0).getERA(),
+                    mPlayer.getPitchingStats().get(0).getWHIP(),
+                    mPlayer.getPitchingStats().get(0).getWins(),
+                    mPlayer.getPitchingStats().get(0).getLosses(),
+                    mPlayer.getPitchingStats().get(0).getSaves());
             playerDetailBinding.playerDetailPitchingPlayerStats.setText(currentPitchingStats);
             setProgressBarDrawable(mPlayer.getPitchingStaminaRating(), playerDetailBinding.playerDetailPitchingStaminaPb);
             playerDetailBinding.playerDetailPitchingStaminaPb.setProgress(mPlayer.getPitchingStaminaRating());

@@ -55,7 +55,7 @@ private StandingsViewModel standingsViewModel;
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setTitle("Standings");
+        setTitle(getString(R.string.standings_title));
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -381,9 +381,9 @@ private StandingsViewModel standingsViewModel;
                         }
                     }
                     TextView teamNameTV = teamRow.findViewById(R.id.standings_empty_team_name_tv);
-                    teamNameTV.setText(String.format("%s %s", team.getTeamCity(), team.getTeamName()));
+                    teamNameTV.setText(String.format(getString(R.string.standings_team_name_display_format), team.getTeamCity(), team.getTeamName()));
                     TextView teamRecordTV = teamRow.findViewById(R.id.standings_empty_record_tv);
-                    String teamRecord = String.format(Locale.getDefault(), "%d - %d", team.getWins(), team.getLosses());
+                    String teamRecord = String.format(Locale.getDefault(), getString(R.string.standings_team_record_display_format), team.getWins(), team.getLosses());
                     teamRecordTV.setText(teamRecord);
                     TextView teamWLPctTV = teamRow.findViewById(R.id.standings_empty_win_pct_tv);
                     DecimalFormat decimalFormat = new DecimalFormat(".000");
